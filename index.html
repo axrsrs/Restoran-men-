@@ -19,29 +19,21 @@ html,body{
 
 body{min-height:100vh}
 
-button,input,textarea,select{
- font:inherit
-}
-
+button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-
-a{
- text-decoration:none;
- color:inherit
-}
+a{text-decoration:none;color:inherit}
 
 :root{
- --gold:#d6a83d;
- --gold2:#f0c45a;
+ --accent:#d6a83d;
+ --accent2:#f0c45a;
  --line:#29292d;
  --card:#151517;
  --card2:#1b1b1e;
  --danger:#7f1d1d;
+ --overlay:.55
 }
 
-#app{
- min-height:100vh
-}
+#app{min-height:100vh}
 
 .container{
  width:100%;
@@ -50,35 +42,30 @@ a{
  padding:0 16px 60px
 }
 
-/* =========================
- BACKGROUND
-========================= */
+/* BACKGROUND */
 
-.videoBg{
+.background{
  position:fixed;
  inset:0;
- z-index:-2;
+ z-index:-3;
  overflow:hidden;
  background:#0b0b0c
 }
 
-.videoBg video{
+.background img,
+.background video{
  width:100%;
  height:100%;
- object-fit:cover;
- opacity:.38
+ object-fit:cover
 }
 
-.pageBg{
- position:fixed;
+.backgroundOverlay{
+ position:absolute;
  inset:0;
- z-index:-1;
- background:rgba(0,0,0,.55)
+ background:rgba(0,0,0,var(--overlay))
 }
 
-/* =========================
- TOP
-========================= */
+/* TOP */
 
 .top{
  position:sticky;
@@ -115,14 +102,12 @@ a{
  padding:0 15px;
  border:0;
  border-radius:22px;
- background:var(--gold);
+ background:var(--accent);
  color:#111;
  font-weight:900
 }
 
-.searchBox{
- margin-top:8px
-}
+.searchBox{margin-top:8px}
 
 .searchBox input{
  width:100%;
@@ -134,9 +119,7 @@ a{
  outline:none
 }
 
-/* =========================
- HERO
-========================= */
+/* HERO */
 
 .hero{
  text-align:center;
@@ -151,9 +134,9 @@ a{
  align-items:center;
  justify-content:center;
  border-radius:50%;
- border:1px solid var(--gold);
+ border:1px solid var(--accent);
  background:#111;
- color:var(--gold);
+ color:var(--accent);
  font:42px Georgia,serif;
  box-shadow:0 0 35px rgba(214,168,61,.12);
  overflow:hidden
@@ -167,7 +150,7 @@ a{
 
 .welcome{
  margin-top:17px;
- color:var(--gold2);
+ color:var(--accent2);
  font-size:10px;
  font-weight:900;
  letter-spacing:.3em
@@ -184,13 +167,9 @@ a{
  font-size:13px
 }
 
-/* =========================
- SECTIONS
-========================= */
+/* SECTIONS */
 
-.section{
- margin-top:28px
-}
+.section{margin-top:28px}
 
 .sectionHead{
  display:flex;
@@ -209,9 +188,7 @@ a{
  font-size:10px
 }
 
-/* =========================
- HORIZONTAL
-========================= */
+/* HORIZONTAL */
 
 .horizontal{
  display:flex;
@@ -221,13 +198,9 @@ a{
  scroll-snap-type:x mandatory
 }
 
-.horizontal::-webkit-scrollbar{
- display:none
-}
+.horizontal::-webkit-scrollbar{display:none}
 
-/* =========================
- FEATURED
-========================= */
+/* FEATURE */
 
 .feature{
  position:relative;
@@ -241,7 +214,8 @@ a{
  scroll-snap-align:start
 }
 
-.feature img{
+.feature img,
+.feature video{
  width:100%;
  height:100%;
  object-fit:cover
@@ -261,9 +235,7 @@ a{
  text-align:left
 }
 
-.featureText strong{
- font-size:18px
-}
+.featureText strong{font-size:18px}
 
 .featureText span{
  display:block;
@@ -272,9 +244,7 @@ a{
  font-size:12px
 }
 
-/* =========================
- EVENTS
-========================= */
+/* EVENTS */
 
 .event{
  position:relative;
@@ -288,7 +258,8 @@ a{
  scroll-snap-align:start
 }
 
-.event img{
+.event img,
+.event video{
  width:100%;
  height:100%;
  object-fit:cover
@@ -307,7 +278,7 @@ a{
  padding:7px 10px;
  border-radius:20px;
  background:rgba(0,0,0,.7);
- color:var(--gold2);
+ color:var(--accent2);
  font-size:10px
 }
 
@@ -319,9 +290,7 @@ a{
  text-align:left
 }
 
-.eventText strong{
- font-size:18px
-}
+.eventText strong{font-size:18px}
 
 .eventText span{
  display:block;
@@ -330,9 +299,7 @@ a{
  font-size:12px
 }
 
-/* =========================
- CATEGORIES
-========================= */
+/* CATEGORIES */
 
 .categories{
  display:grid;
@@ -350,7 +317,8 @@ a{
  background:#171719
 }
 
-.category img{
+.category img,
+.category video{
  width:100%;
  height:100%;
  object-fit:cover
@@ -370,9 +338,7 @@ a{
  text-align:left
 }
 
-.categoryText strong{
- font-size:18px
-}
+.categoryText strong{font-size:18px}
 
 .categoryText span{
  display:block;
@@ -381,9 +347,7 @@ a{
  margin-top:4px
 }
 
-/* =========================
- CATEGORY PAGE
-========================= */
+/* CATEGORY PAGE */
 
 .categoryTitle{
  display:flex;
@@ -420,9 +384,7 @@ a{
  scrollbar-width:none
 }
 
-.categoryTabs::-webkit-scrollbar{
- display:none
-}
+.categoryTabs::-webkit-scrollbar{display:none}
 
 .categoryTabs button{
  flex:0 0 auto;
@@ -436,13 +398,11 @@ a{
 }
 
 .categoryTabs button.active{
- background:var(--gold);
+ background:var(--accent);
  color:#111
 }
 
-/* =========================
- PRODUCTS
-========================= */
+/* PRODUCTS */
 
 .products{
  display:flex;
@@ -467,15 +427,14 @@ a{
  background:#1c1c1e
 }
 
-.productImage img{
+.productImage img,
+.productImage video{
  width:100%;
  height:100%;
  object-fit:cover
 }
 
-.productInfo{
- padding:12px
-}
+.productInfo{padding:12px}
 
 .productInfo h3{
  margin:0;
@@ -510,14 +469,12 @@ a{
 
 .price{
  margin-top:8px;
- color:var(--gold2);
+ color:var(--accent2);
  font-weight:900;
  font-size:14px
 }
 
-/* =========================
- DRAWER
-========================= */
+/* DRAWER */
 
 .overlay{
  position:fixed;
@@ -543,13 +500,11 @@ a{
 }
 
 .drawerLogo{
- color:var(--gold);
+ color:var(--accent);
  font:700 25px Georgia,serif
 }
 
-.drawerSection{
- margin-top:25px
-}
+.drawerSection{margin-top:25px}
 
 .drawerLabel{
  color:#666;
@@ -575,7 +530,7 @@ a{
 }
 
 .optionGrid button.active{
- background:var(--gold);
+ background:var(--accent);
  color:#111;
  font-weight:900
 }
@@ -587,9 +542,7 @@ a{
  margin-top:7px
 }
 
-/* =========================
- MODAL
-========================= */
+/* MODAL */
 
 .modalOverlay{
  position:fixed;
@@ -615,7 +568,8 @@ a{
  height:290px
 }
 
-.modalImage img{
+.modalImage img,
+.modalImage video{
  width:100%;
  height:100%;
  object-fit:cover
@@ -634,9 +588,7 @@ a{
  font-size:23px
 }
 
-.modalBody{
- padding:20px
-}
+.modalBody{padding:20px}
 
 .modalBody h2{
  margin:0;
@@ -664,35 +616,12 @@ a{
 
 .modalPrice{
  margin-top:16px;
- color:var(--gold2);
+ color:var(--accent2);
  font-size:25px;
  font-weight:900
 }
 
-.actionRow{
- display:flex;
- gap:8px;
- margin-top:18px
-}
-
-.action{
- flex:1;
- padding:13px;
- border-radius:12px;
- text-align:center;
- background:#202023;
- font-size:12px;
- font-weight:800
-}
-
-.action.gold{
- background:var(--gold);
- color:#111
-}
-
-/* =========================
- ADMIN
-========================= */
+/* ADMIN */
 
 .adminOverlay{
  position:fixed;
@@ -742,18 +671,14 @@ a{
 }
 
 .adminTabs button.active{
- background:var(--gold);
+ background:var(--accent);
  color:#111;
  font-weight:900
 }
 
-.adminBody{
- padding:16px
-}
+.adminBody{padding:16px}
 
-.field{
- margin-bottom:13px
-}
+.field{margin-bottom:13px}
 
 .field label{
  display:block;
@@ -803,7 +728,7 @@ a{
 .toggle input{
  width:18px;
  height:18px;
- accent-color:#d6a83d
+ accent-color:var(--accent)
 }
 
 .adminButton{
@@ -817,7 +742,7 @@ a{
 }
 
 .adminButton.gold{
- background:var(--gold);
+ background:var(--accent);
  color:#111
 }
 
@@ -850,18 +775,18 @@ a{
  line-height:1.5
 }
 
-/* =========================
- ADMIN CATEGORY LIST
-========================= */
+/* ADMIN LIST */
 
-.adminCategoryList{
+.adminCategoryList,
+.adminProductList{
  display:flex;
  flex-direction:column;
  gap:9px;
  margin-top:15px
 }
 
-.adminCategoryItem{
+.adminCategoryItem,
+.adminProductItem{
  display:flex;
  align-items:center;
  gap:12px;
@@ -869,14 +794,12 @@ a{
  border:1px solid var(--line);
  border-radius:14px;
  background:#151517;
- transition:.2s
+ color:#fff;
+ text-align:left
 }
 
-.adminCategoryItem:active{
- transform:scale(.985)
-}
-
-.adminCategoryThumb{
+.adminCategoryThumb,
+.adminProductThumb{
  width:55px;
  height:55px;
  flex:0 0 55px;
@@ -885,18 +808,21 @@ a{
  background:#222225
 }
 
-.adminCategoryThumb img{
+.adminCategoryThumb img,
+.adminProductThumb img{
  width:100%;
  height:100%;
  object-fit:cover
 }
 
-.adminCategoryInfo{
+.adminCategoryInfo,
+.adminProductInfo{
  flex:1;
  min-width:0
 }
 
-.adminCategoryInfo strong{
+.adminCategoryInfo strong,
+.adminProductInfo strong{
  display:block;
  font-size:14px;
  white-space:nowrap;
@@ -904,82 +830,23 @@ a{
  text-overflow:ellipsis
 }
 
-.adminCategoryInfo span{
+.adminCategoryInfo span,
+.adminProductInfo span{
  display:block;
  margin-top:4px;
  color:#777;
  font-size:10px
 }
 
-.adminArrow{
+.adminProductInfo span{
+ color:var(--accent2)
+}
+
+.adminArrow,
+.adminProductArrow{
  color:#777;
  font-size:18px
 }
-
-/* =========================
- ADMIN PRODUCT LIST
-========================= */
-
-.adminProductList{
- display:flex;
- flex-direction:column;
- gap:8px;
- margin-top:14px
-}
-
-.adminProductItem{
- display:flex;
- align-items:center;
- gap:10px;
- padding:10px;
- border:1px solid var(--line);
- border-radius:13px;
- background:#151517
-}
-
-.adminProductThumb{
- width:52px;
- height:52px;
- flex:0 0 52px;
- border-radius:10px;
- overflow:hidden;
- background:#222
-}
-
-.adminProductThumb img{
- width:100%;
- height:100%;
- object-fit:cover
-}
-
-.adminProductInfo{
- flex:1;
- min-width:0
-}
-
-.adminProductInfo strong{
- display:block;
- font-size:13px;
- white-space:nowrap;
- overflow:hidden;
- text-overflow:ellipsis
-}
-
-.adminProductInfo span{
- display:block;
- color:var(--gold2);
- font-size:11px;
- margin-top:4px
-}
-
-.adminProductArrow{
- color:#777;
- font-size:17px
-}
-
-/* =========================
- ADMIN BREADCRUMB
-========================= */
 
 .adminBreadcrumb{
  display:flex;
@@ -994,14 +861,89 @@ a{
  border:0;
  background:none;
  padding:0;
- color:var(--gold2);
+ color:var(--accent2);
  font-size:11px;
  font-weight:800
 }
 
-/* =========================
- ADMIN LOGIN
-========================= */
+/* FILE */
+
+.fileBox{
+ display:flex;
+ gap:7px
+}
+
+.fileBtn{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ gap:5px;
+ flex:1;
+ padding:11px;
+ border:1px solid #303034;
+ border-radius:10px;
+ background:#18181a;
+ color:#ddd;
+ font-size:11px;
+ font-weight:800;
+ cursor:pointer
+}
+
+.preview{
+ width:100%;
+ max-height:180px;
+ object-fit:cover;
+ border-radius:12px;
+ margin-top:8px;
+ border:1px solid #303034
+}
+
+/* ADVANCED */
+
+.advancedBox{
+ margin-top:10px;
+ padding-top:8px;
+ border-top:1px solid #28282b
+}
+
+.rangeRow{
+ display:flex;
+ align-items:center;
+ gap:10px
+}
+
+.rangeRow input{
+ flex:1
+}
+
+.rangeRow span{
+ width:45px;
+ color:var(--accent2);
+ font-size:11px;
+ text-align:right
+}
+
+/* THEME */
+
+.themeGrid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:8px;
+ margin-top:12px
+}
+
+.themeColor{
+ height:38px;
+ border-radius:10px;
+ border:2px solid transparent
+}
+
+.themeColor.active{
+ border-color:#fff;
+ box-shadow:0 0 0 2px var(--accent)
+}
+
+/* LOGIN */
 
 .adminLoginOverlay{
  position:fixed;
@@ -1031,9 +973,9 @@ a{
  display:flex;
  align-items:center;
  justify-content:center;
- border:1px solid var(--gold);
+ border:1px solid var(--accent);
  border-radius:50%;
- color:var(--gold);
+ color:var(--accent);
  font:30px Georgia,serif
 }
 
@@ -1068,7 +1010,7 @@ a{
  padding:13px;
  border:0;
  border-radius:12px;
- background:var(--gold);
+ background:var(--accent);
  color:#111;
  font-weight:900
 }
@@ -1084,9 +1026,7 @@ a{
  font-size:10px
 }
 
-/* =========================
- FOOTER
-========================= */
+/* FOOTER */
 
 .footer{
  padding:35px 0;
@@ -1101,30 +1041,20 @@ a{
  color:#666
 }
 
-/* =========================
- MOBILE
-========================= */
-
 @media(max-width:390px){
 
- .categories{
-  grid-template-columns:1fr
- }
+ .categories{grid-template-columns:1fr}
 
- .product{
-  grid-template-columns:100px 1fr
- }
+ .product{grid-template-columns:100px 1fr}
 
- .productImage{
-  height:115px
- }
+ .productImage{height:115px}
 
- .adminCategoryThumb{
+ .adminCategoryThumb,
+ .adminProductThumb{
   width:50px;
   height:50px;
   flex-basis:50px
  }
-
 }
 </style>
 </head>
@@ -1136,57 +1066,23 @@ a{
 <script>
 
 /* ============================================================
-   NEARMENU
-   TEK DOSYA SİSTEMİ
-============================================================ */
-
-
-/* ============================================================
-   KONTROL PANELİ ŞİFRESİ
-============================================================ */
+ NEARMENU
+ ============================================================ */
 
 const ADMIN_PASSWORD="1234";
 
-
-/* ============================================================
-   GÖRSELLER
-============================================================ */
-
 const IMAGES={
-
- breakfast:
- "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=900&q=80",
-
- burger:
- "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80",
-
- pizza:
- "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80",
-
- grill:
- "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
-
- salad:
- "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80",
-
- dessert:
- "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=80",
-
- drink:
- "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=900&q=80",
-
- music:
- "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1000&q=80"
-
+ breakfast:"https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=900&q=80",
+ burger:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80",
+ pizza:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80",
+ grill:"https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+ salad:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80",
+ dessert:"https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=80",
+ drink:"https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=900&q=80",
+ music:"https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1000&q=80"
 };
 
-
-/* ============================================================
-   DİL
-============================================================ */
-
 const TEXT={
-
  tr:{
   welcome:"HOŞ GELDİNİZ",
   best:"Çok Satanlar",
@@ -1206,12 +1102,11 @@ const TEXT={
   currency:"Para Birimi",
   admin:"Yönetim Paneli",
   general:"Genel",
-  products:"Ürünler",
+  products:"Menü",
   settings:"Ayarlar",
   save:"Kaydet",
   search:"Ürün ara..."
  },
-
  en:{
   welcome:"WELCOME",
   best:"Best Sellers",
@@ -1231,12 +1126,11 @@ const TEXT={
   currency:"Currency",
   admin:"Admin Panel",
   general:"General",
-  products:"Products",
+  products:"Menu",
   settings:"Settings",
   save:"Save",
   search:"Search products..."
  },
-
  ar:{
   welcome:"مرحباً بكم",
   best:"الأكثر مبيعاً",
@@ -1256,37 +1150,29 @@ const TEXT={
   currency:"العملة",
   admin:"لوحة الإدارة",
   general:"عام",
-  products:"المنتجات",
+  products:"القائمة",
   settings:"الإعدادات",
   save:"حفظ",
   search:"ابحث عن منتج..."
  }
-
 };
 
-
 /* ============================================================
-   ANA VERİ
-============================================================ */
+ DATA
+ ============================================================ */
 
 const DATA={
-
  name:"NEARMENU DEMO",
-
- subtitle:
- "Lezzetin en güzel hali burada.",
-
- phone:
- "+90 555 555 55 55",
-
- whatsapp:
- "905555555555",
-
+ subtitle:"Lezzetin en güzel hali burada.",
+ phone:"+90 555 555 55 55",
+ whatsapp:"905555555555",
  logo:"",
+ rates:{USD:40,EUR:47},
 
- rates:{
-  USD:40,
-  EUR:47
+ theme:{
+  accent:"#d6a83d",
+  accent2:"#f0c45a",
+  overlay:.55
  },
 
  settings:{
@@ -1309,8 +1195,7 @@ const DATA={
   video:""
  },
 
- hours:
- "09:00 - 23:00",
+ hours:"09:00 - 23:00",
 
  categories:[
 
@@ -1318,57 +1203,52 @@ const DATA={
    id:"kahvalti",
    name:"Kahvaltı",
    image:IMAGES.breakfast,
-
    items:[
-
     {
      id:"serpme",
      name:"Serpme Kahvaltı",
-     description:
-     "Peynir çeşitleri, zeytin, reçel, bal, yumurta ve sıcak ürünlerden oluşan zengin kahvaltı.",
+     description:"Peynir çeşitleri, zeytin, reçel, bal, yumurta ve sıcak ürünlerden oluşan zengin kahvaltı.",
      portion:"2 kişilik",
      calories:"1250",
      allergens:["Süt","Gluten","Yumurta"],
      spicy:0,
      price:650,
      image:IMAGES.breakfast,
+     video:"",
      featured:true,
      dish:true,
      sold:false
     },
-
     {
      id:"kahvalti-tabagi",
      name:"Kahvaltı Tabağı",
-     description:
-     "Peynir, zeytin, yumurta, domates ve salatalık.",
+     description:"Peynir, zeytin, yumurta, domates ve salatalık.",
      portion:"1 kişilik",
      calories:"720",
      allergens:["Süt","Yumurta"],
      spicy:0,
      price:320,
      image:IMAGES.breakfast,
+     video:"",
      featured:false,
      dish:false,
      sold:false
     },
-
     {
      id:"menemen",
      name:"Sahanda Menemen",
-     description:
-     "Domates, biber ve yumurta ile hazırlanan sıcak menemen.",
+     description:"Domates, biber ve yumurta ile hazırlanan sıcak menemen.",
      portion:"250 g",
      calories:"410",
      allergens:["Yumurta"],
      spicy:1,
      price:220,
      image:IMAGES.breakfast,
+     video:"",
      featured:false,
      dish:false,
      sold:false
     }
-
    ]
   },
 
@@ -1376,41 +1256,37 @@ const DATA={
    id:"izgara",
    name:"Izgaralar",
    image:IMAGES.grill,
-
    items:[
-
     {
      id:"izgara-et",
      name:"Izgara Et",
-     description:
-     "Günlük seçilen et, közlenmiş sebzeler ve garnitür.",
+     description:"Günlük seçilen et, közlenmiş sebzeler ve garnitür.",
      portion:"300 g",
      calories:"820",
      allergens:[],
      spicy:0,
      price:790,
      image:IMAGES.grill,
+     video:"",
      featured:true,
      dish:false,
      sold:false
     },
-
     {
      id:"izgara-tavuk",
      name:"Izgara Tavuk",
-     description:
-     "Marine edilmiş tavuk ve günlük garnitür.",
+     description:"Marine edilmiş tavuk ve günlük garnitür.",
      portion:"250 g",
      calories:"610",
      allergens:[],
      spicy:0,
      price:420,
      image:IMAGES.grill,
+     video:"",
      featured:false,
      dish:false,
      sold:false
     }
-
    ]
   },
 
@@ -1418,41 +1294,37 @@ const DATA={
    id:"burger",
    name:"Burgerler",
    image:IMAGES.burger,
-
    items:[
-
     {
      id:"classic-burger",
      name:"Classic Burger",
-     description:
-     "Dana köfte, cheddar, marul, domates ve özel sos.",
+     description:"Dana köfte, cheddar, marul, domates ve özel sos.",
      portion:"180 g",
      calories:"840",
      allergens:["Gluten","Süt"],
      spicy:0,
      price:295,
      image:IMAGES.burger,
+     video:"",
      featured:true,
      dish:false,
      sold:false
     },
-
     {
      id:"spicy-burger",
      name:"Spicy Burger",
-     description:
-     "Dana köfte, cheddar, jalapeño ve acılı özel sos.",
+     description:"Dana köfte, cheddar, jalapeño ve acılı özel sos.",
      portion:"180 g",
      calories:"900",
      allergens:["Gluten","Süt"],
      spicy:3,
      price:320,
      image:IMAGES.burger,
+     video:"",
      featured:false,
      dish:false,
      sold:false
     }
-
    ]
   },
 
@@ -1460,41 +1332,37 @@ const DATA={
    id:"pizza",
    name:"Pizzalar",
    image:IMAGES.pizza,
-
    items:[
-
     {
      id:"margherita",
      name:"Margherita",
-     description:
-     "Domates sosu, mozzarella ve fesleğen.",
+     description:"Domates sosu, mozzarella ve fesleğen.",
      portion:"30 cm",
      calories:"780",
      allergens:["Gluten","Süt"],
      spicy:0,
      price:340,
      image:IMAGES.pizza,
+     video:"",
      featured:false,
      dish:false,
      sold:false
     },
-
     {
      id:"karisik-pizza",
      name:"Karışık Pizza",
-     description:
-     "Sucuk, mantar, biber, mısır, zeytin ve mozzarella.",
+     description:"Sucuk, mantar, biber, mısır, zeytin ve mozzarella.",
      portion:"30 cm",
      calories:"980",
      allergens:["Gluten","Süt"],
      spicy:1,
      price:420,
      image:IMAGES.pizza,
+     video:"",
      featured:false,
      dish:false,
      sold:false
     }
-
    ]
   },
 
@@ -1502,25 +1370,22 @@ const DATA={
    id:"salata",
    name:"Salatalar",
    image:IMAGES.salad,
-
    items:[
-
     {
      id:"sezar",
      name:"Sezar Salata",
-     description:
-     "Göbek marul, parmesan, kruton ve özel sos.",
+     description:"Göbek marul, parmesan, kruton ve özel sos.",
      portion:"350 g",
      calories:"460",
      allergens:["Süt","Gluten"],
      spicy:0,
      price:280,
      image:IMAGES.salad,
+     video:"",
      featured:false,
      dish:false,
      sold:false
     }
-
    ]
   },
 
@@ -1528,25 +1393,22 @@ const DATA={
    id:"tatli",
    name:"Tatlılar",
    image:IMAGES.dessert,
-
    items:[
-
     {
      id:"gunun-tatlisi",
      name:"Günün Tatlısı",
-     description:
-     "Şefin günlük hazırladığı özel tatlı.",
+     description:"Şefin günlük hazırladığı özel tatlı.",
      portion:"1 porsiyon",
      calories:"520",
      allergens:["Gluten","Süt","Yumurta"],
      spicy:0,
      price:190,
      image:IMAGES.dessert,
+     video:"",
      featured:false,
      dish:true,
      sold:false
     }
-
    ]
   },
 
@@ -1554,56 +1416,45 @@ const DATA={
    id:"icecek",
    name:"İçecekler",
    image:IMAGES.drink,
-
    items:[
-
     {
      id:"soguk-icecek",
      name:"Soğuk İçecek",
-     description:
-     "Çeşitli soğuk içecek seçenekleri.",
+     description:"Çeşitli soğuk içecek seçenekleri.",
      portion:"330 ml",
      calories:"140",
      allergens:[],
      spicy:0,
      price:90,
      image:IMAGES.drink,
+     video:"",
      featured:false,
      dish:false,
      sold:false
     }
-
    ]
   }
-
  ],
 
  events:[
-
   {
    id:"canli-muzik",
    name:"Canlı Müzik Gecesi",
    date:"Cumartesi",
    time:"20:30",
-   description:
-   "Canlı müzik eşliğinde keyifli bir akşam. Rezervasyon için WhatsApp üzerinden bize ulaşabilirsiniz.",
-   image:IMAGES.music
+   description:"Canlı müzik eşliğinde keyifli bir akşam.",
+   image:IMAGES.music,
+   video:""
   }
-
  ]
-
 };
-
 
 /* ============================================================
  STATE
-============================================================ */
+ ============================================================ */
 
-let language=
- localStorage.getItem("nearMenuLanguage")||"tr";
-
-let currency=
- localStorage.getItem("nearMenuCurrency")||"TRY";
+let language=localStorage.getItem("nearMenuLanguage")||"tr";
+let currency=localStorage.getItem("nearMenuCurrency")||"TRY";
 
 let selectedCategory=null;
 let selectedProduct=null;
@@ -1614,122 +1465,88 @@ let adminOpen=false;
 let adminAuthenticated=false;
 
 let adminTab="general";
-
 let adminCategoryView=null;
 let adminProductView=null;
 
 let searchOpen=false;
 let searchText="";
 
+let advancedProduct=false;
+let advancedCategory=false;
 
 /* ============================================================
- LOAD EXISTING DATA
-============================================================ */
+ LOAD
+ ============================================================ */
 
 try{
-
- const saved=
-  localStorage.getItem("nearMenuData");
-
- if(saved){
-
-  const parsed=
-   JSON.parse(saved);
-
-  mergeData(parsed);
-
- }
-
-}catch(error){
-
- console.log("Kayıt okunamadı",error);
-
+ const saved=localStorage.getItem("nearMenuData");
+ if(saved) mergeData(JSON.parse(saved));
+}catch(e){
+ console.log(e);
 }
 
-
-/* ============================================================
- DATA MERGE
-============================================================ */
-
 function mergeData(data){
-
- if(!data)
-  return;
+ if(!data)return;
 
  Object.keys(data).forEach(function(key){
 
   if(
-   key==="settings" ||
-   key==="background" ||
-   key==="rates"
+   key==="settings"||
+   key==="background"||
+   key==="rates"||
+   key==="theme"
   ){
-
    DATA[key]=Object.assign(
     {},
     DATA[key]||{},
     data[key]||{}
    );
-
   }else{
-
    DATA[key]=data[key];
-
   }
 
  });
 
+ /* Eski verilerde video alanı yoksa ekle */
+ (DATA.categories||[]).forEach(function(category){
+  if(!category.items)category.items=[];
+  category.items.forEach(function(item){
+   if(typeof item.video==="undefined")item.video="";
+  });
+ });
+
+ (DATA.events||[]).forEach(function(event){
+  if(typeof event.video==="undefined")event.video="";
+ });
 }
 
-
-/* ============================================================
- SAVE
-============================================================ */
-
 function saveData(){
-
  try{
-
   localStorage.setItem(
    "nearMenuData",
    JSON.stringify(DATA)
   );
-
- }catch(error){
-
-  console.log("Kayıt yapılamadı",error);
-
+ }catch(e){
+  console.log(e);
  }
-
 }
-
 
 /* ============================================================
  HELPERS
-============================================================ */
+ ============================================================ */
 
 function t(key){
-
- return (
-  TEXT[language]?.[key]||
-  TEXT.tr[key]||
-  key
- );
-
+ return TEXT[language]?.[key]||TEXT.tr[key]||key;
 }
 
-
 function escapeHTML(value){
-
  return String(value??"")
-
   .replace(/&/g,"&amp;")
   .replace(/</g,"&lt;")
   .replace(/>/g,"&gt;")
   .replace(/"/g,"&quot;")
   .replace(/'/g,"&#039;");
-
 }
-
 
 function allProducts(){
 
@@ -1740,14 +1557,10 @@ function allProducts(){
   (category.items||[]).forEach(function(item){
 
    result.push(
-    Object.assign(
-     {},
-     item,
-     {
-      categoryId:category.id,
-      categoryName:category.name
-     }
-    )
+    Object.assign({},item,{
+     categoryId:category.id,
+     categoryName:category.name
+    })
    );
 
   });
@@ -1755,99 +1568,55 @@ function allProducts(){
  });
 
  return result;
-
 }
-
 
 function findProduct(id){
 
- for(
-  const category of DATA.categories||[]
- ){
+ for(const category of DATA.categories||[]){
 
-  const item=
-   (category.items||[]).find(
-    function(product){
-     return product.id===id;
-    }
-   );
+  const item=(category.items||[]).find(
+   p=>p.id===id
+  );
 
-  if(item)
-   return item;
-
+  if(item)return item;
  }
 
  return null;
-
 }
-
 
 function findCategory(id){
-
- return (
-  DATA.categories||[]
- ).find(function(category){
-
-  return category.id===id;
-
- })||null;
-
+ return (DATA.categories||[]).find(
+  c=>c.id===id
+ )||null;
 }
-
 
 function findEvent(id){
-
- return (
-  DATA.events||[]
- ).find(function(event){
-
-  return event.id===id;
-
- })||null;
-
+ return (DATA.events||[]).find(
+  e=>e.id===id
+ )||null;
 }
-
-
-/* ============================================================
- MONEY
-============================================================ */
 
 function money(price){
 
- let value=
-  Number(price)||0;
+ let value=Number(price)||0;
 
  if(currency==="USD"){
-
   return "$"+
-   (
-    value/
-    (DATA.rates?.USD||40)
-   ).toFixed(2);
-
+   (value/(DATA.rates?.USD||40)).toFixed(2);
  }
 
  if(currency==="EUR"){
-
   return "€"+
-   (
-    value/
-    (DATA.rates?.EUR||47)
-   ).toFixed(2);
-
+   (value/(DATA.rates?.EUR||47)).toFixed(2);
  }
 
- return (
-  Math.round(value)
-  .toLocaleString("tr-TR")
- )+" ₺";
-
+ return Math.round(value)
+  .toLocaleString("tr-TR")+" ₺";
 }
-
 
 /* ============================================================
  BACKGROUND
-============================================================ */
+ ============================================================ */
 
 function renderBackground(){
 
@@ -1855,71 +1624,49 @@ function renderBackground(){
   DATA.background?.type==="video" &&
   DATA.background.video
  ){
-
   return `
-   <div class="videoBg">
-
+   <div class="background">
     <video
-      autoplay
-      muted
-      loop
-      playsinline
-      src="${escapeHTML(DATA.background.video)}">
+     autoplay
+     muted
+     loop
+     playsinline
+     src="${escapeHTML(DATA.background.video)}">
     </video>
-
-    <div class="pageBg"></div>
-
+    <div class="backgroundOverlay"></div>
    </div>
   `;
-
  }
-
 
  if(
   DATA.background?.type==="image" &&
   DATA.background.image
  ){
-
   return `
-   <div
-     class="videoBg"
-     style="
-      background:url('${escapeHTML(
-       DATA.background.image
-      )}') center/cover no-repeat
-     ">
-
-    <div class="pageBg"></div>
-
+   <div class="background">
+    <img src="${escapeHTML(DATA.background.image)}">
+    <div class="backgroundOverlay"></div>
    </div>
   `;
-
  }
-
 
  return `
   <div
-    class="videoBg"
-    style="
-     background:${escapeHTML(
-      DATA.background?.value||
-      "#0b0b0c"
-     )}
-    ">
+   class="background"
+   style="background:${escapeHTML(
+    DATA.background?.value||"#0b0b0c"
+   )}">
   </div>
  `;
-
 }
-
 
 /* ============================================================
  HERO
-============================================================ */
+ ============================================================ */
 
 function renderHero(){
 
  return `
-
  <section class="hero">
 
   <div class="logo">
@@ -1927,428 +1674,322 @@ function renderHero(){
    ${
     DATA.logo
     ?
-    `<img
-      src="${escapeHTML(DATA.logo)}"
-      alt="">`
+    `<img src="${escapeHTML(DATA.logo)}">`
     :
     "N"
    }
 
   </div>
 
-  <div class="welcome">
-   ${t("welcome")}
-  </div>
+  <div class="welcome">${t("welcome")}</div>
 
-  <h1>
-   ${escapeHTML(DATA.name)}
-  </h1>
+  <h1>${escapeHTML(DATA.name)}</h1>
 
-  <p>
-   ${escapeHTML(DATA.subtitle)}
-  </p>
+  <p>${escapeHTML(DATA.subtitle)}</p>
 
   ${
    DATA.settings.hours
    ?
-   `
-    <div
-      style="
-       margin-top:8px;
-       color:#666;
-       font-size:10px
-      ">
-     ${escapeHTML(DATA.hours)}
-    </div>
-   `
-   :
-   ""
+   `<div style="margin-top:8px;color:#666;font-size:10px">
+    ${escapeHTML(DATA.hours)}
+   </div>`
+   :""
   }
 
  </section>
-
  `;
-
 }
-
 
 /* ============================================================
  FEATURED
-============================================================ */
+ ============================================================ */
 
 function renderFeatured(){
 
- if(!DATA.settings.featured)
-  return "";
+ if(!DATA.settings.featured)return "";
 
- const products=
-  allProducts()
-  .filter(function(item){
+ const products=allProducts().filter(
+  item=>item.featured&&!item.sold
+ );
 
-   return item.featured&&!item.sold;
-
-  });
-
- if(!products.length)
-  return "";
+ if(!products.length)return "";
 
  return `
-
  <section class="section">
 
   <div class="sectionHead">
-
-   <h2>
-    🔥 ${t("best")}
-   </h2>
-
-   <span class="hint">
-    ${t("swipe")}
-   </span>
-
+   <h2>🔥 ${t("best")}</h2>
+   <span class="hint">${t("swipe")}</span>
   </div>
 
   <div class="horizontal">
 
-   ${
-    products.map(function(item){
+   ${products.map(function(item){
 
-     return `
-     <button
-       class="feature"
-       data-product="${escapeHTML(item.id)}">
+    return `
+    <button
+     class="feature"
+     data-product="${escapeHTML(item.id)}">
 
-      <img
-        src="${escapeHTML(item.image)}"
-        alt="">
+     ${
+      item.video
+      ?
+      `<video
+       autoplay
+       muted
+       loop
+       playsinline
+       src="${escapeHTML(item.video)}"></video>`
+      :
+      `<img src="${escapeHTML(item.image)}">`
+     }
 
-      <div class="featureShade"></div>
+     <div class="featureShade"></div>
 
-      <div class="featureText">
+     <div class="featureText">
+      <strong>${escapeHTML(item.name)}</strong>
+      <span>${money(item.price)}</span>
+     </div>
 
-       <strong>
-        ${escapeHTML(item.name)}
-       </strong>
+    </button>
+    `;
 
-       <span>
-        ${money(item.price)}
-       </span>
-
-      </div>
-
-     </button>
-     `;
-
-    }).join("")
-   }
+   }).join("")}
 
   </div>
-
  </section>
-
  `;
-
 }
-
 
 /* ============================================================
  EVENTS
-============================================================ */
+ ============================================================ */
 
 function renderEvents(){
 
- if(
-  !DATA.settings.events||
-  !DATA.events?.length
- )
+ if(!DATA.settings.events||!DATA.events?.length)
   return "";
 
  return `
-
  <section class="section">
 
   <div class="sectionHead">
-
-   <h2>
-    ✨ ${t("events")}
-   </h2>
-
-   <span class="hint">
-    ${t("swipe")}
-   </span>
-
+   <h2>✨ ${t("events")}</h2>
+   <span class="hint">${t("swipe")}</span>
   </div>
 
   <div class="horizontal">
 
-   ${
-    DATA.events.map(function(event){
+   ${DATA.events.map(function(event){
 
-     return `
-     <button
-       class="event"
-       data-event="${escapeHTML(event.id)}">
+    return `
+    <button
+     class="event"
+     data-event="${escapeHTML(event.id)}">
 
-      <img
-        src="${escapeHTML(event.image)}"
-        alt="">
+     ${
+      event.video
+      ?
+      `<video
+       autoplay
+       muted
+       loop
+       playsinline
+       src="${escapeHTML(event.video)}"></video>`
+      :
+      `<img src="${escapeHTML(event.image)}">`
+     }
 
-      <div class="eventShade"></div>
+     <div class="eventShade"></div>
 
-      <div class="eventDate">
-       ${escapeHTML(event.date)}
-       •
-       ${escapeHTML(event.time)}
-      </div>
+     <div class="eventDate">
+      ${escapeHTML(event.date)}
+      •
+      ${escapeHTML(event.time)}
+     </div>
 
-      <div class="eventText">
+     <div class="eventText">
+      <strong>${escapeHTML(event.name)}</strong>
+      <span>${t("reserve")}</span>
+     </div>
 
-       <strong>
-        ${escapeHTML(event.name)}
-       </strong>
+    </button>
+    `;
 
-       <span>
-        ${t("reserve")}
-       </span>
-
-      </div>
-
-     </button>
-     `;
-
-    }).join("")
-   }
+   }).join("")}
 
   </div>
-
  </section>
-
  `;
-
 }
-
 
 /* ============================================================
  CATEGORIES
-============================================================ */
+ ============================================================ */
 
 function renderCategories(){
 
  return `
-
  <section class="section">
 
   <div class="sectionHead">
-
-   <h2>
-    ${t("categories")}
-   </h2>
-
+   <h2>${t("categories")}</h2>
   </div>
 
   <div class="categories">
 
-   ${
-    (DATA.categories||[]).map(function(category){
+   ${(DATA.categories||[]).map(function(category){
 
-     return `
-     <button
-       class="category"
-       data-category="${escapeHTML(category.id)}">
+    return `
+    <button
+     class="category"
+     data-category="${escapeHTML(category.id)}">
 
-      <img
-        src="${escapeHTML(category.image)}"
-        alt="">
+     <img src="${escapeHTML(category.image)}">
 
-      <div class="categoryShade"></div>
+     <div class="categoryShade"></div>
 
-      <div class="categoryText">
+     <div class="categoryText">
+      <strong>${escapeHTML(category.name)}</strong>
+      <span>${(category.items||[]).length} ürün</span>
+     </div>
 
-       <strong>
-        ${escapeHTML(category.name)}
-       </strong>
+    </button>
+    `;
 
-       <span>
-        ${(category.items||[]).length} ürün
-       </span>
-
-      </div>
-
-     </button>
-     `;
-
-    }).join("")
-   }
+   }).join("")}
 
   </div>
-
  </section>
-
  `;
-
 }
-
 
 /* ============================================================
  TAGS
-============================================================ */
+ ============================================================ */
 
 function renderTags(item){
 
  return `
-
  <div class="tags">
 
   ${
    DATA.settings.portion&&item.portion
    ?
-   `<span class="tag">
-     ${escapeHTML(item.portion)}
-    </span>`
-   :
-   ""
+   `<span class="tag">${escapeHTML(item.portion)}</span>`
+   :""
   }
 
   ${
    DATA.settings.calories&&item.calories
    ?
-   `<span class="tag">
-     ${escapeHTML(item.calories)} kcal
-    </span>`
-   :
-   ""
+   `<span class="tag">${escapeHTML(item.calories)} kcal</span>`
+   :""
   }
 
   ${
    DATA.settings.spicy&&item.spicy
    ?
-   `<span class="tag">
-     ${"🌶️".repeat(
-      Math.min(
-       5,
-       Number(item.spicy)||0
-      )
-     )}
-    </span>`
-   :
-   ""
+   `<span class="tag">${
+    "🌶️".repeat(Math.min(5,Number(item.spicy)||0))
+   }</span>`
+   :""
   }
 
   ${
    DATA.settings.allergens&&item.allergens?.length
    ?
-   `<span class="tag">
-     ${escapeHTML(
-      item.allergens.join(", ")
-     )}
-    </span>`
-   :
-   ""
+   `<span class="tag">${
+    escapeHTML(item.allergens.join(", "))
+   }</span>`
+   :""
   }
 
   ${
    DATA.settings.sold&&item.sold
    ?
-   `<span class="tag sold">
-     ${t("sold")}
-    </span>`
-   :
-   ""
+   `<span class="tag sold">${t("sold")}</span>`
+   :""
   }
 
  </div>
-
  `;
-
 }
-
 
 /* ============================================================
  PRODUCT CARD
-============================================================ */
+ ============================================================ */
 
 function renderProductCard(item){
 
  return `
  <article
-   class="product"
-   id="product-${escapeHTML(item.id)}"
-   data-product="${escapeHTML(item.id)}">
+  class="product"
+  id="product-${escapeHTML(item.id)}"
+  data-product="${escapeHTML(item.id)}">
 
   <div class="productImage">
 
-   <img
+   ${
+    item.video
+    ?
+    `<video
+     autoplay
+     muted
+     loop
+     playsinline
+     src="${escapeHTML(item.video)}"></video>`
+    :
+    `<img
      src="${escapeHTML(item.image)}"
-     alt="${escapeHTML(item.name)}">
+     alt="${escapeHTML(item.name)}">`
+   }
 
   </div>
 
   <div class="productInfo">
 
-   <h3>
-    ${escapeHTML(item.name)}
-   </h3>
+   <h3>${escapeHTML(item.name)}</h3>
 
-   <p>
-    ${escapeHTML(item.description)}
-   </p>
+   <p>${escapeHTML(item.description)}</p>
 
    ${renderTags(item)}
 
    <div class="price">
-
     ${
      DATA.settings.sold&&item.sold
-     ?
-     t("sold")
-     :
-     money(item.price)
+     ?t("sold")
+     :money(item.price)
     }
-
    </div>
 
   </div>
 
  </article>
  `;
-
 }
-
 
 /* ============================================================
  CATEGORY PAGE
-============================================================ */
+ ============================================================ */
 
 function renderCategoryPage(){
 
- const category=
-  findCategory(selectedCategory);
+ const category=findCategory(selectedCategory);
 
- if(!category)
-  return renderHome();
+ if(!category)return renderHome();
 
  return `
-
  <section class="section">
 
   <div class="categoryTitle">
 
-   <button
-     class="backBtn"
-     id="backHome">
-
+   <button class="backBtn" id="backHome">
     ← ${t("back")}
-
    </button>
 
-   <h2
-     style="
-      margin:0;
-      font-size:19px
-     ">
-
+   <h2 style="margin:0;font-size:19px">
     ${escapeHTML(category.name)}
-
    </h2>
 
   </div>
@@ -2357,23 +1998,19 @@ function renderCategoryPage(){
 
    <div class="categoryTabs">
 
-    ${
-     (category.items||[]).map(
-      function(item,index){
+    ${(category.items||[]).map(function(item,index){
 
-       return `
-       <button
-         class="${index===0?"active":""}"
-         data-scroll-product="${escapeHTML(item.id)}">
+     return `
+     <button
+      class="${index===0?"active":""}"
+      data-scroll-product="${escapeHTML(item.id)}">
 
-        ${escapeHTML(item.name)}
+      ${escapeHTML(item.name)}
 
-       </button>
-       `;
+     </button>
+     `;
 
-      }
-     ).join("")
-    }
+    }).join("")}
 
    </div>
 
@@ -2386,56 +2023,40 @@ function renderCategoryPage(){
     ?
     category.items.map(renderProductCard).join("")
     :
-    `
-     <div class="empty">
-      Bu kategoride ürün bulunmuyor.
-     </div>
-    `
+    `<div class="empty">Bu kategoride ürün bulunmuyor.</div>`
    }
 
   </div>
 
  </section>
-
  `;
-
 }
-
 
 /* ============================================================
  SEARCH
-============================================================ */
+ ============================================================ */
 
 function renderSearch(){
 
- const query=
-  searchText.toLocaleLowerCase("tr");
+ const query=searchText.toLocaleLowerCase("tr");
 
- const products=
-  allProducts().filter(function(item){
+ const products=allProducts().filter(function(item){
 
-   return (
-    item.name+
-    " "+
-    item.description+
-    " "+
-    item.categoryName
-   )
-   .toLocaleLowerCase("tr")
-   .includes(query);
+  return (
+   item.name+" "+
+   item.description+" "+
+   item.categoryName
+  )
+  .toLocaleLowerCase("tr")
+  .includes(query);
 
-  });
+ });
 
  return `
-
  <section class="section">
 
   <div class="sectionHead">
-
-   <h2>
-    ${products.length} ürün
-   </h2>
-
+   <h2>${products.length} ürün</h2>
   </div>
 
   <div class="products">
@@ -2451,334 +2072,252 @@ function renderSearch(){
   </div>
 
  </section>
-
  `;
-
 }
-
-
-/* ============================================================
- HOME
-============================================================ */
 
 function renderHome(){
-
- return (
-  renderFeatured()+
-  renderEvents()+
-  renderCategories()
- );
-
+ return renderFeatured()+
+        renderEvents()+
+        renderCategories();
 }
-
 
 /* ============================================================
  DRAWER
-============================================================ */
+ ============================================================ */
 
 function renderDrawer(){
 
- if(!drawerOpen)
-  return "";
+ if(!drawerOpen)return "";
 
  return `
-
- <div
-   class="overlay"
-   id="drawerOverlay">
+ <div class="overlay" id="drawerOverlay">
 
   <aside class="drawer">
 
    <div class="drawerHead">
 
-    <div class="drawerLogo">
-     NEARMENU
-    </div>
+    <div class="drawerLogo">NEARMENU</div>
 
-    <button
-      class="iconBtn"
-      id="closeDrawer">
-     ×
-    </button>
+    <button class="iconBtn" id="closeDrawer">×</button>
 
    </div>
 
-
    <div class="drawerSection">
 
-    <div class="drawerLabel">
-     ${t("language")}
-    </div>
+    <div class="drawerLabel">${t("language")}</div>
 
     <div class="optionGrid">
 
      <button
-       class="${language==="tr"?"active":""}"
-       data-language="tr">
+      class="${language==="tr"?"active":""}"
+      data-language="tr">
       🇹🇷 TR
      </button>
 
      <button
-       class="${language==="en"?"active":""}"
-       data-language="en">
+      class="${language==="en"?"active":""}"
+      data-language="en">
       🇬🇧 EN
      </button>
 
      <button
-       class="${language==="ar"?"active":""}"
-       data-language="ar">
+      class="${language==="ar"?"active":""}"
+      data-language="ar">
       🇸🇦 AR
      </button>
 
     </div>
-
    </div>
-
 
    <div class="drawerSection">
 
-    <div class="drawerLabel">
-     ${t("currency")}
-    </div>
+    <div class="drawerLabel">${t("currency")}</div>
 
     <div class="optionGrid">
 
      <button
-       class="${currency==="TRY"?"active":""}"
-       data-currency="TRY">
+      class="${currency==="TRY"?"active":""}"
+      data-currency="TRY">
       ₺ TRY
      </button>
 
      <button
-       class="${currency==="USD"?"active":""}"
-       data-currency="USD">
+      class="${currency==="USD"?"active":""}"
+      data-currency="USD">
       $ USD
      </button>
 
      <button
-       class="${currency==="EUR"?"active":""}"
-       data-currency="EUR">
+      class="${currency==="EUR"?"active":""}"
+      data-currency="EUR">
       € EUR
      </button>
 
     </div>
-
    </div>
-
 
    <div class="drawerSection">
 
-    <div class="drawerLabel">
-     İLETİŞİM
-    </div>
+    <div class="drawerLabel">İLETİŞİM</div>
 
     ${
      DATA.whatsapp
      ?
-     `
-      <a
-        class="drawerLink"
-        target="_blank"
-        href="https://wa.me/${escapeHTML(DATA.whatsapp)}">
-       WhatsApp
-      </a>
-     `
-     :
-     ""
+     `<a
+      class="drawerLink"
+      target="_blank"
+      href="https://wa.me/${escapeHTML(DATA.whatsapp)}">
+      WhatsApp
+     </a>`
+     :""
     }
 
     ${
      DATA.phone
      ?
-     `
-      <a
-        class="drawerLink"
-        href="tel:${escapeHTML(DATA.phone)}">
-       Telefon
-      </a>
-     `
-     :
-     ""
+     `<a
+      class="drawerLink"
+      href="tel:${escapeHTML(DATA.phone)}">
+      Telefon
+     </a>`
+     :""
     }
 
    </div>
 
-
    <div class="drawerSection">
 
-    <button
-      class="drawerLink"
-      id="openAdmin">
-
+    <button class="drawerLink" id="openAdmin">
      ⚙ ${t("admin")}
-
     </button>
 
    </div>
 
   </aside>
-
  </div>
-
  `;
-
 }
-
 
 /* ============================================================
  PRODUCT MODAL
-============================================================ */
+ ============================================================ */
 
 function renderProductModal(){
 
- if(!selectedProduct)
-  return "";
+ if(!selectedProduct)return "";
 
  const item=selectedProduct;
 
  return `
-
- <div
-   class="modalOverlay"
-   id="productOverlay">
+ <div class="modalOverlay" id="productOverlay">
 
   <div class="modal">
 
    <div class="modalImage">
 
-    <img
+    ${
+     item.video
+     ?
+     `<video
+      controls
+      autoplay
+      muted
+      playsinline
+      src="${escapeHTML(item.video)}"></video>`
+     :
+     `<img
       src="${escapeHTML(item.image)}"
-      alt="${escapeHTML(item.name)}">
+      alt="${escapeHTML(item.name)}">`
+    }
 
-    <button
-      class="closeBtn"
-      id="closeProduct">
-     ×
-    </button>
+    <button class="closeBtn" id="closeProduct">×</button>
 
    </div>
 
    <div class="modalBody">
 
-    <h2>
-     ${escapeHTML(item.name)}
-    </h2>
+    <h2>${escapeHTML(item.name)}</h2>
 
     ${
      DATA.settings.dish&&item.dish
      ?
-     `
-      <div style="margin-top:9px">
-       <span
-         class="tag"
-         style="
-          background:var(--gold);
-          color:#111
-         ">
-        ⭐ ${t("dish")}
-       </span>
-      </div>
-     `
-     :
-     ""
+     `<div style="margin-top:9px">
+      <span
+       class="tag"
+       style="background:var(--accent);color:#111">
+       ⭐ ${t("dish")}
+      </span>
+     </div>`
+     :""
     }
 
-    <p>
-     ${escapeHTML(item.description)}
-    </p>
+    <p>${escapeHTML(item.description)}</p>
 
     ${
      DATA.settings.portion&&item.portion
      ?
-     `
-      <div class="infoRow">
-       <span>${t("portion")}</span>
-       <span>${escapeHTML(item.portion)}</span>
-      </div>
-     `
-     :
-     ""
+     `<div class="infoRow">
+      <span>${t("portion")}</span>
+      <span>${escapeHTML(item.portion)}</span>
+     </div>`
+     :""
     }
 
     ${
      DATA.settings.calories&&item.calories
      ?
-     `
-      <div class="infoRow">
-       <span>${t("calories")}</span>
-       <span>${escapeHTML(item.calories)} kcal</span>
-      </div>
-     `
-     :
-     ""
+     `<div class="infoRow">
+      <span>${t("calories")}</span>
+      <span>${escapeHTML(item.calories)} kcal</span>
+     </div>`
+     :""
     }
 
     ${
      DATA.settings.allergens&&item.allergens?.length
      ?
-     `
-      <div class="infoRow">
-       <span>${t("allergens")}</span>
-       <span>
-        ${escapeHTML(item.allergens.join(", "))}
-       </span>
-      </div>
-     `
-     :
-     ""
+     `<div class="infoRow">
+      <span>${t("allergens")}</span>
+      <span>${escapeHTML(item.allergens.join(", "))}</span>
+     </div>`
+     :""
     }
 
     ${
      DATA.settings.spicy&&item.spicy
      ?
-     `
-      <div class="infoRow">
-       <span>${t("spicy")}</span>
-       <span>
-        ${"🌶️".repeat(
-         Math.min(
-          5,
-          Number(item.spicy)||0
-         )
-        )}
-       </span>
-      </div>
-     `
-     :
-     ""
+     `<div class="infoRow">
+      <span>${t("spicy")}</span>
+      <span>${
+       "🌶️".repeat(Math.min(5,Number(item.spicy)||0))
+      }</span>
+     </div>`
+     :""
     }
 
     <div class="modalPrice">
 
      ${
       DATA.settings.sold&&item.sold
-      ?
-      t("sold")
-      :
-      money(item.price)
+      ?t("sold")
+      :money(item.price)
      }
 
     </div>
 
    </div>
-
   </div>
-
  </div>
-
  `;
-
 }
-
 
 /* ============================================================
  EVENT MODAL
-============================================================ */
+ ============================================================ */
 
 function renderEventModal(){
 
- if(!selectedEvent)
-  return "";
+ if(!selectedEvent)return "";
 
  const event=selectedEvent;
 
@@ -2793,32 +2332,34 @@ function renderEventModal(){
   );
 
  return `
-
- <div
-   class="modalOverlay"
-   id="eventOverlay">
+ <div class="modalOverlay" id="eventOverlay">
 
   <div class="modal">
 
    <div class="modalImage">
 
-    <img
+    ${
+     event.video
+     ?
+     `<video
+      controls
+      autoplay
+      muted
+      playsinline
+      src="${escapeHTML(event.video)}"></video>`
+     :
+     `<img
       src="${escapeHTML(event.image)}"
-      alt="${escapeHTML(event.name)}">
+      alt="${escapeHTML(event.name)}">`
+    }
 
-    <button
-      class="closeBtn"
-      id="closeEvent">
-     ×
-    </button>
+    <button class="closeBtn" id="closeEvent">×</button>
 
    </div>
 
    <div class="modalBody">
 
-    <h2>
-     ${escapeHTML(event.name)}
-    </h2>
+    <h2>${escapeHTML(event.name)}</h2>
 
     <p>
      ${escapeHTML(event.date)}
@@ -2826,108 +2367,126 @@ function renderEventModal(){
      ${escapeHTML(event.time)}
     </p>
 
-    <p>
-     ${escapeHTML(event.description)}
-    </p>
+    <p>${escapeHTML(event.description)}</p>
 
-    <div class="actionRow">
-
-     ${
-      DATA.whatsapp
-      ?
-      `
-       <a
-         class="action gold"
-         target="_blank"
-         href="${whatsappLink}">
-        ${t("reserve")}
-       </a>
-      `
-      :
-      ""
-     }
-
-     ${
-      DATA.phone
-      ?
-      `
-       <a
-         class="action"
-         href="tel:${escapeHTML(DATA.phone)}">
-        ${t("call")}
-       </a>
-      `
-      :
-      ""
-     }
-
-    </div>
+    ${
+     DATA.whatsapp
+     ?
+     `<a
+      class="adminButton gold"
+      style="display:block;text-align:center"
+      target="_blank"
+      href="${whatsappLink}">
+      ${t("reserve")}
+     </a>`
+     :""
+    }
 
    </div>
 
   </div>
-
  </div>
-
  `;
-
 }
-
 
 /* ============================================================
  ADMIN INPUT
-============================================================ */
+ ============================================================ */
 
-function adminInput(
- key,
- label,
- value,
- type="text"
-){
+function adminInput(key,label,value,type="text"){
 
  return `
  <div class="field">
 
-  <label>
-   ${label}
-  </label>
+  <label>${label}</label>
 
   <input
-    type="${type}"
-    data-admin="${escapeHTML(key)}"
-    value="${escapeHTML(value)}">
+   type="${type}"
+   data-admin="${escapeHTML(key)}"
+   value="${escapeHTML(value)}">
 
  </div>
  `;
-
 }
 
-
-function adminTextarea(
- key,
- label,
- value
-){
+function adminTextarea(key,label,value){
 
  return `
  <div class="field">
 
-  <label>
-   ${label}
-  </label>
+  <label>${label}</label>
 
   <textarea
-    data-admin="${escapeHTML(key)}">${escapeHTML(value)}</textarea>
+   data-admin="${escapeHTML(key)}">${escapeHTML(value)}</textarea>
 
  </div>
  `;
-
 }
 
+/* ============================================================
+ FILE FIELD
+ ============================================================ */
+
+function fileField(type,id,label,value,accept){
+
+ return `
+ <div class="field">
+
+  <label>${label}</label>
+
+  <div class="fileBox">
+
+   <label class="fileBtn">
+
+    📁 Dosya Ekle
+
+    <input
+     hidden
+     type="file"
+     accept="${accept}"
+     data-file-type="${type}"
+     data-file-id="${escapeHTML(id)}">
+
+   </label>
+
+   ${
+    value
+    ?
+    `<button
+     type="button"
+     class="fileBtn"
+     data-clear-file="${type}|${escapeHTML(id)}">
+     Temizle
+    </button>`
+    :""
+   }
+
+  </div>
+
+  ${
+   value
+   ?
+   type==="video"
+   ?
+   `<video
+    class="preview"
+    controls
+    src="${escapeHTML(value)}"></video>`
+   :
+   `<img
+    class="preview"
+    src="${escapeHTML(value)}">`
+   :
+   `<div class="small">Henüz dosya seçilmedi.</div>`
+  }
+
+ </div>
+ `;
+}
 
 /* ============================================================
  ADMIN GENERAL
-============================================================ */
+ ============================================================ */
 
 function renderAdminGeneral(){
 
@@ -2959,10 +2518,12 @@ function renderAdminGeneral(){
   DATA.whatsapp
  )}
 
- ${adminInput(
+ ${fileField(
   "logo",
-  "Logo URL",
-  DATA.logo
+  "logo",
+  "Logo",
+  DATA.logo,
+  "image/*"
  )}
 
  ${adminInput(
@@ -2971,32 +2532,31 @@ function renderAdminGeneral(){
   DATA.hours
  )}
 
-
  <div class="adminCard">
 
   <b>Arka Plan</b>
 
   <p class="small">
-   Renk, fotoğraf veya video seçebilirsin.
+   Renk, fotoğraf veya video kullanabilirsin.
   </p>
 
   <div class="optionGrid">
 
    <button
-     class="${DATA.background.type==="color"?"active":""}"
-     data-background="color">
+    class="${DATA.background.type==="color"?"active":""}"
+    data-background="color">
     Renk
    </button>
 
    <button
-     class="${DATA.background.type==="image"?"active":""}"
-     data-background="image">
+    class="${DATA.background.type==="image"?"active":""}"
+    data-background="image">
     Fotoğraf
    </button>
 
    <button
-     class="${DATA.background.type==="video"?"active":""}"
-     data-background="video">
+    class="${DATA.background.type==="video"?"active":""}"
+    data-background="video">
     Video
    </button>
 
@@ -3010,52 +2570,71 @@ function renderAdminGeneral(){
     "Arka plan rengi",
     DATA.background.value
    )
-   :
-   ""
+   :""
   }
 
   ${
    DATA.background.type==="image"
    ?
-   adminInput(
+   fileField(
     "backgroundImage",
-    "Fotoğraf URL",
-    DATA.background.image
+    "background",
+    "Arka plan fotoğrafı",
+    DATA.background.image,
+    "image/*"
    )
-   :
-   ""
+   :""
   }
 
   ${
    DATA.background.type==="video"
    ?
-   adminInput(
+   fileField(
     "backgroundVideo",
-    "Video URL",
-    DATA.background.video
+    "background",
+    "Arka plan videosu",
+    DATA.background.video,
+    "video/*"
    )
-   :
-   ""
+   :""
   }
 
- </div>
+  <div class="field">
+   <label>Karartma %</label>
 
+   <div class="rangeRow">
+
+    <input
+     type="range"
+     min="0"
+     max="90"
+     value="${Math.round(
+      (DATA.theme.overlay??.55)*100
+     )}"
+     data-overlay-range>
+
+    <span id="overlayValue">
+     ${Math.round(
+      (DATA.theme.overlay??.55)*100
+     )}%
+    </span>
+
+   </div>
+  </div>
+
+ </div>
 
  <div class="adminCard">
 
   <b>Etkinlikler</b>
 
-  <p class="small">
-   Etkinlik ekle, düzenle veya sil.
-  </p>
-
   ${
-   (DATA.events||[])
-   .map(function(event){
+   (DATA.events||[]).map(function(event){
 
     return `
-
-    <div class="adminCard">
+    <div
+     class="adminCard"
+     style="margin-top:10px">
 
      ${adminInput(
       "eventName-"+event.id,
@@ -3085,64 +2664,64 @@ function renderAdminGeneral(){
       event.description
      )}
 
-     ${adminInput(
-      "eventImage-"+event.id,
-      "Görsel URL",
-      event.image
+     ${fileField(
+      "eventImage",
+      event.id,
+      "Etkinlik fotoğrafı",
+      event.image,
+      "image/*"
+     )}
+
+     ${fileField(
+      "eventVideo",
+      event.id,
+      "Etkinlik videosu",
+      event.video||"",
+      "video/*"
      )}
 
      <button
-       class="adminButton danger"
-       data-delete-event="${escapeHTML(event.id)}">
-
+      class="adminButton danger"
+      data-delete-event="${escapeHTML(event.id)}">
       Etkinliği Sil
-
      </button>
 
     </div>
-
     `;
 
    }).join("")
   }
 
   <button
-    class="adminButton gold"
-    id="addEvent">
+   class="adminButton gold"
+   id="addEvent">
    + Etkinlik Ekle
   </button>
 
  </div>
 
  `;
-
 }
 
-
 /* ============================================================
- ADMIN PRODUCT CATEGORY LIST
-============================================================ */
+ ADMIN CATEGORIES
+ ============================================================ */
 
 function renderAdminProductCategories(){
 
  return `
 
- <h3>
-  Menü
- </h3>
+ <h3>Menü</h3>
 
  <p class="small">
-  Önce kategori seç. Sonra sadece o kategorideki ürünleri göreceksin.
+  Önce kategoriye gir. Sadece o kategorinin ürünleri gösterilir.
  </p>
 
  <button
-   class="adminButton gold"
-   id="addCategory">
-
+  class="adminButton gold"
+  id="addCategory">
   + Kategori Ekle
-
  </button>
-
 
  <div class="adminCategoryList">
 
@@ -3150,17 +2729,12 @@ function renderAdminProductCategories(){
   (DATA.categories||[]).map(function(category){
 
    return `
-
    <button
-     class="adminCategoryItem"
-     data-admin-category="${escapeHTML(category.id)}">
+    class="adminCategoryItem"
+    data-admin-category="${escapeHTML(category.id)}">
 
     <div class="adminCategoryThumb">
-
-     <img
-       src="${escapeHTML(category.image)}"
-       alt="">
-
+     <img src="${escapeHTML(category.image)}">
     </div>
 
     <div class="adminCategoryInfo">
@@ -3175,38 +2749,29 @@ function renderAdminProductCategories(){
 
     </div>
 
-    <div class="adminArrow">
-     ›
-    </div>
+    <div class="adminArrow">›</div>
 
    </button>
-
    `;
 
   }).join("")
  }
 
  </div>
-
  `;
-
 }
 
-
 /* ============================================================
- ADMIN CATEGORY PRODUCTS
-============================================================ */
+ ADMIN CATEGORY
+ ============================================================ */
 
 function renderAdminCategoryProducts(){
 
- const category=
-  findCategory(adminCategoryView);
+ const category=findCategory(adminCategoryView);
 
  if(!category){
-
   adminCategoryView=null;
   return renderAdminProductCategories();
-
  }
 
  return `
@@ -3225,12 +2790,9 @@ function renderAdminCategoryProducts(){
 
  </div>
 
-
  <div class="adminCard">
 
-  <b>
-   Kategori
-  </b>
+  <b>Kategori</b>
 
   ${adminInput(
    "categoryName-"+category.id,
@@ -3238,53 +2800,44 @@ function renderAdminCategoryProducts(){
    category.name
   )}
 
-  ${adminInput(
-   "categoryImage-"+category.id,
-   "Kategori görsel URL",
-   category.image
+  ${fileField(
+   "categoryImage",
+   category.id,
+   "Kategori fotoğrafı",
+   category.image,
+   "image/*"
   )}
 
   <button
-    class="adminButton danger"
-    data-delete-category="${escapeHTML(category.id)}">
-
+   class="adminButton danger"
+   data-delete-category="${escapeHTML(category.id)}">
    Kategoriyi Sil
-
   </button>
 
  </div>
 
-
  <div
-   style="
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-top:18px
-   ">
+  style="
+   display:flex;
+   align-items:center;
+   justify-content:space-between;
+   margin-top:18px">
 
   <div>
-
-   <b>
-    Ürünler
-   </b>
+   <b>Ürünler</b>
 
    <div class="small">
     ${(category.items||[]).length} ürün
    </div>
-
   </div>
 
   <button
-    class="adminButton gold"
-    data-add-product="${escapeHTML(category.id)}">
-
+   class="adminButton gold"
+   data-add-product="${escapeHTML(category.id)}">
    + Ürün
-
   </button>
 
  </div>
-
 
  <div class="adminProductList">
 
@@ -3294,16 +2847,19 @@ function renderAdminCategoryProducts(){
   category.items.map(function(item){
 
    return `
-
    <button
-     class="adminProductItem"
-     data-admin-product="${escapeHTML(item.id)}">
+    class="adminProductItem"
+    data-admin-product="${escapeHTML(item.id)}">
 
     <div class="adminProductThumb">
 
-     <img
-       src="${escapeHTML(item.image)}"
-       alt="">
+     ${
+      item.image
+      ?
+      `<img src="${escapeHTML(item.image)}">`
+      :
+      ""
+     }
 
     </div>
 
@@ -3319,59 +2875,49 @@ function renderAdminCategoryProducts(){
 
     </div>
 
-    <div class="adminProductArrow">
-     ›
-    </div>
+    <div class="adminProductArrow">›</div>
 
    </button>
-
    `;
 
   }).join("")
   :
-  `
-   <div class="empty">
-    Bu kategoride henüz ürün yok.
-   </div>
-  `
+  `<div class="empty">
+   Bu kategoride henüz ürün yok.
+  </div>`
  }
 
  </div>
 
  `;
-
 }
 
-
 /* ============================================================
- ADMIN PRODUCT EDITOR
-============================================================ */
+ ADMIN PRODUCT
+ ============================================================ */
 
 function renderAdminProductEditor(){
 
- const item=
-  findProduct(adminProductView);
+ const item=findProduct(adminProductView);
 
- const category=
-  item
-  ?
-  DATA.categories.find(function(cat){
+ let category=null;
 
-   return cat.items.some(function(product){
+ if(item){
 
+  category=DATA.categories.find(function(cat){
+
+   return (cat.items||[]).some(function(product){
     return product.id===adminProductView;
-
    });
 
-  })
-  :
-  null;
+  });
+
+ }
 
  if(!item||!category){
 
   adminProductView=null;
   return renderAdminCategoryProducts();
-
  }
 
  return `
@@ -3384,18 +2930,11 @@ function renderAdminProductEditor(){
 
   <span>›</span>
 
-  <strong>
-   Ürün
-  </strong>
+  <strong>Ürün</strong>
 
  </div>
 
-
  <div class="adminCard">
-
-  <h3 style="margin-top:0">
-   ${escapeHTML(item.name)}
-  </h3>
 
   ${adminInput(
    "productName-"+item.id,
@@ -3416,114 +2955,113 @@ function renderAdminProductEditor(){
    "number"
   )}
 
-  ${adminInput(
-   "productImage-"+item.id,
-   "Fotoğraf URL",
-   item.image
+  ${fileField(
+   "productImage",
+   item.id,
+   "Ürün fotoğrafı",
+   item.image,
+   "image/*"
   )}
 
-  ${adminInput(
-   "productPortion-"+item.id,
-   "Gramaj / Porsiyon",
-   item.portion||""
+  ${fileField(
+   "productVideo",
+   item.id,
+   "Ürün videosu",
+   item.video||"",
+   "video/*"
   )}
-
-  ${adminInput(
-   "productCalories-"+item.id,
-   "Kalori",
-   item.calories||""
-  )}
-
-  ${adminInput(
-   "productAllergens-"+item.id,
-   "Alerjenler (virgülle ayır)",
-   (item.allergens||[]).join(", ")
-  )}
-
-  ${adminInput(
-   "productSpicy-"+item.id,
-   "Acılık (0-5)",
-   item.spicy||0,
-   "number"
-  )}
-
-  <label class="toggle">
-
-   Tükendi
-
-   <input
-     type="checkbox"
-     data-sold="${escapeHTML(item.id)}"
-     ${item.sold?"checked":""}>
-
-  </label>
-
-
-  <label class="toggle">
-
-   Çok Satanlar
-
-   <input
-     type="checkbox"
-     data-featured="${escapeHTML(item.id)}"
-     ${item.featured?"checked":""}>
-
-  </label>
-
-
-  <label class="toggle">
-
-   Günün Ürünü
-
-   <input
-     type="checkbox"
-     data-dish="${escapeHTML(item.id)}"
-     ${item.dish?"checked":""}>
-
-  </label>
-
 
   <button
-    class="adminButton danger"
-    data-delete-product="${escapeHTML(category.id)}|${escapeHTML(item.id)}"
-    style="width:100%;margin-top:12px">
+   class="adminButton"
+   style="width:100%;margin-bottom:10px"
+   data-toggle-advanced="product">
+
+   ⚙ Ek Bilgiler
+   ${advancedProduct?"▲":"▼"}
+
+  </button>
+
+  ${
+   advancedProduct
+   ?
+   `
+   <div class="advancedBox">
+
+    ${adminInput(
+     "productPortion-"+item.id,
+     "Gramaj / Porsiyon",
+     item.portion||""
+    )}
+
+    ${adminInput(
+     "productCalories-"+item.id,
+     "Kalori",
+     item.calories||""
+    )}
+
+    ${adminInput(
+     "productAllergens-"+item.id,
+     "Alerjenler (virgülle ayır)",
+     (item.allergens||[]).join(", ")
+    )}
+
+    ${adminInput(
+     "productSpicy-"+item.id,
+     "Acılık (0-5)",
+     item.spicy||0,
+     "number"
+    )}
+
+    <label class="toggle">
+     Tükendi
+     <input
+      type="checkbox"
+      data-sold="${escapeHTML(item.id)}"
+      ${item.sold?"checked":""}>
+    </label>
+
+    <label class="toggle">
+     Çok Satanlar
+     <input
+      type="checkbox"
+      data-featured="${escapeHTML(item.id)}"
+      ${item.featured?"checked":""}>
+    </label>
+
+    <label class="toggle">
+     Günün Ürünü
+     <input
+      type="checkbox"
+      data-dish="${escapeHTML(item.id)}"
+      ${item.dish?"checked":""}>
+    </label>
+
+   </div>
+   `
+   :
+   ""
+  }
+
+  <button
+   class="adminButton danger"
+   data-delete-product="${escapeHTML(category.id)}|${escapeHTML(item.id)}"
+   style="width:100%;margin-top:12px">
 
    Ürünü Sil
 
   </button>
 
  </div>
-
  `;
-
 }
-
-
-/* ============================================================
- ADMIN PRODUCTS
-============================================================ */
-
-function renderAdminProducts(){
-
- if(adminProductView)
-  return renderAdminProductEditor();
-
- if(adminCategoryView)
-  return renderAdminCategoryProducts();
-
- return renderAdminProductCategories();
-
-}
-
 
 /* ============================================================
  ADMIN SETTINGS
-============================================================ */
+ ============================================================ */
 
 function renderAdminSettings(){
 
  const options=[
-
   ["portion","Gramaj / Porsiyon"],
   ["calories","Kalori"],
   ["allergens","Alerjenler"],
@@ -3534,17 +3072,14 @@ function renderAdminSettings(){
   ["featured","Çok Satanlar"],
   ["events","Etkinlikler"],
   ["search","Ürün Arama"]
-
  ];
 
  return `
 
- <h3>
-  Opsiyonel Alanlar
- </h3>
+ <h3>Görünürlük</h3>
 
  <p class="small">
-  İşletme sahibi istediği özellikleri açıp kapatabilir.
+  Müşteriye hangi bilgilerin gösterileceğini buradan seç.
  </p>
 
  ${
@@ -3556,9 +3091,9 @@ function renderAdminSettings(){
     ${option[1]}
 
     <input
-      type="checkbox"
-      data-setting="${option[0]}"
-      ${DATA.settings[option[0]]?"checked":""}>
+     type="checkbox"
+     data-setting="${option[0]}"
+     ${DATA.settings[option[0]]?"checked":""}>
 
    </label>
    `;
@@ -3566,19 +3101,61 @@ function renderAdminSettings(){
   }).join("")
  }
 
+ <div class="adminCard">
+
+  <b>Tema</b>
+
+  <p class="small">
+   Renkleri ve görünümü buradan değiştir.
+  </p>
+
+  <div class="themeGrid">
+
+   ${
+    [
+     "#d6a83d",
+     "#c96b2c",
+     "#b83b5e",
+     "#5b8def",
+     "#43a047",
+     "#9c6ade",
+     "#f1f1f1",
+     "#00a99d"
+    ].map(function(c){
+
+     return `
+     <button
+      class="themeColor ${
+       DATA.theme.accent===c?"active":""
+      }"
+      style="background:${c}"
+      data-theme-color="${c}">
+     </button>
+     `;
+
+    }).join("")
+   }
+
+  </div>
+
+  ${adminInput(
+   "accent2",
+   "Vurgu açık rengi",
+   DATA.theme.accent2
+  )}
+
+ </div>
+
  `;
-
 }
-
 
 /* ============================================================
  ADMIN
-============================================================ */
+ ============================================================ */
 
 function renderAdmin(){
 
- if(!adminOpen||!adminAuthenticated)
-  return "";
+ if(!adminOpen||!adminAuthenticated)return "";
 
  let body="";
 
@@ -3586,14 +3163,16 @@ function renderAdmin(){
   body=renderAdminGeneral();
 
  if(adminTab==="products")
-  body=renderAdminProducts();
+  body=adminProductView
+   ?renderAdminProductEditor()
+   :adminCategoryView
+    ?renderAdminCategoryProducts()
+    :renderAdminProductCategories();
 
  if(adminTab==="settings")
   body=renderAdminSettings();
 
-
  return `
-
  <div class="adminOverlay">
 
   <aside class="admin">
@@ -3602,144 +3181,111 @@ function renderAdmin(){
 
     <div class="adminTop">
 
-     <b>
-      ${t("admin")}
-     </b>
+     <b>${t("admin")}</b>
 
      <button
-       class="iconBtn"
-       id="closeAdmin">
+      class="iconBtn"
+      id="closeAdmin">
       ×
      </button>
 
     </div>
 
-
     <div class="adminTabs">
 
      <button
-       class="${adminTab==="general"?"active":""}"
-       data-admin-tab="general">
-
+      class="${adminTab==="general"?"active":""}"
+      data-admin-tab="general">
       ${t("general")}
-
      </button>
 
      <button
-       class="${adminTab==="products"?"active":""}"
-       data-admin-tab="products">
-
+      class="${adminTab==="products"?"active":""}"
+      data-admin-tab="products">
       ${t("products")}
-
      </button>
 
      <button
-       class="${adminTab==="settings"?"active":""}"
-       data-admin-tab="settings">
-
+      class="${adminTab==="settings"?"active":""}"
+      data-admin-tab="settings">
       ${t("settings")}
-
      </button>
 
     </div>
 
    </div>
 
-
    <div class="adminBody">
-
     ${body}
-
    </div>
-
 
    <div class="saveBar">
 
     <button
-      class="adminButton gold"
-      id="saveAdmin"
-      style="width:100%">
-
+     class="adminButton gold"
+     id="saveAdmin"
+     style="width:100%">
      ${t("save")}
-
     </button>
 
    </div>
 
   </aside>
-
  </div>
-
  `;
-
 }
 
-
 /* ============================================================
- ADMIN LOGIN
-============================================================ */
+ LOGIN
+ ============================================================ */
 
 function renderAdminLogin(){
 
- if(!adminOpen||adminAuthenticated)
-  return "";
+ if(!adminOpen||adminAuthenticated)return "";
 
  return `
-
  <div
-   class="adminLoginOverlay"
-   id="adminLoginOverlay">
+  class="adminLoginOverlay"
+  id="adminLoginOverlay">
 
   <div class="adminLogin">
 
-   <div class="adminLoginLogo">
-    N
-   </div>
+   <div class="adminLoginLogo">N</div>
 
-   <h2>
-    Yönetim Paneli
-   </h2>
+   <h2>Yönetim Paneli</h2>
 
    <p>
     Devam etmek için yönetici şifresini girin.
    </p>
 
    <input
-     id="adminPassword"
-     class="adminPassword"
-     type="password"
-     inputmode="numeric"
-     autocomplete="off"
-     placeholder="Şifre">
+    id="adminPassword"
+    class="adminPassword"
+    type="password"
+    inputmode="numeric"
+    autocomplete="off"
+    placeholder="Şifre">
 
    <button
-     class="adminLoginButton"
-     id="adminLoginButton">
-
+    class="adminLoginButton"
+    id="adminLoginButton">
     Giriş Yap
-
    </button>
 
    <div
-     class="loginError"
-     id="loginError">
-
+    class="loginError"
+    id="loginError">
     Şifre yanlış.
-
    </div>
 
   </div>
-
  </div>
-
  `;
-
 }
-
 
 /* ============================================================
  COLLECT ADMIN
-============================================================ */
+ ============================================================ */
 
 function collectAdmin(){
 
@@ -3749,7 +3295,6 @@ function collectAdmin(){
 
   const key=input.dataset.admin;
   const value=input.value;
-
 
   if(key==="businessName")
    DATA.name=value;
@@ -3763,446 +3308,382 @@ function collectAdmin(){
   else if(key==="whatsapp")
    DATA.whatsapp=value;
 
-  else if(key==="logo")
-   DATA.logo=value;
-
   else if(key==="hours")
    DATA.hours=value;
+
+  else if(key==="accent2")
+   DATA.theme.accent2=value;
 
   else if(key==="backgroundColor")
    DATA.background.value=value;
 
-  else if(key==="backgroundImage")
-   DATA.background.image=value;
-
-  else if(key==="backgroundVideo")
-   DATA.background.video=value;
-
-
   else if(key.startsWith("categoryName-")){
 
-   const id=
-    key.replace("categoryName-","");
+   const id=key.replace("categoryName-","");
+   const category=findCategory(id);
 
-   const category=
-    findCategory(id);
-
-   if(category)
-    category.name=value;
+   if(category)category.name=value;
 
   }
-
-
-  else if(key.startsWith("categoryImage-")){
-
-   const id=
-    key.replace("categoryImage-","");
-
-   const category=
-    findCategory(id);
-
-   if(category)
-    category.image=value;
-
-  }
-
 
   else if(key.startsWith("productName-")){
 
-   const id=
-    key.replace("productName-","");
+   const id=key.replace("productName-","");
+   const item=findProduct(id);
 
-   const item=
-    findProduct(id);
-
-   if(item)
-    item.name=value;
+   if(item)item.name=value;
 
   }
-
 
   else if(key.startsWith("productDescription-")){
 
-   const id=
-    key.replace("productDescription-","");
+   const id=key.replace("productDescription-","");
+   const item=findProduct(id);
 
-   const item=
-    findProduct(id);
-
-   if(item)
-    item.description=value;
+   if(item)item.description=value;
 
   }
-
 
   else if(key.startsWith("productPrice-")){
 
-   const id=
-    key.replace("productPrice-","");
+   const id=key.replace("productPrice-","");
+   const item=findProduct(id);
 
-   const item=
-    findProduct(id);
-
-   if(item)
-    item.price=Number(value)||0;
+   if(item)item.price=Number(value)||0;
 
   }
-
-
-  else if(key.startsWith("productImage-")){
-
-   const id=
-    key.replace("productImage-","");
-
-   const item=
-    findProduct(id);
-
-   if(item)
-    item.image=value;
-
-  }
-
 
   else if(key.startsWith("productPortion-")){
 
-   const id=
-    key.replace("productPortion-","");
+   const id=key.replace("productPortion-","");
+   const item=findProduct(id);
 
-   const item=
-    findProduct(id);
-
-   if(item)
-    item.portion=value;
+   if(item)item.portion=value;
 
   }
-
 
   else if(key.startsWith("productCalories-")){
 
-   const id=
-    key.replace("productCalories-","");
+   const id=key.replace("productCalories-","");
+   const item=findProduct(id);
 
-   const item=
-    findProduct(id);
-
-   if(item)
-    item.calories=value;
+   if(item)item.calories=value;
 
   }
 
-
   else if(key.startsWith("productAllergens-")){
 
-   const id=
-    key.replace("productAllergens-","");
-
-   const item=
-    findProduct(id);
+   const id=key.replace("productAllergens-","");
+   const item=findProduct(id);
 
    if(item){
 
-    item.allergens=
-     value
+    item.allergens=value
      .split(",")
-     .map(function(x){
-      return x.trim();
-     })
+     .map(x=>x.trim())
      .filter(Boolean);
 
    }
 
   }
 
-
   else if(key.startsWith("productSpicy-")){
 
-   const id=
-    key.replace("productSpicy-","");
-
-   const item=
-    findProduct(id);
+   const id=key.replace("productSpicy-","");
+   const item=findProduct(id);
 
    if(item){
 
-    item.spicy=
-     Math.max(
-      0,
-      Math.min(
-       5,
-       Number(value)||0
-      )
-     );
+    item.spicy=Math.max(
+     0,
+     Math.min(5,Number(value)||0)
+    );
+
+   }
 
   }
 
- }
+  else if(key.startsWith("eventName-")){
 
+   const id=key.replace("eventName-","");
+   const event=findEvent(id);
 
- else if(key.startsWith("eventName-")){
+   if(event)event.name=value;
 
-  const id=
-   key.replace("eventName-","");
+  }
 
-  const event=
-   findEvent(id);
+  else if(key.startsWith("eventDate-")){
 
-  if(event)
-   event.name=value;
+   const id=key.replace("eventDate-","");
+   const event=findEvent(id);
 
- }
+   if(event)event.date=value;
 
+  }
 
- else if(key.startsWith("eventDate-")){
+  else if(key.startsWith("eventTime-")){
 
-  const id=
-   key.replace("eventDate-","");
+   const id=key.replace("eventTime-","");
+   const event=findEvent(id);
 
-  const event=
-   findEvent(id);
+   if(event)event.time=value;
 
-  if(event)
-   event.date=value;
+  }
 
- }
+  else if(key.startsWith("eventDescription-")){
 
+   const id=key.replace("eventDescription-","");
+   const event=findEvent(id);
 
- else if(key.startsWith("eventTime-")){
+   if(event)event.description=value;
 
-  const id=
-   key.replace("eventTime-","");
-
-  const event=
-   findEvent(id);
-
-  if(event)
-   event.time=value;
-
- }
-
-
- else if(key.startsWith("eventDescription-")){
-
-  const id=
-   key.replace("eventDescription-","");
-
-  const event=
-   findEvent(id);
-
-  if(event)
-   event.description=value;
-
- }
-
-
- else if(key.startsWith("eventImage-")){
-
-  const id=
-   key.replace("eventImage-","");
-
-  const event=
-   findEvent(id);
-
-  if(event)
-   event.image=value;
-
- }
+  }
 
  });
 
 }
 
+/* ============================================================
+ FILE READER
+ ============================================================ */
+
+function readFileAsDataURL(file,callback){
+
+ const reader=new FileReader();
+
+ reader.onload=function(){
+  callback(reader.result);
+ };
+
+ reader.readAsDataURL(file);
+}
+
+function handleFile(type,id,file){
+
+ if(!file)return;
+
+ readFileAsDataURL(file,function(data){
+
+  if(type==="logo"){
+   DATA.logo=data;
+  }
+
+  else if(type==="backgroundImage"){
+   DATA.background.image=data;
+  }
+
+  else if(type==="backgroundVideo"){
+   DATA.background.video=data;
+  }
+
+  else if(type==="categoryImage"){
+
+   const category=findCategory(id);
+
+   if(category)category.image=data;
+
+  }
+
+  else if(type==="productImage"){
+
+   const item=findProduct(id);
+
+   if(item)item.image=data;
+
+  }
+
+  else if(type==="productVideo"){
+
+   const item=findProduct(id);
+
+   if(item)item.video=data;
+
+  }
+
+  else if(type==="eventImage"){
+
+   const event=findEvent(id);
+
+   if(event)event.image=data;
+
+  }
+
+  else if(type==="eventVideo"){
+
+   const event=findEvent(id);
+
+   if(event)event.video=data;
+
+  }
+
+  saveData();
+  render();
+
+ });
+
+}
 
 /* ============================================================
  MAIN RENDER
-============================================================ */
+ ============================================================ */
 
 function render(){
 
  document.documentElement.dir=
   language==="ar"?"rtl":"ltr";
 
+ document.documentElement.style
+  .setProperty(
+   "--accent",
+   DATA.theme?.accent||"#d6a83d"
+  );
+
+ document.documentElement.style
+  .setProperty(
+   "--accent2",
+   DATA.theme?.accent2||"#f0c45a"
+  );
+
+ document.documentElement.style
+  .setProperty(
+   "--overlay",
+   DATA.theme?.overlay??.55
+  );
 
  let content="";
 
-
- if(searchText){
-
+ if(searchText)
   content=renderSearch();
 
- }
-
- else if(selectedCategory){
-
+ else if(selectedCategory)
   content=renderCategoryPage();
 
- }
-
- else{
-
+ else
   content=renderHome();
 
- }
+ document.getElementById("app").innerHTML=`
 
+  ${renderBackground()}
 
- document
- .getElementById("app")
- .innerHTML=
+  <div class="container">
 
- `
- ${renderBackground()}
+   <div class="top">
 
- <div class="container">
-
-  <div class="top">
-
-   <div class="topRow">
-
-    <button
-      class="iconBtn"
-      id="openDrawer">
-     ☰
-    </button>
-
-    <div class="topRight">
-
-     ${
-      DATA.settings.search
-      ?
-      `
-       <button
-         class="iconBtn"
-         id="searchButton">
-        ⌕
-       </button>
-      `
-      :
-      ""
-     }
+    <div class="topRow">
 
      <button
+      class="iconBtn"
+      id="openDrawer">
+      ☰
+     </button>
+
+     <div class="topRight">
+
+      ${
+       DATA.settings.search
+       ?
+       `<button
+        class="iconBtn"
+        id="searchButton">
+        ⌕
+       </button>`
+       :""
+      }
+
+      <button
        class="currencyBtn"
        id="currencyButton">
 
-      ${
-       currency==="TRY"
-       ?"₺"
-       :
-       currency==="USD"
-       ?"$"
-       :
-       "€"
-      }
+       ${
+        currency==="TRY"
+        ?"₺"
+        :
+        currency==="USD"
+        ?"$"
+        :"€"
+       }
 
-     </button>
+      </button>
+
+     </div>
 
     </div>
 
-   </div>
-
-
-   ${
-    searchOpen
-    ?
-    `
-     <div class="searchBox">
+    ${
+     searchOpen
+     ?
+     `<div class="searchBox">
 
       <input
-        id="searchInput"
-        value="${escapeHTML(searchText)}"
-        placeholder="${t("search")}">
+       id="searchInput"
+       value="${escapeHTML(searchText)}"
+       placeholder="${t("search")}">
 
-     </div>
-    `
-    :
-    ""
-   }
+     </div>`
+     :""
+    }
+
+   </div>
+
+   ${renderHero()}
+
+   ${content}
+
+   <div class="footer">
+    NearMenu • Demo
+   </div>
 
   </div>
 
-
-  ${renderHero()}
-
-  ${content}
-
-  <div class="footer">
-   NearMenu • Demo
-  </div>
-
- </div>
-
-
- ${renderDrawer()}
-
- ${renderProductModal()}
-
- ${renderEventModal()}
-
- ${renderAdmin()}
-
- ${renderAdminLogin()}
-
+  ${renderDrawer()}
+  ${renderProductModal()}
+  ${renderEventModal()}
+  ${renderAdmin()}
+  ${renderAdminLogin()}
  `;
 
-
  bindEvents();
-
 }
-
 
 /* ============================================================
  EVENTS
-============================================================ */
+ ============================================================ */
 
 function bindEvents(){
 
- const get=
-  id=>document.getElementById(id);
+ const get=id=>document.getElementById(id);
 
-
- /* =====================
- DRAWER
- ===================== */
+ /* DRAWER */
 
  get("openDrawer")?.addEventListener(
   "click",
   function(){
-
    drawerOpen=true;
    render();
-
   }
  );
-
 
  get("closeDrawer")?.addEventListener(
   "click",
   function(){
-
    drawerOpen=false;
    render();
-
   }
  );
-
 
  get("drawerOverlay")?.addEventListener(
   "click",
   function(event){
 
    if(event.target.id==="drawerOverlay"){
-
     drawerOpen=false;
     render();
-
    }
 
   }
  );
 
-
- /* =====================
- SEARCH
- ===================== */
+ /* SEARCH */
 
  get("searchButton")?.addEventListener(
   "click",
@@ -4211,29 +3692,25 @@ function bindEvents(){
    searchOpen=true;
    render();
 
-   setTimeout(function(){
-
-    get("searchInput")?.focus();
-
-   },20);
+   setTimeout(
+    ()=>get("searchInput")?.focus(),
+    20
+   );
 
   }
  );
-
 
  get("searchInput")?.addEventListener(
   "input",
   function(event){
 
-   searchText=
-    event.target.value;
+   searchText=event.target.value;
 
    render();
 
    setTimeout(function(){
 
-    const input=
-     get("searchInput");
+    const input=get("searchInput");
 
     if(input){
 
@@ -4251,21 +3728,15 @@ function bindEvents(){
   }
  );
 
-
- /* =====================
- CURRENCY
- ===================== */
+ /* CURRENCY */
 
  get("currencyButton")?.addEventListener(
   "click",
   function(){
-
    drawerOpen=true;
    render();
-
   }
  );
-
 
  document
  .querySelectorAll("[data-currency]")
@@ -4273,8 +3744,7 @@ function bindEvents(){
 
   button.onclick=function(){
 
-   currency=
-    button.dataset.currency;
+   currency=button.dataset.currency;
 
    localStorage.setItem(
     "nearMenuCurrency",
@@ -4284,15 +3754,11 @@ function bindEvents(){
    drawerOpen=false;
 
    render();
-
   };
 
  });
 
-
- /* =====================
- LANGUAGE
- ===================== */
+ /* LANGUAGE */
 
  document
  .querySelectorAll("[data-language]")
@@ -4300,8 +3766,7 @@ function bindEvents(){
 
   button.onclick=function(){
 
-   language=
-    button.dataset.language;
+   language=button.dataset.language;
 
    localStorage.setItem(
     "nearMenuLanguage",
@@ -4311,15 +3776,11 @@ function bindEvents(){
    drawerOpen=false;
 
    render();
-
   };
 
  });
 
-
- /* =====================
- CATEGORY
- ===================== */
+ /* CATEGORY */
 
  document
  .querySelectorAll("[data-category]")
@@ -4342,11 +3803,6 @@ function bindEvents(){
 
  });
 
-
- /* =====================
- BACK HOME
- ===================== */
-
  get("backHome")?.addEventListener(
   "click",
   function(){
@@ -4360,10 +3816,7 @@ function bindEvents(){
   }
  );
 
-
- /* =====================
- PRODUCT
- ===================== */
+ /* PRODUCT */
 
  document
  .querySelectorAll("[data-product]")
@@ -4371,14 +3824,14 @@ function bindEvents(){
 
   element.onclick=function(){
 
-   const product=
-    findProduct(
-     element.dataset.product
-    );
+   const product=findProduct(
+    element.dataset.product
+   );
 
    if(product){
 
     selectedProduct=product;
+
     render();
 
    }
@@ -4386,7 +3839,6 @@ function bindEvents(){
   };
 
  });
-
 
  get("closeProduct")?.addEventListener(
   "click",
@@ -4397,7 +3849,6 @@ function bindEvents(){
 
   }
  );
-
 
  get("productOverlay")?.addEventListener(
   "click",
@@ -4413,10 +3864,7 @@ function bindEvents(){
   }
  );
 
-
- /* =====================
- EVENTS
- ===================== */
+ /* EVENT */
 
  document
  .querySelectorAll("[data-event]")
@@ -4424,17 +3872,15 @@ function bindEvents(){
 
   button.onclick=function(){
 
-   selectedEvent=
-    findEvent(
-     button.dataset.event
-    );
+   selectedEvent=findEvent(
+    button.dataset.event
+   );
 
    render();
 
   };
 
  });
-
 
  get("closeEvent")?.addEventListener(
   "click",
@@ -4445,7 +3891,6 @@ function bindEvents(){
 
   }
  );
-
 
  get("eventOverlay")?.addEventListener(
   "click",
@@ -4461,10 +3906,7 @@ function bindEvents(){
   }
  );
 
-
- /* =====================
- CATEGORY PRODUCT TABS
- ===================== */
+ /* CATEGORY TABS */
 
  document
  .querySelectorAll("[data-scroll-product]")
@@ -4472,11 +3914,9 @@ function bindEvents(){
 
   button.onclick=function(){
 
-   const target=
-    document.getElementById(
-     "product-"+
-     button.dataset.scrollProduct
-    );
+   const target=document.getElementById(
+    "product-"+button.dataset.scrollProduct
+   );
 
    if(target){
 
@@ -4491,46 +3931,35 @@ function bindEvents(){
 
  });
 
-
- /* =====================
- ADMIN OPEN
- ===================== */
+ /* ADMIN OPEN */
 
  get("openAdmin")?.addEventListener(
   "click",
   function(){
 
    drawerOpen=false;
-
    adminOpen=true;
    adminAuthenticated=false;
-
    adminTab="general";
-
    adminCategoryView=null;
    adminProductView=null;
 
    render();
 
-   setTimeout(function(){
-
-    get("adminPassword")?.focus();
-
-   },50);
+   setTimeout(
+    ()=>get("adminPassword")?.focus(),
+    50
+   );
 
   }
  );
 
-
- /* =====================
- ADMIN LOGIN
- ===================== */
+ /* LOGIN */
 
  get("adminLoginButton")?.addEventListener(
   "click",
   adminLogin
  );
-
 
  get("adminPassword")?.addEventListener(
   "keydown",
@@ -4542,22 +3971,16 @@ function bindEvents(){
   }
  );
 
-
  function adminLogin(){
 
-  const input=
-   get("adminPassword");
+  const input=get("adminPassword");
+  const error=get("loginError");
 
-  const error=
-   get("loginError");
-
-  if(!input)
-   return;
+  if(!input)return;
 
   if(input.value===ADMIN_PASSWORD){
 
    adminAuthenticated=true;
-
    render();
 
   }else{
@@ -4569,33 +3992,28 @@ function bindEvents(){
    input.focus();
 
   }
-
  }
 
-
- /* =====================
- ADMIN CLOSE
- ===================== */
+ /* ADMIN CLOSE */
 
  get("closeAdmin")?.addEventListener(
   "click",
   function(){
 
+   collectAdmin();
+
    adminOpen=false;
    adminAuthenticated=false;
-
    adminCategoryView=null;
    adminProductView=null;
 
+   saveData();
    render();
 
   }
  );
 
-
- /* =====================
- ADMIN TABS
- ===================== */
+ /* ADMIN TABS */
 
  document
  .querySelectorAll("[data-admin-tab]")
@@ -4605,11 +4023,12 @@ function bindEvents(){
 
    collectAdmin();
 
-   adminTab=
-    button.dataset.adminTab;
+   adminTab=button.dataset.adminTab;
 
    adminCategoryView=null;
    adminProductView=null;
+
+   advancedProduct=false;
 
    render();
 
@@ -4617,10 +4036,7 @@ function bindEvents(){
 
  });
 
-
- /* =====================
- ADMIN CATEGORY
- ===================== */
+ /* ADMIN CATEGORY */
 
  document
  .querySelectorAll("[data-admin-category]")
@@ -4641,11 +4057,6 @@ function bindEvents(){
 
  });
 
-
- /* =====================
- ADMIN CATEGORY BACK
- ===================== */
-
  get("adminProductsBack")?.addEventListener(
   "click",
   function(){
@@ -4660,10 +4071,7 @@ function bindEvents(){
   }
  );
 
-
- /* =====================
- ADMIN PRODUCT OPEN
- ===================== */
+ /* ADMIN PRODUCT */
 
  document
  .querySelectorAll("[data-admin-product]")
@@ -4676,16 +4084,13 @@ function bindEvents(){
    adminProductView=
     button.dataset.adminProduct;
 
+   advancedProduct=false;
+
    render();
 
   };
 
  });
-
-
- /* =====================
- ADMIN PRODUCT BACK
- ===================== */
 
  get("adminProductBack")?.addEventListener(
   "click",
@@ -4694,16 +4099,32 @@ function bindEvents(){
    collectAdmin();
 
    adminProductView=null;
+   advancedProduct=false;
 
    render();
 
   }
  );
 
+ /* ADVANCED */
 
- /* =====================
- SETTINGS
- ===================== */
+ document
+ .querySelectorAll("[data-toggle-advanced]")
+ .forEach(function(button){
+
+  button.onclick=function(){
+
+   collectAdmin();
+
+   advancedProduct=!advancedProduct;
+
+   render();
+
+  };
+
+ });
+
+ /* SETTINGS */
 
  document
  .querySelectorAll("[data-setting]")
@@ -4713,17 +4134,13 @@ function bindEvents(){
 
    DATA.settings[
     input.dataset.setting
-   ]=
-    input.checked;
+   ]=input.checked;
 
   };
 
  });
 
-
- /* =====================
- SOLD
- ===================== */
+ /* SOLD */
 
  document
  .querySelectorAll("[data-sold]")
@@ -4731,23 +4148,17 @@ function bindEvents(){
 
   input.onchange=function(){
 
-   const item=
-    findProduct(
-     input.dataset.sold
-    );
+   const item=findProduct(
+    input.dataset.sold
+   );
 
-   if(item)
-    item.sold=
-     input.checked;
+   if(item)item.sold=input.checked;
 
   };
 
  });
 
-
- /* =====================
- FEATURED
- ===================== */
+ /* FEATURED */
 
  document
  .querySelectorAll("[data-featured]")
@@ -4755,23 +4166,17 @@ function bindEvents(){
 
   input.onchange=function(){
 
-   const item=
-    findProduct(
-     input.dataset.featured
-    );
+   const item=findProduct(
+    input.dataset.featured
+   );
 
-   if(item)
-    item.featured=
-     input.checked;
+   if(item)item.featured=input.checked;
 
   };
 
  });
 
-
- /* =====================
- DISH
- ===================== */
+ /* DISH */
 
  document
  .querySelectorAll("[data-dish]")
@@ -4779,23 +4184,62 @@ function bindEvents(){
 
   input.onchange=function(){
 
-   const item=
-    findProduct(
-     input.dataset.dish
-    );
+   const item=findProduct(
+    input.dataset.dish
+   );
 
-   if(item)
-    item.dish=
-     input.checked;
+   if(item)item.dish=input.checked;
 
   };
 
  });
 
+ /* THEME */
 
- /* =====================
- BACKGROUND
- ===================== */
+ document
+ .querySelectorAll("[data-theme-color]")
+ .forEach(function(button){
+
+  button.onclick=function(){
+
+   collectAdmin();
+
+   DATA.theme.accent=
+    button.dataset.themeColor;
+
+   render();
+
+  };
+
+ });
+
+ /* OVERLAY */
+
+ get("overlayValue")?.parentElement
+  ?.querySelector("[data-overlay-range]")
+  ?.addEventListener(
+   "input",
+   function(event){
+
+    DATA.theme.overlay=
+     Number(event.target.value)/100;
+
+    const value=get("overlayValue");
+
+    if(value)
+     value.textContent=
+      event.target.value+"%";
+
+    document.documentElement.style
+     .setProperty(
+      "--overlay",
+      DATA.theme.overlay
+     );
+
+   }
+  );
+
+ /* BACKGROUND */
 
  document
  .querySelectorAll("[data-background]")
@@ -4814,10 +4258,97 @@ function bindEvents(){
 
  });
 
+ /* FILES */
 
- /* =====================
- DELETE CATEGORY
- ===================== */
+ document
+ .querySelectorAll("[data-file-type]")
+ .forEach(function(input){
+
+  input.onchange=function(event){
+
+   const file=event.target.files?.[0];
+
+   handleFile(
+    input.dataset.fileType,
+    input.dataset.fileId,
+    file
+   );
+
+  };
+
+ });
+
+ /* CLEAR FILE */
+
+ document
+ .querySelectorAll("[data-clear-file]")
+ .forEach(function(button){
+
+  button.onclick=function(){
+
+   const parts=
+    button.dataset.clearFile.split("|");
+
+   const type=parts[0];
+   const id=parts[1];
+
+   if(type==="logo")
+    DATA.logo="";
+
+   else if(type==="backgroundImage")
+    DATA.background.image="";
+
+   else if(type==="backgroundVideo")
+    DATA.background.video="";
+
+   else if(type==="categoryImage"){
+
+    const category=findCategory(id);
+
+    if(category)category.image="";
+
+   }
+
+   else if(type==="productImage"){
+
+    const item=findProduct(id);
+
+    if(item)item.image="";
+
+   }
+
+   else if(type==="productVideo"){
+
+    const item=findProduct(id);
+
+    if(item)item.video="";
+
+   }
+
+   else if(type==="eventImage"){
+
+    const event=findEvent(id);
+
+    if(event)event.image="";
+
+   }
+
+   else if(type==="eventVideo"){
+
+    const event=findEvent(id);
+
+    if(event)event.video="";
+
+   }
+
+   saveData();
+   render();
+
+  };
+
+ });
+
+ /* DELETE CATEGORY */
 
  document
  .querySelectorAll("[data-delete-category]")
@@ -4825,38 +4356,27 @@ function bindEvents(){
 
   button.onclick=function(){
 
-   if(
-    !confirm(
-     "Bu kategori ve içindeki tüm ürünler silinsin mi?"
-    )
-   )
-    return;
+   if(!confirm(
+    "Bu kategori ve içindeki tüm ürünler silinsin mi?"
+   ))return;
 
    DATA.categories=
     DATA.categories.filter(
-     function(category){
-
-      return category.id!==
-       button.dataset.deleteCategory;
-
-     }
+     category=>
+      category.id!==button.dataset.deleteCategory
     );
 
    adminCategoryView=null;
    adminProductView=null;
 
    saveData();
-
    render();
 
   };
 
  });
 
-
- /* =====================
- DELETE PRODUCT
- ===================== */
+ /* DELETE PRODUCT */
 
  document
  .querySelectorAll("[data-delete-product]")
@@ -4865,45 +4385,30 @@ function bindEvents(){
   button.onclick=function(){
 
    const parts=
-    button.dataset.deleteProduct
-    .split("|");
+    button.dataset.deleteProduct.split("|");
 
-   const category=
-    findCategory(parts[0]);
+   const category=findCategory(parts[0]);
 
-   if(!category)
-    return;
+   if(!category)return;
 
-   if(
-    !confirm(
-     "Bu ürün silinsin mi?"
-    )
-   )
+   if(!confirm("Bu ürün silinsin mi?"))
     return;
 
    category.items=
     category.items.filter(
-     function(item){
-
-      return item.id!==parts[1];
-
-     }
+     item=>item.id!==parts[1]
     );
 
    adminProductView=null;
 
    saveData();
-
    render();
 
   };
 
  });
 
-
- /* =====================
- DELETE EVENT
- ===================== */
+ /* DELETE EVENT */
 
  document
  .querySelectorAll("[data-delete-event]")
@@ -4911,35 +4416,23 @@ function bindEvents(){
 
   button.onclick=function(){
 
-   if(
-    !confirm(
-     "Bu etkinlik silinsin mi?"
-    )
-   )
+   if(!confirm("Bu etkinlik silinsin mi?"))
     return;
 
    DATA.events=
     DATA.events.filter(
-     function(event){
-
-      return event.id!==
-       button.dataset.deleteEvent;
-
-     }
+     event=>
+      event.id!==button.dataset.deleteEvent
     );
 
    saveData();
-
    render();
 
   };
 
  });
 
-
- /* =====================
- ADD CATEGORY
- ===================== */
+ /* ADD CATEGORY */
 
  get("addCategory")?.addEventListener(
   "click",
@@ -4947,35 +4440,25 @@ function bindEvents(){
 
    collectAdmin();
 
-   const id=
-    "category-"+Date.now();
+   const id="category-"+Date.now();
 
    DATA.categories.push({
-
     id:id,
-
     name:"Yeni Kategori",
-
-    image:IMAGES.breakfast,
-
+    image:"",
     items:[]
-
    });
 
    adminCategoryView=id;
    adminProductView=null;
 
    saveData();
-
    render();
 
   }
  );
 
-
- /* =====================
- ADD PRODUCT
- ===================== */
+ /* ADD PRODUCT */
 
  document
  .querySelectorAll("[data-add-product]")
@@ -4985,59 +4468,43 @@ function bindEvents(){
 
    collectAdmin();
 
-   const category=
-    findCategory(
-     button.dataset.addProduct
-    );
+   const category=findCategory(
+    button.dataset.addProduct
+   );
 
-   if(!category)
-    return;
+   if(!category)return;
 
-   const id=
-    "product-"+Date.now();
+   const id="product-"+Date.now();
 
    category.items.push({
 
     id:id,
-
     name:"Yeni Ürün",
-
     description:"Ürün açıklaması",
-
     portion:"",
-
     calories:"",
-
     allergens:[],
-
     spicy:0,
-
     price:0,
-
-    image:IMAGES.breakfast,
-
+    image:"",
+    video:"",
     featured:false,
-
     dish:false,
-
     sold:false
 
    });
 
    adminProductView=id;
+   advancedProduct=false;
 
    saveData();
-
    render();
 
   };
 
  });
 
-
- /* =====================
- ADD EVENT
- ===================== */
+ /* ADD EVENT */
 
  get("addEvent")?.addEventListener(
   "click",
@@ -5047,37 +4514,23 @@ function bindEvents(){
 
    DATA.events.push({
 
-    id:
-     "event-"+Date.now(),
-
-    name:
-     "Yeni Etkinlik",
-
-    date:
-     "Cumartesi",
-
-    time:
-     "20:00",
-
-    description:
-     "Etkinlik açıklaması",
-
-    image:
-     IMAGES.music
+    id:"event-"+Date.now(),
+    name:"Yeni Etkinlik",
+    date:"Cumartesi",
+    time:"20:00",
+    description:"Etkinlik açıklaması",
+    image:"",
+    video:""
 
    });
 
    saveData();
-
    render();
 
   }
  );
 
-
- /* =====================
- SAVE
- ===================== */
+ /* SAVE */
 
  get("saveAdmin")?.addEventListener(
   "click",
@@ -5097,13 +4550,11 @@ function bindEvents(){
 
   }
  );
-
 }
-
 
 /* ============================================================
  START
-============================================================ */
+ ============================================================ */
 
 render();
 
