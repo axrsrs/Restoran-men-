@@ -8,6 +8,7 @@
 
 <style>
 *{box-sizing:border-box}
+
 html,body{
  margin:0;
  padding:0;
@@ -16,15 +17,29 @@ html,body{
  color:#fff;
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
-html{scroll-behavior:smooth}
+
+html{
+ scroll-behavior:smooth;
+}
+
 body{
  min-height:100vh;
  overflow-x:hidden;
  font-size:13px;
 }
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-a{text-decoration:none;color:inherit}
+
+button,input,textarea,select{
+ font:inherit;
+}
+
+button{
+ cursor:pointer;
+}
+
+a{
+ text-decoration:none;
+ color:inherit;
+}
 
 :root{
  --accent:#d6a83d;
@@ -45,12 +60,59 @@ a{text-decoration:none;color:inherit}
  --titleFont:Georgia,serif;
 }
 
-body{font-family:var(--fontFamily);color:var(--text);font-size:var(--bodySize)}
-#app{min-height:100vh}
+body{
+ font-family:var(--fontFamily);
+ color:var(--text);
+ font-size:var(--bodySize);
+}
 
-/* =========================
+/* =========================================================
+   BACKGROUND - FIXED
+========================================================= */
+
+.background{
+ position:fixed;
+ inset:0;
+ width:100%;
+ height:100%;
+ z-index:0;
+ overflow:hidden;
+ background:#0b0b0c;
+ pointer-events:none;
+ transition:background .35s ease;
+}
+
+.background img,
+.background video{
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.backgroundOverlay{
+ position:absolute;
+ inset:0;
+ background:rgba(0,0,0,var(--overlay));
+ transition:background .35s ease;
+}
+
+/*
+  Arka plan artık -10 z-index'te değil.
+  Bu, bazı tarayıcılarda arka planın tamamen siyah
+  görünmesine neden olan problemi çözer.
+*/
+
+#app{
+ position:relative;
+ z-index:1;
+ min-height:100vh;
+}
+
+/* =========================================================
    ANIMATIONS
-========================= */
+========================================================= */
 
 @keyframes fadeIn{
  from{opacity:0}
@@ -91,8 +153,14 @@ body{font-family:var(--fontFamily);color:var(--text);font-size:var(--bodySize)}
 }
 
 @keyframes drawerIn{
- from{transform:translateX(-100%);opacity:.5}
- to{transform:none;opacity:1}
+ from{
+  transform:translateX(-100%);
+  opacity:.5;
+ }
+ to{
+  transform:none;
+  opacity:1;
+ }
 }
 
 @keyframes modalUp{
@@ -107,13 +175,23 @@ body{font-family:var(--fontFamily);color:var(--text);font-size:var(--bodySize)}
 }
 
 @keyframes adminIn{
- from{transform:translateX(100%);opacity:.7}
- to{transform:none;opacity:1}
+ from{
+  transform:translateX(100%);
+  opacity:.7;
+ }
+ to{
+  transform:none;
+  opacity:1;
+ }
 }
 
 @keyframes pulseSoft{
- 0%,100%{box-shadow:0 0 0 0 rgba(214,168,61,0)}
- 50%{box-shadow:0 0 0 6px rgba(214,168,61,.07)}
+ 0%,100%{
+  box-shadow:0 0 0 0 rgba(214,168,61,0);
+ }
+ 50%{
+  box-shadow:0 0 0 6px rgba(214,168,61,.07);
+ }
 }
 
 .pageContent{
@@ -134,17 +212,23 @@ body{font-family:var(--fontFamily);color:var(--text);font-size:var(--bodySize)}
 .product:nth-child(2),
 .category:nth-child(2),
 .feature:nth-child(2),
-.event:nth-child(2){animation-delay:.035s}
+.event:nth-child(2){
+ animation-delay:.035s;
+}
 
 .product:nth-child(3),
 .category:nth-child(3),
 .feature:nth-child(3),
-.event:nth-child(3){animation-delay:.07s}
+.event:nth-child(3){
+ animation-delay:.07s;
+}
 
 .product:nth-child(4),
 .category:nth-child(4),
 .feature:nth-child(4),
-.event:nth-child(4){animation-delay:.105s}
+.event:nth-child(4){
+ animation-delay:.105s;
+}
 
 button,
 a,
@@ -171,47 +255,22 @@ button:active{
  transform:scale(.985);
 }
 
-/* =========================
-   BACKGROUND
-========================= */
-
-.background{
- position:fixed;
- inset:0;
- z-index:-10;
- overflow:hidden;
- background:#0b0b0c;
- transition:background .35s ease;
-}
-
-.background img,
-.background video{
- width:100%;
- height:100%;
- object-fit:cover;
-}
-
-.backgroundOverlay{
- position:absolute;
- inset:0;
- background:rgba(0,0,0,var(--overlay));
- transition:background .35s ease;
-}
-
-/* =========================
+/* =========================================================
    CONTAINER
-========================= */
+========================================================= */
 
 .container{
+ position:relative;
+ z-index:2;
  width:100%;
  max-width:650px;
  margin:auto;
  padding:0 16px 80px;
 }
 
-/* =========================
+/* =========================================================
    TOP BAR
-========================= */
+========================================================= */
 
 .top{
  position:sticky;
@@ -299,9 +358,9 @@ button:active{
  box-shadow:0 0 0 3px rgba(214,168,61,.10);
 }
 
-/* =========================
+/* =========================================================
    POPUPS
-========================= */
+========================================================= */
 
 .quickPopup{
  position:absolute;
@@ -347,9 +406,9 @@ button:active{
  color:#111;
 }
 
-/* =========================
+/* =========================================================
    HERO
-========================= */
+========================================================= */
 
 .hero{
  text-align:center;
@@ -411,9 +470,9 @@ button:active{
  line-height:1.6;
 }
 
-/* =========================
+/* =========================================================
    SECTION
-========================= */
+========================================================= */
 
 .section{
  margin-top:31px;
@@ -438,9 +497,9 @@ button:active{
  font-size:10px;
 }
 
-/* =========================
+/* =========================================================
    HORIZONTAL
-========================= */
+========================================================= */
 
 .horizontal{
  display:flex;
@@ -455,9 +514,9 @@ button:active{
  display:none;
 }
 
-/* =========================
+/* =========================================================
    FEATURE
-========================= */
+========================================================= */
 
 .feature{
  position:relative;
@@ -518,9 +577,9 @@ button:active{
  font-weight:950;
 }
 
-/* =========================
+/* =========================================================
    EVENTS
-========================= */
+========================================================= */
 
 .event{
  position:relative;
@@ -590,9 +649,9 @@ button:active{
  font-size:11px;
 }
 
-/* =========================
+/* =========================================================
    CATEGORIES
-========================= */
+========================================================= */
 
 .categories{
  display:grid;
@@ -654,9 +713,9 @@ button:active{
  margin-top:4px;
 }
 
-/* =========================
+/* =========================================================
    CATEGORY PAGE
-========================= */
+========================================================= */
 
 .categoryTitle{
  display:flex;
@@ -724,9 +783,9 @@ button:active{
  color:#111;
 }
 
-/* =========================
+/* =========================================================
    PRODUCTS
-========================= */
+========================================================= */
 
 .products{
  display:flex;
@@ -826,9 +885,9 @@ button:active{
  font-size:14px;
 }
 
-/* =========================
+/* =========================================================
    DRAWER
-========================= */
+========================================================= */
 
 .overlay{
  position:fixed;
@@ -890,9 +949,9 @@ button:active{
  color:#fff;
 }
 
-/* =========================
+/* =========================================================
    MODAL
-========================= */
+========================================================= */
 
 .modalOverlay{
  position:fixed;
@@ -985,9 +1044,9 @@ button:active{
  font-weight:950;
 }
 
-/* =========================
+/* =========================================================
    ADMIN
-========================= */
+========================================================= */
 
 .adminOverlay{
  position:fixed;
@@ -1002,7 +1061,10 @@ button:active{
 .admin{
  width:min(100%,650px);
  height:100%;
- overflow:auto;
+ overflow-y:auto;
+ overflow-x:hidden;
+ overscroll-behavior:contain;
+ -webkit-overflow-scrolling:touch;
  background:#0e0e0f;
  animation:adminIn .28s cubic-bezier(.2,.8,.2,1);
 }
@@ -1180,10 +1242,6 @@ button:active{
  margin-top:5px;
 }
 
-/* =========================
-   ADMIN BREADCRUMB
-========================= */
-
 .adminBreadcrumb{
  display:flex;
  align-items:center;
@@ -1205,10 +1263,6 @@ button:active{
 .adminBreadcrumb strong{
  color:#fff;
 }
-
-/* =========================
-   ADMIN LISTS
-========================= */
 
 .adminCategoryList,
 .adminProductList{
@@ -1287,9 +1341,9 @@ button:active{
  font-size:20px;
 }
 
-/* =========================
+/* =========================================================
    FILE
-========================= */
+========================================================= */
 
 .fileBox{
  display:flex;
@@ -1325,9 +1379,9 @@ button:active{
  border:1px solid #303034;
 }
 
-/* =========================
+/* =========================================================
    DESIGN
-========================= */
+========================================================= */
 
 .designGrid{
  display:grid;
@@ -1411,9 +1465,9 @@ button:active{
  accent-color:var(--accent);
 }
 
-/* =========================
+/* =========================================================
    TRANSLATION
-========================= */
+========================================================= */
 
 .translationStatus{
  display:flex;
@@ -1443,9 +1497,9 @@ button:active{
  line-height:1.5;
 }
 
-/* =========================
-   SIMPLE PRODUCT FORM
-========================= */
+/* =========================================================
+   SIMPLE PRODUCT
+========================================================= */
 
 .simpleProductHero{
  padding:14px;
@@ -1483,9 +1537,9 @@ button:active{
  font-weight:850;
 }
 
-/* =========================
+/* =========================================================
    PIN
-========================= */
+========================================================= */
 
 .pinBox{
  padding:13px;
@@ -1507,9 +1561,9 @@ button:active{
  margin-bottom:12px;
 }
 
-/* =========================
+/* =========================================================
    LOGIN
-========================= */
+========================================================= */
 
 .adminLoginOverlay{
  position:fixed;
@@ -1599,10 +1653,6 @@ button:active{
  font-size:10px;
 }
 
-/* =========================
-   FOOTER
-========================= */
-
 .footer{
  padding:35px 0;
  text-align:center;
@@ -1624,9 +1674,11 @@ button:active{
  .categories{
   grid-template-columns:1fr 1fr;
  }
+
  .product{
   grid-template-columns:105px 1fr;
  }
+
  .productImage{
   height:118px;
  }
@@ -1636,16 +1688,17 @@ button:active{
  .categories{
   grid-template-columns:1fr;
  }
+
  .designGrid{
   grid-template-columns:1fr;
  }
+
  .row{
   flex-direction:column;
   gap:0;
  }
 }
 
-/* RTL */
 [dir="rtl"] .featureText,
 [dir="rtl"] .eventText,
 [dir="rtl"] .categoryText,
@@ -1665,8 +1718,14 @@ button:active{
 }
 
 @keyframes drawerInRTL{
- from{transform:translateX(100%);opacity:.5}
- to{transform:none;opacity:1}
+ from{
+  transform:translateX(100%);
+  opacity:.5;
+ }
+ to{
+  transform:none;
+  opacity:1;
+ }
 }
 </style>
 </head>
@@ -1678,8 +1737,8 @@ button:active{
 <script>
 
 /* =========================================================
-   NEARMENU PREMIUM V3
-   ========================================================= */
+   NEARMENU PREMIUM V4
+========================================================= */
 
 const DEFAULT_ADMIN_PIN="1234";
 
@@ -1855,7 +1914,6 @@ const TEXT={
   basic:"المعلومات الأساسية",
   advanced:"معلومات إضافية",
   hideAdvanced:"إخفاء المعلومات الإضافية",
-  advanced:"معلومات إضافية",
   productName:"اسم المنتج",
   productPrice:"السعر",
   description:"الوصف",
@@ -1942,6 +2000,11 @@ const DATA={
   {
    id:"kahvalti",
    name:"Kahvaltı",
+   names:{
+    tr:"Kahvaltı",
+    en:"Breakfast",
+    ar:"الفطور"
+   },
    image:IMAGES.breakfast,
    items:[
     {
@@ -2228,38 +2291,126 @@ let advancedProduct=false;
 let translating=false;
 
 /* =========================================================
+   SCROLL STATE
+========================================================= */
+
+let savedWindowScroll=0;
+let savedAdminScroll=0;
+
+function rememberWindowScroll(){
+ savedWindowScroll=
+  window.scrollY||
+  window.pageYOffset||
+  0;
+}
+
+function rememberAdminScroll(){
+ const admin=document.querySelector(".admin");
+
+ if(admin){
+  savedAdminScroll=admin.scrollTop||0;
+ }
+}
+
+function rememberAllScroll(){
+ rememberWindowScroll();
+ rememberAdminScroll();
+}
+
+function restoreWindowScroll(){
+
+ const y=savedWindowScroll;
+
+ requestAnimationFrame(()=>{
+  window.scrollTo(0,y);
+ });
+}
+
+function restoreAdminScroll(){
+
+ const y=savedAdminScroll;
+
+ requestAnimationFrame(()=>{
+   requestAnimationFrame(()=>{
+
+    const admin=document.querySelector(".admin");
+
+    if(admin){
+     admin.scrollTop=y;
+    }
+
+   });
+ });
+}
+
+function scrollToTop(){
+
+ requestAnimationFrame(()=>{
+
+  window.scrollTo({
+   top:0,
+   left:0,
+   behavior:"smooth"
+  });
+
+ });
+}
+
+/* =========================================================
    SAFE STORAGE
 ========================================================= */
 
 function storageAvailable(){
+
  try{
+
   const x="__near_test__";
+
   localStorage.setItem(x,x);
   localStorage.removeItem(x);
+
   return true;
+
  }catch(e){
+
   return false;
+
  }
 }
 
 function safeGet(key){
- if(!storageAvailable())return null;
+
+ if(!storageAvailable())
+  return null;
+
  try{
   return localStorage.getItem(key);
  }catch(e){
   return null;
  }
+
 }
 
 function safeSet(key,value){
- if(!storageAvailable())return false;
+
+ if(!storageAvailable())
+  return false;
 
  try{
-  localStorage.setItem(key,value);
+
+  localStorage.setItem(
+   key,
+   value
+  );
+
   return true;
+
  }catch(e){
+
   console.warn("Storage:",e);
+
   return false;
+
  }
 }
 
@@ -2268,13 +2419,20 @@ function safeSet(key,value){
 ========================================================= */
 
 try{
+
  const saved=safeGet(STORAGE_KEY);
 
  if(saved){
   mergeData(JSON.parse(saved));
  }
+
 }catch(e){
- console.log("Veri yükleme:",e);
+
+ console.log(
+  "Veri yükleme:",
+  e
+ );
+
 }
 
 function mergeData(saved){
@@ -2362,6 +2520,12 @@ function mergeData(saved){
   if(typeof c.name!=="string")
    c.name="Yeni Kategori";
 
+  if(!c.names)
+   c.names={};
+
+  if(!c.names.tr)
+   c.names.tr=c.name;
+
   c.items.forEach(p=>{
 
    if(!p.id)
@@ -2430,6 +2594,18 @@ function mergeData(saved){
   if(typeof e.description==="undefined")
    e.description="";
 
+  if(!e.names)
+   e.names={};
+
+  if(!e.descriptions)
+   e.descriptions={};
+
+  if(!e.names.tr)
+   e.names.tr=e.name;
+
+  if(!e.descriptions.tr)
+   e.descriptions.tr=e.description;
+
  });
 
 }
@@ -2446,9 +2622,11 @@ function saveData(){
  );
 
  if(!ok){
+
   alert(
    "Veriler tarayıcı hafızasına kaydedilemedi. Fotoğraf/video dosyası çok büyük olabilir."
   );
+
  }
 
  return ok;
@@ -2459,11 +2637,19 @@ function saveData(){
 ========================================================= */
 
 function getAdminPin(){
- return safeGet(PIN_KEY)||DEFAULT_ADMIN_PIN;
+
+ return safeGet(PIN_KEY)||
+        DEFAULT_ADMIN_PIN;
+
 }
 
 function setAdminPin(pin){
- return safeSet(PIN_KEY,String(pin));
+
+ return safeSet(
+  PIN_KEY,
+  String(pin)
+ );
+
 }
 
 /* =========================================================
@@ -2475,18 +2661,22 @@ function $(id){
 }
 
 function esc(value){
+
  return String(value??"")
   .replace(/&/g,"&amp;")
   .replace(/</g,"&lt;")
   .replace(/>/g,"&gt;")
   .replace(/"/g,"&quot;")
   .replace(/'/g,"&#039;");
+
 }
 
 function t(key){
+
  return TEXT[language]?.[key]||
         TEXT.tr[key]||
         key;
+
 }
 
 function localizedName(item){
@@ -2495,10 +2685,13 @@ function localizedName(item){
   item?.names &&
   item.names[language]
  ){
+
   return item.names[language];
+
  }
 
  return item?.name||"";
+
 }
 
 function localizedDescription(item){
@@ -2507,10 +2700,13 @@ function localizedDescription(item){
   item?.descriptions &&
   item.descriptions[language]
  ){
+
   return item.descriptions[language];
+
  }
 
  return item?.description||"";
+
 }
 
 function localizedCategoryName(category){
@@ -2519,10 +2715,13 @@ function localizedCategoryName(category){
   category?.names &&
   category.names[language]
  ){
+
   return category.names[language];
+
  }
 
  return category?.name||"";
+
 }
 
 function localizedEventName(event){
@@ -2531,10 +2730,13 @@ function localizedEventName(event){
   event?.names &&
   event.names[language]
  ){
+
   return event.names[language];
+
  }
 
  return event?.name||"";
+
 }
 
 function localizedEventDescription(event){
@@ -2543,10 +2745,13 @@ function localizedEventDescription(event){
   event?.descriptions &&
   event.descriptions[language]
  ){
+
   return event.descriptions[language];
+
  }
 
  return event?.description||"";
+
 }
 
 function allProducts(){
@@ -2569,29 +2774,40 @@ function allProducts(){
  });
 
  return result;
+
 }
 
 function findProduct(id){
 
- for(const category of DATA.categories||[]){
+ for(
+  const category of DATA.categories||[]
+ ){
 
-  const product=(category.items||[])
+  const product=
+   (category.items||[])
    .find(p=>p.id===id);
 
-  if(product)return product;
+  if(product)
+   return product;
+
  }
 
  return null;
+
 }
 
 function findCategory(id){
+
  return (DATA.categories||[])
   .find(c=>c.id===id)||null;
+
 }
 
 function findEvent(id){
+
  return (DATA.events||[])
   .find(e=>e.id===id)||null;
+
 }
 
 function money(price){
@@ -2600,23 +2816,32 @@ function money(price){
 
  if(currency==="USD"){
 
-  const rate=Number(DATA.rates.USD)||40;
+  const rate=
+   Number(DATA.rates.USD)||40;
 
-  return "$"+(value/rate).toFixed(2);
+  return "$"+
+   (value/rate).toFixed(2);
+
  }
 
  if(currency==="EUR"){
 
-  const rate=Number(DATA.rates.EUR)||47;
+  const rate=
+   Number(DATA.rates.EUR)||47;
 
-  return "€"+(value/rate).toFixed(2);
+  return "€"+
+   (value/rate).toFixed(2);
+
  }
 
  return Math.round(value)
-  .toLocaleString("tr-TR")+" ₺";
+  .toLocaleString("tr-TR")+
+  " ₺";
+
 }
 
 function uid(prefix){
+
  return prefix+
   "-"+
   Date.now()+
@@ -2624,89 +2849,53 @@ function uid(prefix){
   Math.random()
    .toString(36)
    .slice(2,7);
+
 }
 
 /* =========================================================
-   SCROLL PROTECTION
+   TRANSLATION
 ========================================================= */
-
-let savedScrollY=0;
-
-function rememberScroll(){
- savedScrollY=window.scrollY||window.pageYOffset||0;
-}
-
-function restoreScroll(delay=0){
-
- const y=savedScrollY;
-
- setTimeout(()=>{
-
-  window.scrollTo({
-   top:y,
-   left:0,
-   behavior:"instant"
-  });
-
- },delay);
-}
-
-/*
- Eğer gerçek bir sayfa geçişi yapılacaksa
- scrollToHome() veya scrollToTop() çağrılır.
-*/
-
-function scrollToTop(){
- setTimeout(()=>{
-  window.scrollTo({
-   top:0,
-   left:0,
-   behavior:"smooth"
-  });
- },20);
-}
-
-/* =========================================================
-   AUTOMATIC TRANSLATION
-========================================================= */
-
-/*
- Bu bölüm Türkçe metinleri otomatik olarak
- İngilizce ve Arapçaya çevirir.
-
- Çeviriler localStorage'da cache'lenir.
- Böylece aynı metin tekrar tekrar çevrilmez.
-
- Not:
- Google Translate'in public endpoint'i resmi API değildir.
- Gerçek ticari kullanımda Supabase Edge Function
- üzerinden resmi bir çeviri API'sine geçirilmesi önerilir.
-*/
 
 function getTranslationCache(){
 
  try{
+
   return JSON.parse(
-   safeGet(TRANSLATION_CACHE_KEY)||"{}"
+   safeGet(
+    TRANSLATION_CACHE_KEY
+   )||"{}"
   );
+
  }catch(e){
+
   return {};
+
  }
+
 }
 
 function saveTranslationCache(cache){
+
  safeSet(
   TRANSLATION_CACHE_KEY,
   JSON.stringify(cache)
  );
+
 }
 
-async function translateText(text,target){
+async function translateText(
+ text,
+ target
+){
 
- if(!text||target==="tr")
+ if(
+  !text||
+  target==="tr"
+ )
   return text||"";
 
- const cache=getTranslationCache();
+ const cache=
+  getTranslationCache();
 
  const key=
   "tr|"+
@@ -2723,15 +2912,19 @@ async function translateText(text,target){
    "https://translate.googleapis.com/translate_a/single"+
    "?client=gtx"+
    "&sl=tr"+
-   "&tl="+encodeURIComponent(target)+
+   "&tl="+
+   encodeURIComponent(target)+
    "&dt=t"+
-   "&q="+encodeURIComponent(text);
+   "&q="+
+   encodeURIComponent(text);
 
   const response=
    await fetch(url);
 
   if(!response.ok)
-   throw new Error("Translation failed");
+   throw new Error(
+    "Translation failed"
+   );
 
   const data=
    await response.json();
@@ -2741,8 +2934,10 @@ async function translateText(text,target){
   if(Array.isArray(data?.[0])){
 
    data[0].forEach(part=>{
+
     if(part?.[0])
      result+=part[0];
+
    });
 
   }
@@ -2752,9 +2947,11 @@ async function translateText(text,target){
   if(result){
 
    cache[key]=result;
+
    saveTranslationCache(cache);
 
    return result;
+
   }
 
  }catch(e){
@@ -2767,9 +2964,19 @@ async function translateText(text,target){
  }
 
  return text;
+
 }
 
-async function translateProduct(item){
+/*
+  TÜRKÇE KAYNAK METİN DEĞİŞTİĞİNDE
+  eski EN/AR çevirilerini temizliyoruz.
+
+  Böylece:
+  Eski Türkçe -> eski İngilizce
+  problemi oluşmuyor.
+*/
+
+function markProductTranslationDirty(item){
 
  if(!item)return;
 
@@ -2779,72 +2986,36 @@ async function translateProduct(item){
  if(!item.descriptions)
   item.descriptions={};
 
- item.names.tr=item.name||"";
- item.descriptions.tr=item.description||"";
+ item.names.tr=
+  item.name||"";
 
- if(language==="tr")
-  return;
+ item.descriptions.tr=
+  item.description||"";
 
- translating=true;
- render();
+ item.names.en="";
+ item.names.ar="";
 
- const target=
-  language==="en"
-  ?"en"
-  :"ar";
+ item.descriptions.en="";
+ item.descriptions.ar="";
 
- const [
-  translatedName,
-  translatedDescription
- ]=await Promise.all([
-  translateText(item.name,target),
-  translateText(item.description,target)
- ]);
-
- item.names[target]=translatedName||item.name;
- item.descriptions[target]=
-  translatedDescription||item.description;
-
- translating=false;
-
- saveData();
-
- render();
 }
 
-async function translateCategory(category){
+function markCategoryTranslationDirty(category){
 
  if(!category)return;
 
  if(!category.names)
   category.names={};
 
- category.names.tr=category.name||"";
+ category.names.tr=
+  category.name||"";
 
- if(language==="tr")
-  return;
+ category.names.en="";
+ category.names.ar="";
 
- translating=true;
- render();
-
- const target=
-  language==="en"
-  ?"en"
-  :"ar";
-
- category.names[target]=
-  await translateText(
-   category.name,
-   target
-  );
-
- translating=false;
-
- saveData();
- render();
 }
 
-async function translateEvent(event){
+function markEventTranslationDirty(event){
 
  if(!event)return;
 
@@ -2854,39 +3025,27 @@ async function translateEvent(event){
  if(!event.descriptions)
   event.descriptions={};
 
- event.names.tr=event.name||"";
- event.descriptions.tr=event.description||"";
+ event.names.tr=
+  event.name||"";
 
- if(language==="tr")
-  return;
+ event.descriptions.tr=
+  event.description||"";
 
- translating=true;
- render();
+ event.names.en="";
+ event.names.ar="";
 
- const target=
-  language==="en"
-  ?"en"
-  :"ar";
+ event.descriptions.en="";
+ event.descriptions.ar="";
 
- const [
-  translatedName,
-  translatedDescription
- ]=await Promise.all([
-  translateText(event.name,target),
-  translateText(event.description,target)
- ]);
-
- event.names[target]=
-  translatedName||event.name;
-
- event.descriptions[target]=
-  translatedDescription||event.description;
-
- translating=false;
-
- saveData();
- render();
 }
+
+/*
+  TÜM kategoriler + TÜM ürünler + TÜM açıklamalar
+  + TÜM etkinlikler seçilen dile hazırlanır.
+
+  Cache kullanıldığı için aynı metin tekrar
+  çevrilmek zorunda kalmaz.
+*/
 
 async function translateEverything(){
 
@@ -2894,7 +3053,11 @@ async function translateEverything(){
   return;
 
  translating=true;
- render();
+
+ render({
+  preserveAdminScroll:true,
+  preserveWindowScroll:true
+ });
 
  const target=
   language==="en"
@@ -2903,7 +3066,9 @@ async function translateEverything(){
 
  try{
 
-  for(const category of DATA.categories){
+  for(
+   const category of DATA.categories
+  ){
 
    if(!category.names)
     category.names={};
@@ -2911,17 +3076,15 @@ async function translateEverything(){
    category.names.tr=
     category.name||"";
 
-   if(!category.names[target]){
+   category.names[target]=
+    await translateText(
+     category.name,
+     target
+    );
 
-    category.names[target]=
-     await translateText(
-      category.name,
-      target
-     );
-
-   }
-
-   for(const item of category.items||[]){
+   for(
+    const item of category.items||[]
+   ){
 
     if(!item.names)
      item.names={};
@@ -2935,60 +3098,39 @@ async function translateEverything(){
     item.descriptions.tr=
      item.description||"";
 
-    if(!item.names[target]){
+    item.names[target]=
+     await translateText(
+      item.name,
+      target
+     );
 
-     item.names[target]=
-      await translateText(
-       item.name,
-       target
-      );
-
-    }
-
-    if(!item.descriptions[target]){
-
-     item.descriptions[target]=
-      await translateText(
-       item.description,
-       target
-      );
-
-    }
+    item.descriptions[target]=
+     await translateText(
+      item.description,
+      target
+     );
 
    }
 
   }
 
-  for(const event of DATA.events){
+  for(
+   const event of DATA.events
+  ){
 
-   if(!event.names)
-    event.names={};
+   markEventTranslationDirty(event);
 
-   if(!event.descriptions)
-    event.descriptions={};
+   event.names[target]=
+    await translateText(
+     event.name,
+     target
+    );
 
-   event.names.tr=event.name||"";
-   event.descriptions.tr=event.description||"";
-
-   if(!event.names[target]){
-
-    event.names[target]=
-     await translateText(
-      event.name,
-      target
-     );
-
-   }
-
-   if(!event.descriptions[target]){
-
-    event.descriptions[target]=
-     await translateText(
-      event.description,
-      target
-     );
-
-   }
+   event.descriptions[target]=
+    await translateText(
+     event.description,
+     target
+    );
 
   }
 
@@ -2997,14 +3139,19 @@ async function translateEverything(){
  }catch(e){
 
   console.warn(
-   "Toplu çeviri:",
+   "Toplu çeviri hatası:",
    e
   );
 
  }
 
  translating=false;
- render();
+
+ render({
+  preserveAdminScroll:true,
+  preserveWindowScroll:true
+ });
+
 }
 
 /* =========================================================
@@ -3013,20 +3160,26 @@ async function translateEverything(){
 
 function renderBackground(){
 
+ const bg=DATA.background||{};
+
+ /*
+   Video varsa video.
+ */
+
  if(
-  DATA.background.type==="video" &&
-  DATA.background.video
+  bg.type==="video" &&
+  bg.video
  ){
 
   return `
-   <div class="background">
+   <div class="background" id="siteBackground">
 
     <video
      autoplay
      muted
      loop
      playsinline
-     src="${esc(DATA.background.video)}">
+     src="${esc(bg.video)}">
     </video>
 
     <div class="backgroundOverlay"></div>
@@ -3036,15 +3189,23 @@ function renderBackground(){
 
  }
 
+ /*
+   Fotoğraf varsa fotoğraf.
+ */
+
  if(
-  DATA.background.type==="image" &&
-  DATA.background.image
+  bg.type==="image" &&
+  bg.image
  ){
 
   return `
-   <div class="background">
+   <div
+    class="background"
+    id="siteBackground">
 
-    <img src="${esc(DATA.background.image)}">
+    <img
+     src="${esc(bg.image)}"
+     alt="">
 
     <div class="backgroundOverlay"></div>
 
@@ -3053,12 +3214,18 @@ function renderBackground(){
 
  }
 
+ /*
+   Renk modu.
+ */
+
  return `
   <div
    class="background"
-   style="background:${esc(
-    DATA.background.value||"#0b0b0c"
-   )}">
+   id="siteBackground"
+   style="
+    background-color:${esc(
+     bg.value||"#0b0b0c"
+    )}">
   </div>
  `;
 
@@ -3078,7 +3245,9 @@ function renderHero(){
    ${
     DATA.logo
     ?
-    `<img src="${esc(DATA.logo)}" alt="Logo">`
+    `<img
+      src="${esc(DATA.logo)}"
+      alt="Logo">`
     :
     "N"
    }
@@ -3106,7 +3275,8 @@ function renderHero(){
     font-size:10px">
     ${esc(DATA.hours)}
    </div>`
-   :""
+   :
+   ""
   }
 
  </section>
@@ -3123,8 +3293,11 @@ function renderFeatured(){
  if(!DATA.settings.featured)
   return "";
 
- const products=allProducts()
-  .filter(p=>p.featured&&!p.sold);
+ const products=
+  allProducts()
+   .filter(
+    p=>p.featured&&!p.sold
+   );
 
  if(!products.length)
   return "";
@@ -3134,7 +3307,9 @@ function renderFeatured(){
 
   <div class="sectionHead">
 
-   <h2>🔥 ${t("best")}</h2>
+   <h2>
+    🔥 ${t("best")}
+   </h2>
 
    <span class="hint">
     ${t("swipe")}
@@ -3163,7 +3338,9 @@ function renderFeatured(){
        :
        item.image
        ?
-       `<img src="${esc(item.image)}" alt="">`
+       `<img
+        src="${esc(item.image)}"
+        alt="">`
        :
        ""
       }
@@ -3203,14 +3380,17 @@ function renderEvents(){
  if(
   !DATA.settings.events||
   !DATA.events?.length
- )return "";
+ )
+  return "";
 
  return `
  <section class="section">
 
   <div class="sectionHead">
 
-   <h2>✨ ${t("events")}</h2>
+   <h2>
+    ✨ ${t("events")}
+   </h2>
 
    <span class="hint">
     ${t("swipe")}
@@ -3237,18 +3417,21 @@ function renderEvents(){
         playsinline
         src="${esc(event.video)}"></video>`
        :
-       `<img src="${esc(event.image)}" alt="">`
+       event.image
+       ?
+       `<img
+        src="${esc(event.image)}"
+        alt="">`
+       :
+       ""
       }
 
       <div class="eventShade"></div>
 
       <div class="eventDate">
-       ${esc(
-        event.date||
-        (language==="en"?"":"")
-       )}
+       ${esc(event.date||"")}
        •
-       ${esc(event.time)}
+       ${esc(event.time||"")}
       </div>
 
       <div class="eventText">
@@ -3307,7 +3490,9 @@ function renderCategories(){
        ${
         category.image
         ?
-        `<img src="${esc(category.image)}" alt="">`
+        `<img
+         src="${esc(category.image)}"
+         alt="">`
         :
         `<div style="
          width:100%;
@@ -3321,11 +3506,22 @@ function renderCategories(){
        <div class="categoryText">
 
         <strong>
-         ${esc(localizedCategoryName(category))}
+         ${esc(
+          localizedCategoryName(
+           category
+          )
+         )}
         </strong>
 
         <span>
-         ${(category.items||[]).length} ürün
+         ${(category.items||[]).length} ${
+          language==="ar"
+          ?"منتج"
+          :
+          language==="en"
+          ?"products"
+          :"ürün"
+         }
         </span>
 
        </div>
@@ -3381,7 +3577,10 @@ function renderTags(item){
    ?
    `<span class="tag">
     ${"🌶️".repeat(
-     Math.min(5,Number(item.spicy)||0)
+     Math.min(
+      5,
+      Number(item.spicy)||0
+     )
     )}
    </span>`
    :
@@ -3392,7 +3591,9 @@ function renderTags(item){
    DATA.settings.allergens&&item.allergens?.length
    ?
    `<span class="tag">
-    ${esc(item.allergens.join(", "))}
+    ${esc(
+     item.allergens.join(", ")
+    )}
    </span>`
    :
    ""
@@ -3441,7 +3642,9 @@ function renderProductCard(item){
     ?
     `<img
      src="${esc(item.image)}"
-     alt="${esc(localizedName(item))}">`
+     alt="${esc(
+      localizedName(item)
+     )}">`
     :
     `<div style="
      width:100%;
@@ -3464,7 +3667,9 @@ function renderProductCard(item){
    </h3>
 
    <p>
-    ${esc(localizedDescription(item))}
+    ${esc(
+     localizedDescription(item)
+    )}
    </p>
 
    ${renderTags(item)}
@@ -3494,7 +3699,8 @@ function renderProductCard(item){
 
 function renderCategoryPage(){
 
- const category=findCategory(selectedCategory);
+ const category=
+  findCategory(selectedCategory);
 
  if(!category)
   return renderHome();
@@ -3510,8 +3716,14 @@ function renderCategoryPage(){
     ← ${t("back")}
    </button>
 
-   <h2 style="margin:0;font-size:19px">
-    ${esc(localizedCategoryName(category))}
+   <h2 style="
+    margin:0;
+    font-size:19px">
+    ${esc(
+     localizedCategoryName(
+      category
+     )
+    )}
    </h2>
 
   </div>
@@ -3530,7 +3742,9 @@ function renderCategoryPage(){
         class="${i===0?"active":""}"
         data-scroll-product="${esc(item.id)}">
 
-        ${esc(localizedName(item))}
+        ${esc(
+         localizedName(item)
+        )}
 
        </button>
 
@@ -3549,7 +3763,9 @@ function renderCategoryPage(){
    ${
     category.items?.length
     ?
-    category.items.map(renderProductCard).join("")
+    category.items.map(
+     renderProductCard
+    ).join("")
     :
     `<div class="empty">
      ${t("noProducts")}
@@ -3569,36 +3785,66 @@ function renderCategoryPage(){
 
 function renderSearch(){
 
- const query=searchText
-  .toLocaleLowerCase(language==="tr"?"tr":"en");
+ const query=
+  searchText.toLocaleLowerCase(
+   language==="tr"
+   ?"tr"
+   :
+   language==="ar"
+   ?"ar"
+   :
+   "en"
+  );
 
- const products=allProducts()
-  .filter(item=>{
+ const products=
+  allProducts()
+   .filter(item=>{
 
-   const text=[
-    item.name,
-    localizedName(item),
-    item.description,
-    localizedDescription(item),
-    item.categoryName,
-    localizedCategoryName(
-     findCategory(item.categoryId)
-    )
-   ].join(" ");
+    const category=
+     findCategory(
+      item.categoryId
+     );
 
-   return text
-    .toLocaleLowerCase(
-     language==="tr"?"tr":"en"
-    )
-    .includes(query);
+    const text=[
+     item.name,
+     localizedName(item),
+     item.description,
+     localizedDescription(item),
+     item.categoryName,
+     localizedCategoryName(
+      category
+     )
+    ].join(" ");
 
-  });
+    return text
+     .toLocaleLowerCase(
+      language==="tr"
+      ?"tr"
+      :
+      language==="ar"
+      ?"ar"
+      :
+      "en"
+     )
+     .includes(query);
+
+   });
 
  return `
  <section class="section pageContent">
 
   <div class="sectionHead">
-   <h2>${products.length} ürün</h2>
+   <h2>
+    ${products.length}
+    ${
+     language==="ar"
+     ?"منتج"
+     :
+     language==="en"
+     ?"products"
+     :"ürün"
+    }
+   </h2>
   </div>
 
   <div class="products">
@@ -3606,10 +3852,19 @@ function renderSearch(){
    ${
     products.length
     ?
-    products.map(renderProductCard).join("")
+    products.map(
+     renderProductCard
+    ).join("")
     :
     `<div class="empty">
-     Ürün bulunamadı.
+     ${
+      language==="ar"
+      ?"لم يتم العثور على منتج."
+      :
+      language==="en"
+      ?"No products found."
+      :"Ürün bulunamadı."
+     }
     </div>`
    }
 
@@ -3621,9 +3876,11 @@ function renderSearch(){
 }
 
 function renderHome(){
+
  return renderFeatured()+
         renderEvents()+
         renderCategories();
+
 }
 
 /* =========================================================
@@ -3639,28 +3896,49 @@ function renderCurrencyPopup(){
  <div class="quickPopup">
 
   <button
-   class="${currency==="TRY"?"active":""}"
+   class="${
+    currency==="TRY"
+    ?"active"
+    :""
+   }"
    data-currency="TRY">
 
-   <span>🇹🇷 ${t("try")}</span>
+   <span>
+    🇹🇷 ${t("try")}
+   </span>
+
    <span>₺</span>
 
   </button>
 
   <button
-   class="${currency==="USD"?"active":""}"
+   class="${
+    currency==="USD"
+    ?"active"
+    :""
+   }"
    data-currency="USD">
 
-   <span>🇺🇸 ${t("usd")}</span>
+   <span>
+    🇺🇸 ${t("usd")}
+   </span>
+
    <span>$</span>
 
   </button>
 
   <button
-   class="${currency==="EUR"?"active":""}"
+   class="${
+    currency==="EUR"
+    ?"active"
+    :""
+   }"
    data-currency="EUR">
 
-   <span>🇪🇺 ${t("eur")}</span>
+   <span>
+    🇪🇺 ${t("eur")}
+   </span>
+
    <span>€</span>
 
   </button>
@@ -3680,10 +3958,16 @@ function renderLanguagePopup(){
   return "";
 
  return `
- <div class="quickPopup" style="width:170px">
+ <div
+  class="quickPopup"
+  style="width:170px">
 
   <button
-   class="${language==="tr"?"active":""}"
+   class="${
+    language==="tr"
+    ?"active"
+    :""
+   }"
    data-language="tr">
 
    <span>🇹🇷 Türkçe</span>
@@ -3692,7 +3976,11 @@ function renderLanguagePopup(){
   </button>
 
   <button
-   class="${language==="en"?"active":""}"
+   class="${
+    language==="en"
+    ?"active"
+    :""
+   }"
    data-language="en">
 
    <span>🇬🇧 English</span>
@@ -3701,7 +3989,11 @@ function renderLanguagePopup(){
   </button>
 
   <button
-   class="${language==="ar"?"active":""}"
+   class="${
+    language==="ar"
+    ?"active"
+    :""
+   }"
    data-language="ar">
 
    <span>🇸🇦 العربية</span>
@@ -3757,7 +4049,9 @@ function renderDrawer(){
       class="drawerLink"
       target="_blank"
       rel="noopener"
-      href="https://wa.me/${esc(DATA.whatsapp)}">
+      href="https://wa.me/${esc(
+       DATA.whatsapp
+      )}">
       WhatsApp
      </a>`
      :
@@ -3829,7 +4123,9 @@ function renderProductModal(){
      ?
      `<img
       src="${esc(item.image)}"
-      alt="${esc(localizedName(item))}">`
+      alt="${esc(
+       localizedName(item)
+      )}">`
      :
      ""
     }
@@ -3845,7 +4141,9 @@ function renderProductModal(){
    <div class="modalBody">
 
     <h2>
-     ${esc(localizedName(item))}
+     ${esc(
+      localizedName(item)
+     )}
     </h2>
 
     ${
@@ -3865,7 +4163,9 @@ function renderProductModal(){
     }
 
     <p>
-     ${esc(localizedDescription(item))}
+     ${esc(
+      localizedDescription(item)
+     )}
     </p>
 
     ${
@@ -3895,7 +4195,9 @@ function renderProductModal(){
      ?
      `<div class="infoRow">
       <span>${t("allergens")}</span>
-      <span>${esc(item.allergens.join(", "))}</span>
+      <span>${esc(
+       item.allergens.join(", ")
+      )}</span>
      </div>`
      :
      ""
@@ -3908,7 +4210,10 @@ function renderProductModal(){
       <span>${t("spicy")}</span>
       <span>
        ${"🌶️".repeat(
-        Math.min(5,Number(item.spicy)||0)
+        Math.min(
+         5,
+         Number(item.spicy)||0
+        )
        )}
       </span>
      </div>`
@@ -3981,9 +4286,13 @@ function renderEventModal(){
       playsinline
       src="${esc(event.video)}"></video>`
      :
+     event.image
+     ?
      `<img
       src="${esc(event.image)}"
       alt="">`
+     :
+     ""
     }
 
     <button
@@ -3997,7 +4306,9 @@ function renderEventModal(){
    <div class="modalBody">
 
     <h2>
-     ${esc(localizedEventName(event))}
+     ${esc(
+      localizedEventName(event)
+     )}
     </h2>
 
     <p>
@@ -4007,7 +4318,11 @@ function renderEventModal(){
     </p>
 
     <p>
-     ${esc(localizedEventDescription(event))}
+     ${esc(
+      localizedEventDescription(
+       event
+      )
+     )}
     </p>
 
     ${
@@ -4040,12 +4355,19 @@ function renderEventModal(){
    ADMIN INPUTS
 ========================================================= */
 
-function input(key,label,value,type="text"){
+function input(
+ key,
+ label,
+ value,
+ type="text"
+){
 
  return `
  <div class="field">
 
-  <label>${label}</label>
+  <label>
+   ${label}
+  </label>
 
   <input
    type="${type}"
@@ -4057,22 +4379,36 @@ function input(key,label,value,type="text"){
 
 }
 
-function textarea(key,label,value){
+function textarea(
+ key,
+ label,
+ value
+){
 
  return `
  <div class="field">
 
-  <label>${label}</label>
+  <label>
+   ${label}
+  </label>
 
   <textarea
-   data-admin="${esc(key)}">${esc(value??"")}</textarea>
+   data-admin="${esc(key)}">${esc(
+    value??""
+   )}</textarea>
 
  </div>
  `;
 
 }
 
-function fileField(type,id,label,value,accept){
+function fileField(
+ type,
+ id,
+ label,
+ value,
+ accept
+){
 
  const isVideo=
   type==="productVideo"||
@@ -4082,13 +4418,22 @@ function fileField(type,id,label,value,accept){
  return `
  <div class="field">
 
-  <label>${label}</label>
+  <label>
+   ${label}
+  </label>
 
   <div class="fileBox">
 
    <label class="fileBtn">
 
-    📁 ${t("image")} ${isVideo?" / "+t("video"):""}
+    📁
+    ${
+     isVideo
+     ?
+     t("video")
+     :
+     t("image")
+    }
 
     <input
      hidden
@@ -4249,7 +4594,7 @@ function renderAdminGeneral(){
   </div>
 
   <div class="small">
-   Kur tamamen senin kontrolünde. Örneğin 1 USD = 40 TL.
+   Kur tamamen senin kontrolünde.
   </div>
 
   <div style="margin-top:14px">
@@ -4414,7 +4759,9 @@ function renderAdminCategories(){
      ${
       category.image
       ?
-      `<img src="${esc(category.image)}" alt="">`
+      `<img
+       src="${esc(category.image)}"
+       alt="">`
       :
       `<div style="
        width:100%;
@@ -4432,11 +4779,22 @@ function renderAdminCategories(){
     <div class="adminCategoryInfo">
 
      <strong>
-      ${esc(category.name)}
+      ${esc(
+       localizedCategoryName(
+        category
+       )
+      )}
      </strong>
 
      <span>
-      ${(category.items||[]).length} ürün
+      ${(category.items||[]).length} ${
+       language==="en"
+       ?"products"
+       :
+       language==="ar"
+       ?"منتج"
+       :"ürün"
+      }
      </span>
 
     </div>
@@ -4466,9 +4824,10 @@ function renderAdminCategories(){
 
 function renderAdminCategory(){
 
- const category=findCategory(
-  adminCategoryView
- );
+ const category=
+  findCategory(
+   adminCategoryView
+  );
 
  if(!category){
 
@@ -4489,7 +4848,11 @@ function renderAdminCategory(){
   <span>›</span>
 
   <strong>
-   ${esc(category.name)}
+   ${esc(
+    localizedCategoryName(
+     category
+    )
+   )}
   </strong>
 
  </div>
@@ -4532,6 +4895,7 @@ function renderAdminCategory(){
    gap:10px">
 
    <div>
+
     <div class="adminCardTitle">
      Ürünler
     </div>
@@ -4539,6 +4903,7 @@ function renderAdminCategory(){
     <div class="small">
      ${(category.items||[]).length} ürün
     </div>
+
    </div>
 
    <button
@@ -4567,7 +4932,9 @@ function renderAdminCategory(){
      ${
       item.image
       ?
-      `<img src="${esc(item.image)}" alt="">`
+      `<img
+       src="${esc(item.image)}"
+       alt="">`
       :
       `<div style="
        width:100%;
@@ -4619,20 +4986,22 @@ function renderAdminCategory(){
 
 function renderAdminProduct(){
 
- const item=findProduct(
-  adminProductView
- );
+ const item=
+  findProduct(
+   adminProductView
+  );
 
  let category=null;
 
  if(item){
 
-  category=DATA.categories.find(
-   c=>
-    (c.items||[]).some(
-     p=>p.id===item.id
-    )
-  );
+  category=
+   DATA.categories.find(
+    c=>
+     (c.items||[]).some(
+      p=>p.id===item.id
+     )
+   );
 
  }
 
@@ -4655,7 +5024,13 @@ function renderAdminProduct(){
   <span>›</span>
 
   <strong>
-   ${item.name==="Yeni Ürün"?"Yeni Ürün":"Ürün"}
+   ${
+    item.name==="Yeni Ürün"
+    ?
+    "Yeni Ürün"
+    :
+    "Ürün"
+   }
   </strong>
 
  </div>
@@ -4663,9 +5038,13 @@ function renderAdminProduct(){
  <div class="simpleProductHero">
 
   <strong>
-   ${item.name==="Yeni Ürün"
-    ?"Yeni Ürün Oluştur"
-    :"Ürün Düzenle"}
+   ${
+    item.name==="Yeni Ürün"
+    ?
+    "Yeni Ürün Oluştur"
+    :
+    "Ürün Düzenle"
+   }
   </strong>
 
   <span>
@@ -4735,8 +5114,10 @@ function renderAdminProduct(){
    ⚙
    ${
     advancedProduct
-    ? t("hideAdvanced")
-    : t("advanced")
+    ?
+    t("hideAdvanced")
+    :
+    t("advanced")
    }
 
   </button>
@@ -4815,7 +5196,9 @@ function renderAdminProduct(){
   <button
    class="adminButton gold"
    id="saveProductNow"
-   style="width:100%;padding:14px">
+   style="
+    width:100%;
+    padding:14px">
    ✓ ${t("saveProduct")}
   </button>
 
@@ -4871,60 +5254,93 @@ function renderAdminDesign(){
    Sitenin bütün ana renklerini ayrı ayrı ayarlayabilirsin.
   </div>
 
-  <div class="designGrid" style="margin-top:13px">
+  <div
+   class="designGrid"
+   style="margin-top:13px">
 
    <div class="designCard">
+
     <h4>Ana renk</h4>
+
     <input
      class="colorInput"
      type="color"
      data-color-setting="accent"
-     value="${esc(th.accent)}">
+     value="${esc(
+      th.accent
+     )}">
+
    </div>
 
    <div class="designCard">
+
     <h4>Vurgu rengi</h4>
+
     <input
      class="colorInput"
      type="color"
      data-color-setting="accent2"
-     value="${esc(th.accent2)}">
+     value="${esc(
+      th.accent2
+     )}">
+
    </div>
 
    <div class="designCard">
+
     <h4>Genel yazı</h4>
+
     <input
      class="colorInput"
      type="color"
      data-color-setting="text"
-     value="${esc(th.text||"#ffffff")}">
+     value="${esc(
+      th.text||"#ffffff"
+     )}">
+
    </div>
 
    <div class="designCard">
+
     <h4>Ürün yazısı</h4>
+
     <input
      class="colorInput"
      type="color"
      data-color-setting="cardText"
-     value="${esc(th.cardText||"#ffffff")}">
+     value="${esc(
+      th.cardText||"#ffffff"
+     )}">
+
    </div>
 
    <div class="designCard">
+
     <h4>Fiyat</h4>
+
     <input
      class="colorInput"
      type="color"
      data-color-setting="price"
-     value="${esc(th.price||th.accent2)}">
+     value="${esc(
+      th.price||th.accent2
+     )}">
+
    </div>
 
    <div class="designCard">
+
     <h4>Arka plan rengi</h4>
+
     <input
      class="colorInput"
      type="color"
      data-color-setting="background"
-     value="${esc(DATA.background.value||"#0b0b0c")}">
+     value="${esc(
+      DATA.background.value||
+      "#0b0b0c"
+     )}">
+
    </div>
 
   </div>
@@ -4937,7 +5353,9 @@ function renderAdminDesign(){
    Hazır Renkler
   </div>
 
-  <div class="presetRow" style="margin-top:12px">
+  <div
+   class="presetRow"
+   style="margin-top:12px">
 
    ${
     [
@@ -4955,7 +5373,11 @@ function renderAdminDesign(){
 
      <button
       class="preset ${
-       th.accent===c?"active":""
+       th.accent===c
+       ?
+       "active"
+       :
+       ""
       }"
       style="background:${c}"
       data-theme-color="${c}">
@@ -4974,9 +5396,13 @@ function renderAdminDesign(){
    🔤 ${t("font")}
   </div>
 
-  <div class="field" style="margin-top:13px">
+  <div
+   class="field"
+   style="margin-top:13px">
 
-   <label>Genel font</label>
+   <label>
+    Genel font
+   </label>
 
    <select data-admin="fontFamily">
 
@@ -4987,8 +5413,10 @@ function renderAdminDesign(){
        value="${esc(f[0])}"
        ${
         fontValue===f[0]
-        ?"selected"
-        :""
+        ?
+        "selected"
+        :
+        ""
        }>
        ${esc(f[1])}
       </option>
@@ -5002,7 +5430,9 @@ function renderAdminDesign(){
 
   <div class="field">
 
-   <label>Başlık fontu</label>
+   <label>
+    Başlık fontu
+   </label>
 
    <select data-admin="titleFont">
 
@@ -5013,8 +5443,10 @@ function renderAdminDesign(){
        value="${esc(f[0])}"
        ${
         titleFontValue===f[0]
-        ?"selected"
-        :""
+        ?
+        "selected"
+        :
+        ""
        }>
        ${esc(f[1])}
       </option>
@@ -5034,7 +5466,9 @@ function renderAdminDesign(){
    📐 ${t("sizes")}
   </div>
 
-  <div class="designGrid" style="margin-top:13px">
+  <div
+   class="designGrid"
+   style="margin-top:13px">
 
    <div class="designCard">
 
@@ -5138,13 +5572,21 @@ function renderAdminDesign(){
       type="range"
       min="55"
       max="100"
-      value="${Math.round((th.cardOpacity??.94)*100)}"
+      value="${
+       Math.round(
+        (th.cardOpacity??.94)*100
+       )
+      }"
       data-design="cardOpacity">
 
      <span
       class="rangeValue"
       id="cardOpacityValue">
-      ${Math.round((th.cardOpacity??.94)*100)}%
+      ${
+       Math.round(
+        (th.cardOpacity??.94)*100
+       )
+      }%
      </span>
 
     </div>
@@ -5161,13 +5603,21 @@ function renderAdminDesign(){
       type="range"
       min="0"
       max="90"
-      value="${Math.round((th.overlay??.55)*100)}"
+      value="${
+       Math.round(
+        (th.overlay??.55)*100
+       )
+      }"
       data-design="overlay">
 
      <span
       class="rangeValue"
       id="overlayValue">
-      ${Math.round((th.overlay??.55)*100)}%
+      ${
+       Math.round(
+        (th.overlay??.55)*100
+       )
+      }%
      </span>
 
     </div>
@@ -5192,7 +5642,11 @@ function renderAdminDesign(){
 
    <button
     class="adminButton ${
-     DATA.background.type==="color"?"gold":""
+     DATA.background.type==="color"
+     ?
+     "gold"
+     :
+     ""
     }"
     data-background="color">
     Renk
@@ -5200,7 +5654,11 @@ function renderAdminDesign(){
 
    <button
     class="adminButton ${
-     DATA.background.type==="image"?"gold":""
+     DATA.background.type==="image"
+     ?
+     "gold"
+     :
+     ""
     }"
     data-background="image">
     Fotoğraf
@@ -5208,7 +5666,11 @@ function renderAdminDesign(){
 
    <button
     class="adminButton ${
-     DATA.background.type==="video"?"gold":""
+     DATA.background.type==="video"
+     ?
+     "gold"
+     :
+     ""
     }"
     data-background="video">
     Video
@@ -5219,7 +5681,9 @@ function renderAdminDesign(){
   ${
    DATA.background.type==="color"
    ?
-   `<div class="help" style="margin-top:10px">
+   `<div
+    class="help"
+    style="margin-top:10px">
     Yukarıdaki "Arka plan rengi" kutusundan istediğin rengi seç.
    </div>`
    :
@@ -5283,7 +5747,13 @@ function renderAdminDesign(){
      <input
       type="checkbox"
       data-setting="${o[0]}"
-      ${DATA.settings[o[0]]?"checked":""}>
+      ${
+       DATA.settings[o[0]]
+       ?
+       "checked"
+       :
+       ""
+      }>
 
     </label>
 
@@ -5302,7 +5772,10 @@ function renderAdminDesign(){
 
 function renderAdmin(){
 
- if(!adminOpen||!adminAuthenticated)
+ if(
+  !adminOpen||
+  !adminAuthenticated
+ )
   return "";
 
  let body="";
@@ -5341,7 +5814,10 @@ function renderAdmin(){
       </div>
 
       <div>
-       <b>${t("admin")}</b>
+
+       <b>
+        ${t("admin")}
+       </b>
 
        <div class="small">
         NearMenu Premium
@@ -5362,19 +5838,37 @@ function renderAdmin(){
     <div class="adminTabs">
 
      <button
-      class="${adminTab==="general"?"active":""}"
+      class="${
+       adminTab==="general"
+       ?
+       "active"
+       :
+       ""
+      }"
       data-admin-tab="general">
       ${t("general")}
      </button>
 
      <button
-      class="${adminTab==="products"?"active":""}"
+      class="${
+       adminTab==="products"
+       ?
+       "active"
+       :
+       ""
+      }"
       data-admin-tab="products">
       ${t("products")}
      </button>
 
      <button
-      class="${adminTab==="settings"?"active":""}"
+      class="${
+       adminTab==="settings"
+       ?
+       "active"
+       :
+       ""
+      }"
       data-admin-tab="settings">
       ${t("settings")}
      </button>
@@ -5411,7 +5905,10 @@ function renderAdmin(){
 
 function renderAdminLogin(){
 
- if(!adminOpen||adminAuthenticated)
+ if(
+  !adminOpen||
+  adminAuthenticated
+ )
   return "";
 
  return `
@@ -5473,230 +5970,378 @@ function collectAdmin(){
   const key=input.dataset.admin;
   const value=input.value;
 
-  if(key==="businessName")
+  if(key==="businessName"){
+
    DATA.name=value;
 
-  else if(key==="subtitle")
+  }
+
+  else if(key==="subtitle"){
+
    DATA.subtitle=value;
 
-  else if(key==="phone")
+  }
+
+  else if(key==="phone"){
+
    DATA.phone=value;
 
-  else if(key==="whatsapp")
+  }
+
+  else if(key==="whatsapp"){
+
    DATA.whatsapp=value;
 
-  else if(key==="hours")
+  }
+
+  else if(key==="hours"){
+
    DATA.hours=value;
 
-  else if(key==="rateUSD")
+  }
+
+  else if(key==="rateUSD"){
+
    DATA.rates.USD=
     Number(value)||0;
 
-  else if(key==="rateEUR")
+  }
+
+  else if(key==="rateEUR"){
+
    DATA.rates.EUR=
     Number(value)||0;
 
-  else if(key==="fontFamily")
+  }
+
+  else if(key==="fontFamily"){
+
    DATA.theme.fontFamily=value;
 
-  else if(key==="titleFont")
+  }
+
+  else if(key==="titleFont"){
+
    DATA.theme.titleFont=value;
 
-  else if(key.startsWith("categoryName-")){
+  }
+
+  else if(
+   key.startsWith(
+    "categoryName-"
+   )
+  ){
 
    const id=
-    key.replace("categoryName-","");
+    key.replace(
+     "categoryName-",
+     ""
+    );
 
-   const category=findCategory(id);
+   const category=
+    findCategory(id);
 
    if(category){
 
-    category.name=value;
+    if(
+     category.name!==value
+    ){
 
-    if(!category.names)
-     category.names={};
+     category.name=value;
 
-    category.names.tr=value;
+     markCategoryTranslationDirty(
+      category
+     );
+
+    }
 
    }
 
   }
 
-  else if(key.startsWith("productName-")){
+  else if(
+   key.startsWith(
+    "productName-"
+   )
+  ){
 
    const id=
-    key.replace("productName-","");
+    key.replace(
+     "productName-",
+     ""
+    );
 
-   const item=findProduct(id);
+   const item=
+    findProduct(id);
 
    if(item){
 
-    item.name=value;
+    if(item.name!==value){
 
-    if(!item.names)
-     item.names={};
+     item.name=value;
 
-    item.names.tr=value;
+     markProductTranslationDirty(
+      item
+     );
+
+    }
 
    }
 
   }
 
-  else if(key.startsWith("productDescription-")){
+  else if(
+   key.startsWith(
+    "productDescription-"
+   )
+  ){
 
    const id=
-    key.replace("productDescription-","");
+    key.replace(
+     "productDescription-",
+     ""
+    );
 
-   const item=findProduct(id);
+   const item=
+    findProduct(id);
 
    if(item){
 
-    item.description=value;
+    if(
+     item.description!==value
+    ){
 
-    if(!item.descriptions)
-     item.descriptions={};
+     item.description=value;
 
-    item.descriptions.tr=value;
+     markProductTranslationDirty(
+      item
+     );
+
+    }
 
    }
 
   }
 
-  else if(key.startsWith("productPrice-")){
+  else if(
+   key.startsWith(
+    "productPrice-"
+   )
+  ){
 
    const id=
-    key.replace("productPrice-","");
+    key.replace(
+     "productPrice-",
+     ""
+    );
 
-   const item=findProduct(id);
+   const item=
+    findProduct(id);
 
    if(item)
-    item.price=Number(value)||0;
+    item.price=
+     Number(value)||0;
 
   }
 
-  else if(key.startsWith("productPortion-")){
+  else if(
+   key.startsWith(
+    "productPortion-"
+   )
+  ){
 
    const id=
-    key.replace("productPortion-","");
+    key.replace(
+     "productPortion-",
+     ""
+    );
 
-   const item=findProduct(id);
+   const item=
+    findProduct(id);
 
    if(item)
     item.portion=value;
 
   }
 
-  else if(key.startsWith("productCalories-")){
+  else if(
+   key.startsWith(
+    "productCalories-"
+   )
+  ){
 
    const id=
-    key.replace("productCalories-","");
+    key.replace(
+     "productCalories-",
+     ""
+    );
 
-   const item=findProduct(id);
+   const item=
+    findProduct(id);
 
    if(item)
     item.calories=value;
 
   }
 
-  else if(key.startsWith("productAllergens-")){
+  else if(
+   key.startsWith(
+    "productAllergens-"
+   )
+  ){
 
    const id=
-    key.replace("productAllergens-","");
+    key.replace(
+     "productAllergens-",
+     ""
+    );
 
-   const item=findProduct(id);
+   const item=
+    findProduct(id);
 
    if(item){
 
     item.allergens=
      value
      .split(",")
-     .map(x=>x.trim())
+     .map(
+      x=>x.trim()
+     )
      .filter(Boolean);
 
    }
 
   }
 
-  else if(key.startsWith("productSpicy-")){
+  else if(
+   key.startsWith(
+    "productSpicy-"
+   )
+  ){
 
    const id=
-    key.replace("productSpicy-","");
+    key.replace(
+     "productSpicy-",
+     ""
+    );
 
-   const item=findProduct(id);
+   const item=
+    findProduct(id);
 
    if(item){
 
-    item.spicy=Math.max(
-     0,
-     Math.min(
-      5,
-      Number(value)||0
-     )
-    );
+    item.spicy=
+     Math.max(
+      0,
+      Math.min(
+       5,
+       Number(value)||0
+      )
+     );
 
    }
 
   }
 
-  else if(key.startsWith("eventName-")){
+  else if(
+   key.startsWith(
+    "eventName-"
+   )
+  ){
 
    const id=
-    key.replace("eventName-","");
+    key.replace(
+     "eventName-",
+     ""
+    );
 
-   const event=findEvent(id);
+   const event=
+    findEvent(id);
 
    if(event){
 
-    event.name=value;
+    if(event.name!==value){
 
-    if(!event.names)
-     event.names={};
+     event.name=value;
 
-    event.names.tr=value;
+     markEventTranslationDirty(
+      event
+     );
+
+    }
 
    }
 
   }
 
-  else if(key.startsWith("eventDate-")){
+  else if(
+   key.startsWith(
+    "eventDate-"
+   )
+  ){
 
    const id=
-    key.replace("eventDate-","");
+    key.replace(
+     "eventDate-",
+     ""
+    );
 
-   const event=findEvent(id);
+   const event=
+    findEvent(id);
 
    if(event)
     event.date=value;
 
   }
 
-  else if(key.startsWith("eventTime-")){
+  else if(
+   key.startsWith(
+    "eventTime-"
+   )
+  ){
 
    const id=
-    key.replace("eventTime-","");
+    key.replace(
+     "eventTime-",
+     ""
+    );
 
-   const event=findEvent(id);
+   const event=
+    findEvent(id);
 
    if(event)
     event.time=value;
 
   }
 
-  else if(key.startsWith("eventDescription-")){
+  else if(
+   key.startsWith(
+    "eventDescription-"
+   )
+  ){
 
    const id=
-    key.replace("eventDescription-","");
+    key.replace(
+     "eventDescription-",
+     ""
+    );
 
-   const event=findEvent(id);
+   const event=
+    findEvent(id);
 
    if(event){
 
-    event.description=value;
+    if(
+     event.description!==value
+    ){
 
-    if(!event.descriptions)
-     event.descriptions={};
+     event.description=value;
 
-    event.descriptions.tr=value;
+     markEventTranslationDirty(
+      event
+     );
+
+    }
 
    }
 
@@ -5707,36 +6352,55 @@ function collectAdmin(){
 }
 
 /* =========================================================
-   FILE HANDLING
+   FILE
 ========================================================= */
 
-function readFileAsDataURL(file,callback){
+function readFileAsDataURL(
+ file,
+ callback
+){
 
- const reader=new FileReader();
+ const reader=
+  new FileReader();
 
  reader.onload=()=>{
-  callback(reader.result);
+  callback(
+   reader.result
+  );
  };
 
  reader.onerror=()=>{
-  alert("Dosya okunamadı.");
+  alert(
+   "Dosya okunamadı."
+  );
  };
 
  reader.readAsDataURL(file);
+
 }
 
-function handleFile(type,id,file){
+function handleFile(
+ type,
+ id,
+ file
+){
 
- if(!file)return;
+ if(!file)
+  return;
 
- const maxImage=8*1024*1024;
- const maxVideo=20*1024*1024;
+ const maxImage=
+  8*1024*1024;
+
+ const maxVideo=
+  20*1024*1024;
 
  const isVideo=
-  file.type.startsWith("video/");
+  file.type.startsWith(
+   "video/"
+  );
 
  if(
-  isVideo &&
+  isVideo&&
   file.size>maxVideo
  ){
 
@@ -5745,10 +6409,11 @@ function handleFile(type,id,file){
   );
 
   return;
+
  }
 
  if(
-  !isVideo &&
+  !isVideo&&
   file.size>maxImage
  ){
 
@@ -5757,68 +6422,97 @@ function handleFile(type,id,file){
   );
 
   return;
+
  }
 
  readFileAsDataURL(
   file,
   data=>{
 
-   if(type==="logo")
+   if(type==="logo"){
+
     DATA.logo=data;
 
-   else if(type==="backgroundImage"){
+   }
 
-    DATA.background.image=data;
-    DATA.background.type="image";
+   else if(
+    type==="backgroundImage"
+   ){
+
+    DATA.background.image=
+     data;
+
+    DATA.background.type=
+     "image";
 
    }
 
-   else if(type==="backgroundVideo"){
+   else if(
+    type==="backgroundVideo"
+   ){
 
-    DATA.background.video=data;
-    DATA.background.type="video";
+    DATA.background.video=
+     data;
+
+    DATA.background.type=
+     "video";
 
    }
 
-   else if(type==="categoryImage"){
+   else if(
+    type==="categoryImage"
+   ){
 
-    const category=findCategory(id);
+    const category=
+     findCategory(id);
 
     if(category)
      category.image=data;
 
    }
 
-   else if(type==="productImage"){
+   else if(
+    type==="productImage"
+   ){
 
-    const item=findProduct(id);
+    const item=
+     findProduct(id);
 
     if(item)
      item.image=data;
 
    }
 
-   else if(type==="productVideo"){
+   else if(
+    type==="productVideo"
+   ){
 
-    const item=findProduct(id);
+    const item=
+     findProduct(id);
 
     if(item)
      item.video=data;
 
    }
 
-   else if(type==="eventImage"){
+   else if(
+    type==="eventImage"
+   ){
 
-    const event=findEvent(id);
+    const event=
+     findEvent(id);
 
     if(event)
      event.image=data;
 
    }
 
-   else if(type==="eventVideo"){
+   else if(
+    type==="eventVideo"
+   ){
 
-    const event=findEvent(id);
+    const event=
+     findEvent(id);
 
     if(event)
      event.video=data;
@@ -5826,7 +6520,16 @@ function handleFile(type,id,file){
    }
 
    saveData();
-   render();
+
+   /*
+     Dosya seçildikten sonra admin scroll konumu
+     korunuyor.
+   */
+
+   render({
+    preserveAdminScroll:true,
+    preserveWindowScroll:true
+   });
 
   }
  );
@@ -5834,13 +6537,30 @@ function handleFile(type,id,file){
 }
 
 /* =========================================================
-   LIVE CSS
+   THEME
 ========================================================= */
+
+function resolveFont(font){
+
+ if(
+  font==="system"||
+  !font
+ ){
+
+  return '-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif';
+
+ }
+
+ return font;
+
+}
 
 function applyTheme(){
 
  const th=DATA.theme;
- const root=document.documentElement;
+
+ const root=
+  document.documentElement;
 
  root.style.setProperty(
   "--accent",
@@ -5864,7 +6584,9 @@ function applyTheme(){
 
  root.style.setProperty(
   "--price",
-  th.price||th.accent2||"#f0c45a"
+  th.price||
+  th.accent2||
+  "#f0c45a"
  );
 
  root.style.setProperty(
@@ -5879,42 +6601,43 @@ function applyTheme(){
 
  root.style.setProperty(
   "--cardRadius",
-  (th.cardRadius||20)+"px"
+  (th.cardRadius||20)+
+  "px"
  );
 
  root.style.setProperty(
   "--titleSize",
-  (th.titleSize||34)+"px"
+  (th.titleSize||34)+
+  "px"
  );
 
  root.style.setProperty(
   "--bodySize",
-  (th.bodySize||13)+"px"
+  (th.bodySize||13)+
+  "px"
  );
 
  root.style.setProperty(
   "--logoSize",
-  (th.logoSize||112)+"px"
+  (th.logoSize||112)+
+  "px"
  );
 
  root.style.setProperty(
   "--fontFamily",
-  resolveFont(th.fontFamily)
+  resolveFont(
+   th.fontFamily
+  )
  );
 
  root.style.setProperty(
   "--titleFont",
-  resolveFont(th.titleFont||"Georgia")
+  resolveFont(
+   th.titleFont||
+   "Georgia"
+  )
  );
-}
 
-function resolveFont(font){
-
- if(font==="system"||!font){
-  return '-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif';
- }
-
- return font;
 }
 
 /* =========================================================
@@ -5924,12 +6647,45 @@ function resolveFont(font){
 function render(options={}){
 
  /*
-  Ana hata burada düzeltildi:
-  Her render'da scroll konumu artık kaybolmuyor.
+   ÇOK ÖNEMLİ:
+
+   Admin açıksa admin.scrollTop ayrı tutuluyor.
+   window.scrollY ile karıştırılmıyor.
+
+   Böylece yönetim panelinde:
+   - kategori tıklama
+   - ürün tıklama
+   - tasarım değişikliği
+   - dosya yükleme
+   - renk değiştirme
+   - sekme değişimi
+   - PIN değiştirme
+   sırasında yukarı sıçrama olmaz.
  */
 
- if(!options.resetScroll){
-  rememberScroll();
+ if(
+  options.preserveAdminScroll
+ ){
+
+  rememberAdminScroll();
+
+ }
+
+ if(
+  options.preserveWindowScroll
+ ){
+
+  rememberWindowScroll();
+
+ }
+
+ if(
+  !options.preserveAdminScroll &&
+  !options.resetScroll
+ ){
+
+  rememberWindowScroll();
+
  }
 
  document.documentElement.dir=
@@ -5943,16 +6699,30 @@ function render(options={}){
 
  let content="";
 
- if(searchText)
-  content=renderSearch();
+ if(searchText){
 
- else if(selectedCategory)
-  content=renderCategoryPage();
+  content=
+   renderSearch();
 
- else
-  content=renderHome();
+ }
 
- document.getElementById("app").innerHTML=`
+ else if(selectedCategory){
+
+  content=
+   renderCategoryPage();
+
+ }
+
+ else{
+
+  content=
+   renderHome();
+
+ }
+
+ document.getElementById(
+  "app"
+ ).innerHTML=`
 
   ${renderBackground()}
 
@@ -5990,11 +6760,14 @@ function render(options={}){
 
        ${
         currency==="TRY"
-        ?"₺"
+        ?
+        "₺"
         :
         currency==="USD"
-        ?"$"
-        :"€"
+        ?
+        "$"
+        :
+        "€"
        }
 
       </button>
@@ -6008,11 +6781,14 @@ function render(options={}){
 
        ${
         language==="tr"
-        ?"TR"
+        ?
+        "TR"
         :
         language==="en"
-        ?"EN"
-        :"AR"
+        ?
+        "EN"
+        :
+        "AR"
        }
 
       </button>
@@ -6062,13 +6838,42 @@ function render(options={}){
 
  bindEvents();
 
- if(!options.resetScroll){
-  restoreScroll(0);
+ /*
+   Admin açıksa sadece admin scroll'u geri yükle.
+ */
+
+ if(
+  options.preserveAdminScroll
+ ){
+
+  restoreAdminScroll();
+
  }
 
- if(options.resetScroll){
-  scrollToTop();
+ /*
+   Normal site scroll'u.
+ */
+
+ if(
+  options.preserveWindowScroll
+ ){
+
+  restoreWindowScroll();
+
  }
+
+ /*
+   Kontrollü sayfa geçişlerinde gerçekten yukarı çık.
+ */
+
+ if(
+  options.resetScroll
+ ){
+
+  scrollToTop();
+
+ }
+
 }
 
 /* =========================================================
@@ -6077,40 +6882,49 @@ function render(options={}){
 
 function bindEvents(){
 
- /*
-  Eski kodda her render() sonrasında document'a
-  yeni click listener ekleniyordu.
+ if(
+  !window.nearMenuOutsideHandler
+ ){
 
-  Bu da zamanla gereksiz listener birikmesine neden oluyordu.
+  window.nearMenuOutsideHandler=
+   function(e){
 
-  Burada sadece tek global listener kullanıyoruz.
- */
+    if(
+     !e.target.closest(
+      "#currencyButton"
+     ) &&
+     !e.target.closest(
+      "[data-currency]"
+     ) &&
+     !e.target.closest(
+      "#languageButton"
+     ) &&
+     !e.target.closest(
+      "[data-language]"
+     )
+    ){
 
- if(!window.nearMenuOutsideHandler){
+     if(
+      currencyMenu||
+      languageMenu
+     ){
 
-  window.nearMenuOutsideHandler=function(e){
+      rememberAllScroll();
 
-   if(
-    !e.target.closest("#currencyButton") &&
-    !e.target.closest("[data-currency]") &&
-    !e.target.closest("#languageButton") &&
-    !e.target.closest("[data-language]")
-   ){
+      currencyMenu=false;
+      languageMenu=false;
 
-    if(currencyMenu||languageMenu){
+      render({
+       preserveWindowScroll:true,
+       preserveAdminScroll:
+        adminOpen
+      });
 
-     rememberScroll();
-
-     currencyMenu=false;
-     languageMenu=false;
-
-     render();
+     }
 
     }
 
-   }
-
-  };
+   };
 
   document.addEventListener(
    "click",
@@ -6119,18 +6933,23 @@ function bindEvents(){
 
  }
 
- /* DRAWER */
+ /* =====================================================
+    DRAWER
+ ===================================================== */
 
  $("openDrawer")?.addEventListener(
   "click",
   ()=>{
-   rememberScroll();
+
+   rememberWindowScroll();
 
    drawerOpen=true;
    currencyMenu=false;
    languageMenu=false;
 
-   render();
+   render({
+    preserveWindowScroll:true
+   });
 
   }
  );
@@ -6138,11 +6957,14 @@ function bindEvents(){
  $("closeDrawer")?.addEventListener(
   "click",
   ()=>{
-   rememberScroll();
+
+   rememberWindowScroll();
 
    drawerOpen=false;
 
-   render();
+   render({
+    preserveWindowScroll:true
+   });
 
   }
  );
@@ -6151,20 +6973,27 @@ function bindEvents(){
   "click",
   e=>{
 
-   if(e.target.id==="drawerOverlay"){
+   if(
+    e.target.id===
+    "drawerOverlay"
+   ){
 
-    rememberScroll();
+    rememberWindowScroll();
 
     drawerOpen=false;
 
-    render();
+    render({
+     preserveWindowScroll:true
+    });
 
    }
 
   }
  );
 
- /* CURRENCY */
+ /* =====================================================
+    CURRENCY
+ ===================================================== */
 
  $("currencyButton")?.addEventListener(
   "click",
@@ -6172,25 +7001,31 @@ function bindEvents(){
 
    e.stopPropagation();
 
-   rememberScroll();
+   rememberWindowScroll();
 
-   currencyMenu=!currencyMenu;
+   currencyMenu=
+    !currencyMenu;
+
    languageMenu=false;
 
-   render();
+   render({
+    preserveWindowScroll:true
+   });
 
   }
  );
 
  document
- .querySelectorAll("[data-currency]")
+ .querySelectorAll(
+  "[data-currency]"
+ )
  .forEach(button=>{
 
   button.onclick=e=>{
 
    e.stopPropagation();
 
-   rememberScroll();
+   rememberWindowScroll();
 
    currency=
     button.dataset.currency;
@@ -6202,13 +7037,17 @@ function bindEvents(){
 
    currencyMenu=false;
 
-   render();
+   render({
+    preserveWindowScroll:true
+   });
 
   };
 
  });
 
- /* LANGUAGE */
+ /* =====================================================
+    LANGUAGE
+ ===================================================== */
 
  $("languageButton")?.addEventListener(
   "click",
@@ -6216,25 +7055,33 @@ function bindEvents(){
 
    e.stopPropagation();
 
-   rememberScroll();
+   rememberAllScroll();
 
-   languageMenu=!languageMenu;
+   languageMenu=
+    !languageMenu;
+
    currencyMenu=false;
 
-   render();
+   render({
+    preserveWindowScroll:true,
+    preserveAdminScroll:
+     adminOpen
+   });
 
   }
  );
 
  document
- .querySelectorAll("[data-language]")
+ .querySelectorAll(
+  "[data-language]"
+ )
  .forEach(button=>{
 
   button.onclick=async e=>{
 
    e.stopPropagation();
 
-   rememberScroll();
+   rememberAllScroll();
 
    language=
     button.dataset.language;
@@ -6246,47 +7093,61 @@ function bindEvents(){
 
    languageMenu=false;
 
-   render();
+   render({
+    preserveWindowScroll:true,
+    preserveAdminScroll:
+     adminOpen
+   });
 
-   /*
-    Dil değişince mevcut bütün kategoriler,
-    ürünler ve etkinlikler otomatik çevrilir.
-   */
+   if(
+    language!=="tr"
+   ){
 
-   if(language!=="tr"){
     await translateEverything();
+
    }
 
   };
 
  });
 
- /* SEARCH */
+ /* =====================================================
+    SEARCH
+ ===================================================== */
 
  $("searchButton")?.addEventListener(
   "click",
   ()=>{
 
-   rememberScroll();
+   rememberWindowScroll();
 
-   searchOpen=!searchOpen;
+   searchOpen=
+    !searchOpen;
 
    if(!searchOpen)
     searchText="";
 
-   render();
+   render({
+    preserveWindowScroll:true
+   });
 
    setTimeout(
     ()=>{
-     const input=$("searchInput");
 
-     if(input){
-      input.focus();
-      input.setSelectionRange(
-       input.value.length,
-       input.value.length
+     const search=
+      $("searchInput");
+
+     if(search){
+
+      search.focus();
+
+      search.setSelectionRange(
+       search.value.length,
+       search.value.length
       );
+
      }
+
     },
     30
    );
@@ -6294,49 +7155,61 @@ function bindEvents(){
   }
  );
 
+ /*
+   Arama kutusunda her harfte komple render yapmak yerine
+   değer değişikliğini kontrol ediyoruz.
+
+   Scroll korunuyor.
+ */
+
  $("searchInput")?.addEventListener(
   "input",
   e=>{
 
-   /*
-    Arama sırasında scroll sıçramasını engelliyoruz.
-   */
+   rememberWindowScroll();
 
-   rememberScroll();
+   searchText=
+    e.target.value;
 
-   searchText=e.target.value;
+   render({
+    preserveWindowScroll:true
+   });
 
-   render();
+   setTimeout(
+    ()=>{
 
-   setTimeout(()=>{
+     const input=
+      $("searchInput");
 
-    const input=$("searchInput");
+     if(input){
 
-    if(input){
+      input.focus();
 
-     input.focus();
+      input.setSelectionRange(
+       input.value.length,
+       input.value.length
+      );
 
-     input.setSelectionRange(
-      input.value.length,
-      input.value.length
-     );
+     }
 
-    }
-
-   },0);
+    },
+    0
+   );
 
   }
  );
 
- /* CATEGORY */
+ /* =====================================================
+    CATEGORY
+ ===================================================== */
 
  document
- .querySelectorAll("[data-category]")
+ .querySelectorAll(
+  "[data-category]"
+ )
  .forEach(button=>{
 
   button.onclick=async ()=>{
-
-   rememberScroll();
 
    selectedCategory=
     button.dataset.category;
@@ -6344,11 +7217,6 @@ function bindEvents(){
    selectedProduct=null;
    selectedEvent=null;
    searchText="";
-
-   /*
-    Kategoriye gerçekten girildiği için
-    burada kontrollü şekilde yukarı gidiyoruz.
-   */
 
    render({
     resetScroll:true
@@ -6360,11 +7228,18 @@ function bindEvents(){
     );
 
    if(
-    category &&
+    category&&
     language!=="tr"
    ){
-    await translateCategory(category);
+
+    /*
+      Kategori sayfasına girildiğinde
+      sadece eksik değil, mevcut Türkçe kaynağa
+      göre doğru çeviri kullanılır.
+    */
+
     await translateEverything();
+
    }
 
   };
@@ -6384,10 +7259,14 @@ function bindEvents(){
   }
  );
 
- /* PRODUCT */
+ /* =====================================================
+    PRODUCT
+ ===================================================== */
 
  document
- .querySelectorAll("[data-product]")
+ .querySelectorAll(
+  "[data-product]"
+ )
  .forEach(element=>{
 
   element.onclick=()=>{
@@ -6399,11 +7278,14 @@ function bindEvents(){
 
    if(product){
 
-    rememberScroll();
+    rememberWindowScroll();
 
-    selectedProduct=product;
+    selectedProduct=
+     product;
 
-    render();
+    render({
+     preserveWindowScroll:true
+    });
 
    }
 
@@ -6414,11 +7296,14 @@ function bindEvents(){
  $("closeProduct")?.addEventListener(
   "click",
   ()=>{
-   rememberScroll();
+
+   rememberWindowScroll();
 
    selectedProduct=null;
 
-   render();
+   render({
+    preserveWindowScroll:true
+   });
 
   }
  );
@@ -6427,35 +7312,46 @@ function bindEvents(){
   "click",
   e=>{
 
-   if(e.target.id==="productOverlay"){
+   if(
+    e.target.id===
+    "productOverlay"
+   ){
 
-    rememberScroll();
+    rememberWindowScroll();
 
     selectedProduct=null;
 
-    render();
+    render({
+     preserveWindowScroll:true
+    });
 
    }
 
   }
  );
 
- /* EVENT */
+ /* =====================================================
+    EVENT
+ ===================================================== */
 
  document
- .querySelectorAll("[data-event]")
+ .querySelectorAll(
+  "[data-event]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
-   rememberScroll();
+   rememberWindowScroll();
 
    selectedEvent=
     findEvent(
      button.dataset.event
     );
 
-   render();
+   render({
+    preserveWindowScroll:true
+   });
 
   };
 
@@ -6464,11 +7360,14 @@ function bindEvents(){
  $("closeEvent")?.addEventListener(
   "click",
   ()=>{
-   rememberScroll();
+
+   rememberWindowScroll();
 
    selectedEvent=null;
 
-   render();
+   render({
+    preserveWindowScroll:true
+   });
 
   }
  );
@@ -6477,23 +7376,32 @@ function bindEvents(){
   "click",
   e=>{
 
-   if(e.target.id==="eventOverlay"){
+   if(
+    e.target.id===
+    "eventOverlay"
+   ){
 
-    rememberScroll();
+    rememberWindowScroll();
 
     selectedEvent=null;
 
-    render();
+    render({
+     preserveWindowScroll:true
+    });
 
    }
 
   }
  );
 
- /* CATEGORY PRODUCT SCROLL */
+ /* =====================================================
+    CATEGORY PRODUCT SCROLL
+ ===================================================== */
 
  document
- .querySelectorAll("[data-scroll-product]")
+ .querySelectorAll(
+  "[data-scroll-product]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
@@ -6517,19 +7425,27 @@ function bindEvents(){
 
  });
 
- /* OPEN ADMIN */
+ /* =====================================================
+    OPEN ADMIN
+ ===================================================== */
 
  $("openAdmin")?.addEventListener(
   "click",
   ()=>{
 
    drawerOpen=false;
+
    adminOpen=true;
    adminAuthenticated=false;
+
    adminTab="general";
+
    adminCategoryView=null;
    adminProductView=null;
+
    advancedProduct=false;
+
+   savedAdminScroll=0;
 
    render();
 
@@ -6541,7 +7457,9 @@ function bindEvents(){
   }
  );
 
- /* LOGIN */
+ /* =====================================================
+    LOGIN
+ ===================================================== */
 
  $("adminLoginButton")?.addEventListener(
   "click",
@@ -6551,17 +7469,23 @@ function bindEvents(){
  $("adminPassword")?.addEventListener(
   "keydown",
   e=>{
+
    if(e.key==="Enter")
     login();
+
   }
  );
 
  function login(){
 
-  const input=$("adminPassword");
-  const error=$("loginError");
+  const input=
+   $("adminPassword");
 
-  if(!input)return;
+  const error=
+   $("loginError");
+
+  if(!input)
+   return;
 
   if(
    input.value===
@@ -6570,12 +7494,15 @@ function bindEvents(){
 
    adminAuthenticated=true;
 
+   savedAdminScroll=0;
+
    render();
 
   }else{
 
    if(error)
-    error.style.display="block";
+    error.style.display=
+     "block";
 
    input.value="";
    input.focus();
@@ -6584,7 +7511,9 @@ function bindEvents(){
 
  }
 
- /* CLOSE ADMIN */
+ /* =====================================================
+    CLOSE ADMIN
+ ===================================================== */
 
  $("closeAdmin")?.addEventListener(
   "click",
@@ -6605,15 +7534,30 @@ function bindEvents(){
   }
  );
 
- /* ADMIN TABS */
+ /* =====================================================
+    ADMIN TABS
+ ===================================================== */
 
  document
- .querySelectorAll("[data-admin-tab]")
+ .querySelectorAll(
+  "[data-admin-tab]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
+   /*
+     Önce mevcut input değerlerini al.
+   */
+
    collectAdmin();
+
+   /*
+     Mevcut admin scroll pozisyonunu
+     yeni render'dan önce kaydet.
+   */
+
+   rememberAdminScroll();
 
    adminTab=
     button.dataset.adminTab;
@@ -6622,13 +7566,19 @@ function bindEvents(){
    adminProductView=null;
    advancedProduct=false;
 
-   render();
+   saveData();
+
+   render({
+    preserveAdminScroll:true
+   });
 
   };
 
  });
 
- /* CHANGE PIN */
+ /* =====================================================
+    CHANGE PIN
+ ===================================================== */
 
  $("changePinButton")?.addEventListener(
   "click",
@@ -6642,35 +7592,55 @@ function bindEvents(){
    const confirmPin=
     $("confirmPin")?.value?.trim();
 
-   if(!newPin||!confirmPin){
+   if(
+    !newPin||
+    !confirmPin
+   ){
 
-    alert("Yeni PIN'i iki alana da gir.");
-
-    return;
-   }
-
-   if(newPin!==confirmPin){
-
-    alert("Yeni PIN'ler aynı değil.");
+    alert(
+     "Yeni PIN'i iki alana da gir."
+    );
 
     return;
+
    }
 
-   if(!/^\d{4,12}$/.test(newPin)){
+   if(
+    newPin!==confirmPin
+   ){
+
+    alert(
+     "Yeni PIN'ler aynı değil."
+    );
+
+    return;
+
+   }
+
+   if(
+    !/^\d{4,12}$/.test(
+     newPin
+    )
+   ){
 
     alert(
      "PIN sadece rakamlardan oluşmalı ve 4-12 haneli olmalı."
     );
 
     return;
+
    }
 
-   if(setAdminPin(newPin)){
+   if(
+    setAdminPin(newPin)
+   ){
 
     $("newPin").value="";
     $("confirmPin").value="";
 
-    alert(t("pinSaved"));
+    alert(
+     t("pinSaved")
+    );
 
    }else{
 
@@ -6683,22 +7653,30 @@ function bindEvents(){
   }
  );
 
- /* ADMIN CATEGORY */
+ /* =====================================================
+    ADMIN CATEGORY
+ ===================================================== */
 
  document
- .querySelectorAll("[data-admin-category]")
+ .querySelectorAll(
+  "[data-admin-category]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
    collectAdmin();
 
+   rememberAdminScroll();
+
    adminCategoryView=
     button.dataset.adminCategory;
 
    adminProductView=null;
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   };
 
@@ -6710,30 +7688,42 @@ function bindEvents(){
 
    collectAdmin();
 
+   rememberAdminScroll();
+
    adminCategoryView=null;
    adminProductView=null;
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   }
  );
 
- /* ADMIN PRODUCT */
+ /* =====================================================
+    ADMIN PRODUCT
+ ===================================================== */
 
  document
- .querySelectorAll("[data-admin-product]")
+ .querySelectorAll(
+  "[data-admin-product]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
    collectAdmin();
 
+   rememberAdminScroll();
+
    adminProductView=
     button.dataset.adminProduct;
 
    advancedProduct=false;
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   };
 
@@ -6745,38 +7735,54 @@ function bindEvents(){
 
    collectAdmin();
 
+   rememberAdminScroll();
+
    adminProductView=null;
 
    advancedProduct=false;
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   }
  );
 
- /* ADVANCED */
+ /* =====================================================
+    ADVANCED
+ ===================================================== */
 
  document
- .querySelectorAll("[data-toggle-advanced]")
+ .querySelectorAll(
+  "[data-toggle-advanced]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
    collectAdmin();
 
+   rememberAdminScroll();
+
    advancedProduct=
     !advancedProduct;
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   };
 
  });
 
- /* SETTINGS */
+ /* =====================================================
+    SETTINGS
+ ===================================================== */
 
  document
- .querySelectorAll("[data-setting]")
+ .querySelectorAll(
+  "[data-setting]"
+ )
  .forEach(input=>{
 
   input.onchange=()=>{
@@ -6788,18 +7794,22 @@ function bindEvents(){
    saveData();
 
    /*
-    Burada komple render yerine sadece veri
-    kaydediliyor. Böylece sayfa sıçramıyor.
+     Burada render yok.
+     Dolayısıyla scroll hiç oynamıyor.
    */
 
   };
 
  });
 
- /* PRODUCT SWITCHES */
+ /* =====================================================
+    PRODUCT SWITCHES
+ ===================================================== */
 
  document
- .querySelectorAll("[data-sold]")
+ .querySelectorAll(
+  "[data-sold]"
+ )
  .forEach(input=>{
 
   input.onchange=()=>{
@@ -6810,7 +7820,8 @@ function bindEvents(){
     );
 
    if(item)
-    item.sold=input.checked;
+    item.sold=
+     input.checked;
 
    saveData();
 
@@ -6819,7 +7830,9 @@ function bindEvents(){
  });
 
  document
- .querySelectorAll("[data-featured]")
+ .querySelectorAll(
+  "[data-featured]"
+ )
  .forEach(input=>{
 
   input.onchange=()=>{
@@ -6830,7 +7843,8 @@ function bindEvents(){
     );
 
    if(item)
-    item.featured=input.checked;
+    item.featured=
+     input.checked;
 
    saveData();
 
@@ -6839,7 +7853,9 @@ function bindEvents(){
  });
 
  document
- .querySelectorAll("[data-dish]")
+ .querySelectorAll(
+  "[data-dish]"
+ )
  .forEach(input=>{
 
   input.onchange=()=>{
@@ -6850,7 +7866,8 @@ function bindEvents(){
     );
 
    if(item)
-    item.dish=input.checked;
+    item.dish=
+     input.checked;
 
    saveData();
 
@@ -6858,52 +7875,59 @@ function bindEvents(){
 
  });
 
- /* COLORS */
+ /* =====================================================
+    PRESET COLORS
+ ===================================================== */
 
  document
- .querySelectorAll("[data-theme-color]")
+ .querySelectorAll(
+  "[data-theme-color]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
    collectAdmin();
 
-   DATA.theme.accent=
+   rememberAdminScroll();
+
+   const color=
     button.dataset.themeColor;
 
-   DATA.theme.accent2=
-    button.dataset.themeColor;
-
-   DATA.theme.price=
-    button.dataset.themeColor;
+   DATA.theme.accent=color;
+   DATA.theme.accent2=color;
+   DATA.theme.price=color;
 
    applyTheme();
 
-   /*
-    Render yerine kaydedip sayfayı bozmuyoruz.
-   */
-
    saveData();
 
-   const presets=
-    document.querySelectorAll(
-     "[data-theme-color]"
-    );
+   document
+   .querySelectorAll(
+    "[data-theme-color]"
+   )
+   .forEach(p=>{
 
-   presets.forEach(p=>{
     p.classList.toggle(
      "active",
      p.dataset.themeColor===
      DATA.theme.accent
     );
+
    });
 
   };
 
  });
 
+ /* =====================================================
+    COLOR INPUTS
+ ===================================================== */
+
  document
- .querySelectorAll("[data-color-setting]")
+ .querySelectorAll(
+  "[data-color-setting]"
+ )
  .forEach(input=>{
 
   input.oninput=()=>{
@@ -6911,25 +7935,42 @@ function bindEvents(){
    const key=
     input.dataset.colorSetting;
 
-   if(key==="background"){
+   if(
+    key==="background"
+   ){
 
-    DATA.background.type="color";
+    DATA.background.type=
+     "color";
+
     DATA.background.value=
      input.value;
 
+    /*
+      ANA DÜZELTME:
+
+      Sadece mevcut background elementinin
+      rengini değiştiriyoruz.
+
+      Admin render edilmiyor.
+      Dolayısıyla scroll sıçramıyor.
+    */
+
     const bg=
-     document.querySelector(".background");
+     document.querySelector(
+      "#siteBackground"
+     );
 
     if(bg){
 
-     bg.style.background=
+     bg.style.backgroundColor=
       input.value;
 
     }
 
    }else{
 
-    DATA.theme[key]=input.value;
+    DATA.theme[key]=
+     input.value;
 
     applyTheme();
 
@@ -6941,10 +7982,14 @@ function bindEvents(){
 
  });
 
- /* DESIGN RANGES */
+ /* =====================================================
+    DESIGN RANGES
+ ===================================================== */
 
  document
- .querySelectorAll("[data-design]")
+ .querySelectorAll(
+  "[data-design]"
+ )
  .forEach(input=>{
 
   input.oninput=()=>{
@@ -6955,14 +8000,28 @@ function bindEvents(){
    const value=
     Number(input.value);
 
-   if(key==="overlay")
-    DATA.theme.overlay=value/100;
+   if(key==="overlay"){
 
-   else if(key==="cardOpacity")
-    DATA.theme.cardOpacity=value/100;
+    DATA.theme.overlay=
+     value/100;
 
-   else
-    DATA.theme[key]=value;
+   }
+
+   else if(
+    key==="cardOpacity"
+   ){
+
+    DATA.theme.cardOpacity=
+     value/100;
+
+   }
+
+   else{
+
+    DATA.theme[key]=
+     value;
+
+   }
 
    const label=
     $(key+"Value");
@@ -6983,35 +8042,57 @@ function bindEvents(){
 
    applyTheme();
 
+   saveData();
+
   };
 
  });
 
- /* BACKGROUND */
+ /* =====================================================
+    BACKGROUND TYPE
+ ===================================================== */
 
  document
- .querySelectorAll("[data-background]")
+ .querySelectorAll(
+  "[data-background]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
    collectAdmin();
 
-   DATA.background.type=
+   rememberAdminScroll();
+
+   const type=
     button.dataset.background;
+
+   DATA.background.type=
+    type;
+
+   /*
+     Eğer renk seçildiyse mevcut renk korunur.
+     Eğer fotoğraf/video seçildiyse mevcut dosya korunur.
+   */
 
    saveData();
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   };
 
  });
 
- /* FILES */
+ /* =====================================================
+    FILES
+ ===================================================== */
 
  document
- .querySelectorAll("[data-file-type]")
+ .querySelectorAll(
+  "[data-file-type]"
+ )
  .forEach(input=>{
 
   input.onchange=e=>{
@@ -7029,93 +8110,143 @@ function bindEvents(){
 
  });
 
- /* CLEAR FILE */
+ /* =====================================================
+    CLEAR FILE
+ ===================================================== */
 
  document
- .querySelectorAll("[data-clear-file]")
+ .querySelectorAll(
+  "[data-clear-file]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
+   rememberAdminScroll();
+
    const parts=
-    button.dataset.clearFile.split("|");
+    button.dataset.clearFile
+     .split("|");
 
    const type=parts[0];
    const id=parts[1];
 
-   if(type==="logo")
+   if(type==="logo"){
+
     DATA.logo="";
 
-   else if(type==="backgroundImage")
+   }
+
+   else if(
+    type==="backgroundImage"
+   ){
+
     DATA.background.image="";
 
-   else if(type==="backgroundVideo")
+   }
+
+   else if(
+    type==="backgroundVideo"
+   ){
+
     DATA.background.video="";
 
-   else if(type==="categoryImage"){
+   }
 
-    const c=findCategory(id);
+   else if(
+    type==="categoryImage"
+   ){
 
-    if(c)c.image="";
+    const c=
+     findCategory(id);
+
+    if(c)
+     c.image="";
 
    }
 
-   else if(type==="productImage"){
+   else if(
+    type==="productImage"
+   ){
 
-    const p=findProduct(id);
+    const p=
+     findProduct(id);
 
-    if(p)p.image="";
-
-   }
-
-   else if(type==="productVideo"){
-
-    const p=findProduct(id);
-
-    if(p)p.video="";
+    if(p)
+     p.image="";
 
    }
 
-   else if(type==="eventImage"){
+   else if(
+    type==="productVideo"
+   ){
 
-    const e=findEvent(id);
+    const p=
+     findProduct(id);
 
-    if(e)e.image="";
+    if(p)
+     p.video="";
 
    }
 
-   else if(type==="eventVideo"){
+   else if(
+    type==="eventImage"
+   ){
 
-    const e=findEvent(id);
+    const e=
+     findEvent(id);
 
-    if(e)e.video="";
+    if(e)
+     e.image="";
+
+   }
+
+   else if(
+    type==="eventVideo"
+   ){
+
+    const e=
+     findEvent(id);
+
+    if(e)
+     e.video="";
 
    }
 
    saveData();
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   };
 
  });
 
- /* DELETE CATEGORY */
+ /* =====================================================
+    DELETE CATEGORY
+ ===================================================== */
 
  document
- .querySelectorAll("[data-delete-category]")
+ .querySelectorAll(
+  "[data-delete-category]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
-   if(!confirm(
-    "Bu kategori ve içindeki tüm ürünler silinsin mi?"
-   ))return;
+   if(
+    !confirm(
+     "Bu kategori ve içindeki tüm ürünler silinsin mi?"
+    )
+   )
+    return;
 
    DATA.categories=
     DATA.categories.filter(
      c=>
-      c.id!==button.dataset.deleteCategory
+      c.id!==
+      button.dataset.deleteCategory
     );
 
    adminCategoryView=null;
@@ -7123,32 +8254,42 @@ function bindEvents(){
 
    saveData();
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   };
 
  });
 
- /* DELETE PRODUCT */
+ /* =====================================================
+    DELETE PRODUCT
+ ===================================================== */
 
  document
- .querySelectorAll("[data-delete-product]")
+ .querySelectorAll(
+  "[data-delete-product]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
    const parts=
     button.dataset.deleteProduct
-    .split("|");
+     .split("|");
 
    const category=
     findCategory(parts[0]);
 
-   if(!category)return;
+   if(!category)
+    return;
 
-   if(!confirm(
-    "Bu ürün silinsin mi?"
-   ))return;
+   if(
+    !confirm(
+     "Bu ürün silinsin mi?"
+    )
+   )
+    return;
 
    category.items=
     category.items.filter(
@@ -7159,39 +8300,53 @@ function bindEvents(){
 
    saveData();
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   };
 
  });
 
- /* DELETE EVENT */
+ /* =====================================================
+    DELETE EVENT
+ ===================================================== */
 
  document
- .querySelectorAll("[data-delete-event]")
+ .querySelectorAll(
+  "[data-delete-event]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
-   if(!confirm(
-    "Bu etkinlik silinsin mi?"
-   ))return;
+   if(
+    !confirm(
+     "Bu etkinlik silinsin mi?"
+    )
+   )
+    return;
 
    DATA.events=
     DATA.events.filter(
      e=>
-      e.id!==button.dataset.deleteEvent
+      e.id!==
+      button.dataset.deleteEvent
     );
 
    saveData();
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   };
 
  });
 
- /* ADD CATEGORY */
+ /* =====================================================
+    ADD CATEGORY
+ ===================================================== */
 
  $("addCategory")?.addEventListener(
   "click",
@@ -7199,7 +8354,10 @@ function bindEvents(){
 
    collectAdmin();
 
-   const id=uid("category");
+   rememberAdminScroll();
+
+   const id=
+    uid("category");
 
    DATA.categories.push({
 
@@ -7222,29 +8380,44 @@ function bindEvents(){
 
    saveData();
 
-   render();
+   /*
+     Yeni kategoriye geçtiğimiz için
+     kontrollü olarak o noktaya geçiyoruz.
+   */
+
+   render({
+    preserveAdminScroll:true
+   });
 
   }
  );
 
- /* ADD PRODUCT */
+ /* =====================================================
+    ADD PRODUCT
+ ===================================================== */
 
  document
- .querySelectorAll("[data-add-product]")
+ .querySelectorAll(
+  "[data-add-product]"
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
    collectAdmin();
 
+   rememberAdminScroll();
+
    const category=
     findCategory(
      button.dataset.addProduct
     );
 
-   if(!category)return;
+   if(!category)
+    return;
 
-   const id=uid("product");
+   const id=
+    uid("product");
 
    category.items.push({
 
@@ -7290,19 +8463,25 @@ function bindEvents(){
 
    saveData();
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   };
 
  });
 
- /* ADD EVENT */
+ /* =====================================================
+    ADD EVENT
+ ===================================================== */
 
  $("addEvent")?.addEventListener(
   "click",
   ()=>{
 
    collectAdmin();
+
+   rememberAdminScroll();
 
    DATA.events.push({
 
@@ -7325,18 +8504,23 @@ function bindEvents(){
     },
 
     image:"",
+
     video:""
 
    });
 
    saveData();
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   }
  );
 
- /* SAVE PRODUCT */
+ /* =====================================================
+    SAVE PRODUCT
+ ===================================================== */
 
  $("saveProductNow")?.addEventListener(
   "click",
@@ -7344,33 +8528,40 @@ function bindEvents(){
 
    collectAdmin();
 
+   rememberAdminScroll();
+
    saveData();
 
    const item=
-    findProduct(adminProductView);
+    findProduct(
+     adminProductView
+    );
 
    if(item){
 
-    /*
-     Kaydettiğin anda İngilizce ve Arapça
-     çevirileri hazırlanır.
-    */
-
-    await generateMissingTranslations(item);
+    await generateMissingTranslations(
+     item
+    );
 
    }
 
-   alert("Ürün kaydedildi.");
+   alert(
+    "Ürün kaydedildi."
+   );
 
    adminProductView=null;
    advancedProduct=false;
 
-   render();
+   render({
+    preserveAdminScroll:true
+   });
 
   }
  );
 
- /* SAVE ALL */
+ /* =====================================================
+    SAVE ADMIN
+ ===================================================== */
 
  $("saveAdmin")?.addEventListener(
   "click",
@@ -7394,12 +8585,15 @@ function bindEvents(){
 }
 
 /* =========================================================
-   GENERATE MISSING TRANSLATIONS
+   PRODUCT TRANSLATIONS
 ========================================================= */
 
-async function generateMissingTranslations(item){
+async function generateMissingTranslations(
+ item
+){
 
- if(!item)return;
+ if(!item)
+  return;
 
  if(!item.names)
   item.names={};
@@ -7407,39 +8601,58 @@ async function generateMissingTranslations(item){
  if(!item.descriptions)
   item.descriptions={};
 
- item.names.tr=item.name||"";
- item.descriptions.tr=item.description||"";
+ item.names.tr=
+  item.name||"";
+
+ item.descriptions.tr=
+  item.description||"";
 
  translating=true;
- render();
 
- for(const target of ["en","ar"]){
+ /*
+   Admin scroll'u kaydet.
+ */
 
-  if(!item.names[target]){
+ rememberAdminScroll();
 
-   item.names[target]=
-    await translateText(
-     item.name,
-     target
-    );
+ render({
+  preserveAdminScroll:true
+ });
 
-  }
+ for(
+  const target of ["en","ar"]
+ ){
 
-  if(!item.descriptions[target]){
+  /*
+    Kaynak Türkçe değiştiyse zaten
+    eski çeviri temizlenmiş oluyor.
+  */
 
-   item.descriptions[target]=
-    await translateText(
-     item.description,
-     target
-    );
+  item.names[target]=
+   await translateText(
+    item.name,
+    target
+   );
 
-  }
+  item.descriptions[target]=
+   await translateText(
+    item.description,
+    target
+   );
 
  }
 
  translating=false;
 
  saveData();
+
+ /*
+   Çeviri bittiğinde de admin yukarı sıçramıyor.
+ */
+
+ render({
+  preserveAdminScroll:true
+ });
 
 }
 
