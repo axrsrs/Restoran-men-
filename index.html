@@ -23,9 +23,7 @@ button,input,textarea,select{
  font:inherit
 }
 
-button{
- cursor:pointer
-}
+button{cursor:pointer}
 
 a{
  text-decoration:none;
@@ -36,6 +34,9 @@ a{
  --gold:#d6a83d;
  --gold2:#f0c45a;
  --line:#29292d;
+ --card:#151517;
+ --card2:#1b1b1e;
+ --danger:#7f1d1d;
 }
 
 #app{
@@ -50,7 +51,7 @@ a{
 }
 
 /* =========================
-   BACKGROUND
+ BACKGROUND
 ========================= */
 
 .videoBg{
@@ -76,7 +77,7 @@ a{
 }
 
 /* =========================
-   TOP
+ TOP
 ========================= */
 
 .top{
@@ -134,7 +135,7 @@ a{
 }
 
 /* =========================
-   HERO
+ HERO
 ========================= */
 
 .hero{
@@ -184,7 +185,7 @@ a{
 }
 
 /* =========================
-   SECTIONS
+ SECTIONS
 ========================= */
 
 .section{
@@ -209,7 +210,7 @@ a{
 }
 
 /* =========================
-   HORIZONTAL
+ HORIZONTAL
 ========================= */
 
 .horizontal{
@@ -225,7 +226,7 @@ a{
 }
 
 /* =========================
-   FEATURED
+ FEATURED
 ========================= */
 
 .feature{
@@ -249,10 +250,7 @@ a{
 .featureShade{
  position:absolute;
  inset:0;
- background:linear-gradient(
-  transparent 25%,
-  rgba(0,0,0,.9)
- )
+ background:linear-gradient(transparent 25%,rgba(0,0,0,.9))
 }
 
 .featureText{
@@ -275,7 +273,7 @@ a{
 }
 
 /* =========================
-   EVENTS
+ EVENTS
 ========================= */
 
 .event{
@@ -299,10 +297,7 @@ a{
 .eventShade{
  position:absolute;
  inset:0;
- background:linear-gradient(
-  transparent 25%,
-  rgba(0,0,0,.9)
- )
+ background:linear-gradient(transparent 25%,rgba(0,0,0,.9))
 }
 
 .eventDate{
@@ -336,7 +331,7 @@ a{
 }
 
 /* =========================
-   CATEGORIES
+ CATEGORIES
 ========================= */
 
 .categories{
@@ -364,10 +359,7 @@ a{
 .categoryShade{
  position:absolute;
  inset:0;
- background:linear-gradient(
-  transparent 20%,
-  rgba(0,0,0,.9)
- )
+ background:linear-gradient(transparent 20%,rgba(0,0,0,.9))
 }
 
 .categoryText{
@@ -390,7 +382,7 @@ a{
 }
 
 /* =========================
-   CATEGORY PAGE
+ CATEGORY PAGE
 ========================= */
 
 .categoryTitle{
@@ -449,7 +441,7 @@ a{
 }
 
 /* =========================
-   PRODUCTS
+ PRODUCTS
 ========================= */
 
 .products{
@@ -512,7 +504,7 @@ a{
 }
 
 .tag.sold{
- background:#7f1d1d;
+ background:var(--danger);
  color:#fff
 }
 
@@ -524,7 +516,7 @@ a{
 }
 
 /* =========================
-   DRAWER
+ DRAWER
 ========================= */
 
 .overlay{
@@ -596,7 +588,7 @@ a{
 }
 
 /* =========================
-   MODAL
+ MODAL
 ========================= */
 
 .modalOverlay{
@@ -699,14 +691,14 @@ a{
 }
 
 /* =========================
-   ADMIN
+ ADMIN
 ========================= */
 
 .adminOverlay{
  position:fixed;
  inset:0;
  z-index:250;
- background:rgba(0,0,0,.8);
+ background:rgba(0,0,0,.82);
  display:flex;
  justify-content:flex-end
 }
@@ -723,7 +715,7 @@ a{
  top:0;
  z-index:5;
  padding:15px;
- background:rgba(14,14,15,.97);
+ background:rgba(14,14,15,.98);
  border-bottom:1px solid var(--line)
 }
 
@@ -830,7 +822,7 @@ a{
 }
 
 .adminButton.danger{
- background:#7f1d1d;
+ background:var(--danger);
  color:#fff
 }
 
@@ -838,7 +830,7 @@ a{
  position:sticky;
  bottom:0;
  padding:12px 16px;
- background:rgba(14,14,15,.97);
+ background:rgba(14,14,15,.98);
  border-top:1px solid var(--line)
 }
 
@@ -859,7 +851,241 @@ a{
 }
 
 /* =========================
-   FOOTER
+ ADMIN CATEGORY LIST
+========================= */
+
+.adminCategoryList{
+ display:flex;
+ flex-direction:column;
+ gap:9px;
+ margin-top:15px
+}
+
+.adminCategoryItem{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ padding:12px;
+ border:1px solid var(--line);
+ border-radius:14px;
+ background:#151517;
+ transition:.2s
+}
+
+.adminCategoryItem:active{
+ transform:scale(.985)
+}
+
+.adminCategoryThumb{
+ width:55px;
+ height:55px;
+ flex:0 0 55px;
+ border-radius:11px;
+ overflow:hidden;
+ background:#222225
+}
+
+.adminCategoryThumb img{
+ width:100%;
+ height:100%;
+ object-fit:cover
+}
+
+.adminCategoryInfo{
+ flex:1;
+ min-width:0
+}
+
+.adminCategoryInfo strong{
+ display:block;
+ font-size:14px;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis
+}
+
+.adminCategoryInfo span{
+ display:block;
+ margin-top:4px;
+ color:#777;
+ font-size:10px
+}
+
+.adminArrow{
+ color:#777;
+ font-size:18px
+}
+
+/* =========================
+ ADMIN PRODUCT LIST
+========================= */
+
+.adminProductList{
+ display:flex;
+ flex-direction:column;
+ gap:8px;
+ margin-top:14px
+}
+
+.adminProductItem{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ padding:10px;
+ border:1px solid var(--line);
+ border-radius:13px;
+ background:#151517
+}
+
+.adminProductThumb{
+ width:52px;
+ height:52px;
+ flex:0 0 52px;
+ border-radius:10px;
+ overflow:hidden;
+ background:#222
+}
+
+.adminProductThumb img{
+ width:100%;
+ height:100%;
+ object-fit:cover
+}
+
+.adminProductInfo{
+ flex:1;
+ min-width:0
+}
+
+.adminProductInfo strong{
+ display:block;
+ font-size:13px;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis
+}
+
+.adminProductInfo span{
+ display:block;
+ color:var(--gold2);
+ font-size:11px;
+ margin-top:4px
+}
+
+.adminProductArrow{
+ color:#777;
+ font-size:17px
+}
+
+/* =========================
+ ADMIN BREADCRUMB
+========================= */
+
+.adminBreadcrumb{
+ display:flex;
+ align-items:center;
+ gap:7px;
+ margin-bottom:15px;
+ color:#777;
+ font-size:11px
+}
+
+.adminBreadcrumb button{
+ border:0;
+ background:none;
+ padding:0;
+ color:var(--gold2);
+ font-size:11px;
+ font-weight:800
+}
+
+/* =========================
+ ADMIN LOGIN
+========================= */
+
+.adminLoginOverlay{
+ position:fixed;
+ inset:0;
+ z-index:500;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+ background:rgba(0,0,0,.9);
+ backdrop-filter:blur(12px)
+}
+
+.adminLogin{
+ width:min(100%,390px);
+ padding:25px;
+ border:1px solid #29292d;
+ border-radius:22px;
+ background:#111113;
+ box-shadow:0 20px 60px #000
+}
+
+.adminLoginLogo{
+ width:65px;
+ height:65px;
+ margin:0 auto 17px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border:1px solid var(--gold);
+ border-radius:50%;
+ color:var(--gold);
+ font:30px Georgia,serif
+}
+
+.adminLogin h2{
+ margin:0;
+ text-align:center;
+ font-size:21px
+}
+
+.adminLogin p{
+ margin:7px 0 20px;
+ text-align:center;
+ color:#777;
+ font-size:11px
+}
+
+.adminPassword{
+ width:100%;
+ padding:14px;
+ border:1px solid #303034;
+ border-radius:12px;
+ background:#18181a;
+ color:#fff;
+ outline:none;
+ text-align:center;
+ letter-spacing:.15em
+}
+
+.adminLoginButton{
+ width:100%;
+ margin-top:10px;
+ padding:13px;
+ border:0;
+ border-radius:12px;
+ background:var(--gold);
+ color:#111;
+ font-weight:900
+}
+
+.loginError{
+ display:none;
+ margin-top:10px;
+ padding:9px;
+ border-radius:9px;
+ background:#3a1717;
+ color:#ff8d8d;
+ text-align:center;
+ font-size:10px
+}
+
+/* =========================
+ FOOTER
 ========================= */
 
 .footer{
@@ -876,7 +1102,7 @@ a{
 }
 
 /* =========================
-   MOBILE
+ MOBILE
 ========================= */
 
 @media(max-width:390px){
@@ -891,6 +1117,12 @@ a{
 
  .productImage{
   height:115px
+ }
+
+ .adminCategoryThumb{
+  width:50px;
+  height:50px;
+  flex-basis:50px
  }
 
 }
@@ -909,9 +1141,16 @@ a{
 ============================================================ */
 
 
-/* =========================
+/* ============================================================
+   KONTROL PANELİ ŞİFRESİ
+============================================================ */
+
+const ADMIN_PASSWORD="1234";
+
+
+/* ============================================================
    GÖRSELLER
-========================= */
+============================================================ */
 
 const IMAGES={
 
@@ -942,9 +1181,9 @@ const IMAGES={
 };
 
 
-/* =========================
+/* ============================================================
    DİL
-========================= */
+============================================================ */
 
 const TEXT={
 
@@ -1026,9 +1265,9 @@ const TEXT={
 };
 
 
-/* =========================
+/* ============================================================
    ANA VERİ
-========================= */
+============================================================ */
 
 const DATA={
 
@@ -1356,9 +1595,9 @@ const DATA={
 };
 
 
-/* =========================
-   STATE
-========================= */
+/* ============================================================
+ STATE
+============================================================ */
 
 let language=
  localStorage.getItem("nearMenuLanguage")||"tr";
@@ -1372,16 +1611,20 @@ let selectedEvent=null;
 
 let drawerOpen=false;
 let adminOpen=false;
+let adminAuthenticated=false;
 
 let adminTab="general";
+
+let adminCategoryView=null;
+let adminProductView=null;
 
 let searchOpen=false;
 let searchText="";
 
 
-/* =========================
-   LOCAL STORAGE
-========================= */
+/* ============================================================
+ LOAD EXISTING DATA
+============================================================ */
 
 try{
 
@@ -1399,17 +1642,14 @@ try{
 
 }catch(error){
 
- console.log(
-  "Kayıt okunamadı",
-  error
- );
+ console.log("Kayıt okunamadı",error);
 
 }
 
 
-/* =========================
-   DATA MERGE
-========================= */
+/* ============================================================
+ DATA MERGE
+============================================================ */
 
 function mergeData(data){
 
@@ -1430,9 +1670,7 @@ function mergeData(data){
     data[key]||{}
    );
 
-  }
-
-  else{
+  }else{
 
    DATA[key]=data[key];
 
@@ -1443,9 +1681,9 @@ function mergeData(data){
 }
 
 
-/* =========================
-   SAVE
-========================= */
+/* ============================================================
+ SAVE
+============================================================ */
 
 function saveData(){
 
@@ -1458,19 +1696,16 @@ function saveData(){
 
  }catch(error){
 
-  console.log(
-   "Kayıt yapılamadı",
-   error
-  );
+  console.log("Kayıt yapılamadı",error);
 
  }
 
 }
 
 
-/* =========================
-   HELPERS
-========================= */
+/* ============================================================
+ HELPERS
+============================================================ */
 
 function t(key){
 
@@ -1500,9 +1735,9 @@ function allProducts(){
 
  let result=[];
 
- DATA.categories.forEach(function(category){
+ (DATA.categories||[]).forEach(function(category){
 
-  category.items.forEach(function(item){
+  (category.items||[]).forEach(function(item){
 
    result.push(
     Object.assign(
@@ -1527,11 +1762,11 @@ function allProducts(){
 function findProduct(id){
 
  for(
-  const category of DATA.categories
+  const category of DATA.categories||[]
  ){
 
   const item=
-   category.items.find(
+   (category.items||[]).find(
     function(product){
      return product.id===id;
     }
@@ -1547,9 +1782,35 @@ function findProduct(id){
 }
 
 
-/* =========================
-   MONEY
-========================= */
+function findCategory(id){
+
+ return (
+  DATA.categories||[]
+ ).find(function(category){
+
+  return category.id===id;
+
+ })||null;
+
+}
+
+
+function findEvent(id){
+
+ return (
+  DATA.events||[]
+ ).find(function(event){
+
+  return event.id===id;
+
+ })||null;
+
+}
+
+
+/* ============================================================
+ MONEY
+============================================================ */
 
 function money(price){
 
@@ -1561,7 +1822,7 @@ function money(price){
   return "$"+
    (
     value/
-    (DATA.rates.USD||40)
+    (DATA.rates?.USD||40)
    ).toFixed(2);
 
  }
@@ -1571,7 +1832,7 @@ function money(price){
   return "€"+
    (
     value/
-    (DATA.rates.EUR||47)
+    (DATA.rates?.EUR||47)
    ).toFixed(2);
 
  }
@@ -1584,9 +1845,9 @@ function money(price){
 }
 
 
-/* =========================
-   BACKGROUND
-========================= */
+/* ============================================================
+ BACKGROUND
+============================================================ */
 
 function renderBackground(){
 
@@ -1651,9 +1912,9 @@ function renderBackground(){
 }
 
 
-/* =========================
-   HERO
-========================= */
+/* ============================================================
+ HERO
+============================================================ */
 
 function renderHero(){
 
@@ -1676,21 +1937,15 @@ function renderHero(){
   </div>
 
   <div class="welcome">
-
    ${t("welcome")}
-
   </div>
 
   <h1>
-
    ${escapeHTML(DATA.name)}
-
   </h1>
 
   <p>
-
    ${escapeHTML(DATA.subtitle)}
-
   </p>
 
   ${
@@ -1703,9 +1958,7 @@ function renderHero(){
        color:#666;
        font-size:10px
       ">
-
      ${escapeHTML(DATA.hours)}
-
     </div>
    `
    :
@@ -1719,9 +1972,9 @@ function renderHero(){
 }
 
 
-/* =========================
-   FEATURED
-========================= */
+/* ============================================================
+ FEATURED
+============================================================ */
 
 function renderFeatured(){
 
@@ -1732,8 +1985,7 @@ function renderFeatured(){
   allProducts()
   .filter(function(item){
 
-   return item.featured &&
-          !item.sold;
+   return item.featured&&!item.sold;
 
   });
 
@@ -1762,7 +2014,6 @@ function renderFeatured(){
     products.map(function(item){
 
      return `
-
      <button
        class="feature"
        data-product="${escapeHTML(item.id)}">
@@ -1786,7 +2037,6 @@ function renderFeatured(){
       </div>
 
      </button>
-
      `;
 
     }).join("")
@@ -1801,14 +2051,14 @@ function renderFeatured(){
 }
 
 
-/* =========================
-   EVENTS
-========================= */
+/* ============================================================
+ EVENTS
+============================================================ */
 
 function renderEvents(){
 
  if(
-  !DATA.settings.events ||
+  !DATA.settings.events||
   !DATA.events?.length
  )
   return "";
@@ -1835,7 +2085,6 @@ function renderEvents(){
     DATA.events.map(function(event){
 
      return `
-
      <button
        class="event"
        data-event="${escapeHTML(event.id)}">
@@ -1847,11 +2096,9 @@ function renderEvents(){
       <div class="eventShade"></div>
 
       <div class="eventDate">
-
        ${escapeHTML(event.date)}
        •
        ${escapeHTML(event.time)}
-
       </div>
 
       <div class="eventText">
@@ -1867,7 +2114,6 @@ function renderEvents(){
       </div>
 
      </button>
-
      `;
 
     }).join("")
@@ -1882,9 +2128,9 @@ function renderEvents(){
 }
 
 
-/* =========================
-   CATEGORIES
-========================= */
+/* ============================================================
+ CATEGORIES
+============================================================ */
 
 function renderCategories(){
 
@@ -1903,10 +2149,9 @@ function renderCategories(){
   <div class="categories">
 
    ${
-    DATA.categories.map(function(category){
+    (DATA.categories||[]).map(function(category){
 
      return `
-
      <button
        class="category"
        data-category="${escapeHTML(category.id)}">
@@ -1924,13 +2169,12 @@ function renderCategories(){
        </strong>
 
        <span>
-        ${category.items.length} ürün
+        ${(category.items||[]).length} ürün
        </span>
 
       </div>
 
      </button>
-
      `;
 
     }).join("")
@@ -1945,9 +2189,9 @@ function renderCategories(){
 }
 
 
-/* =========================
-   TAGS
-========================= */
+/* ============================================================
+ TAGS
+============================================================ */
 
 function renderTags(item){
 
@@ -1956,75 +2200,58 @@ function renderTags(item){
  <div class="tags">
 
   ${
-   DATA.settings.portion &&
-   item.portion
+   DATA.settings.portion&&item.portion
    ?
-   `
-    <span class="tag">
+   `<span class="tag">
      ${escapeHTML(item.portion)}
-    </span>
-   `
+    </span>`
    :
    ""
   }
 
   ${
-   DATA.settings.calories &&
-   item.calories
+   DATA.settings.calories&&item.calories
    ?
-   `
-    <span class="tag">
+   `<span class="tag">
      ${escapeHTML(item.calories)} kcal
-    </span>
-   `
+    </span>`
    :
    ""
   }
 
   ${
-   DATA.settings.spicy &&
-   item.spicy
+   DATA.settings.spicy&&item.spicy
    ?
-   `
-    <span class="tag">
-     ${
-      "🌶️".repeat(
-       Math.min(
-        5,
-        Number(item.spicy)||0
-       )
+   `<span class="tag">
+     ${"🌶️".repeat(
+      Math.min(
+       5,
+       Number(item.spicy)||0
       )
-     }
-    </span>
-   `
+     )}
+    </span>`
    :
    ""
   }
 
   ${
-   DATA.settings.allergens &&
-   item.allergens?.length
+   DATA.settings.allergens&&item.allergens?.length
    ?
-   `
-    <span class="tag">
+   `<span class="tag">
      ${escapeHTML(
       item.allergens.join(", ")
      )}
-    </span>
-   `
+    </span>`
    :
    ""
   }
 
   ${
-   DATA.settings.sold &&
-   item.sold
+   DATA.settings.sold&&item.sold
    ?
-   `
-    <span class="tag sold">
+   `<span class="tag sold">
      ${t("sold")}
-    </span>
-   `
+    </span>`
    :
    ""
   }
@@ -2036,16 +2263,16 @@ function renderTags(item){
 }
 
 
-/* =========================
-   PRODUCT CARD
-========================= */
+/* ============================================================
+ PRODUCT CARD
+============================================================ */
 
 function renderProductCard(item){
 
  return `
-
  <article
    class="product"
+   id="product-${escapeHTML(item.id)}"
    data-product="${escapeHTML(item.id)}">
 
   <div class="productImage">
@@ -2071,8 +2298,7 @@ function renderProductCard(item){
    <div class="price">
 
     ${
-     DATA.settings.sold &&
-     item.sold
+     DATA.settings.sold&&item.sold
      ?
      t("sold")
      :
@@ -2084,24 +2310,19 @@ function renderProductCard(item){
   </div>
 
  </article>
-
  `;
 
 }
 
 
-/* =========================
-   CATEGORY PAGE
-========================= */
+/* ============================================================
+ CATEGORY PAGE
+============================================================ */
 
 function renderCategoryPage(){
 
  const category=
-  DATA.categories.find(
-   function(item){
-    return item.id===selectedCategory;
-   }
-  );
+  findCategory(selectedCategory);
 
  if(!category)
   return renderHome();
@@ -2137,11 +2358,10 @@ function renderCategoryPage(){
    <div class="categoryTabs">
 
     ${
-     category.items.map(
+     (category.items||[]).map(
       function(item,index){
 
        return `
-
        <button
          class="${index===0?"active":""}"
          data-scroll-product="${escapeHTML(item.id)}">
@@ -2149,7 +2369,6 @@ function renderCategoryPage(){
         ${escapeHTML(item.name)}
 
        </button>
-
        `;
 
       }
@@ -2163,11 +2382,9 @@ function renderCategoryPage(){
   <div class="products">
 
    ${
-    category.items.length
+    category.items?.length
     ?
-    category.items
-     .map(renderProductCard)
-     .join("")
+    category.items.map(renderProductCard).join("")
     :
     `
      <div class="empty">
@@ -2185,9 +2402,9 @@ function renderCategoryPage(){
 }
 
 
-/* =========================
-   SEARCH
-========================= */
+/* ============================================================
+ SEARCH
+============================================================ */
 
 function renderSearch(){
 
@@ -2226,15 +2443,9 @@ function renderSearch(){
    ${
     products.length
     ?
-    products
-     .map(renderProductCard)
-     .join("")
+    products.map(renderProductCard).join("")
     :
-    `
-     <div class="empty">
-      Ürün bulunamadı.
-     </div>
-    `
+    `<div class="empty">Ürün bulunamadı.</div>`
    }
 
   </div>
@@ -2246,9 +2457,9 @@ function renderSearch(){
 }
 
 
-/* =========================
-   HOME
-========================= */
+/* ============================================================
+ HOME
+============================================================ */
 
 function renderHome(){
 
@@ -2261,9 +2472,9 @@ function renderHome(){
 }
 
 
-/* =========================
-   DRAWER
-========================= */
+/* ============================================================
+ DRAWER
+============================================================ */
 
 function renderDrawer(){
 
@@ -2287,9 +2498,7 @@ function renderDrawer(){
     <button
       class="iconBtn"
       id="closeDrawer">
-
      ×
-
     </button>
 
    </div>
@@ -2306,25 +2515,19 @@ function renderDrawer(){
      <button
        class="${language==="tr"?"active":""}"
        data-language="tr">
-
       🇹🇷 TR
-
      </button>
 
      <button
        class="${language==="en"?"active":""}"
        data-language="en">
-
       🇬🇧 EN
-
      </button>
 
      <button
        class="${language==="ar"?"active":""}"
        data-language="ar">
-
       🇸🇦 AR
-
      </button>
 
     </div>
@@ -2343,25 +2546,19 @@ function renderDrawer(){
      <button
        class="${currency==="TRY"?"active":""}"
        data-currency="TRY">
-
       ₺ TRY
-
      </button>
 
      <button
        class="${currency==="USD"?"active":""}"
        data-currency="USD">
-
       $ USD
-
      </button>
 
      <button
        class="${currency==="EUR"?"active":""}"
        data-currency="EUR">
-
       € EUR
-
      </button>
 
     </div>
@@ -2382,18 +2579,13 @@ function renderDrawer(){
       <a
         class="drawerLink"
         target="_blank"
-        href="https://wa.me/${escapeHTML(
-         DATA.whatsapp
-        )}">
-
+        href="https://wa.me/${escapeHTML(DATA.whatsapp)}">
        WhatsApp
-
       </a>
      `
      :
      ""
     }
-
 
     ${
      DATA.phone
@@ -2401,12 +2593,8 @@ function renderDrawer(){
      `
       <a
         class="drawerLink"
-        href="tel:${escapeHTML(
-         DATA.phone
-        )}">
-
+        href="tel:${escapeHTML(DATA.phone)}">
        Telefon
-
       </a>
      `
      :
@@ -2437,17 +2625,16 @@ function renderDrawer(){
 }
 
 
-/* =========================
-   PRODUCT MODAL
-========================= */
+/* ============================================================
+ PRODUCT MODAL
+============================================================ */
 
 function renderProductModal(){
 
  if(!selectedProduct)
   return "";
 
- const item=
-  selectedProduct;
+ const item=selectedProduct;
 
  return `
 
@@ -2466,9 +2653,7 @@ function renderProductModal(){
     <button
       class="closeBtn"
       id="closeProduct">
-
      ×
-
     </button>
 
    </div>
@@ -2479,139 +2664,94 @@ function renderProductModal(){
      ${escapeHTML(item.name)}
     </h2>
 
-
     ${
-     DATA.settings.dish &&
-     item.dish
+     DATA.settings.dish&&item.dish
      ?
      `
       <div style="margin-top:9px">
-
        <span
          class="tag"
          style="
           background:var(--gold);
           color:#111
          ">
-
         ⭐ ${t("dish")}
-
        </span>
-
       </div>
      `
      :
      ""
     }
-
 
     <p>
      ${escapeHTML(item.description)}
     </p>
 
-
     ${
-     DATA.settings.portion &&
-     item.portion
+     DATA.settings.portion&&item.portion
      ?
      `
       <div class="infoRow">
-
-       <span>
-        ${t("portion")}
-       </span>
-
-       <span>
-        ${escapeHTML(item.portion)}
-       </span>
-
+       <span>${t("portion")}</span>
+       <span>${escapeHTML(item.portion)}</span>
       </div>
      `
      :
      ""
     }
 
-
     ${
-     DATA.settings.calories &&
-     item.calories
+     DATA.settings.calories&&item.calories
      ?
      `
       <div class="infoRow">
-
-       <span>
-        ${t("calories")}
-       </span>
-
-       <span>
-        ${escapeHTML(item.calories)} kcal
-       </span>
-
+       <span>${t("calories")}</span>
+       <span>${escapeHTML(item.calories)} kcal</span>
       </div>
      `
      :
      ""
     }
 
-
     ${
-     DATA.settings.allergens &&
-     item.allergens?.length
+     DATA.settings.allergens&&item.allergens?.length
      ?
      `
       <div class="infoRow">
-
+       <span>${t("allergens")}</span>
        <span>
-        ${t("allergens")}
+        ${escapeHTML(item.allergens.join(", "))}
        </span>
+      </div>
+     `
+     :
+     ""
+    }
 
+    ${
+     DATA.settings.spicy&&item.spicy
+     ?
+     `
+      <div class="infoRow">
+       <span>${t("spicy")}</span>
        <span>
-        ${escapeHTML(
-         item.allergens.join(", ")
+        ${"🌶️".repeat(
+         Math.min(
+          5,
+          Number(item.spicy)||0
+         )
         )}
        </span>
-
       </div>
      `
      :
      ""
     }
-
-
-    ${
-     DATA.settings.spicy &&
-     item.spicy
-     ?
-     `
-      <div class="infoRow">
-
-       <span>
-        ${t("spicy")}
-       </span>
-
-       <span>
-        ${
-         "🌶️".repeat(
-          Math.min(
-           5,
-           Number(item.spicy)||0
-          )
-         )
-        }
-       </span>
-
-      </div>
-     `
-     :
-     ""
-    }
-
 
     <div class="modalPrice">
 
      ${
-      DATA.settings.sold &&
-      item.sold
+      DATA.settings.sold&&item.sold
       ?
       t("sold")
       :
@@ -2631,17 +2771,16 @@ function renderProductModal(){
 }
 
 
-/* =========================
-   EVENT MODAL
-========================= */
+/* ============================================================
+ EVENT MODAL
+============================================================ */
 
 function renderEventModal(){
 
  if(!selectedEvent)
   return "";
 
- const event=
-  selectedEvent;
+ const event=selectedEvent;
 
  const whatsappLink=
   "https://wa.me/"+
@@ -2670,9 +2809,7 @@ function renderEventModal(){
     <button
       class="closeBtn"
       id="closeEvent">
-
      ×
-
     </button>
 
    </div>
@@ -2703,15 +2840,12 @@ function renderEventModal(){
          class="action gold"
          target="_blank"
          href="${whatsappLink}">
-
         ${t("reserve")}
-
        </a>
       `
       :
       ""
      }
-
 
      ${
       DATA.phone
@@ -2719,12 +2853,8 @@ function renderEventModal(){
       `
        <a
          class="action"
-         href="tel:${escapeHTML(
-          DATA.phone
-         )}">
-
+         href="tel:${escapeHTML(DATA.phone)}">
         ${t("call")}
-
        </a>
       `
       :
@@ -2745,7 +2875,7 @@ function renderEventModal(){
 
 
 /* ============================================================
-   ADMIN INPUT HELPERS
+ ADMIN INPUT
 ============================================================ */
 
 function adminInput(
@@ -2756,7 +2886,6 @@ function adminInput(
 ){
 
  return `
-
  <div class="field">
 
   <label>
@@ -2769,7 +2898,6 @@ function adminInput(
     value="${escapeHTML(value)}">
 
  </div>
-
  `;
 
 }
@@ -2782,7 +2910,6 @@ function adminTextarea(
 ){
 
  return `
-
  <div class="field">
 
   <label>
@@ -2793,24 +2920,20 @@ function adminTextarea(
     data-admin="${escapeHTML(key)}">${escapeHTML(value)}</textarea>
 
  </div>
-
  `;
 
 }
 
 
 /* ============================================================
-   ADMIN GENERAL
+ ADMIN GENERAL
 ============================================================ */
 
 function renderAdminGeneral(){
 
  return `
 
- <h3>
-  İşletme
- </h3>
-
+ <h3>İşletme</h3>
 
  ${adminInput(
   "businessName",
@@ -2818,13 +2941,11 @@ function renderAdminGeneral(){
   DATA.name
  )}
 
-
  ${adminInput(
   "subtitle",
   "Başlık / açıklama",
   DATA.subtitle
  )}
-
 
  ${adminInput(
   "phone",
@@ -2832,20 +2953,17 @@ function renderAdminGeneral(){
   DATA.phone
  )}
 
-
  ${adminInput(
   "whatsapp",
   "WhatsApp numarası",
   DATA.whatsapp
  )}
 
-
  ${adminInput(
   "logo",
   "Logo URL",
   DATA.logo
  )}
-
 
  ${adminInput(
   "hours",
@@ -2856,45 +2974,33 @@ function renderAdminGeneral(){
 
  <div class="adminCard">
 
-  <b>
-   Arka Plan
-  </b>
+  <b>Arka Plan</b>
 
   <p class="small">
-
    Renk, fotoğraf veya video seçebilirsin.
-
   </p>
-
 
   <div class="optionGrid">
 
    <button
      class="${DATA.background.type==="color"?"active":""}"
      data-background="color">
-
     Renk
-
    </button>
 
    <button
      class="${DATA.background.type==="image"?"active":""}"
      data-background="image">
-
     Fotoğraf
-
    </button>
 
    <button
      class="${DATA.background.type==="video"?"active":""}"
      data-background="video">
-
     Video
-
    </button>
 
   </div>
-
 
   ${
    DATA.background.type==="color"
@@ -2908,7 +3014,6 @@ function renderAdminGeneral(){
    ""
   }
 
-
   ${
    DATA.background.type==="image"
    ?
@@ -2920,7 +3025,6 @@ function renderAdminGeneral(){
    :
    ""
   }
-
 
   ${
    DATA.background.type==="video"
@@ -2939,16 +3043,11 @@ function renderAdminGeneral(){
 
  <div class="adminCard">
 
-  <b>
-   Etkinlikler
-  </b>
+  <b>Etkinlikler</b>
 
   <p class="small">
-
    Etkinlik ekle, düzenle veya sil.
-
   </p>
-
 
   ${
    (DATA.events||[])
@@ -3007,12 +3106,389 @@ function renderAdminGeneral(){
    }).join("")
   }
 
-
   <button
     class="adminButton gold"
     id="addEvent">
-
    + Etkinlik Ekle
+  </button>
+
+ </div>
+
+ `;
+
+}
+
+
+/* ============================================================
+ ADMIN PRODUCT CATEGORY LIST
+============================================================ */
+
+function renderAdminProductCategories(){
+
+ return `
+
+ <h3>
+  Menü
+ </h3>
+
+ <p class="small">
+  Önce kategori seç. Sonra sadece o kategorideki ürünleri göreceksin.
+ </p>
+
+ <button
+   class="adminButton gold"
+   id="addCategory">
+
+  + Kategori Ekle
+
+ </button>
+
+
+ <div class="adminCategoryList">
+
+ ${
+  (DATA.categories||[]).map(function(category){
+
+   return `
+
+   <button
+     class="adminCategoryItem"
+     data-admin-category="${escapeHTML(category.id)}">
+
+    <div class="adminCategoryThumb">
+
+     <img
+       src="${escapeHTML(category.image)}"
+       alt="">
+
+    </div>
+
+    <div class="adminCategoryInfo">
+
+     <strong>
+      ${escapeHTML(category.name)}
+     </strong>
+
+     <span>
+      ${(category.items||[]).length} ürün
+     </span>
+
+    </div>
+
+    <div class="adminArrow">
+     ›
+    </div>
+
+   </button>
+
+   `;
+
+  }).join("")
+ }
+
+ </div>
+
+ `;
+
+}
+
+
+/* ============================================================
+ ADMIN CATEGORY PRODUCTS
+============================================================ */
+
+function renderAdminCategoryProducts(){
+
+ const category=
+  findCategory(adminCategoryView);
+
+ if(!category){
+
+  adminCategoryView=null;
+  return renderAdminProductCategories();
+
+ }
+
+ return `
+
+ <div class="adminBreadcrumb">
+
+  <button id="adminProductsBack">
+   ‹ Menü
+  </button>
+
+  <span>›</span>
+
+  <strong>
+   ${escapeHTML(category.name)}
+  </strong>
+
+ </div>
+
+
+ <div class="adminCard">
+
+  <b>
+   Kategori
+  </b>
+
+  ${adminInput(
+   "categoryName-"+category.id,
+   "Kategori adı",
+   category.name
+  )}
+
+  ${adminInput(
+   "categoryImage-"+category.id,
+   "Kategori görsel URL",
+   category.image
+  )}
+
+  <button
+    class="adminButton danger"
+    data-delete-category="${escapeHTML(category.id)}">
+
+   Kategoriyi Sil
+
+  </button>
+
+ </div>
+
+
+ <div
+   style="
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:18px
+   ">
+
+  <div>
+
+   <b>
+    Ürünler
+   </b>
+
+   <div class="small">
+    ${(category.items||[]).length} ürün
+   </div>
+
+  </div>
+
+  <button
+    class="adminButton gold"
+    data-add-product="${escapeHTML(category.id)}">
+
+   + Ürün
+
+  </button>
+
+ </div>
+
+
+ <div class="adminProductList">
+
+ ${
+  (category.items||[]).length
+  ?
+  category.items.map(function(item){
+
+   return `
+
+   <button
+     class="adminProductItem"
+     data-admin-product="${escapeHTML(item.id)}">
+
+    <div class="adminProductThumb">
+
+     <img
+       src="${escapeHTML(item.image)}"
+       alt="">
+
+    </div>
+
+    <div class="adminProductInfo">
+
+     <strong>
+      ${escapeHTML(item.name)}
+     </strong>
+
+     <span>
+      ${money(item.price)}
+     </span>
+
+    </div>
+
+    <div class="adminProductArrow">
+     ›
+    </div>
+
+   </button>
+
+   `;
+
+  }).join("")
+  :
+  `
+   <div class="empty">
+    Bu kategoride henüz ürün yok.
+   </div>
+  `
+ }
+
+ </div>
+
+ `;
+
+}
+
+
+/* ============================================================
+ ADMIN PRODUCT EDITOR
+============================================================ */
+
+function renderAdminProductEditor(){
+
+ const item=
+  findProduct(adminProductView);
+
+ const category=
+  item
+  ?
+  DATA.categories.find(function(cat){
+
+   return cat.items.some(function(product){
+
+    return product.id===adminProductView;
+
+   });
+
+  })
+  :
+  null;
+
+ if(!item||!category){
+
+  adminProductView=null;
+  return renderAdminCategoryProducts();
+
+ }
+
+ return `
+
+ <div class="adminBreadcrumb">
+
+  <button id="adminProductBack">
+   ‹ ${escapeHTML(category.name)}
+  </button>
+
+  <span>›</span>
+
+  <strong>
+   Ürün
+  </strong>
+
+ </div>
+
+
+ <div class="adminCard">
+
+  <h3 style="margin-top:0">
+   ${escapeHTML(item.name)}
+  </h3>
+
+  ${adminInput(
+   "productName-"+item.id,
+   "Ürün adı",
+   item.name
+  )}
+
+  ${adminTextarea(
+   "productDescription-"+item.id,
+   "Ürün açıklaması",
+   item.description
+  )}
+
+  ${adminInput(
+   "productPrice-"+item.id,
+   "Fiyat",
+   item.price,
+   "number"
+  )}
+
+  ${adminInput(
+   "productImage-"+item.id,
+   "Fotoğraf URL",
+   item.image
+  )}
+
+  ${adminInput(
+   "productPortion-"+item.id,
+   "Gramaj / Porsiyon",
+   item.portion||""
+  )}
+
+  ${adminInput(
+   "productCalories-"+item.id,
+   "Kalori",
+   item.calories||""
+  )}
+
+  ${adminInput(
+   "productAllergens-"+item.id,
+   "Alerjenler (virgülle ayır)",
+   (item.allergens||[]).join(", ")
+  )}
+
+  ${adminInput(
+   "productSpicy-"+item.id,
+   "Acılık (0-5)",
+   item.spicy||0,
+   "number"
+  )}
+
+  <label class="toggle">
+
+   Tükendi
+
+   <input
+     type="checkbox"
+     data-sold="${escapeHTML(item.id)}"
+     ${item.sold?"checked":""}>
+
+  </label>
+
+
+  <label class="toggle">
+
+   Çok Satanlar
+
+   <input
+     type="checkbox"
+     data-featured="${escapeHTML(item.id)}"
+     ${item.featured?"checked":""}>
+
+  </label>
+
+
+  <label class="toggle">
+
+   Günün Ürünü
+
+   <input
+     type="checkbox"
+     data-dish="${escapeHTML(item.id)}"
+     ${item.dish?"checked":""}>
+
+  </label>
+
+
+  <button
+    class="adminButton danger"
+    data-delete-product="${escapeHTML(category.id)}|${escapeHTML(item.id)}"
+    style="width:100%;margin-top:12px">
+
+   Ürünü Sil
 
   </button>
 
@@ -3024,217 +3500,24 @@ function renderAdminGeneral(){
 
 
 /* ============================================================
-   ADMIN PRODUCTS
+ ADMIN PRODUCTS
 ============================================================ */
 
 function renderAdminProducts(){
 
- return `
+ if(adminProductView)
+  return renderAdminProductEditor();
 
- <button
-   class="adminButton gold"
-   id="addCategory">
+ if(adminCategoryView)
+  return renderAdminCategoryProducts();
 
-  + Kategori Ekle
-
- </button>
-
-
- ${
-  DATA.categories.map(function(category){
-
-   return `
-
-   <div
-     class="adminCard"
-     style="margin-top:12px">
-
-    <div class="row">
-
-     <input
-       data-category-name="${escapeHTML(category.id)}"
-       value="${escapeHTML(category.name)}"
-       placeholder="Kategori adı"
-       style="
-        flex:1;
-        min-width:0;
-        padding:10px;
-        border-radius:10px;
-        border:1px solid #303034;
-        background:#171719;
-        color:#fff;
-        outline:none
-       ">
-
-     <input
-       data-category-image="${escapeHTML(category.id)}"
-       value="${escapeHTML(category.image)}"
-       placeholder="Kategori görsel URL"
-       style="
-        flex:1;
-        min-width:0;
-        padding:10px;
-        border-radius:10px;
-        border:1px solid #303034;
-        background:#171719;
-        color:#fff;
-        outline:none
-       ">
-
-    </div>
-
-
-    ${
-     category.items.map(function(item){
-
-      return `
-
-      <div
-        class="adminCard"
-        style="margin-top:9px">
-
-       ${adminInput(
-        "productName-"+item.id,
-        "Ürün adı",
-        item.name
-       )}
-
-
-       ${adminTextarea(
-        "productDescription-"+item.id,
-        "Ürün açıklaması",
-        item.description
-       )}
-
-
-       ${adminInput(
-        "productPrice-"+item.id,
-        "Fiyat",
-        item.price,
-        "number"
-       )}
-
-
-       ${adminInput(
-        "productImage-"+item.id,
-        "Fotoğraf URL",
-        item.image
-       )}
-
-
-       ${adminInput(
-        "productPortion-"+item.id,
-        "Gramaj / Porsiyon",
-        item.portion||""
-       )}
-
-
-       ${adminInput(
-        "productCalories-"+item.id,
-        "Kalori",
-        item.calories||""
-       )}
-
-
-       ${adminInput(
-        "productAllergens-"+item.id,
-        "Alerjenler (virgülle ayır)",
-        (item.allergens||[]).join(", ")
-       )}
-
-
-       <div class="row">
-
-        ${adminInput(
-         "productSpicy-"+item.id,
-         "Acılık 0-5",
-         item.spicy||0,
-         "number"
-        )}
-
-
-        ${adminInput(
-         "productDish-"+item.id,
-         "Günün ürünü 0/1",
-         item.dish?1:0,
-         "number"
-        )}
-
-       </div>
-
-
-       <label class="toggle">
-
-        Tükendi
-
-        <input
-          type="checkbox"
-          data-sold="${escapeHTML(item.id)}"
-          ${item.sold?"checked":""}>
-
-       </label>
-
-
-       <label class="toggle">
-
-        Çok Satanlar
-
-        <input
-          type="checkbox"
-          data-featured="${escapeHTML(item.id)}"
-          ${item.featured?"checked":""}>
-
-       </label>
-
-
-       <button
-         class="adminButton danger"
-         data-delete-product="${escapeHTML(category.id)}|${escapeHTML(item.id)}">
-
-        Ürünü Sil
-
-       </button>
-
-      </div>
-
-      `;
-
-     }).join("")
-    }
-
-
-    <button
-      class="adminButton"
-      data-add-product="${escapeHTML(category.id)}">
-
-     + Ürün Ekle
-
-    </button>
-
-
-    <button
-      class="adminButton danger"
-      data-delete-category="${escapeHTML(category.id)}"
-      style="margin-left:6px">
-
-     Kategoriyi Sil
-
-    </button>
-
-   </div>
-
-   `;
-
-  }).join("")
- }
-
- `;
+ return renderAdminProductCategories();
 
 }
 
 
 /* ============================================================
-   ADMIN SETTINGS
+ ADMIN SETTINGS
 ============================================================ */
 
 function renderAdminSettings(){
@@ -3242,27 +3525,17 @@ function renderAdminSettings(){
  const options=[
 
   ["portion","Gramaj / Porsiyon"],
-
   ["calories","Kalori"],
-
   ["allergens","Alerjenler"],
-
   ["spicy","Acılık"],
-
   ["sold","Tükendi"],
-
   ["hours","Çalışma Saatleri"],
-
   ["dish","Günün Ürünü"],
-
   ["featured","Çok Satanlar"],
-
   ["events","Etkinlikler"],
-
   ["search","Ürün Arama"]
 
  ];
-
 
  return `
 
@@ -3271,18 +3544,13 @@ function renderAdminSettings(){
  </h3>
 
  <p class="small">
-
-  İşletme sahibi istediği özellikleri
-  açıp kapatabilir.
-
+  İşletme sahibi istediği özellikleri açıp kapatabilir.
  </p>
-
 
  ${
   options.map(function(option){
 
    return `
-
    <label class="toggle">
 
     ${option[1]}
@@ -3293,7 +3561,6 @@ function renderAdminSettings(){
       ${DATA.settings[option[0]]?"checked":""}>
 
    </label>
-
    `;
 
   }).join("")
@@ -3305,12 +3572,12 @@ function renderAdminSettings(){
 
 
 /* ============================================================
-   ADMIN
+ ADMIN
 ============================================================ */
 
 function renderAdmin(){
 
- if(!adminOpen)
+ if(!adminOpen||!adminAuthenticated)
   return "";
 
  let body="";
@@ -3342,9 +3609,7 @@ function renderAdmin(){
      <button
        class="iconBtn"
        id="closeAdmin">
-
       ×
-
      </button>
 
     </div>
@@ -3360,7 +3625,6 @@ function renderAdmin(){
 
      </button>
 
-
      <button
        class="${adminTab==="products"?"active":""}"
        data-admin-tab="products">
@@ -3368,7 +3632,6 @@ function renderAdmin(){
       ${t("products")}
 
      </button>
-
 
      <button
        class="${adminTab==="settings"?"active":""}"
@@ -3413,7 +3676,69 @@ function renderAdmin(){
 
 
 /* ============================================================
-   COLLECT ADMIN
+ ADMIN LOGIN
+============================================================ */
+
+function renderAdminLogin(){
+
+ if(!adminOpen||adminAuthenticated)
+  return "";
+
+ return `
+
+ <div
+   class="adminLoginOverlay"
+   id="adminLoginOverlay">
+
+  <div class="adminLogin">
+
+   <div class="adminLoginLogo">
+    N
+   </div>
+
+   <h2>
+    Yönetim Paneli
+   </h2>
+
+   <p>
+    Devam etmek için yönetici şifresini girin.
+   </p>
+
+   <input
+     id="adminPassword"
+     class="adminPassword"
+     type="password"
+     inputmode="numeric"
+     autocomplete="off"
+     placeholder="Şifre">
+
+   <button
+     class="adminLoginButton"
+     id="adminLoginButton">
+
+    Giriş Yap
+
+   </button>
+
+   <div
+     class="loginError"
+     id="loginError">
+
+    Şifre yanlış.
+
+   </div>
+
+  </div>
+
+ </div>
+
+ `;
+
+}
+
+
+/* ============================================================
+ COLLECT ADMIN
 ============================================================ */
 
 function collectAdmin(){
@@ -3422,58 +3747,70 @@ function collectAdmin(){
  .querySelectorAll("[data-admin]")
  .forEach(function(input){
 
-  const key=
-   input.dataset.admin;
-
-  const value=
-   input.value;
+  const key=input.dataset.admin;
+  const value=input.value;
 
 
   if(key==="businessName")
    DATA.name=value;
 
-
   else if(key==="subtitle")
    DATA.subtitle=value;
-
 
   else if(key==="phone")
    DATA.phone=value;
 
-
   else if(key==="whatsapp")
    DATA.whatsapp=value;
-
 
   else if(key==="logo")
    DATA.logo=value;
 
-
   else if(key==="hours")
    DATA.hours=value;
-
 
   else if(key==="backgroundColor")
    DATA.background.value=value;
 
-
   else if(key==="backgroundImage")
    DATA.background.image=value;
-
 
   else if(key==="backgroundVideo")
    DATA.background.video=value;
 
 
-  else if(
-   key.startsWith("productName-")
-  ){
+  else if(key.startsWith("categoryName-")){
 
    const id=
-    key.replace(
-     "productName-",
-     ""
-    );
+    key.replace("categoryName-","");
+
+   const category=
+    findCategory(id);
+
+   if(category)
+    category.name=value;
+
+  }
+
+
+  else if(key.startsWith("categoryImage-")){
+
+   const id=
+    key.replace("categoryImage-","");
+
+   const category=
+    findCategory(id);
+
+   if(category)
+    category.image=value;
+
+  }
+
+
+  else if(key.startsWith("productName-")){
+
+   const id=
+    key.replace("productName-","");
 
    const item=
     findProduct(id);
@@ -3484,15 +3821,10 @@ function collectAdmin(){
   }
 
 
-  else if(
-   key.startsWith("productDescription-")
-  ){
+  else if(key.startsWith("productDescription-")){
 
    const id=
-    key.replace(
-     "productDescription-",
-     ""
-    );
+    key.replace("productDescription-","");
 
    const item=
     findProduct(id);
@@ -3503,35 +3835,24 @@ function collectAdmin(){
   }
 
 
-  else if(
-   key.startsWith("productPrice-")
-  ){
+  else if(key.startsWith("productPrice-")){
 
    const id=
-    key.replace(
-     "productPrice-",
-     ""
-    );
+    key.replace("productPrice-","");
 
    const item=
     findProduct(id);
 
    if(item)
-    item.price=
-     Number(value)||0;
+    item.price=Number(value)||0;
 
   }
 
 
-  else if(
-   key.startsWith("productImage-")
-  ){
+  else if(key.startsWith("productImage-")){
 
    const id=
-    key.replace(
-     "productImage-",
-     ""
-    );
+    key.replace("productImage-","");
 
    const item=
     findProduct(id);
@@ -3542,15 +3863,10 @@ function collectAdmin(){
   }
 
 
-  else if(
-   key.startsWith("productPortion-")
-  ){
+  else if(key.startsWith("productPortion-")){
 
    const id=
-    key.replace(
-     "productPortion-",
-     ""
-    );
+    key.replace("productPortion-","");
 
    const item=
     findProduct(id);
@@ -3561,15 +3877,10 @@ function collectAdmin(){
   }
 
 
-  else if(
-   key.startsWith("productCalories-")
-  ){
+  else if(key.startsWith("productCalories-")){
 
    const id=
-    key.replace(
-     "productCalories-",
-     ""
-    );
+    key.replace("productCalories-","");
 
    const item=
     findProduct(id);
@@ -3580,15 +3891,10 @@ function collectAdmin(){
   }
 
 
-  else if(
-   key.startsWith("productAllergens-")
-  ){
+  else if(key.startsWith("productAllergens-")){
 
    const id=
-    key.replace(
-     "productAllergens-",
-     ""
-    );
+    key.replace("productAllergens-","");
 
    const item=
     findProduct(id);
@@ -3598,9 +3904,9 @@ function collectAdmin(){
     item.allergens=
      value
      .split(",")
-     .map(
-      x=>x.trim()
-     )
+     .map(function(x){
+      return x.trim();
+     })
      .filter(Boolean);
 
    }
@@ -3608,15 +3914,10 @@ function collectAdmin(){
   }
 
 
-  else if(
-   key.startsWith("productSpicy-")
-  ){
+  else if(key.startsWith("productSpicy-")){
 
    const id=
-    key.replace(
-     "productSpicy-",
-     ""
-    );
+    key.replace("productSpicy-","");
 
    const item=
     findProduct(id);
@@ -3632,178 +3933,79 @@ function collectAdmin(){
       )
      );
 
-   }
-
   }
 
-
-  else if(
-   key.startsWith("productDish-")
-  ){
-
-   const id=
-    key.replace(
-     "productDish-",
-     ""
-    );
-
-   const item=
-    findProduct(id);
-
-   if(item)
-    item.dish=
-     Number(value)===1;
-
-  }
+ }
 
 
-  else if(
-   key.startsWith("eventName-")
-  ){
+ else if(key.startsWith("eventName-")){
 
-   const id=
-    key.replace(
-     "eventName-",
-     ""
-    );
+  const id=
+   key.replace("eventName-","");
 
-   const event=
-    DATA.events.find(
-     x=>x.id===id
-    );
+  const event=
+   findEvent(id);
 
-   if(event)
-    event.name=value;
+  if(event)
+   event.name=value;
 
-  }
+ }
 
 
-  else if(
-   key.startsWith("eventDate-")
-  ){
+ else if(key.startsWith("eventDate-")){
 
-   const id=
-    key.replace(
-     "eventDate-",
-     ""
-    );
+  const id=
+   key.replace("eventDate-","");
 
-   const event=
-    DATA.events.find(
-     x=>x.id===id
-    );
+  const event=
+   findEvent(id);
 
-   if(event)
-    event.date=value;
+  if(event)
+   event.date=value;
 
-  }
+ }
 
 
-  else if(
-   key.startsWith("eventTime-")
-  ){
+ else if(key.startsWith("eventTime-")){
 
-   const id=
-    key.replace(
-     "eventTime-",
-     ""
-    );
+  const id=
+   key.replace("eventTime-","");
 
-   const event=
-    DATA.events.find(
-     x=>x.id===id
-    );
+  const event=
+   findEvent(id);
 
-   if(event)
-    event.time=value;
+  if(event)
+   event.time=value;
 
-  }
+ }
 
 
-  else if(
-   key.startsWith("eventDescription-")
-  ){
+ else if(key.startsWith("eventDescription-")){
 
-   const id=
-    key.replace(
-     "eventDescription-",
-     ""
-    );
+  const id=
+   key.replace("eventDescription-","");
 
-   const event=
-    DATA.events.find(
-     x=>x.id===id
-    );
+  const event=
+   findEvent(id);
 
-   if(event)
-    event.description=value;
+  if(event)
+   event.description=value;
 
-  }
+ }
 
 
-  else if(
-   key.startsWith("eventImage-")
-  ){
+ else if(key.startsWith("eventImage-")){
 
-   const id=
-    key.replace(
-     "eventImage-",
-     ""
-    );
+  const id=
+   key.replace("eventImage-","");
 
-   const event=
-    DATA.events.find(
-     x=>x.id===id
-    );
+  const event=
+   findEvent(id);
 
-   if(event)
-    event.image=value;
+  if(event)
+   event.image=value;
 
-  }
-
- });
-
-
- document
- .querySelectorAll("[data-category-name]")
- .forEach(function(input){
-
-  const category=
-   DATA.categories.find(
-    function(category){
-
-     return category.id===
-      input.dataset.categoryName;
-
-    }
-   );
-
-
-  if(category)
-   category.name=
-    input.value;
-
- });
-
-
- document
- .querySelectorAll("[data-category-image]")
- .forEach(function(input){
-
-  const category=
-   DATA.categories.find(
-    function(category){
-
-     return category.id===
-      input.dataset.categoryImage;
-
-    }
-   );
-
-
-  if(category)
-   category.image=
-    input.value;
+ }
 
  });
 
@@ -3811,15 +4013,13 @@ function collectAdmin(){
 
 
 /* ============================================================
-   MAIN RENDER
+ MAIN RENDER
 ============================================================ */
 
 function render(){
 
  document.documentElement.dir=
-  language==="ar"
-  ?"rtl"
-  :"ltr";
+  language==="ar"?"rtl":"ltr";
 
 
  let content="";
@@ -3827,22 +4027,19 @@ function render(){
 
  if(searchText){
 
-  content=
-   renderSearch();
+  content=renderSearch();
 
  }
 
  else if(selectedCategory){
 
-  content=
-   renderCategoryPage();
+  content=renderCategoryPage();
 
  }
 
  else{
 
-  content=
-   renderHome();
+  content=renderHome();
 
  }
 
@@ -3863,11 +4060,8 @@ function render(){
     <button
       class="iconBtn"
       id="openDrawer">
-
      ☰
-
     </button>
-
 
     <div class="topRight">
 
@@ -3878,15 +4072,12 @@ function render(){
        <button
          class="iconBtn"
          id="searchButton">
-
         ⌕
-
        </button>
       `
       :
       ""
      }
-
 
      <button
        class="currencyBtn"
@@ -3933,11 +4124,8 @@ function render(){
 
   ${content}
 
-
   <div class="footer">
-
    NearMenu • Demo
-
   </div>
 
  </div>
@@ -3951,6 +4139,8 @@ function render(){
 
  ${renderAdmin()}
 
+ ${renderAdminLogin()}
+
  `;
 
 
@@ -3960,7 +4150,7 @@ function render(){
 
 
 /* ============================================================
-   EVENTS
+ EVENTS
 ============================================================ */
 
 function bindEvents(){
@@ -3969,14 +4159,15 @@ function bindEvents(){
   id=>document.getElementById(id);
 
 
- /* DRAWER */
+ /* =====================
+ DRAWER
+ ===================== */
 
  get("openDrawer")?.addEventListener(
   "click",
   function(){
 
    drawerOpen=true;
-
    render();
 
   }
@@ -3988,7 +4179,6 @@ function bindEvents(){
   function(){
 
    drawerOpen=false;
-
    render();
 
   }
@@ -3999,13 +4189,9 @@ function bindEvents(){
   "click",
   function(event){
 
-   if(
-    event.target.id===
-    "drawerOverlay"
-   ){
+   if(event.target.id==="drawerOverlay"){
 
     drawerOpen=false;
-
     render();
 
    }
@@ -4014,24 +4200,22 @@ function bindEvents(){
  );
 
 
- /* SEARCH */
+ /* =====================
+ SEARCH
+ ===================== */
 
  get("searchButton")?.addEventListener(
   "click",
   function(){
 
    searchOpen=true;
-
    render();
 
-   setTimeout(
-    function(){
+   setTimeout(function(){
 
-     get("searchInput")?.focus();
+    get("searchInput")?.focus();
 
-    },
-    20
-   );
+   },20);
 
   }
  );
@@ -4046,39 +4230,37 @@ function bindEvents(){
 
    render();
 
-   setTimeout(
-    function(){
+   setTimeout(function(){
 
-     const input=
-      get("searchInput");
+    const input=
+     get("searchInput");
 
-     if(input){
+    if(input){
 
-      input.focus();
+     input.focus();
 
-      input.setSelectionRange(
-       input.value.length,
-       input.value.length
-      );
+     input.setSelectionRange(
+      input.value.length,
+      input.value.length
+     );
 
-     }
+    }
 
-    },
-    0
-   );
+   },0);
 
   }
  );
 
 
- /* CURRENCY */
+ /* =====================
+ CURRENCY
+ ===================== */
 
  get("currencyButton")?.addEventListener(
   "click",
   function(){
 
    drawerOpen=true;
-
    render();
 
   }
@@ -4089,82 +4271,81 @@ function bindEvents(){
  .querySelectorAll("[data-currency]")
  .forEach(function(button){
 
-  button.onclick=
-   function(){
+  button.onclick=function(){
 
-    currency=
-     button.dataset.currency;
+   currency=
+    button.dataset.currency;
 
-    localStorage.setItem(
-     "nearMenuCurrency",
-     currency
-    );
+   localStorage.setItem(
+    "nearMenuCurrency",
+    currency
+   );
 
-    drawerOpen=false;
+   drawerOpen=false;
 
-    render();
+   render();
 
-   };
+  };
 
  });
 
 
- /* LANGUAGE */
+ /* =====================
+ LANGUAGE
+ ===================== */
 
  document
  .querySelectorAll("[data-language]")
  .forEach(function(button){
 
-  button.onclick=
-   function(){
+  button.onclick=function(){
 
-    language=
-     button.dataset.language;
+   language=
+    button.dataset.language;
 
-    localStorage.setItem(
-     "nearMenuLanguage",
-     language
-    );
+   localStorage.setItem(
+    "nearMenuLanguage",
+    language
+   );
 
-    drawerOpen=false;
+   drawerOpen=false;
 
-    render();
+   render();
 
-   };
+  };
 
  });
 
 
- /* CATEGORY */
+ /* =====================
+ CATEGORY
+ ===================== */
 
  document
  .querySelectorAll("[data-category]")
  .forEach(function(button){
 
-  button.onclick=
-   function(){
+  button.onclick=function(){
 
-    selectedCategory=
-     button.dataset.category;
+   selectedCategory=
+    button.dataset.category;
 
-    selectedProduct=null;
-    selectedEvent=null;
+   selectedProduct=null;
+   selectedEvent=null;
+   searchText="";
 
-    searchText="";
+   render();
 
-    render();
+   window.scrollTo(0,0);
 
-    window.scrollTo(
-     0,
-     0
-    );
-
-   };
+  };
 
  });
 
 
- /* BACK */
+ /* =====================
+ BACK HOME
+ ===================== */
 
  get("backHome")?.addEventListener(
   "click",
@@ -4174,51 +4355,44 @@ function bindEvents(){
 
    render();
 
-   window.scrollTo(
-    0,
-    0
-   );
+   window.scrollTo(0,0);
 
   }
  );
 
 
- /* PRODUCT */
+ /* =====================
+ PRODUCT
+ ===================== */
 
  document
  .querySelectorAll("[data-product]")
  .forEach(function(element){
 
-  element.onclick=
-   function(){
+  element.onclick=function(){
 
-    const product=
-     findProduct(
-      element.dataset.product
-     );
+   const product=
+    findProduct(
+     element.dataset.product
+    );
 
-    if(product){
+   if(product){
 
-     selectedProduct=
-      product;
+    selectedProduct=product;
+    render();
 
-     render();
+   }
 
-    }
-
-   };
+  };
 
  });
 
-
- /* PRODUCT CLOSE */
 
  get("closeProduct")?.addEventListener(
   "click",
   function(){
 
    selectedProduct=null;
-
    render();
 
   }
@@ -4229,13 +4403,9 @@ function bindEvents(){
   "click",
   function(event){
 
-   if(
-    event.target.id===
-    "productOverlay"
-   ){
+   if(event.target.id==="productOverlay"){
 
     selectedProduct=null;
-
     render();
 
    }
@@ -4244,28 +4414,24 @@ function bindEvents(){
  );
 
 
- /* EVENTS */
+ /* =====================
+ EVENTS
+ ===================== */
 
  document
  .querySelectorAll("[data-event]")
  .forEach(function(button){
 
-  button.onclick=
-   function(){
+  button.onclick=function(){
 
-    selectedEvent=
-     DATA.events.find(
-      function(event){
+   selectedEvent=
+    findEvent(
+     button.dataset.event
+    );
 
-       return event.id===
-        button.dataset.event;
+   render();
 
-      }
-     )||null;
-
-    render();
-
-   };
+  };
 
  });
 
@@ -4275,7 +4441,6 @@ function bindEvents(){
   function(){
 
    selectedEvent=null;
-
    render();
 
   }
@@ -4286,13 +4451,9 @@ function bindEvents(){
   "click",
   function(event){
 
-   if(
-    event.target.id===
-    "eventOverlay"
-   ){
+   if(event.target.id==="eventOverlay"){
 
     selectedEvent=null;
-
     render();
 
    }
@@ -4301,36 +4462,39 @@ function bindEvents(){
  );
 
 
- /* CATEGORY TABS */
+ /* =====================
+ CATEGORY PRODUCT TABS
+ ===================== */
 
  document
  .querySelectorAll("[data-scroll-product]")
  .forEach(function(button){
 
-  button.onclick=
-   function(){
+  button.onclick=function(){
 
-    const target=
-     document.getElementById(
-      "product-"+
-      button.dataset.scrollProduct
-     );
+   const target=
+    document.getElementById(
+     "product-"+
+     button.dataset.scrollProduct
+    );
 
-    if(target){
+   if(target){
 
-     target.scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-     });
+    target.scrollIntoView({
+     behavior:"smooth",
+     block:"start"
+    });
 
-    }
+   }
 
-   };
+  };
 
  });
 
 
- /* ADMIN OPEN */
+ /* =====================
+ ADMIN OPEN
+ ===================== */
 
  get("openAdmin")?.addEventListener(
   "click",
@@ -4339,20 +4503,89 @@ function bindEvents(){
    drawerOpen=false;
 
    adminOpen=true;
+   adminAuthenticated=false;
+
+   adminTab="general";
+
+   adminCategoryView=null;
+   adminProductView=null;
 
    render();
+
+   setTimeout(function(){
+
+    get("adminPassword")?.focus();
+
+   },50);
 
   }
  );
 
 
- /* ADMIN CLOSE */
+ /* =====================
+ ADMIN LOGIN
+ ===================== */
+
+ get("adminLoginButton")?.addEventListener(
+  "click",
+  adminLogin
+ );
+
+
+ get("adminPassword")?.addEventListener(
+  "keydown",
+  function(event){
+
+   if(event.key==="Enter")
+    adminLogin();
+
+  }
+ );
+
+
+ function adminLogin(){
+
+  const input=
+   get("adminPassword");
+
+  const error=
+   get("loginError");
+
+  if(!input)
+   return;
+
+  if(input.value===ADMIN_PASSWORD){
+
+   adminAuthenticated=true;
+
+   render();
+
+  }else{
+
+   if(error)
+    error.style.display="block";
+
+   input.value="";
+   input.focus();
+
+  }
+
+ }
+
+
+ /* =====================
+ ADMIN CLOSE
+ ===================== */
 
  get("closeAdmin")?.addEventListener(
   "click",
   function(){
 
    adminOpen=false;
+   adminAuthenticated=false;
+
+   adminCategoryView=null;
+   adminProductView=null;
 
    render();
 
@@ -4360,241 +4593,67 @@ function bindEvents(){
  );
 
 
- /* ADMIN TABS */
+ /* =====================
+ ADMIN TABS
+ ===================== */
 
  document
  .querySelectorAll("[data-admin-tab]")
  .forEach(function(button){
 
-  button.onclick=
-   function(){
+  button.onclick=function(){
 
-    adminTab=
-     button.dataset.adminTab;
+   collectAdmin();
 
-    render();
+   adminTab=
+    button.dataset.adminTab;
 
-   };
+   adminCategoryView=null;
+   adminProductView=null;
 
- });
+   render();
 
-
- /* SETTINGS */
-
- document
- .querySelectorAll("[data-setting]")
- .forEach(function(input){
-
-  input.onchange=
-   function(){
-
-    DATA.settings[
-     input.dataset.setting
-    ]=
-     input.checked;
-
-   };
+  };
 
  });
 
 
- /* SOLD */
+ /* =====================
+ ADMIN CATEGORY
+ ===================== */
 
  document
- .querySelectorAll("[data-sold]")
- .forEach(function(input){
-
-  input.onchange=
-   function(){
-
-    const item=
-     findProduct(
-      input.dataset.sold
-     );
-
-    if(item)
-     item.sold=
-      input.checked;
-
-   };
-
- });
-
-
- /* FEATURED */
-
- document
- .querySelectorAll("[data-featured]")
- .forEach(function(input){
-
-  input.onchange=
-   function(){
-
-    const item=
-     findProduct(
-      input.dataset.featured
-     );
-
-    if(item)
-     item.featured=
-      input.checked;
-
-   };
-
- });
-
-
- /* BACKGROUND */
-
- document
- .querySelectorAll("[data-background]")
+ .querySelectorAll("[data-admin-category]")
  .forEach(function(button){
 
-  button.onclick=
-   function(){
+  button.onclick=function(){
 
-    collectAdmin();
+   collectAdmin();
 
-    DATA.background.type=
-     button.dataset.background;
+   adminCategoryView=
+    button.dataset.adminCategory;
 
-    render();
+   adminProductView=null;
 
-   };
+   render();
 
- });
-
-
- /* DELETE CATEGORY */
-
- document
- .querySelectorAll("[data-delete-category]")
- .forEach(function(button){
-
-  button.onclick=
-   function(){
-
-    if(
-     confirm(
-      "Bu kategori ve içindeki ürünler silinsin mi?"
-     )
-    ){
-
-     DATA.categories=
-      DATA.categories.filter(
-       function(category){
-
-        return category.id!==
-         button.dataset.deleteCategory;
-
-       }
-      );
-
-     saveData();
-
-     render();
-
-    }
-
-   };
+  };
 
  });
 
 
- /* DELETE PRODUCT */
+ /* =====================
+ ADMIN CATEGORY BACK
+ ===================== */
 
- document
- .querySelectorAll("[data-delete-product]")
- .forEach(function(button){
-
-  button.onclick=
-   function(){
-
-    const parts=
-     button.dataset.deleteProduct
-     .split("|");
-
-    const category=
-     DATA.categories.find(
-      function(category){
-
-       return category.id===
-        parts[0];
-
-      }
-     );
-
-
-    if(category){
-
-     category.items=
-      category.items.filter(
-       function(item){
-
-        return item.id!==parts[1];
-
-       }
-      );
-
-     saveData();
-
-     render();
-
-    }
-
-   };
-
- });
-
-
- /* DELETE EVENT */
-
- document
- .querySelectorAll("[data-delete-event]")
- .forEach(function(button){
-
-  button.onclick=
-   function(){
-
-    DATA.events=
-     DATA.events.filter(
-      function(event){
-
-       return event.id!==
-        button.dataset.deleteEvent;
-
-      }
-     );
-
-    saveData();
-
-    render();
-
-   };
-
- });
-
-
- /* ADD CATEGORY */
-
- get("addCategory")?.addEventListener(
+ get("adminProductsBack")?.addEventListener(
   "click",
   function(){
 
-   DATA.categories.push({
+   collectAdmin();
 
-    id:
-     "category-"+Date.now(),
-
-    name:
-     "Yeni Kategori",
-
-    image:
-     IMAGES.breakfast,
-
-    items:[]
-
-   });
+   adminCategoryView=null;
+   adminProductView=null;
 
    render();
 
@@ -4602,74 +4661,389 @@ function bindEvents(){
  );
 
 
- /* ADD PRODUCT */
+ /* =====================
+ ADMIN PRODUCT OPEN
+ ===================== */
+
+ document
+ .querySelectorAll("[data-admin-product]")
+ .forEach(function(button){
+
+  button.onclick=function(){
+
+   collectAdmin();
+
+   adminProductView=
+    button.dataset.adminProduct;
+
+   render();
+
+  };
+
+ });
+
+
+ /* =====================
+ ADMIN PRODUCT BACK
+ ===================== */
+
+ get("adminProductBack")?.addEventListener(
+  "click",
+  function(){
+
+   collectAdmin();
+
+   adminProductView=null;
+
+   render();
+
+  }
+ );
+
+
+ /* =====================
+ SETTINGS
+ ===================== */
+
+ document
+ .querySelectorAll("[data-setting]")
+ .forEach(function(input){
+
+  input.onchange=function(){
+
+   DATA.settings[
+    input.dataset.setting
+   ]=
+    input.checked;
+
+  };
+
+ });
+
+
+ /* =====================
+ SOLD
+ ===================== */
+
+ document
+ .querySelectorAll("[data-sold]")
+ .forEach(function(input){
+
+  input.onchange=function(){
+
+   const item=
+    findProduct(
+     input.dataset.sold
+    );
+
+   if(item)
+    item.sold=
+     input.checked;
+
+  };
+
+ });
+
+
+ /* =====================
+ FEATURED
+ ===================== */
+
+ document
+ .querySelectorAll("[data-featured]")
+ .forEach(function(input){
+
+  input.onchange=function(){
+
+   const item=
+    findProduct(
+     input.dataset.featured
+    );
+
+   if(item)
+    item.featured=
+     input.checked;
+
+  };
+
+ });
+
+
+ /* =====================
+ DISH
+ ===================== */
+
+ document
+ .querySelectorAll("[data-dish]")
+ .forEach(function(input){
+
+  input.onchange=function(){
+
+   const item=
+    findProduct(
+     input.dataset.dish
+    );
+
+   if(item)
+    item.dish=
+     input.checked;
+
+  };
+
+ });
+
+
+ /* =====================
+ BACKGROUND
+ ===================== */
+
+ document
+ .querySelectorAll("[data-background]")
+ .forEach(function(button){
+
+  button.onclick=function(){
+
+   collectAdmin();
+
+   DATA.background.type=
+    button.dataset.background;
+
+   render();
+
+  };
+
+ });
+
+
+ /* =====================
+ DELETE CATEGORY
+ ===================== */
+
+ document
+ .querySelectorAll("[data-delete-category]")
+ .forEach(function(button){
+
+  button.onclick=function(){
+
+   if(
+    !confirm(
+     "Bu kategori ve içindeki tüm ürünler silinsin mi?"
+    )
+   )
+    return;
+
+   DATA.categories=
+    DATA.categories.filter(
+     function(category){
+
+      return category.id!==
+       button.dataset.deleteCategory;
+
+     }
+    );
+
+   adminCategoryView=null;
+   adminProductView=null;
+
+   saveData();
+
+   render();
+
+  };
+
+ });
+
+
+ /* =====================
+ DELETE PRODUCT
+ ===================== */
+
+ document
+ .querySelectorAll("[data-delete-product]")
+ .forEach(function(button){
+
+  button.onclick=function(){
+
+   const parts=
+    button.dataset.deleteProduct
+    .split("|");
+
+   const category=
+    findCategory(parts[0]);
+
+   if(!category)
+    return;
+
+   if(
+    !confirm(
+     "Bu ürün silinsin mi?"
+    )
+   )
+    return;
+
+   category.items=
+    category.items.filter(
+     function(item){
+
+      return item.id!==parts[1];
+
+     }
+    );
+
+   adminProductView=null;
+
+   saveData();
+
+   render();
+
+  };
+
+ });
+
+
+ /* =====================
+ DELETE EVENT
+ ===================== */
+
+ document
+ .querySelectorAll("[data-delete-event]")
+ .forEach(function(button){
+
+  button.onclick=function(){
+
+   if(
+    !confirm(
+     "Bu etkinlik silinsin mi?"
+    )
+   )
+    return;
+
+   DATA.events=
+    DATA.events.filter(
+     function(event){
+
+      return event.id!==
+       button.dataset.deleteEvent;
+
+     }
+    );
+
+   saveData();
+
+   render();
+
+  };
+
+ });
+
+
+ /* =====================
+ ADD CATEGORY
+ ===================== */
+
+ get("addCategory")?.addEventListener(
+  "click",
+  function(){
+
+   collectAdmin();
+
+   const id=
+    "category-"+Date.now();
+
+   DATA.categories.push({
+
+    id:id,
+
+    name:"Yeni Kategori",
+
+    image:IMAGES.breakfast,
+
+    items:[]
+
+   });
+
+   adminCategoryView=id;
+   adminProductView=null;
+
+   saveData();
+
+   render();
+
+  }
+ );
+
+
+ /* =====================
+ ADD PRODUCT
+ ===================== */
 
  document
  .querySelectorAll("[data-add-product]")
  .forEach(function(button){
 
-  button.onclick=
-   function(){
+  button.onclick=function(){
 
-    const category=
-     DATA.categories.find(
-      function(category){
+   collectAdmin();
 
-       return category.id===
-        button.dataset.addProduct;
+   const category=
+    findCategory(
+     button.dataset.addProduct
+    );
 
-      }
-     );
+   if(!category)
+    return;
 
+   const id=
+    "product-"+Date.now();
 
-    if(category){
+   category.items.push({
 
-     category.items.push({
+    id:id,
 
-      id:
-       "product-"+Date.now(),
+    name:"Yeni Ürün",
 
-      name:
-       "Yeni Ürün",
+    description:"Ürün açıklaması",
 
-      description:
-       "Ürün açıklaması",
+    portion:"",
 
-      portion:"",
+    calories:"",
 
-      calories:"",
+    allergens:[],
 
-      allergens:[],
+    spicy:0,
 
-      spicy:0,
+    price:0,
 
-      price:0,
+    image:IMAGES.breakfast,
 
-      image:
-       IMAGES.breakfast,
+    featured:false,
 
-      featured:false,
+    dish:false,
 
-      dish:false,
+    sold:false
 
-      sold:false
+   });
 
-     });
+   adminProductView=id;
 
-     render();
+   saveData();
 
-    }
+   render();
 
-   };
+  };
 
  });
 
 
- /* ADD EVENT */
+ /* =====================
+ ADD EVENT
+ ===================== */
 
  get("addEvent")?.addEventListener(
   "click",
   function(){
+
+   collectAdmin();
 
    DATA.events.push({
 
@@ -4693,13 +5067,17 @@ function bindEvents(){
 
    });
 
+   saveData();
+
    render();
 
   }
  );
 
 
- /* SAVE */
+ /* =====================
+ SAVE
+ ===================== */
 
  get("saveAdmin")?.addEventListener(
   "click",
@@ -4710,6 +5088,10 @@ function bindEvents(){
    saveData();
 
    adminOpen=false;
+   adminAuthenticated=false;
+
+   adminCategoryView=null;
+   adminProductView=null;
 
    render();
 
@@ -4719,9 +5101,9 @@ function bindEvents(){
 }
 
 
-/* =========================
-   START
-========================= */
+/* ============================================================
+ START
+============================================================ */
 
 render();
 
