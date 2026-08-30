@@ -54,10 +54,6 @@ body{
 
 html{scroll-behavior:smooth}
 
-/* =========================================================
-   BACKGROUND
-========================================================= */
-
 .background{
  position:fixed;
  inset:0;
@@ -89,10 +85,6 @@ html{scroll-behavior:smooth}
  z-index:1;
  min-height:100vh;
 }
-
-/* =========================================================
-   ANIMATIONS
-========================================================= */
 
 @keyframes fadeIn{
  from{opacity:0}
@@ -153,10 +145,6 @@ select{
 
 button:active{transform:scale(.97)}
 
-/* =========================================================
-   CONTAINER
-========================================================= */
-
 .container{
  position:relative;
  z-index:2;
@@ -165,10 +153,6 @@ button:active{transform:scale(.97)}
  margin:auto;
  padding:0 16px 80px;
 }
-
-/* =========================================================
-   TOP
-========================================================= */
 
 .top{
  position:sticky;
@@ -230,9 +214,7 @@ button:active{transform:scale(.97)}
  font-weight:900;
 }
 
-.searchBox{
- margin-top:9px;
-}
+.searchBox{margin-top:9px}
 
 .searchBox input{
  width:100%;
@@ -248,10 +230,6 @@ button:active{transform:scale(.97)}
  border-color:var(--accent);
  box-shadow:0 0 0 3px rgba(214,168,61,.1);
 }
-
-/* =========================================================
-   POPUP
-========================================================= */
 
 .quickPopup{
  position:absolute;
@@ -290,10 +268,6 @@ button:active{transform:scale(.97)}
  color:#111;
 }
 
-/* =========================================================
-   HERO - PREMIUM
-========================================================= */
-
 .hero{
  text-align:center;
  padding:52px 0 34px;
@@ -310,12 +284,8 @@ button:active{transform:scale(.97)}
  border-radius:50%;
  border:1px solid var(--accent);
  background:
-  radial-gradient(
-   circle at 35% 25%,
-   rgba(255,255,255,.07),
-   transparent 42%
-  ),
-  rgba(15,15,16,.94);
+ radial-gradient(circle at 35% 25%,rgba(255,255,255,.07),transparent 42%),
+ rgba(15,15,16,.94);
  color:var(--accent);
  font:42px Georgia,serif;
  box-shadow:
@@ -355,13 +325,7 @@ button:active{transform:scale(.97)}
  line-height:1.65;
 }
 
-/* =========================================================
-   SECTION
-========================================================= */
-
-.section{
- margin-top:34px;
-}
+.section{margin-top:34px}
 
 .sectionHead{
  display:flex;
@@ -382,10 +346,6 @@ button:active{transform:scale(.97)}
  font-size:10px;
 }
 
-/* =========================================================
-   HORIZONTAL
-========================================================= */
-
 .horizontal{
  display:flex;
  gap:13px;
@@ -396,10 +356,6 @@ button:active{transform:scale(.97)}
 }
 
 .horizontal::-webkit-scrollbar{display:none}
-
-/* =========================================================
-   FEATURE / EVENT PREMIUM
-========================================================= */
 
 .feature,
 .event{
@@ -442,12 +398,12 @@ button:active{transform:scale(.97)}
  position:absolute;
  inset:0;
  background:
-  linear-gradient(
-   180deg,
-   rgba(0,0,0,.02) 15%,
-   rgba(0,0,0,.2) 40%,
-   rgba(0,0,0,.94) 100%
-  );
+ linear-gradient(
+ 180deg,
+ rgba(0,0,0,.02) 15%,
+ rgba(0,0,0,.2) 40%,
+ rgba(0,0,0,.94) 100%
+ );
 }
 
 .featureText,
@@ -459,10 +415,7 @@ button:active{transform:scale(.97)}
  text-align:left;
 }
 
-.featureText strong{
- font-size:21px;
- letter-spacing:-.02em;
-}
+.featureText strong{font-size:21px;letter-spacing:-.02em}
 
 .featureText span{
  display:block;
@@ -485,9 +438,7 @@ button:active{transform:scale(.97)}
  font-size:10px;
 }
 
-.eventText strong{
- font-size:19px;
-}
+.eventText strong{font-size:19px}
 
 .eventText span{
  display:block;
@@ -495,10 +446,6 @@ button:active{transform:scale(.97)}
  color:#ccc;
  font-size:11px;
 }
-
-/* =========================================================
-   CATEGORIES - PREMIUM
-========================================================= */
 
 .categories{
  display:grid;
@@ -527,20 +474,18 @@ button:active{transform:scale(.97)}
  transition:transform .6s cubic-bezier(.2,.8,.2,1);
 }
 
-.category:hover img{
- transform:scale(1.055);
-}
+.category:hover img{transform:scale(1.055)}
 
 .categoryShade{
  position:absolute;
  inset:0;
  background:
-  linear-gradient(
-   180deg,
-   rgba(0,0,0,.03) 5%,
-   rgba(0,0,0,.25) 35%,
-   rgba(0,0,0,.95) 100%
-  );
+ linear-gradient(
+ 180deg,
+ rgba(0,0,0,.03) 5%,
+ rgba(0,0,0,.25) 35%,
+ rgba(0,0,0,.95) 100%
+ );
 }
 
 .categoryText{
@@ -564,11 +509,6 @@ button:active{transform:scale(.97)}
  margin-top:5px;
 }
 
-/* =========================================================
-   CATEGORY PAGE - PREMIUM
-   YATAY ÜRÜN/KATEGORİ MENÜSÜ KALDIRILDI
-========================================================= */
-
 .categoryTitle{
  display:flex;
  align-items:center;
@@ -589,27 +529,17 @@ button:active{transform:scale(.97)}
 .backBtn{
  border:1px solid rgba(255,255,255,.08);
  background:
-  linear-gradient(
-   145deg,
-   rgba(255,255,255,.07),
-   rgba(255,255,255,.025)
-  );
+ linear-gradient(
+ 145deg,
+ rgba(255,255,255,.07),
+ rgba(255,255,255,.025)
+ );
  color:#fff;
  padding:10px 13px;
  border-radius:12px;
  font-size:11px;
  font-weight:850;
- box-shadow:0 8px 25px rgba(0,0,0,.18);
 }
-
-.backBtn:hover{
- border-color:rgba(214,168,61,.3);
- color:var(--accent2);
-}
-
-/* =========================================================
-   PRODUCTS - PREMIUM
-========================================================= */
 
 .products{
  display:flex;
@@ -624,13 +554,13 @@ button:active{transform:scale(.97)}
  min-height:130px;
  overflow:hidden;
  border:1px solid rgba(255,255,255,.075);
- border-radius:21px;
+ border-radius:var(--cardRadius);
  background:
-  linear-gradient(
-   145deg,
-   rgba(30,30,32,var(--cardOpacity)),
-   rgba(16,16,18,var(--cardOpacity))
-  );
+ linear-gradient(
+ 145deg,
+ rgba(30,30,32,var(--cardOpacity)),
+ rgba(16,16,18,var(--cardOpacity))
+ );
  cursor:pointer;
  box-shadow:
  0 14px 42px rgba(0,0,0,.24),
@@ -639,9 +569,6 @@ button:active{transform:scale(.97)}
 
 .product:hover{
  border-color:rgba(214,168,61,.2);
- box-shadow:
- 0 20px 52px rgba(0,0,0,.34),
- 0 1px 0 rgba(255,255,255,.04) inset;
  transform:translateY(-1px);
 }
 
@@ -652,29 +579,11 @@ button:active{transform:scale(.97)}
  position:relative;
 }
 
-.productImage:after{
- content:"";
- position:absolute;
- inset:0;
- background:linear-gradient(
-  90deg,
-  transparent 65%,
-  rgba(0,0,0,.08)
- );
- pointer-events:none;
-}
-
 .productImage img,
 .productImage video{
  width:100%;
  height:100%;
  object-fit:cover;
- transition:transform .55s cubic-bezier(.2,.8,.2,1);
-}
-
-.product:hover .productImage img,
-.product:hover .productImage video{
- transform:scale(1.045);
 }
 
 .productInfo{
@@ -684,9 +593,9 @@ button:active{transform:scale(.97)}
 
 .productInfo h3{
  margin:0;
+ color:var(--cardText);
  font-size:15px;
  font-weight:850;
- letter-spacing:-.015em;
  white-space:nowrap;
  overflow:hidden;
  text-overflow:ellipsis;
@@ -728,12 +637,7 @@ button:active{transform:scale(.97)}
  color:var(--price);
  font-weight:950;
  font-size:14px;
- letter-spacing:-.01em;
 }
-
-/* =========================================================
-   DRAWER
-========================================================= */
 
 .overlay{
  position:fixed;
@@ -741,7 +645,6 @@ button:active{transform:scale(.97)}
  z-index:100;
  background:rgba(0,0,0,.72);
  backdrop-filter:blur(6px);
- animation:fadeIn .2s ease;
 }
 
 .drawer{
@@ -787,15 +690,6 @@ button:active{transform:scale(.97)}
  margin-top:7px;
 }
 
-.drawerLink:hover{
- background:#28282b;
- color:#fff;
-}
-
-/* =========================================================
-   MODAL
-========================================================= */
-
 .modalOverlay{
  position:fixed;
  inset:0;
@@ -805,7 +699,6 @@ button:active{transform:scale(.97)}
  justify-content:center;
  background:rgba(0,0,0,.76);
  backdrop-filter:blur(7px);
- animation:fadeIn .2s ease;
 }
 
 .modal{
@@ -849,7 +742,6 @@ button:active{transform:scale(.97)}
 .modalBody h2{
  margin:0;
  font-size:27px;
- letter-spacing:-.025em;
 }
 
 .modalBody p{
@@ -874,9 +766,7 @@ button:active{transform:scale(.97)}
  font-weight:950;
 }
 
-/* =========================================================
-   ADMIN
-========================================================= */
+/* ADMIN */
 
 .adminOverlay{
  position:fixed;
@@ -885,7 +775,6 @@ button:active{transform:scale(.97)}
  background:rgba(0,0,0,.84);
  display:flex;
  justify-content:flex-end;
- animation:fadeIn .2s ease;
 }
 
 .admin{
@@ -895,13 +784,7 @@ button:active{transform:scale(.97)}
  overflow-x:hidden;
  overscroll-behavior:contain;
  -webkit-overflow-scrolling:touch;
- background:
-  radial-gradient(
-   circle at 85% 0%,
-   rgba(214,168,61,.07),
-   transparent 30%
-  ),
-  #0b0b0d;
+ background:#0b0b0d;
  animation:adminIn .28s cubic-bezier(.2,.8,.2,1);
 }
 
@@ -913,14 +796,12 @@ button:active{transform:scale(.97)}
  background:rgba(11,11,13,.94);
  border-bottom:1px solid rgba(255,255,255,.07);
  backdrop-filter:blur(24px);
- -webkit-backdrop-filter:blur(24px);
 }
 
 .adminTop{
  display:flex;
  justify-content:space-between;
  align-items:center;
- gap:12px;
 }
 
 .adminTitle{
@@ -933,25 +814,18 @@ button:active{transform:scale(.97)}
  width:44px;
  height:44px;
  border-radius:13px;
- background:
-  linear-gradient(
-   135deg,
-   var(--accent),
-   var(--accent2)
-  );
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
  color:#111;
  display:flex;
  align-items:center;
  justify-content:center;
  font-size:19px;
  font-weight:1000;
- box-shadow:0 8px 25px rgba(214,168,61,.18);
 }
 
 .adminTitleText b{
  display:block;
  font-size:15px;
- letter-spacing:-.01em;
 }
 
 .adminTitleText span{
@@ -971,7 +845,6 @@ button:active{transform:scale(.97)}
 }
 
 .adminTabs button{
- position:relative;
  padding:12px 8px;
  border:1px solid rgba(255,255,255,.06);
  border-radius:12px;
@@ -981,38 +854,15 @@ button:active{transform:scale(.97)}
  font-weight:850;
 }
 
-.adminTabs button:hover{
- background:#1d1d20;
- color:#fff;
-}
-
 .adminTabs button.active{
- background:
-  linear-gradient(
-   135deg,
-   rgba(214,168,61,.2),
-   rgba(214,168,61,.08)
-  );
+ background:rgba(214,168,61,.15);
  border-color:rgba(214,168,61,.35);
  color:var(--accent2);
- box-shadow:
-  inset 0 0 0 1px rgba(214,168,61,.05);
-}
-
-.adminTabs button.active:after{
- content:"";
- position:absolute;
- left:20%;
- right:20%;
- bottom:-15px;
- height:2px;
- background:var(--accent);
- border-radius:5px;
 }
 
 .adminBody{
  padding:20px;
- padding-bottom:95px;
+ padding-bottom:100px;
 }
 
 .adminSectionHeader{
@@ -1022,14 +872,12 @@ button:active{transform:scale(.97)}
 .adminSectionHeader h2{
  margin:0;
  font-size:24px;
- letter-spacing:-.035em;
 }
 
 .adminSectionHeader p{
  margin:5px 0 0;
  color:#666;
  font-size:10px;
- line-height:1.5;
 }
 
 .statsGrid{
@@ -1040,30 +888,15 @@ button:active{transform:scale(.97)}
 }
 
 .statCard{
- position:relative;
- overflow:hidden;
  padding:15px;
  min-height:105px;
  border:1px solid rgba(255,255,255,.07);
  border-radius:17px;
- background:
-  linear-gradient(
-   145deg,
-   rgba(255,255,255,.045),
-   rgba(255,255,255,.012)
-  );
- box-shadow:0 15px 40px rgba(0,0,0,.18);
-}
-
-.statCard:after{
- content:"";
- position:absolute;
- width:80px;
- height:80px;
- right:-30px;
- bottom:-30px;
- border-radius:50%;
- background:rgba(214,168,61,.07);
+ background:linear-gradient(
+ 145deg,
+ rgba(255,255,255,.045),
+ rgba(255,255,255,.012)
+ );
 }
 
 .statIcon{
@@ -1075,7 +908,6 @@ button:active{transform:scale(.97)}
  justify-content:center;
  background:rgba(214,168,61,.11);
  color:var(--accent2);
- font-size:15px;
  margin-bottom:12px;
 }
 
@@ -1083,14 +915,12 @@ button:active{transform:scale(.97)}
  color:#666;
  font-size:9px;
  text-transform:uppercase;
- letter-spacing:.08em;
 }
 
 .statValue{
  margin-top:5px;
  font-size:24px;
  font-weight:950;
- letter-spacing:-.04em;
 }
 
 .statSub{
@@ -1100,24 +930,20 @@ button:active{transform:scale(.97)}
 }
 
 .adminCard{
- position:relative;
  padding:17px;
  margin-bottom:12px;
  border:1px solid rgba(255,255,255,.07);
  border-radius:17px;
- background:
-  linear-gradient(
-   145deg,
-   rgba(255,255,255,.035),
-   rgba(255,255,255,.012)
-  );
- box-shadow:0 15px 40px rgba(0,0,0,.16);
+ background:linear-gradient(
+ 145deg,
+ rgba(255,255,255,.035),
+ rgba(255,255,255,.012)
+ );
 }
 
 .adminCardTitle{
  font-size:15px;
  font-weight:900;
- letter-spacing:-.02em;
 }
 
 .adminCardDescription{
@@ -1149,13 +975,6 @@ button:active{transform:scale(.97)}
  outline:none;
 }
 
-.field input:focus,
-.field textarea:focus,
-.field select:focus{
- border-color:var(--accent);
- box-shadow:0 0 0 3px rgba(214,168,61,.08);
-}
-
 .field textarea{
  min-height:88px;
  resize:vertical;
@@ -1171,19 +990,6 @@ button:active{transform:scale(.97)}
  min-width:0;
 }
 
-.small{
- color:#777;
- font-size:10px;
- line-height:1.5;
-}
-
-.help{
- color:#666;
- font-size:9px;
- line-height:1.5;
- margin-top:6px;
-}
-
 .adminButton{
  min-height:42px;
  border:1px solid rgba(255,255,255,.07);
@@ -1195,32 +1001,17 @@ button:active{transform:scale(.97)}
  font-weight:850;
 }
 
-.adminButton:hover{
- background:#27272b;
- border-color:rgba(255,255,255,.13);
-}
-
 .adminButton.gold{
  border-color:transparent;
- background:
-  linear-gradient(
-   135deg,
-   var(--accent),
-   var(--accent2)
-  );
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
  color:#111;
- box-shadow:0 8px 24px rgba(214,168,61,.12);
 }
-
-.adminButton.gold:hover{filter:brightness(1.07)}
 
 .adminButton.danger{
  background:#3a1719;
  color:#ff9a9a;
  border-color:#572024;
 }
-
-.adminButton.danger:hover{background:#5a1d20}
 
 .full{width:100%}
 
@@ -1243,33 +1034,15 @@ button:active{transform:scale(.97)}
  text-align:left;
 }
 
-.quickAction:hover{
- background:#1c1c20;
- border-color:rgba(214,168,61,.2);
-}
-
 .quickActionIcon{
  width:34px;
  height:34px;
- flex:0 0 34px;
  border-radius:10px;
  display:flex;
  align-items:center;
  justify-content:center;
  background:rgba(214,168,61,.08);
  color:var(--accent2);
-}
-
-.quickAction strong{
- display:block;
- font-size:11px;
-}
-
-.quickAction span{
- display:block;
- margin-top:3px;
- color:#666;
- font-size:9px;
 }
 
 .adminBreadcrumb{
@@ -1285,8 +1058,6 @@ button:active{transform:scale(.97)}
  border:0;
  background:transparent;
  color:var(--accent2);
- font-size:10px;
- padding:4px 0;
 }
 
 .adminCategoryList,
@@ -1308,13 +1079,6 @@ button:active{transform:scale(.97)}
  background:#141416;
  color:#fff;
  text-align:left;
-}
-
-.adminCategoryItem:hover,
-.adminProductItem:hover{
- background:#1b1b1e;
- border-color:rgba(214,168,61,.18);
- transform:translateY(-1px);
 }
 
 .adminCategoryThumb,
@@ -1392,8 +1156,6 @@ button:active{transform:scale(.97)}
  font-weight:800;
  cursor:pointer;
 }
-
-.fileBtn:hover{background:#29292d}
 
 .preview{
  width:100%;
@@ -1484,24 +1246,16 @@ button:active{transform:scale(.97)}
  accent-color:var(--accent);
 }
 
-.pinBox{
- padding:14px;
- border:1px solid rgba(214,168,61,.17);
- border-radius:13px;
- background:rgba(214,168,61,.045);
-}
-
 .simpleProductHero{
  padding:16px;
  margin-bottom:12px;
  border:1px solid rgba(214,168,61,.18);
  border-radius:16px;
- background:
-  linear-gradient(
-   135deg,
-   rgba(214,168,61,.10),
-   rgba(255,255,255,.015)
-  );
+ background:linear-gradient(
+ 135deg,
+ rgba(214,168,61,.10),
+ rgba(255,255,255,.015)
+ );
 }
 
 .simpleProductHero strong{
@@ -1536,7 +1290,6 @@ button:active{transform:scale(.97)}
  background:rgba(11,11,13,.95);
  border-top:1px solid rgba(255,255,255,.07);
  backdrop-filter:blur(20px);
- -webkit-backdrop-filter:blur(20px);
 }
 
 .saveBar button{
@@ -1554,7 +1307,6 @@ button:active{transform:scale(.97)}
  padding:20px;
  background:rgba(0,0,0,.93);
  backdrop-filter:blur(14px);
- animation:fadeIn .2s ease;
 }
 
 .adminLogin{
@@ -1562,15 +1314,8 @@ button:active{transform:scale(.97)}
  padding:27px;
  border:1px solid rgba(255,255,255,.1);
  border-radius:23px;
- background:
-  radial-gradient(
-   circle at 50% 0%,
-   rgba(214,168,61,.09),
-   transparent 45%
-  ),
-  #111113;
+ background:#111113;
  box-shadow:0 30px 90px #000;
- animation:pageIn .3s ease;
 }
 
 .adminLoginLogo{
@@ -1584,7 +1329,6 @@ button:active{transform:scale(.97)}
  border-radius:50%;
  color:var(--accent);
  font:30px Georgia,serif;
- box-shadow:0 0 35px rgba(214,168,61,.12);
 }
 
 .adminLogin h2{
@@ -1612,22 +1356,13 @@ button:active{transform:scale(.97)}
  letter-spacing:.18em;
 }
 
-.adminPassword:focus{
- border-color:var(--accent);
- box-shadow:0 0 0 3px rgba(214,168,61,.1);
-}
-
 .adminLoginButton{
  width:100%;
  margin-top:10px;
  padding:14px;
  border:0;
  border-radius:12px;
- background:linear-gradient(
-  135deg,
-  var(--accent),
-  var(--accent2)
- );
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
  color:#111;
  font-weight:950;
 }
@@ -1659,59 +1394,22 @@ button:active{transform:scale(.97)}
 .hidden{display:none!important}
 
 @media(max-width:600px){
-
  .admin{width:100%}
-
- .adminBody{
-  padding:16px;
-  padding-bottom:90px;
- }
-
- .adminHeader{
-  padding:14px 16px;
- }
-
- .saveBar{
-  padding:11px 16px;
- }
-
+ .adminBody{padding:16px;padding-bottom:100px}
+ .adminHeader{padding:14px 16px}
+ .saveBar{padding:11px 16px}
 }
 
 @media(max-width:430px){
-
- .product{
-  grid-template-columns:105px 1fr;
- }
-
- .productImage{
-  height:118px;
- }
-
- .statsGrid{gap:8px}
-
- .statCard{min-height:98px}
-
+ .product{grid-template-columns:105px 1fr}
+ .productImage{height:118px}
 }
 
 @media(max-width:390px){
-
- .categories{
-  grid-template-columns:1fr;
- }
-
- .designGrid{
-  grid-template-columns:1fr;
- }
-
- .row{
-  flex-direction:column;
-  gap:0;
- }
-
- .quickActions{
-  grid-template-columns:1fr;
- }
-
+ .categories{grid-template-columns:1fr}
+ .designGrid{grid-template-columns:1fr}
+ .row{flex-direction:column;gap:0}
+ .quickActions{grid-template-columns:1fr}
 }
 
 [dir="rtl"] .featureText,
@@ -1725,17 +1423,6 @@ button:active{transform:scale(.97)}
  right:auto;
  left:0;
 }
-
-[dir="rtl"] .drawer{
- margin-left:auto;
- margin-right:0;
- animation-name:drawerInRTL;
-}
-
-@keyframes drawerInRTL{
- from{transform:translateX(100%)}
- to{transform:none}
-}
 </style>
 </head>
 
@@ -1744,16 +1431,22 @@ button:active{transform:scale(.97)}
 <div id="app"></div>
 
 <script>
-
 /* =========================================================
-   NEARMENU PREMIUM
-   MEVCUT VERİ YAPISI KORUNUR
+   NEARMENU PREMIUM - FIXED STORAGE VERSION
 ========================================================= */
 
 const DEFAULT_ADMIN_PIN="1234";
 const STORAGE_KEY="nearMenuData";
 const PIN_KEY="nearMenuAdminPin";
 const TRANSLATION_CACHE_KEY="nearMenuTranslations";
+
+const DB_NAME="NearMenuMediaDB";
+const DB_VERSION=1;
+const MEDIA_STORE="media";
+
+/* =========================================================
+   DEFAULT IMAGES
+========================================================= */
 
 const IMAGES={
  breakfast:"https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=900&q=80",
@@ -1765,6 +1458,10 @@ const IMAGES={
  drink:"https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=900&q=80",
  music:"https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1000&q=80"
 };
+
+/* =========================================================
+   TEXT
+========================================================= */
 
 const TEXT={
  tr:{
@@ -1827,7 +1524,6 @@ const TEXT={
   translationReady:"Çeviri hazır.",
   translationInfo:"Türkçe metinleri yazman yeterli. İngilizce ve Arapça otomatik oluşturulur."
  },
-
  en:{
   welcome:"WELCOME",
   best:"Best Sellers",
@@ -1888,7 +1584,6 @@ const TEXT={
   translationReady:"Translation ready.",
   translationInfo:"Write Turkish text and English and Arabic versions will be generated automatically."
  },
-
  ar:{
   welcome:"مرحباً بكم",
   best:"الأكثر مبيعاً",
@@ -1965,7 +1660,6 @@ const DATA={
   USD:40,
   EUR:47
  },
-
  theme:{
   accent:"#d6a83d",
   accent2:"#f0c45a",
@@ -1981,7 +1675,6 @@ const DATA={
   fontFamily:"system",
   titleFont:"Georgia"
  },
-
  settings:{
   portion:true,
   calories:true,
@@ -1994,16 +1687,13 @@ const DATA={
   events:true,
   search:true
  },
-
  background:{
   type:"color",
   value:"#0b0b0c",
   image:"",
   video:""
  },
-
  hours:"09:00 - 23:00",
-
  categories:[
   {
    id:"kahvalti",
@@ -2042,7 +1732,6 @@ const DATA={
     }
    ]
   },
-
   {
    id:"izgara",
    name:"Izgaralar",
@@ -2065,7 +1754,6 @@ const DATA={
     }
    ]
   },
-
   {
    id:"burger",
    name:"Burgerler",
@@ -2089,7 +1777,6 @@ const DATA={
    ]
   }
  ],
-
  events:[
   {
    id:"canli-muzik",
@@ -2134,39 +1821,181 @@ let savedWindowScroll=0;
 let savedAdminScroll=0;
 
 /* =========================================================
+   INDEXED DB
+========================================================= */
+
+let dbPromise=null;
+
+function openMediaDB(){
+
+ if(dbPromise)return dbPromise;
+
+ dbPromise=new Promise((resolve,reject)=>{
+
+  if(!("indexedDB" in window)){
+   reject(new Error("IndexedDB desteklenmiyor."));
+   return;
+  }
+
+  const request=indexedDB.open(DB_NAME,DB_VERSION);
+
+  request.onupgradeneeded=e=>{
+
+   const db=e.target.result;
+
+   if(!db.objectStoreNames.contains(MEDIA_STORE)){
+    db.createObjectStore(MEDIA_STORE);
+   }
+  };
+
+  request.onsuccess=()=>resolve(request.result);
+  request.onerror=()=>reject(request.error);
+ });
+
+ return dbPromise;
+}
+
+async function mediaPut(key,blob){
+
+ const db=await openMediaDB();
+
+ return new Promise((resolve,reject)=>{
+
+  const tx=db.transaction(MEDIA_STORE,"readwrite");
+  const store=tx.objectStore(MEDIA_STORE);
+
+  const req=store.put(blob,key);
+
+  req.onsuccess=()=>resolve(true);
+  req.onerror=()=>reject(req.error);
+ });
+}
+
+async function mediaGet(key){
+
+ try{
+
+  const db=await openMediaDB();
+
+  return await new Promise((resolve,reject)=>{
+
+   const tx=db.transaction(MEDIA_STORE,"readonly");
+   const store=tx.objectStore(MEDIA_STORE);
+   const req=store.get(key);
+
+   req.onsuccess=()=>resolve(req.result||null);
+   req.onerror=()=>reject(req.error);
+
+  });
+
+ }catch(e){
+  console.warn("Medya okunamadı:",e);
+  return null;
+ }
+}
+
+async function mediaDelete(key){
+
+ try{
+
+  const db=await openMediaDB();
+
+  return await new Promise((resolve,reject)=>{
+
+   const tx=db.transaction(MEDIA_STORE,"readwrite");
+   const req=tx.objectStore(MEDIA_STORE).delete(key);
+
+   req.onsuccess=()=>resolve(true);
+   req.onerror=()=>reject(req.error);
+
+  });
+
+ }catch(e){
+  return false;
+ }
+}
+
+function mediaKey(type,id){
+ return "nearMedia:"+type+":"+id;
+}
+
+async function saveMedia(type,id,file){
+
+ const key=mediaKey(type,id);
+
+ await mediaPut(key,file);
+
+ return "indexeddb:"+key;
+}
+
+async function loadMediaReference(value){
+
+ if(!value)return "";
+
+ if(!String(value).startsWith("indexeddb:"))
+  return value;
+
+ const key=String(value).replace("indexeddb:","");
+
+ const blob=await mediaGet(key);
+
+ if(!blob)return "";
+
+ return URL.createObjectURL(blob);
+}
+
+/* =========================================================
    STORAGE
 ========================================================= */
 
 function storageAvailable(){
+
  try{
+
   const x="__near_test__";
+
   localStorage.setItem(x,x);
   localStorage.removeItem(x);
+
   return true;
+
  }catch(e){
+
   return false;
  }
 }
 
 function safeGet(key){
+
  if(!storageAvailable())return null;
- try{return localStorage.getItem(key)}
- catch(e){return null}
+
+ try{
+  return localStorage.getItem(key);
+ }catch(e){
+  return null;
+ }
 }
 
 function safeSet(key,value){
+
  if(!storageAvailable())return false;
+
  try{
+
   localStorage.setItem(key,value);
+
   return true;
+
  }catch(e){
-  console.warn(e);
+
+  console.error("localStorage kayıt hatası:",e);
+
   return false;
  }
 }
 
 /* =========================================================
-   MERGE
+   DEEP MERGE
 ========================================================= */
 
 function mergeData(saved){
@@ -2246,7 +2075,10 @@ function mergeData(saved){
  DATA.categories.forEach(c=>{
 
   if(!c.id)c.id=uid("category");
-  if(!Array.isArray(c.items))c.items=[];
+
+  if(!Array.isArray(c.items))
+   c.items=[];
+
   if(!c.names)c.names={};
 
   if(!c.names.tr)
@@ -2265,51 +2097,132 @@ function mergeData(saved){
    if(!p.descriptions.tr)
     p.descriptions.tr=p.description||"";
 
-   if(typeof p.video==="undefined")p.video="";
-   if(typeof p.image==="undefined")p.image="";
-   if(typeof p.description==="undefined")p.description="";
-   if(typeof p.portion==="undefined")p.portion="";
-   if(typeof p.calories==="undefined")p.calories="";
-   if(typeof p.spicy==="undefined")p.spicy=0;
-   if(typeof p.featured==="undefined")p.featured=false;
-   if(typeof p.dish==="undefined")p.dish=false;
-   if(typeof p.sold==="undefined")p.sold=false;
-   if(typeof p.price==="undefined")p.price=0;
-   if(!Array.isArray(p.allergens))p.allergens=[];
+   if(typeof p.video==="undefined")
+    p.video="";
 
+   if(typeof p.image==="undefined")
+    p.image="";
+
+   if(typeof p.description==="undefined")
+    p.description="";
+
+   if(typeof p.portion==="undefined")
+    p.portion="";
+
+   if(typeof p.calories==="undefined")
+    p.calories="";
+
+   if(typeof p.spicy==="undefined")
+    p.spicy=0;
+
+   if(typeof p.featured==="undefined")
+    p.featured=false;
+
+   if(typeof p.dish==="undefined")
+    p.dish=false;
+
+   if(typeof p.sold==="undefined")
+    p.sold=false;
+
+   if(typeof p.price==="undefined")
+    p.price=0;
+
+   if(!Array.isArray(p.allergens))
+    p.allergens=[];
   });
-
  });
 
  DATA.events.forEach(e=>{
 
   if(!e.id)e.id=uid("event");
+
   if(!e.names)e.names={};
   if(!e.descriptions)e.descriptions={};
 
-  if(!e.names.tr)e.names.tr=e.name||"";
-  if(!e.descriptions.tr)e.descriptions.tr=e.description||"";
+  if(!e.names.tr)
+   e.names.tr=e.name||"";
 
-  if(typeof e.video==="undefined")e.video="";
-  if(typeof e.image==="undefined")e.image="";
-  if(typeof e.description==="undefined")e.description="";
+  if(!e.descriptions.tr)
+   e.descriptions.tr=e.description||"";
 
+  if(typeof e.video==="undefined")
+   e.video="";
+
+  if(typeof e.image==="undefined")
+   e.image="";
+
+  if(typeof e.description==="undefined")
+   e.description="";
  });
-
 }
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
 
 try{
- const saved=safeGet(STORAGE_KEY);
- if(saved)mergeData(JSON.parse(saved));
+
+ const old=safeGet(STORAGE_KEY);
+
+ if(old){
+  mergeData(JSON.parse(old));
+ }
+
 }catch(e){
- console.warn("Veri yüklenemedi",e);
+
+ console.error("Eski veriler okunamadı:",e);
 }
 
+/* =========================================================
+   SAVE - FIXED
+========================================================= */
+
 function saveData(){
- return safeSet(
-  STORAGE_KEY,
-  JSON.stringify(DATA)
- );
+
+ try{
+
+  const data=JSON.stringify(DATA);
+
+  const result=safeSet(
+   STORAGE_KEY,
+   data
+  );
+
+  if(!result){
+
+   alert(
+    "⚠️ KAYIT BAŞARISIZ\n\n"+
+    "Veriler tarayıcıya kaydedilemedi."
+   );
+
+   return false;
+  }
+
+  const verification=safeGet(STORAGE_KEY);
+
+  if(verification!==data){
+
+   alert(
+    "⚠️ KAYIT DOĞRULANAMADI\n\n"+
+    "Değişiklikler güvenli şekilde saklanamadı."
+   );
+
+   return false;
+  }
+
+  return true;
+
+ }catch(error){
+
+  console.error(error);
+
+  alert(
+   "⚠️ KAYIT HATASI\n\n"+
+   (error?.message||"Bilinmeyen hata")
+  );
+
+  return false;
+ }
 }
 
 function getAdminPin(){
@@ -2329,16 +2242,20 @@ function $(id){
 }
 
 function esc(value){
+
  return String(value??"")
- .replace(/&/g,"&amp;")
- .replace(/</g,"&lt;")
- .replace(/>/g,"&gt;")
- .replace(/"/g,"&quot;")
- .replace(/'/g,"&#039;");
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
 }
 
 function uid(prefix){
- return prefix+"-"+Date.now()+"-"+Math.random().toString(36).slice(2,7);
+
+ return prefix+"-"+Date.now()+"-"+Math.random()
+  .toString(36)
+  .slice(2,7);
 }
 
 function t(key){
@@ -2372,7 +2289,9 @@ function findCategory(id){
 function findProduct(id){
 
  for(const c of DATA.categories){
+
   const p=(c.items||[]).find(x=>x.id===id);
+
   if(p)return p;
  }
 
@@ -2388,12 +2307,18 @@ function allProducts(){
  const result=[];
 
  DATA.categories.forEach(c=>{
+
   (c.items||[]).forEach(p=>{
-   result.push(Object.assign({},p,{
-    categoryId:c.id,
-    categoryName:c.name
-   }));
+
+   result.push(
+    Object.assign({},p,{
+     categoryId:c.id,
+     categoryName:c.name
+    })
+   );
+
   });
+
  });
 
  return result;
@@ -2403,13 +2328,11 @@ function money(price){
 
  const value=Number(price)||0;
 
- if(currency==="USD"){
+ if(currency==="USD")
   return "$"+(value/(Number(DATA.rates.USD)||40)).toFixed(2);
- }
 
- if(currency==="EUR"){
+ if(currency==="EUR")
   return "€"+(value/(Number(DATA.rates.EUR)||47)).toFixed(2);
- }
 
  return Math.round(value).toLocaleString("tr-TR")+" ₺";
 }
@@ -2419,11 +2342,15 @@ function money(price){
 ========================================================= */
 
 function translationCache(){
+
  try{
+
   return JSON.parse(
    safeGet(TRANSLATION_CACHE_KEY)||"{}"
   );
+
  }catch(e){
+
   return {};
  }
 }
@@ -2437,7 +2364,8 @@ async function translateText(text,target){
 
  const key="tr|"+target+"|"+text.trim();
 
- if(cache[key])return cache[key];
+ if(cache[key])
+  return cache[key];
 
  try{
 
@@ -2459,24 +2387,32 @@ async function translateText(text,target){
   let result="";
 
   if(Array.isArray(data?.[0])){
+
    data[0].forEach(x=>{
-    if(x?.[0])result+=x[0];
+
+    if(x?.[0])
+     result+=x[0];
+
    });
   }
 
   result=result.trim();
 
   if(result){
+
    cache[key]=result;
+
    safeSet(
     TRANSLATION_CACHE_KEY,
     JSON.stringify(cache)
    );
+
    return result;
   }
 
  }catch(e){
-  console.warn("Çeviri başarısız",e);
+
+  console.warn("Çeviri başarısız:",e);
  }
 
  return text;
@@ -2539,7 +2475,9 @@ async function generateMissingTranslations(item){
 
  rememberAdminScroll();
 
- render({preserveAdminScroll:true});
+ render({
+  preserveAdminScroll:true
+ });
 
  for(const target of ["en","ar"]){
 
@@ -2560,7 +2498,9 @@ async function generateMissingTranslations(item){
 
  saveData();
 
- render({preserveAdminScroll:true});
+ render({
+  preserveAdminScroll:true
+ });
 }
 
 /* =========================================================
@@ -2584,7 +2524,7 @@ function applyTheme(){
  root.style.setProperty("--accent2",th.accent2||"#f0c45a");
  root.style.setProperty("--text",th.text||"#fff");
  root.style.setProperty("--cardText",th.cardText||"#fff");
- root.style.setProperty("--price",th.price||th.accent2||"#f0c45a");
+ root.style.setProperty("--price",th.price||"#f0c45a");
  root.style.setProperty("--overlay",th.overlay??.55);
  root.style.setProperty("--cardOpacity",th.cardOpacity??.94);
  root.style.setProperty("--cardRadius",(th.cardRadius||20)+"px");
@@ -2607,7 +2547,8 @@ function renderBackground(){
 
   return `
    <div class="background" id="siteBackground">
-    <video autoplay muted loop playsinline src="${esc(bg.video)}"></video>
+    <video autoplay muted loop playsinline
+     data-media-ref="${esc(bg.video)}"></video>
     <div class="backgroundOverlay"></div>
    </div>
   `;
@@ -2617,7 +2558,7 @@ function renderBackground(){
 
   return `
    <div class="background" id="siteBackground">
-    <img src="${esc(bg.image)}" alt="">
+    <img data-media-ref="${esc(bg.image)}" alt="">
     <div class="backgroundOverlay"></div>
    </div>
   `;
@@ -2642,13 +2583,15 @@ function renderHero(){
  <section class="hero">
 
   <div class="logo">
+
    ${
     DATA.logo
     ?
-    `<img src="${esc(DATA.logo)}" alt="Logo">`
+    `<img data-media-ref="${esc(DATA.logo)}" alt="Logo">`
     :
     "N"
    }
+
   </div>
 
   <div class="welcome">
@@ -2674,6 +2617,29 @@ function renderHero(){
 }
 
 /* =========================================================
+   MEDIA RESOLUTION
+========================================================= */
+
+async function resolveMediaElements(){
+
+ const elements=document.querySelectorAll(
+  "[data-media-ref]"
+ );
+
+ for(const el of elements){
+
+  const ref=el.dataset.mediaRef;
+
+  if(!ref)continue;
+
+  const url=await loadMediaReference(ref);
+
+  if(url)
+   el.src=url;
+ }
+}
+
+/* =========================================================
    FEATURED
 ========================================================= */
 
@@ -2681,10 +2647,8 @@ function renderFeatured(){
 
  if(!DATA.settings.featured)return "";
 
- const products=
-  allProducts().filter(
-   p=>p.featured&&!p.sold
-  );
+ const products=allProducts()
+  .filter(p=>p.featured&&!p.sold);
 
  if(!products.length)return "";
 
@@ -2701,16 +2665,18 @@ function renderFeatured(){
    ${
     products.map(item=>`
 
-     <button class="feature" data-product="${esc(item.id)}">
+     <button class="feature"
+      data-product="${esc(item.id)}">
 
       ${
        item.video
        ?
-       `<video autoplay muted loop playsinline src="${esc(item.video)}"></video>`
+       `<video autoplay muted loop playsinline
+        data-media-ref="${esc(item.video)}"></video>`
        :
        item.image
        ?
-       `<img src="${esc(item.image)}" alt="">`
+       `<img data-media-ref="${esc(item.image)}" alt="">`
        :
        ""
       }
@@ -2754,16 +2720,18 @@ function renderEvents(){
    ${
     DATA.events.map(event=>`
 
-     <button class="event" data-event="${esc(event.id)}">
+     <button class="event"
+      data-event="${esc(event.id)}">
 
       ${
        event.video
        ?
-       `<video autoplay muted loop playsinline src="${esc(event.video)}"></video>`
+       `<video autoplay muted loop playsinline
+        data-media-ref="${esc(event.video)}"></video>`
        :
        event.image
        ?
-       `<img src="${esc(event.image)}" alt="">`
+       `<img data-media-ref="${esc(event.image)}" alt="">`
        :
        ""
       }
@@ -2810,12 +2778,13 @@ function renderCategories(){
     ${
      DATA.categories.map(c=>`
 
-      <button class="category" data-category="${esc(c.id)}">
+      <button class="category"
+       data-category="${esc(c.id)}">
 
        ${
         c.image
         ?
-        `<img src="${esc(c.image)}" alt="">`
+        `<img data-media-ref="${esc(c.image)}" alt="">`
         :
         `<div style="width:100%;height:100%;background:#222"></div>`
        }
@@ -2916,7 +2885,6 @@ function renderProductCard(item){
  return `
  <article
   class="product"
-  id="product-${esc(item.id)}"
   data-product="${esc(item.id)}">
 
   <div class="productImage">
@@ -2924,11 +2892,13 @@ function renderProductCard(item){
    ${
     item.video
     ?
-    `<video autoplay muted loop playsinline src="${esc(item.video)}"></video>`
+    `<video autoplay muted loop playsinline
+     data-media-ref="${esc(item.video)}"></video>`
     :
     item.image
     ?
-    `<img src="${esc(item.image)}" alt="${esc(localizedName(item))}">`
+    `<img data-media-ref="${esc(item.image)}"
+     alt="${esc(localizedName(item))}">`
     :
     `<div style="
      width:100%;
@@ -2970,8 +2940,6 @@ function renderProductCard(item){
 
 /* =========================================================
    CATEGORY PAGE
-   ÖNEMLİ:
-   BURADAKİ YATAY CATEGORY TABS TAMAMEN KALDIRILDI.
 ========================================================= */
 
 function renderCategoryPage(){
@@ -3019,22 +2987,22 @@ function renderSearch(){
 
  const query=searchText.toLocaleLowerCase("tr-TR");
 
- const products=
-  allProducts().filter(item=>{
+ const products=allProducts().filter(item=>{
 
-   const category=findCategory(item.categoryId);
+  const category=findCategory(item.categoryId);
 
-   const text=[
-    item.name,
-    localizedName(item),
-    item.description,
-    localizedDescription(item),
-    item.categoryName,
-    localizedCategoryName(category)
-   ].join(" ");
+  const text=[
+   item.name,
+   localizedName(item),
+   item.description,
+   localizedDescription(item),
+   item.categoryName,
+   localizedCategoryName(category)
+  ].join(" ");
 
-   return text.toLocaleLowerCase("tr-TR").includes(query);
-  });
+  return text.toLocaleLowerCase("tr-TR")
+   .includes(query);
+ });
 
  return `
  <section class="section pageContent">
@@ -3057,16 +3025,7 @@ function renderSearch(){
     ?
     products.map(renderProductCard).join("")
     :
-    `<div class="empty">
-     ${
-      language==="ar"
-      ?"لم يتم العثور على منتج."
-      :
-      language==="en"
-      ?"No products found."
-      :"Ürün bulunamadı."
-     }
-    </div>`
+    `<div class="empty">Ürün bulunamadı.</div>`
    }
 
   </div>
@@ -3092,17 +3051,20 @@ function renderCurrencyPopup(){
  return `
  <div class="quickPopup">
 
-  <button class="${currency==="TRY"?"active":""}" data-currency="TRY">
+  <button class="${currency==="TRY"?"active":""}"
+   data-currency="TRY">
    <span>🇹🇷 ${t("try")}</span>
    <span>₺</span>
   </button>
 
-  <button class="${currency==="USD"?"active":""}" data-currency="USD">
+  <button class="${currency==="USD"?"active":""}"
+   data-currency="USD">
    <span>🇺🇸 ${t("usd")}</span>
    <span>$</span>
   </button>
 
-  <button class="${currency==="EUR"?"active":""}" data-currency="EUR">
+  <button class="${currency==="EUR"?"active":""}"
+   data-currency="EUR">
    <span>🇪🇺 ${t("eur")}</span>
    <span>€</span>
   </button>
@@ -3118,17 +3080,20 @@ function renderLanguagePopup(){
  return `
  <div class="quickPopup" style="width:170px">
 
-  <button class="${language==="tr"?"active":""}" data-language="tr">
+  <button class="${language==="tr"?"active":""}"
+   data-language="tr">
    <span>🇹🇷 Türkçe</span>
    <span>TR</span>
   </button>
 
-  <button class="${language==="en"?"active":""}" data-language="en">
+  <button class="${language==="en"?"active":""}"
+   data-language="en">
    <span>🇬🇧 English</span>
    <span>EN</span>
   </button>
 
-  <button class="${language==="ar"?"active":""}" data-language="ar">
+  <button class="${language==="ar"?"active":""}"
+   data-language="ar">
    <span>🇸🇦 العربية</span>
    <span>AR</span>
   </button>
@@ -3179,7 +3144,8 @@ function renderDrawer(){
     ${
      DATA.phone
      ?
-     `<a class="drawerLink" href="tel:${esc(DATA.phone)}">
+     `<a class="drawerLink"
+      href="tel:${esc(DATA.phone)}">
       ${t("call")}
      </a>`
      :
@@ -3222,16 +3188,19 @@ function renderProductModal(){
     ${
      item.video
      ?
-     `<video controls autoplay muted playsinline src="${esc(item.video)}"></video>`
+     `<video controls autoplay muted playsinline
+      data-media-ref="${esc(item.video)}"></video>`
      :
      item.image
      ?
-     `<img src="${esc(item.image)}" alt="${esc(localizedName(item))}">`
+     `<img data-media-ref="${esc(item.image)}"
+      alt="${esc(localizedName(item))}">`
      :
      ""
     }
 
-    <button class="closeBtn" id="closeProduct">×</button>
+    <button class="closeBtn"
+     id="closeProduct">×</button>
 
    </div>
 
@@ -3243,7 +3212,8 @@ function renderProductModal(){
      DATA.settings.dish&&item.dish
      ?
      `<div style="margin-top:10px">
-      <span class="tag" style="background:var(--accent);color:#111">
+      <span class="tag"
+       style="background:var(--accent);color:#111">
        ⭐ ${t("dish")}
       </span>
      </div>`
@@ -3323,8 +3293,7 @@ function renderEventModal(){
 
  const event=selectedEvent;
 
- const whatsapp=
-  DATA.whatsapp
+ const whatsapp=DATA.whatsapp
   ?
   "https://wa.me/"+
   DATA.whatsapp+
@@ -3347,16 +3316,19 @@ function renderEventModal(){
     ${
      event.video
      ?
-     `<video controls autoplay muted playsinline src="${esc(event.video)}"></video>`
+     `<video controls autoplay muted playsinline
+      data-media-ref="${esc(event.video)}"></video>`
      :
      event.image
      ?
-     `<img src="${esc(event.image)}" alt="">`
+     `<img data-media-ref="${esc(event.image)}"
+      alt="">`
      :
      ""
     }
 
-    <button class="closeBtn" id="closeEvent">×</button>
+    <button class="closeBtn"
+     id="closeEvent">×</button>
 
    </div>
 
@@ -3391,18 +3363,21 @@ function renderEventModal(){
 }
 
 /* =========================================================
-   ADMIN INPUT HELPERS
+   INPUT HELPERS
 ========================================================= */
 
 function input(key,label,value,type="text"){
 
  return `
  <div class="field">
+
   <label>${label}</label>
+
   <input
    type="${type}"
    data-admin="${esc(key)}"
    value="${esc(value??"")}">
+
  </div>
  `;
 }
@@ -3411,8 +3386,11 @@ function textarea(key,label,value){
 
  return `
  <div class="field">
+
   <label>${label}</label>
+
   <textarea data-admin="${esc(key)}">${esc(value??"")}</textarea>
+
  </div>
  `;
 }
@@ -3432,6 +3410,7 @@ function fileField(type,id,label,value,accept){
   <div class="fileBox">
 
    <label class="fileBtn">
+
     📁 ${video?t("video"):t("image")}
 
     <input
@@ -3440,6 +3419,7 @@ function fileField(type,id,label,value,accept){
      accept="${accept}"
      data-file-type="${type}"
      data-file-id="${esc(id)}">
+
    </label>
 
    ${
@@ -3462,11 +3442,17 @@ function fileField(type,id,label,value,accept){
    ?
    video
    ?
-   `<video class="preview" controls src="${esc(value)}"></video>`
+   `<video class="preview"
+    controls
+    data-media-ref="${esc(value)}"></video>`
    :
-   `<img class="preview" src="${esc(value)}" alt="">`
+   `<img class="preview"
+    data-media-ref="${esc(value)}"
+    alt="">`
    :
-   `<div class="help">Henüz dosya seçilmedi.</div>`
+   `<div class="help">
+    Henüz dosya seçilmedi.
+   </div>`
   }
 
  </div>
@@ -3474,12 +3460,13 @@ function fileField(type,id,label,value,accept){
 }
 
 /* =========================================================
-   ADMIN DASHBOARD
+   ADMIN GENERAL
 ========================================================= */
 
 function renderAdminGeneral(){
 
  const products=allProducts();
+
  const categories=DATA.categories.length;
  const events=DATA.events.length;
 
@@ -3527,20 +3514,28 @@ function renderAdminGeneral(){
 
  <div class="quickActions">
 
-  <button class="quickAction" data-admin-tab-direct="products">
+  <button class="quickAction"
+   data-admin-tab-direct="products">
+
    <div class="quickActionIcon">🍽</div>
+
    <div>
     <strong>Menüyü Yönet</strong>
     <span>Ürün ve kategoriler</span>
    </div>
+
   </button>
 
-  <button class="quickAction" data-admin-tab-direct="settings">
+  <button class="quickAction"
+   data-admin-tab-direct="settings">
+
    <div class="quickActionIcon">🎨</div>
+
    <div>
     <strong>Tasarımı Düzenle</strong>
     <span>Renk, font ve görünüm</span>
    </div>
+
   </button>
 
  </div>
@@ -3574,14 +3569,13 @@ function renderAdminGeneral(){
   <div class="adminCardTitle">🔐 Güvenlik</div>
 
   <div class="adminCardDescription">
-   Yönetici paneli giriş PIN'ini değiştir.
+   Yönetici PIN'ini değiştir.
   </div>
 
   ${input("newPin","Yeni PIN","","password")}
   ${input("confirmPin","Yeni PIN Tekrar","","password")}
 
-  <button
-   class="adminButton gold full"
+  <button class="adminButton gold full"
    id="changePinButton">
    🔐 PIN'i Güncelle
   </button>
@@ -3592,10 +3586,6 @@ function renderAdminGeneral(){
 
   <div class="adminCardTitle">💱 Para Birimi</div>
 
-  <div class="adminCardDescription">
-   Menüde USD ve EUR gösterimi için kullanılacak kurlar.
-  </div>
-
   ${input("rateUSD","1 USD = TL",DATA.rates.USD,"number")}
   ${input("rateEUR","1 EUR = TL",DATA.rates.EUR,"number")}
 
@@ -3605,79 +3595,70 @@ function renderAdminGeneral(){
 
   <div class="adminCardTitle">✨ Etkinlikler</div>
 
-  <div class="adminCardDescription">
-   Restoranındaki etkinlikleri yönet.
-  </div>
+  ${
+   DATA.events.length
+   ?
+   DATA.events.map(event=>`
 
-  <div style="margin-top:15px">
+    <div class="adminCard"
+     style="margin:15px 0 10px;background:#0f0f11">
 
-   ${
-    DATA.events.length
-    ?
-    DATA.events.map(event=>`
+     ${input(
+      "eventName-"+event.id,
+      "Etkinlik adı",
+      event.name
+     )}
 
-     <div
-      class="adminCard"
-      style="margin:0 0 10px;background:#0f0f11">
+     <div class="row">
 
       ${input(
-       "eventName-"+event.id,
-       "Etkinlik adı",
-       event.name
+       "eventDate-"+event.id,
+       "Gün",
+       event.date
       )}
 
-      <div class="row">
-
-       ${input(
-        "eventDate-"+event.id,
-        "Gün",
-        event.date
-       )}
-
-       ${input(
-        "eventTime-"+event.id,
-        "Saat",
-        event.time
-       )}
-
-      </div>
-
-      ${textarea(
-       "eventDescription-"+event.id,
-       "Açıklama",
-       event.description
+      ${input(
+       "eventTime-"+event.id,
+       "Saat",
+       event.time
       )}
-
-      ${fileField(
-       "eventImage",
-       event.id,
-       "Etkinlik fotoğrafı",
-       event.image,
-       "image/*"
-      )}
-
-      ${fileField(
-       "eventVideo",
-       event.id,
-       "Etkinlik videosu",
-       event.video||"",
-       "video/*"
-      )}
-
-      <button
-       class="adminButton danger full"
-       data-delete-event="${esc(event.id)}">
-       ${t("delete")} Etkinliği
-      </button>
 
      </div>
 
-    `).join("")
-    :
-    `<div class="empty">Henüz etkinlik yok.</div>`
-   }
+     ${textarea(
+      "eventDescription-"+event.id,
+      "Açıklama",
+      event.description
+     )}
 
-  </div>
+     ${fileField(
+      "eventImage",
+      event.id,
+      "Etkinlik fotoğrafı",
+      event.image,
+      "image/*"
+     )}
+
+     ${fileField(
+      "eventVideo",
+      event.id,
+      "Etkinlik videosu",
+      event.video||"",
+      "video/*"
+     )}
+
+     <button
+      class="adminButton danger full"
+      data-delete-event="${esc(event.id)}">
+      Etkinliği Sil
+     </button>
+
+    </div>
+
+   `).join("")
+   :
+   `<div class="empty">Henüz etkinlik yok.</div>`
+  }
 
   <button
    class="adminButton gold full"
@@ -3690,7 +3671,7 @@ function renderAdminGeneral(){
 }
 
 /* =========================================================
-   ADMIN MENU
+   ADMIN CATEGORIES
 ========================================================= */
 
 function renderAdminCategories(){
@@ -3699,16 +3680,12 @@ function renderAdminCategories(){
 
  <div class="adminSectionHeader">
   <h2>Menü Yönetimi</h2>
-  <p>Kategorilerini ve ürünlerini profesyonel şekilde yönet.</p>
+  <p>Kategorilerini ve ürünlerini yönet.</p>
  </div>
 
  <div class="adminCard">
 
   <div class="adminCardTitle">Kategori Yönetimi</div>
-
-  <div class="adminCardDescription">
-   Yeni kategori oluştur veya mevcut kategorilerden birine gir.
-  </div>
 
   <button
    class="adminButton gold full"
@@ -3735,7 +3712,7 @@ function renderAdminCategories(){
      ${
       category.image
       ?
-      `<img src="${esc(category.image)}" alt="">`
+      `<img data-media-ref="${esc(category.image)}" alt="">`
       :
       `<div style="
        width:100%;
@@ -3784,7 +3761,9 @@ function renderAdminCategory(){
  const category=findCategory(adminCategoryView);
 
  if(!category){
+
   adminCategoryView=null;
+
   return renderAdminCategories();
  }
 
@@ -3803,13 +3782,20 @@ function renderAdminCategory(){
  </div>
 
  <div class="adminSectionHeader">
+
   <h2>${esc(category.name)}</h2>
-  <p>Kategori bilgilerini ve ürünlerini yönet.</p>
+
+  <p>
+   Kategori bilgilerini ve ürünlerini yönet.
+  </p>
+
  </div>
 
  <div class="adminCard">
 
-  <div class="adminCardTitle">Kategori Ayarları</div>
+  <div class="adminCardTitle">
+   Kategori Ayarları
+  </div>
 
   ${input(
    "categoryName-"+category.id,
@@ -3826,8 +3812,15 @@ function renderAdminCategory(){
   )}
 
   <button
+   class="adminButton gold full"
+   id="saveCategoryNow">
+   ✓ ${t("saveCategory")}
+  </button>
+
+  <button
    class="adminButton danger full"
-   data-delete-category="${esc(category.id)}">
+   data-delete-category="${esc(category.id)}"
+   style="margin-top:8px">
    Kategoriyi Sil
   </button>
 
@@ -3874,7 +3867,7 @@ function renderAdminCategory(){
      ${
       item.image
       ?
-      `<img src="${esc(item.image)}" alt="">`
+      `<img data-media-ref="${esc(item.image)}" alt="">`
       :
       `<div style="
        width:100%;
@@ -3922,17 +3915,17 @@ function renderAdminProduct(){
 
  if(item){
 
-  category=
-   DATA.categories.find(
-    c=>(c.items||[]).some(
-     p=>p.id===item.id
-    )
-   );
+  category=DATA.categories.find(
+   c=>(c.items||[]).some(
+    p=>p.id===item.id
+   )
+  );
  }
 
  if(!item||!category){
 
   adminProductView=null;
+
   return renderAdminCategory();
  }
 
@@ -3959,7 +3952,8 @@ function renderAdminProduct(){
   </strong>
 
   <span>
-   Türkçe adı ve açıklamayı yaz. Kaydettiğinde diğer diller hazırlanır.
+   Türkçe adı ve açıklamayı yaz.
+   Kaydettiğinde diğer diller hazırlanır.
   </span>
 
   ${
@@ -3968,12 +3962,11 @@ function renderAdminProduct(){
    `<div style="
     margin-top:10px;
     color:var(--accent2);
-    font-size:10px;
     animation:pulse 1s infinite">
     ● Çeviriler hazırlanıyor...
    </div>`
    :
-   `<div class="help">
+   `<div style="margin-top:8px;color:#666;font-size:9px">
     🌐 ${t("translationInfo")}
    </div>`
   }
@@ -3982,7 +3975,9 @@ function renderAdminProduct(){
 
  <div class="adminCard">
 
-  <div class="adminCardTitle">${t("basic")}</div>
+  <div class="adminCardTitle">
+   ${t("basic")}
+  </div>
 
   ${input(
    "productName-"+item.id,
@@ -4144,10 +4139,8 @@ function renderAdminDesign(){
 
  <div class="adminCard">
 
-  <div class="adminCardTitle">🎨 Renk Sistemi</div>
-
-  <div class="adminCardDescription">
-   Ana renk, vurgu, yazı ve fiyat renklerini belirle.
+  <div class="adminCardTitle">
+   🎨 Renk Sistemi
   </div>
 
   <div class="designGrid" style="margin-top:13px">
@@ -4299,131 +4292,12 @@ function renderAdminDesign(){
 
   <div class="designGrid" style="margin-top:13px">
 
-   <div class="designCard">
-
-    <h4>Logo</h4>
-
-    <div class="rangeRow">
-
-     <input
-      type="range"
-      min="60"
-      max="190"
-      value="${th.logoSize||112}"
-      data-design="logoSize">
-
-     <span class="rangeValue" id="logoSizeValue">
-      ${th.logoSize||112}px
-     </span>
-
-    </div>
-
-   </div>
-
-   <div class="designCard">
-
-    <h4>Başlık</h4>
-
-    <div class="rangeRow">
-
-     <input
-      type="range"
-      min="22"
-      max="52"
-      value="${th.titleSize||34}"
-      data-design="titleSize">
-
-     <span class="rangeValue" id="titleSizeValue">
-      ${th.titleSize||34}px
-     </span>
-
-    </div>
-
-   </div>
-
-   <div class="designCard">
-
-    <h4>Genel yazı</h4>
-
-    <div class="rangeRow">
-
-     <input
-      type="range"
-      min="11"
-      max="20"
-      value="${th.bodySize||13}"
-      data-design="bodySize">
-
-     <span class="rangeValue" id="bodySizeValue">
-      ${th.bodySize||13}px
-     </span>
-
-    </div>
-
-   </div>
-
-   <div class="designCard">
-
-    <h4>Kart köşesi</h4>
-
-    <div class="rangeRow">
-
-     <input
-      type="range"
-      min="8"
-      max="34"
-      value="${th.cardRadius||20}"
-      data-design="cardRadius">
-
-     <span class="rangeValue" id="cardRadiusValue">
-      ${th.cardRadius||20}px
-     </span>
-
-    </div>
-
-   </div>
-
-   <div class="designCard">
-
-    <h4>Kart şeffaflığı</h4>
-
-    <div class="rangeRow">
-
-     <input
-      type="range"
-      min="55"
-      max="100"
-      value="${Math.round((th.cardOpacity??.94)*100)}"
-      data-design="cardOpacity">
-
-     <span class="rangeValue" id="cardOpacityValue">
-      ${Math.round((th.cardOpacity??.94)*100)}%
-     </span>
-
-    </div>
-
-   </div>
-
-   <div class="designCard">
-
-    <h4>Arka plan karartma</h4>
-
-    <div class="rangeRow">
-
-     <input
-      type="range"
-      min="0"
-      max="90"
-      value="${Math.round((th.overlay??.55)*100)}"
-      data-design="overlay">
-
-     <span class="rangeValue" id="overlayValue">
-      ${Math.round((th.overlay??.55)*100)}%
-     </span>
-
-    </div>
-
-   </div>
+   ${designRange("logoSize","Logo",60,190,th.logoSize||112,"px")}
+   ${designRange("titleSize","Başlık",22,52,th.titleSize||34,"px")}
+   ${designRange("bodySize","Genel yazı",11,20,th.bodySize||13,"px")}
+   ${designRange("cardRadius","Kart köşesi",8,34,th.cardRadius||20,"px")}
+   ${designRange("cardOpacity","Kart şeffaflığı",55,100,Math.round((th.cardOpacity??.94)*100),"%")}
+   ${designRange("overlay","Arka plan karartma",0,90,Math.round((th.overlay??.55)*100),"%")}
 
   </div>
 
@@ -4491,7 +4365,9 @@ function renderAdminDesign(){
 
  <div class="adminCard">
 
-  <div class="adminCardTitle">👁️ Görünürlük</div>
+  <div class="adminCardTitle">
+   👁️ Görünürlük
+  </div>
 
   ${
    [
@@ -4520,6 +4396,34 @@ function renderAdminDesign(){
 
    `).join("")
   }
+
+ </div>
+ `;
+}
+
+function designRange(key,label,min,max,value,suffix){
+
+ return `
+ <div class="designCard">
+
+  <h4>${label}</h4>
+
+  <div class="rangeRow">
+
+   <input
+    type="range"
+    min="${min}"
+    max="${max}"
+    value="${value}"
+    data-design="${key}">
+
+   <span
+    class="rangeValue"
+    id="${key}Value">
+    ${value}${suffix}
+   </span>
+
+  </div>
 
  </div>
  `;
@@ -4568,11 +4472,8 @@ function renderAdmin(){
       <div class="adminTitleIcon">N</div>
 
       <div class="adminTitleText">
-
        <b>NearMenu</b>
-
        <span>Premium Control Center</span>
-
       </div>
 
      </div>
@@ -4718,7 +4619,9 @@ function collectAdmin(){
    const c=findCategory(id);
 
    if(c&&c.name!==value){
+
     c.name=value;
+
     markCategoryTranslationDirty(c);
    }
   }
@@ -4729,7 +4632,9 @@ function collectAdmin(){
    const p=findProduct(id);
 
    if(p&&p.name!==value){
+
     p.name=value;
+
     markProductTranslationDirty(p);
    }
   }
@@ -4740,7 +4645,9 @@ function collectAdmin(){
    const p=findProduct(id);
 
    if(p&&p.description!==value){
+
     p.description=value;
+
     markProductTranslationDirty(p);
    }
   }
@@ -4803,7 +4710,9 @@ function collectAdmin(){
    const e=findEvent(id);
 
    if(e&&e.name!==value){
+
     e.name=value;
+
     markEventTranslationDirty(e);
    }
   }
@@ -4830,7 +4739,9 @@ function collectAdmin(){
    const e=findEvent(id);
 
    if(e&&e.description!==value){
+
     e.description=value;
+
     markEventTranslationDirty(e);
    }
   }
@@ -4839,100 +4750,222 @@ function collectAdmin(){
 }
 
 /* =========================================================
-   FILE
+   FILE HANDLING - FIXED
 ========================================================= */
 
-function readFileAsDataURL(file,callback){
-
- const reader=new FileReader();
-
- reader.onload=()=>{
-  callback(reader.result);
- };
-
- reader.onerror=()=>{
-  alert("Dosya okunamadı.");
- };
-
- reader.readAsDataURL(file);
-}
-
-function handleFile(type,id,file){
+async function handleFile(type,id,file){
 
  if(!file)return;
 
  const maxImage=8*1024*1024;
- const maxVideo=20*1024*1024;
+ const maxVideo=100*1024*1024;
 
  const isVideo=file.type.startsWith("video/");
 
  if(isVideo&&file.size>maxVideo){
-  alert("Video en fazla 20 MB olabilir.");
+
+  alert("Video en fazla 100 MB olabilir.");
+
   return;
  }
 
  if(!isVideo&&file.size>maxImage){
+
   alert("Fotoğraf en fazla 8 MB olabilir.");
+
   return;
  }
 
- readFileAsDataURL(file,data=>{
+ try{
 
-  if(type==="logo")
-   DATA.logo=data;
+  const reference=
+   await saveMedia(
+    type,
+    id,
+    file
+   );
 
-  else if(type==="backgroundImage"){
-   DATA.background.image=data;
+  if(type==="logo"){
+
+   DATA.logo=reference;
+
+  }else if(type==="backgroundImage"){
+
+   DATA.background.image=reference;
    DATA.background.type="image";
-  }
 
-  else if(type==="backgroundVideo"){
-   DATA.background.video=data;
+  }else if(type==="backgroundVideo"){
+
+   DATA.background.video=reference;
    DATA.background.type="video";
-  }
 
-  else if(type==="categoryImage"){
+  }else if(type==="categoryImage"){
 
    const c=findCategory(id);
 
-   if(c)c.image=data;
-  }
+   if(c)c.image=reference;
 
-  else if(type==="productImage"){
-
-   const p=findProduct(id);
-
-   if(p)p.image=data;
-  }
-
-  else if(type==="productVideo"){
+  }else if(type==="productImage"){
 
    const p=findProduct(id);
 
-   if(p)p.video=data;
-  }
+   if(p)p.image=reference;
 
-  else if(type==="eventImage"){
+  }else if(type==="productVideo"){
 
-   const e=findEvent(id);
+   const p=findProduct(id);
 
-   if(e)e.image=data;
-  }
+   if(p)p.video=reference;
 
-  else if(type==="eventVideo"){
+  }else if(type==="eventImage"){
 
    const e=findEvent(id);
 
-   if(e)e.video=data;
+   if(e)e.image=reference;
+
+  }else if(type==="eventVideo"){
+
+   const e=findEvent(id);
+
+   if(e)e.video=reference;
   }
 
-  saveData();
+  const saved=saveData();
+
+  if(!saved)
+   return;
+
+  rememberAdminScroll();
 
   render({
    preserveAdminScroll:true
   });
 
- });
+ }catch(error){
+
+  console.error(error);
+
+  alert(
+   "⚠️ DOSYA KAYDEDİLEMEDİ\n\n"+
+   (error?.message||"Bilinmeyen hata")
+  );
+ }
+}
+
+async function clearFile(type,id){
+
+ try{
+
+  if(type==="logo"){
+
+   if(String(DATA.logo).startsWith("indexeddb:"))
+    await mediaDelete(
+     String(DATA.logo).replace("indexeddb:","")
+    );
+
+   DATA.logo="";
+
+  }else if(type==="backgroundImage"){
+
+   if(String(DATA.background.image).startsWith("indexeddb:"))
+    await mediaDelete(
+     String(DATA.background.image).replace("indexeddb:","")
+    );
+
+   DATA.background.image="";
+
+  }else if(type==="backgroundVideo"){
+
+   if(String(DATA.background.video).startsWith("indexeddb:"))
+    await mediaDelete(
+     String(DATA.background.video).replace("indexeddb:","")
+    );
+
+   DATA.background.video="";
+
+  }else if(type==="categoryImage"){
+
+   const c=findCategory(id);
+
+   if(c){
+
+    if(String(c.image).startsWith("indexeddb:"))
+     await mediaDelete(
+      String(c.image).replace("indexeddb:","")
+     );
+
+    c.image="";
+   }
+
+  }else if(type==="productImage"){
+
+   const p=findProduct(id);
+
+   if(p){
+
+    if(String(p.image).startsWith("indexeddb:"))
+     await mediaDelete(
+      String(p.image).replace("indexeddb:","")
+     );
+
+    p.image="";
+   }
+
+  }else if(type==="productVideo"){
+
+   const p=findProduct(id);
+
+   if(p){
+
+    if(String(p.video).startsWith("indexeddb:"))
+     await mediaDelete(
+      String(p.video).replace("indexeddb:","")
+     );
+
+    p.video="";
+   }
+
+  }else if(type==="eventImage"){
+
+   const e=findEvent(id);
+
+   if(e){
+
+    if(String(e.image).startsWith("indexeddb:"))
+     await mediaDelete(
+      String(e.image).replace("indexeddb:","")
+     );
+
+    e.image="";
+   }
+
+  }else if(type==="eventVideo"){
+
+   const e=findEvent(id);
+
+   if(e){
+
+    if(String(e.video).startsWith("indexeddb:"))
+     await mediaDelete(
+      String(e.video).replace("indexeddb:","")
+     );
+
+    e.video="";
+   }
+  }
+
+  saveData();
+
+  rememberAdminScroll();
+
+  render({
+   preserveAdminScroll:true
+  });
+
+ }catch(error){
+
+  alert("Dosya silinemedi.");
+ }
 }
 
 /* =========================================================
@@ -4940,6 +4973,7 @@ function handleFile(type,id,file){
 ========================================================= */
 
 function rememberWindowScroll(){
+
  savedWindowScroll=
   window.scrollY||
   window.pageYOffset||
@@ -4968,6 +5002,7 @@ function restoreAdminScroll(){
  const y=savedAdminScroll;
 
  requestAnimationFrame(()=>{
+
   requestAnimationFrame(()=>{
 
    const admin=document.querySelector(".admin");
@@ -5017,7 +5052,8 @@ function render(options={}){
 
     <div class="topRow">
 
-     <button class="iconBtn" id="openDrawer">
+     <button class="iconBtn"
+      id="openDrawer">
       ☰
      </button>
 
@@ -5026,14 +5062,18 @@ function render(options={}){
       ${
        DATA.settings.search
        ?
-       `<button class="iconBtn" id="searchButton">
+       `<button class="iconBtn"
+        id="searchButton">
         ⌕
        </button>`
        :
        ""
       }
 
-      <button class="currencyBtn" id="currencyButton">
+      <button
+       class="currencyBtn"
+       id="currencyButton">
+
        ${
         currency==="TRY"
         ?"₺"
@@ -5042,11 +5082,15 @@ function render(options={}){
         ?"$"
         :"€"
        }
+
       </button>
 
       ${renderCurrencyPopup()}
 
-      <button class="iconBtn languageBtn" id="languageButton">
+      <button
+       class="iconBtn languageBtn"
+       id="languageButton">
+
        ${
         language==="tr"
         ?"TR"
@@ -5055,6 +5099,7 @@ function render(options={}){
         ?"EN"
         :"AR"
        }
+
       </button>
 
       ${renderLanguagePopup()}
@@ -5067,10 +5112,12 @@ function render(options={}){
      searchOpen
      ?
      `<div class="searchBox">
+
       <input
        id="searchInput"
        value="${esc(searchText)}"
        placeholder="${t("search")}">
+
      </div>`
      :
      ""
@@ -5098,6 +5145,8 @@ function render(options={}){
  `;
 
  bindEvents();
+
+ resolveMediaElements();
 
  if(options.preserveAdminScroll)
   restoreAdminScroll();
@@ -5133,7 +5182,6 @@ function bindEvents(){
   render({
    preserveWindowScroll:true
   });
-
  });
 
  $("closeDrawer")?.addEventListener("click",()=>{
@@ -5145,7 +5193,6 @@ function bindEvents(){
   render({
    preserveWindowScroll:true
   });
-
  });
 
  $("drawerOverlay")?.addEventListener("click",e=>{
@@ -5160,18 +5207,20 @@ function bindEvents(){
     preserveWindowScroll:true
    });
   }
-
  });
 
  $("openAdmin")?.addEventListener("click",()=>{
 
   drawerOpen=false;
+
   adminOpen=true;
   adminAuthenticated=false;
 
   adminTab="general";
+
   adminCategoryView=null;
   adminProductView=null;
+
   advancedProduct=false;
 
   savedAdminScroll=0;
@@ -5198,7 +5247,6 @@ function bindEvents(){
   render({
    preserveWindowScroll:true
   });
-
  });
 
  document.querySelectorAll("[data-currency]")
@@ -5221,7 +5269,6 @@ function bindEvents(){
     preserveWindowScroll:true
    });
   };
-
  });
 
  /* LANGUAGE */
@@ -5238,7 +5285,6 @@ function bindEvents(){
   render({
    preserveWindowScroll:true
   });
-
  });
 
  document.querySelectorAll("[data-language]")
@@ -5264,6 +5310,7 @@ function bindEvents(){
    if(language!=="tr"){
 
     await Promise.all(
+
      DATA.categories.map(async c=>{
 
       if(!c.names)c.names={};
@@ -5300,9 +5347,7 @@ function bindEvents(){
      preserveWindowScroll:true
     });
    }
-
   };
-
  });
 
  /* SEARCH */
@@ -5321,6 +5366,7 @@ function bindEvents(){
   });
 
   setTimeout(()=>{
+
    const input=$("searchInput");
 
    if(input){
@@ -5332,8 +5378,8 @@ function bindEvents(){
      input.value.length
     );
    }
-  },30);
 
+  },30);
  });
 
  $("searchInput")?.addEventListener("input",e=>{
@@ -5361,7 +5407,6 @@ function bindEvents(){
    }
 
   },0);
-
  });
 
  /* CATEGORY */
@@ -5381,7 +5426,6 @@ function bindEvents(){
     resetScroll:true
    });
   };
-
  });
 
  $("backHome")?.addEventListener("click",()=>{
@@ -5391,7 +5435,6 @@ function bindEvents(){
   render({
    resetScroll:true
   });
-
  });
 
  /* PRODUCT */
@@ -5416,7 +5459,6 @@ function bindEvents(){
     });
    }
   };
-
  });
 
  $("closeProduct")?.addEventListener("click",()=>{
@@ -5428,7 +5470,6 @@ function bindEvents(){
   render({
    preserveWindowScroll:true
   });
-
  });
 
  $("productOverlay")?.addEventListener("click",e=>{
@@ -5443,7 +5484,6 @@ function bindEvents(){
     preserveWindowScroll:true
    });
   }
-
  });
 
  /* EVENT */
@@ -5462,9 +5502,7 @@ function bindEvents(){
    render({
     preserveWindowScroll:true
    });
-
   };
-
  });
 
  $("closeEvent")?.addEventListener("click",()=>{
@@ -5476,7 +5514,6 @@ function bindEvents(){
   render({
    preserveWindowScroll:true
   });
-
  });
 
  $("eventOverlay")?.addEventListener("click",e=>{
@@ -5491,10 +5528,9 @@ function bindEvents(){
     preserveWindowScroll:true
    });
   }
-
  });
 
- /* ADMIN LOGIN */
+ /* LOGIN */
 
  $("adminLoginButton")?.addEventListener(
   "click",
@@ -5539,16 +5575,17 @@ function bindEvents(){
 
   collectAdmin();
 
+  const saved=saveData();
+
+  if(!saved)return;
+
   adminOpen=false;
   adminAuthenticated=false;
 
   adminCategoryView=null;
   adminProductView=null;
 
-  saveData();
-
   render();
-
  });
 
  /* ADMIN TABS */
@@ -5573,7 +5610,6 @@ function bindEvents(){
     preserveAdminScroll:true
    });
   };
-
  });
 
  document.querySelectorAll("[data-admin-tab-direct]")
@@ -5581,6 +5617,7 @@ function bindEvents(){
 
   btn.onclick=()=>{
 
+   collectAdmin();
    rememberAdminScroll();
 
    adminTab=btn.dataset.adminTabDirect;
@@ -5592,7 +5629,6 @@ function bindEvents(){
     preserveAdminScroll:true
    });
   };
-
  });
 
  /* CHANGE PIN */
@@ -5638,7 +5674,6 @@ function bindEvents(){
 
    alert("PIN kaydedilemedi.");
   }
-
  });
 
  /* ADMIN CATEGORY */
@@ -5660,7 +5695,6 @@ function bindEvents(){
     preserveAdminScroll:true
    });
   };
-
  });
 
  $("adminProductsBack")?.addEventListener("click",()=>{
@@ -5674,7 +5708,24 @@ function bindEvents(){
   render({
    preserveAdminScroll:true
   });
+ });
 
+ /* SAVE CATEGORY */
+
+ $("saveCategoryNow")?.addEventListener("click",()=>{
+
+  collectAdmin();
+  rememberAdminScroll();
+
+  const saved=saveData();
+
+  if(!saved)return;
+
+  alert("✓ Kategori başarıyla kaydedildi.");
+
+  render({
+   preserveAdminScroll:true
+  });
  });
 
  /* ADMIN PRODUCT */
@@ -5696,7 +5747,6 @@ function bindEvents(){
     preserveAdminScroll:true
    });
   };
-
  });
 
  $("adminProductBack")?.addEventListener("click",()=>{
@@ -5710,7 +5760,6 @@ function bindEvents(){
   render({
    preserveAdminScroll:true
   });
-
  });
 
  /* ADVANCED */
@@ -5729,7 +5778,6 @@ function bindEvents(){
     preserveAdminScroll:true
    });
   };
-
  });
 
  /* SETTINGS */
@@ -5744,7 +5792,6 @@ function bindEvents(){
 
    saveData();
   };
-
  });
 
  /* PRODUCT TOGGLES */
@@ -5762,7 +5809,6 @@ function bindEvents(){
 
    saveData();
   };
-
  });
 
  document.querySelectorAll("[data-featured]")
@@ -5778,7 +5824,6 @@ function bindEvents(){
 
    saveData();
   };
-
  });
 
  document.querySelectorAll("[data-dish]")
@@ -5794,7 +5839,6 @@ function bindEvents(){
 
    saveData();
   };
-
  });
 
  /* COLORS */
@@ -5811,11 +5855,13 @@ function bindEvents(){
    DATA.theme.price=color;
 
    applyTheme();
+
    saveData();
 
    document.querySelectorAll(
     "[data-theme-color]"
    ).forEach(x=>{
+
     x.classList.toggle(
      "active",
      x.dataset.themeColor===
@@ -5823,7 +5869,6 @@ function bindEvents(){
     );
    });
   };
-
  });
 
  document.querySelectorAll("[data-color-setting]")
@@ -5852,7 +5897,6 @@ function bindEvents(){
 
    saveData();
   };
-
  });
 
  /* RANGES */
@@ -5888,9 +5932,9 @@ function bindEvents(){
    }
 
    applyTheme();
+
    saveData();
   };
-
  });
 
  /* BACKGROUND */
@@ -5900,6 +5944,7 @@ function bindEvents(){
 
   btn.onclick=()=>{
 
+   collectAdmin();
    rememberAdminScroll();
 
    DATA.background.type=
@@ -5911,7 +5956,6 @@ function bindEvents(){
     preserveAdminScroll:true
    });
   };
-
  });
 
  /* FILE INPUT */
@@ -5927,7 +5971,6 @@ function bindEvents(){
     e.target.files?.[0]
    );
   };
-
  });
 
  /* CLEAR FILE */
@@ -5935,68 +5978,18 @@ function bindEvents(){
  document.querySelectorAll("[data-clear-file]")
  .forEach(btn=>{
 
-  btn.onclick=()=>{
+  btn.onclick=async()=>{
 
    rememberAdminScroll();
 
    const parts=
     btn.dataset.clearFile.split("|");
 
-   const type=parts[0];
-   const id=parts[1];
-
-   if(type==="logo")
-    DATA.logo="";
-
-   else if(type==="backgroundImage")
-    DATA.background.image="";
-
-   else if(type==="backgroundVideo")
-    DATA.background.video="";
-
-   else if(type==="categoryImage"){
-
-    const c=findCategory(id);
-
-    if(c)c.image="";
-   }
-
-   else if(type==="productImage"){
-
-    const p=findProduct(id);
-
-    if(p)p.image="";
-   }
-
-   else if(type==="productVideo"){
-
-    const p=findProduct(id);
-
-    if(p)p.video="";
-   }
-
-   else if(type==="eventImage"){
-
-    const e=findEvent(id);
-
-    if(e)e.image="";
-   }
-
-   else if(type==="eventVideo"){
-
-    const e=findEvent(id);
-
-    if(e)e.video="";
-   }
-
-   saveData();
-
-   render({
-    preserveAdminScroll:true
-   });
-
+   await clearFile(
+    parts[0],
+    parts[1]
+   );
   };
-
  });
 
  /* DELETE CATEGORY */
@@ -6018,13 +6011,14 @@ function bindEvents(){
    adminCategoryView=null;
    adminProductView=null;
 
-   saveData();
+   const saved=saveData();
+
+   if(!saved)return;
 
    render({
     preserveAdminScroll:true
    });
   };
-
  });
 
  /* DELETE PRODUCT */
@@ -6051,13 +6045,14 @@ function bindEvents(){
 
    adminProductView=null;
 
-   saveData();
+   const saved=saveData();
+
+   if(!saved)return;
 
    render({
     preserveAdminScroll:true
    });
   };
-
  });
 
  /* DELETE EVENT */
@@ -6075,13 +6070,14 @@ function bindEvents(){
      e=>e.id!==btn.dataset.deleteEvent
     );
 
-   saveData();
+   const saved=saveData();
+
+   if(!saved)return;
 
    render({
     preserveAdminScroll:true
    });
   };
-
  });
 
  /* ADD CATEGORY */
@@ -6111,7 +6107,9 @@ function bindEvents(){
   adminCategoryView=id;
   adminProductView=null;
 
-  saveData();
+  const saved=saveData();
+
+  if(!saved)return;
 
   render({
    preserveAdminScroll:true
@@ -6167,13 +6165,14 @@ function bindEvents(){
    adminProductView=id;
    advancedProduct=false;
 
-   saveData();
+   const saved=saveData();
+
+   if(!saved)return;
 
    render({
     preserveAdminScroll:true
    });
   };
-
  });
 
  /* ADD EVENT */
@@ -6207,32 +6206,72 @@ function bindEvents(){
    video:""
   });
 
-  saveData();
+  const saved=saveData();
+
+  if(!saved)return;
 
   render({
    preserveAdminScroll:true
   });
  });
 
- /* SAVE PRODUCT */
+ /* SAVE PRODUCT - FIXED */
 
  $("saveProductNow")?.addEventListener(
   "click",
   async()=>{
 
    collectAdmin();
+
    rememberAdminScroll();
 
-   saveData();
+   const firstSave=saveData();
+
+   if(!firstSave)
+    return;
 
    const item=findProduct(
     adminProductView
    );
 
-   if(item)
+   if(!item){
+
+    alert("Ürün bulunamadı.");
+
+    return;
+   }
+
+   if(item.name.trim()===""){
+
+    alert("Ürün adı boş bırakılamaz.");
+
+    return;
+   }
+
+   if(item.description.trim()){
+
     await generateMissingTranslations(item);
 
-   alert("Ürün başarıyla kaydedildi.");
+   }else{
+
+    if(!item.names)
+     item.names={};
+
+    if(!item.descriptions)
+     item.descriptions={};
+
+    item.names.tr=item.name;
+    item.descriptions.tr="";
+
+    saveData();
+   }
+
+   const finalSave=saveData();
+
+   if(!finalSave)
+    return;
+
+   alert("✓ Ürün başarıyla kaydedildi.");
 
    adminProductView=null;
    advancedProduct=false;
@@ -6242,24 +6281,6 @@ function bindEvents(){
    });
   }
  );
-
- /* SAVE ADMIN */
-
- $("saveAdmin")?.addEventListener("click",()=>{
-
-  collectAdmin();
-
-  saveData();
-
-  adminOpen=false;
-  adminAuthenticated=false;
-
-  adminCategoryView=null;
-  adminProductView=null;
-
-  render();
- });
-
 }
 
 /* =========================================================
@@ -6269,7 +6290,6 @@ function bindEvents(){
 render({
  resetScroll:true
 });
-
 </script>
 
 </body>
