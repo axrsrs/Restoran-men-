@@ -8,22 +8,12 @@
 
 <style>
 *{box-sizing:border-box}
-
 html,body{
- margin:0;
- padding:0;
- min-height:100%;
- background:#171719;
- color:#fff;
- font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+ margin:0;padding:0;min-height:100%;
+ background:#171719;color:#fff;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif
 }
-
-body{
- min-height:100vh;
- overflow-x:hidden;
- font-size:13px;
-}
-
+body{min-height:100vh;overflow-x:hidden;font-size:13px}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
 a{text-decoration:none;color:inherit}
@@ -43,95 +33,52 @@ a{text-decoration:none;color:inherit}
  --bodySize:13px;
  --logoSize:112px;
  --fontFamily:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
- --titleFont:Georgia,serif;
+ --titleFont:Georgia,serif
 }
 
 body{
  font-family:var(--fontFamily);
  color:var(--text);
- font-size:var(--bodySize);
+ font-size:var(--bodySize)
 }
-
-html{
- scroll-behavior:smooth;
- background:#171719;
-}
-
-/* =========================================================
-   BACKGROUND
-========================================================= */
+html{scroll-behavior:smooth;background:#171719}
 
 .background{
- position:fixed;
- inset:0;
- width:100%;
- height:100%;
- z-index:0;
- overflow:hidden;
- background:#171719;
- pointer-events:none;
+ position:fixed;inset:0;width:100%;height:100%;
+ z-index:0;overflow:hidden;background:#171719;
+ pointer-events:none
 }
-
-.background img,
-.background video{
- position:absolute;
- inset:0;
- width:100%;
- height:100%;
- object-fit:cover;
+.background img,.background video{
+ position:absolute;inset:0;width:100%;height:100%;
+ object-fit:cover
 }
-
 .backgroundOverlay{
- position:absolute;
- inset:0;
- background:rgba(0,0,0,var(--overlay));
+ position:absolute;inset:0;
+ background:rgba(0,0,0,var(--overlay))
 }
 
-/* =========================================================
-   APP
-========================================================= */
+#app{position:relative;z-index:1;min-height:100vh;background:transparent}
 
-#app{
- position:relative;
- z-index:1;
- min-height:100vh;
- background:transparent;
-}
-
-/* =========================================================
-   ANIMATIONS
-========================================================= */
-
-@keyframes fadeIn{
- from{opacity:0}
- to{opacity:1}
-}
-
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes pageIn{
  from{opacity:0;transform:translateY(10px)}
  to{opacity:1;transform:none}
 }
-
 @keyframes cardIn{
  from{opacity:0;transform:translateY(15px) scale(.985)}
  to{opacity:1;transform:none}
 }
-
 @keyframes drawerIn{
- from{transform:translateX(-100%)}
- to{transform:none}
+ from{transform:translateX(-100%)}to{transform:none}
 }
-
 @keyframes adminIn{
  from{transform:translateX(100%);opacity:.5}
  to{transform:none;opacity:1}
 }
-
 @keyframes modalUp{
  from{opacity:0;transform:translateY(100%)}
  to{opacity:1;transform:none}
 }
-
 @keyframes pulse{
  0%,100%{opacity:1}
  50%{opacity:.45}
@@ -139,451 +86,247 @@ html{
 
 .pageContent{animation:pageIn .28s ease both}
 .section{animation:pageIn .32s ease both}
+.product,.category,.feature,.event{animation:cardIn .38s ease both}
 
-.product,
-.category,
-.feature,
-.event{
- animation:cardIn .38s ease both;
-}
-
-button,
-input,
-textarea,
-select{
+button,input,textarea,select{
  transition:
  transform .18s ease,
  background .18s ease,
  border-color .18s ease,
  box-shadow .18s ease,
- color .18s ease;
+ color .18s ease
 }
-
 button:active{transform:scale(.97)}
 
-/* =========================================================
-   CONTAINER
-========================================================= */
-
 .container{
- position:relative;
- z-index:2;
- width:100%;
- max-width:650px;
- margin:auto;
- padding:0 16px 0;
- background:transparent;
+ position:relative;z-index:2;width:100%;
+ max-width:650px;margin:auto;
+ padding:0 16px
 }
 
-/* =========================================================
-   TOP BAR
-========================================================= */
-
 .top{
- position:sticky;
- top:0;
- z-index:90;
- padding:11px 0;
- background:transparent;
- backdrop-filter:none;
- -webkit-backdrop-filter:none;
- border-bottom:0;
+ position:sticky;top:0;z-index:90;
+ padding:11px 0;background:transparent
 }
 
 .topRow{
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:10px;
+ display:flex;align-items:center;
+ justify-content:space-between;gap:10px
 }
-
 .topRight{
- display:flex;
- align-items:center;
- gap:7px;
- position:relative;
+ display:flex;align-items:center;
+ gap:7px;position:relative
 }
-
 .iconBtn{
- width:43px;
- height:43px;
- flex:0 0 43px;
+ width:43px;height:43px;flex:0 0 43px;
  border:1px solid rgba(255,255,255,.09);
  border-radius:50%;
  background:rgba(25,25,27,.94);
- color:#fff;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:18px;
+ color:#fff;display:flex;
+ align-items:center;justify-content:center;
+ font-size:18px
 }
-
 .iconBtn:hover{
  background:#29292d;
- border-color:rgba(255,255,255,.18);
+ border-color:rgba(255,255,255,.18)
 }
-
 .currencyBtn{
- height:43px;
- min-width:49px;
- padding:0 15px;
+ height:43px;min-width:49px;padding:0 15px;
  border:1px solid rgba(255,255,255,.07);
- border-radius:23px;
- background:var(--accent);
- color:#111;
- font-weight:950;
+ border-radius:23px;background:var(--accent);
+ color:#111;font-weight:950
 }
-
-.languageBtn{
- font-size:10px;
- font-weight:900;
-}
+.languageBtn{font-size:10px;font-weight:900}
 
 .searchBox{margin-top:9px}
-
 .searchBox input{
- width:100%;
- padding:14px 16px;
+ width:100%;padding:14px 16px;
  border-radius:15px;
  border:1px solid rgba(255,255,255,.08);
- background:#151517;
- color:#fff;
- outline:none;
+ background:#151517;color:#fff;outline:none
 }
-
 .searchBox input:focus{
  border-color:var(--accent);
- box-shadow:0 0 0 3px rgba(214,168,61,.1);
+ box-shadow:0 0 0 3px rgba(214,168,61,.1)
 }
-
-/* =========================================================
-   POPUP
-========================================================= */
 
 .quickPopup{
- position:absolute;
- right:0;
- top:51px;
- width:190px;
- padding:7px;
- border:1px solid rgba(255,255,255,.12);
- border-radius:17px;
- background:rgba(20,20,22,.98);
+ position:absolute;right:0;top:51px;width:190px;
+ padding:7px;border:1px solid rgba(255,255,255,.12);
+ border-radius:17px;background:rgba(20,20,22,.98);
  box-shadow:0 25px 70px rgba(0,0,0,.7);
- backdrop-filter:blur(25px);
- z-index:500;
- animation:pageIn .18s ease;
+ backdrop-filter:blur(25px);z-index:500;
+ animation:pageIn .18s ease
 }
-
 .quickPopup button{
- width:100%;
- min-height:43px;
- display:flex;
- align-items:center;
+ width:100%;min-height:43px;
+ display:flex;align-items:center;
  justify-content:space-between;
- padding:10px 12px;
- margin:2px 0;
- border:0;
- border-radius:11px;
- background:transparent;
- color:#aaa;
- font-size:12px;
- font-weight:800;
+ padding:10px 12px;margin:2px 0;
+ border:0;border-radius:11px;
+ background:transparent;color:#aaa;
+ font-size:12px;font-weight:800
 }
-
 .quickPopup button:hover,
 .quickPopup button.active{
- background:var(--accent);
- color:#111;
+ background:var(--accent);color:#111
 }
-
-/* =========================================================
-   HERO
-========================================================= */
 
 .hero{
- text-align:center;
- padding:52px 0 34px;
- animation:pageIn .45s ease;
+ text-align:center;padding:52px 0 34px;
+ animation:pageIn .45s ease
 }
-
 .logo{
- width:var(--logoSize);
- height:var(--logoSize);
- margin:auto;
- display:flex;
- align-items:center;
- justify-content:center;
- border-radius:50%;
- border:1px solid var(--accent);
+ width:var(--logoSize);height:var(--logoSize);
+ margin:auto;display:flex;
+ align-items:center;justify-content:center;
+ border-radius:50%;border:1px solid var(--accent);
  background:
  radial-gradient(circle at 35% 25%,rgba(255,255,255,.07),transparent 42%),
  rgba(15,15,16,.94);
- color:var(--accent);
- font:42px Georgia,serif;
+ color:var(--accent);font:42px Georgia,serif;
  box-shadow:
  0 0 0 7px rgba(214,168,61,.035),
  0 0 55px rgba(214,168,61,.15),
  inset 0 0 30px rgba(214,168,61,.035);
- overflow:hidden;
+ overflow:hidden
 }
-
-.logo img{
- width:100%;
- height:100%;
- object-fit:cover;
-}
-
+.logo img{width:100%;height:100%;object-fit:cover}
 .welcome{
- margin-top:20px;
- color:var(--accent2);
- font-size:9px;
- font-weight:950;
- letter-spacing:.34em;
+ margin-top:20px;color:var(--accent2);
+ font-size:9px;font-weight:950;
+ letter-spacing:.34em
 }
-
 .hero h1{
- margin:11px 0 8px;
- color:var(--text);
+ margin:11px 0 8px;color:var(--text);
  font:700 var(--titleSize) var(--titleFont);
- line-height:1.05;
- letter-spacing:-.035em;
+ line-height:1.05;letter-spacing:-.035em
 }
-
 .hero p{
- max-width:480px;
- margin:0 auto;
- color:var(--muted);
- font-size:var(--bodySize);
- line-height:1.65;
+ max-width:480px;margin:0 auto;color:var(--muted);
+ font-size:var(--bodySize);line-height:1.65
 }
 
-/* =========================================================
-   SECTIONS
-========================================================= */
-
-.section{
- margin-top:34px;
-}
-
+.section{margin-top:34px}
 .sectionHead{
- display:flex;
- align-items:center;
+ display:flex;align-items:center;
  justify-content:space-between;
- gap:10px;
- margin-bottom:15px;
+ gap:10px;margin-bottom:15px
 }
-
 .sectionHead h2{
- margin:0;
- font-size:20px;
- letter-spacing:-.02em;
+ margin:0;font-size:20px;letter-spacing:-.02em
 }
-
-.hint{
- color:#666;
- font-size:10px;
-}
-
-/* =========================================================
-   HORIZONTAL
-========================================================= */
+.hint{color:#666;font-size:10px}
 
 .horizontal{
- display:flex;
- gap:13px;
- overflow-x:auto;
- scrollbar-width:none;
- scroll-snap-type:x mandatory;
- padding:3px 0 7px;
+ display:flex;gap:13px;overflow-x:auto;
+ scrollbar-width:none;scroll-snap-type:x mandatory;
+ padding:3px 0 7px
 }
+.horizontal::-webkit-scrollbar{display:none}
 
-.horizontal::-webkit-scrollbar{
- display:none;
-}
-
-.feature,
-.event{
- position:relative;
- flex:0 0 88%;
- padding:0;
- border:1px solid rgba(255,255,255,.09);
- border-radius:24px;
- overflow:hidden;
- background:#171719;
- scroll-snap-align:start;
+.feature,.event{
+ position:relative;flex:0 0 88%;
+ padding:0;border:1px solid rgba(255,255,255,.09);
+ border-radius:24px;overflow:hidden;
+ background:#171719;scroll-snap-align:start;
  color:#fff;
  box-shadow:
  0 20px 60px rgba(0,0,0,.38),
- inset 0 0 0 1px rgba(255,255,255,.02);
+ inset 0 0 0 1px rgba(255,255,255,.02)
 }
-
 .feature{height:245px}
 .event{height:210px}
-
-.feature img,
-.feature video,
-.event img,
-.event video{
- width:100%;
- height:100%;
- object-fit:cover;
- transition:transform .6s cubic-bezier(.2,.8,.2,1);
+.feature img,.feature video,
+.event img,.event video{
+ width:100%;height:100%;object-fit:cover;
+ transition:transform .6s cubic-bezier(.2,.8,.2,1)
 }
-
-.feature:hover img,
-.feature:hover video,
-.event:hover img,
-.event:hover video{
- transform:scale(1.045);
+.feature:hover img,.feature:hover video,
+.event:hover img,.event:hover video{
+ transform:scale(1.045)
 }
-
-.featureShade,
-.eventShade{
- position:absolute;
- inset:0;
+.featureShade,.eventShade{
+ position:absolute;inset:0;
  background:
  linear-gradient(
  180deg,
  rgba(0,0,0,.02) 15%,
  rgba(0,0,0,.2) 40%,
  rgba(0,0,0,.94) 100%
- );
+ )
 }
-
-.featureText,
-.eventText{
- position:absolute;
- left:19px;
- right:19px;
- bottom:18px;
- text-align:left;
+.featureText,.eventText{
+ position:absolute;left:19px;right:19px;
+ bottom:18px;text-align:left
 }
-
-.featureText strong{
- font-size:21px;
- letter-spacing:-.02em;
-}
-
+.featureText strong{font-size:21px;letter-spacing:-.02em}
 .featureText span{
- display:block;
- margin-top:7px;
- color:var(--price);
- font-weight:950;
- font-size:15px;
+ display:block;margin-top:7px;
+ color:var(--price);font-weight:950;font-size:15px
 }
-
 .eventDate{
- position:absolute;
- top:13px;
- left:13px;
- padding:8px 11px;
- border:1px solid rgba(255,255,255,.08);
- border-radius:20px;
- background:rgba(0,0,0,.66);
- backdrop-filter:blur(10px);
- color:var(--accent2);
- font-size:10px;
+ position:absolute;top:13px;left:13px;
+ padding:8px 11px;border:1px solid rgba(255,255,255,.08);
+ border-radius:20px;background:rgba(0,0,0,.66);
+ backdrop-filter:blur(10px);color:var(--accent2);
+ font-size:10px
 }
-
 .eventText strong{font-size:19px}
-
 .eventText span{
- display:block;
- margin-top:6px;
- color:#ccc;
- font-size:11px;
+ display:block;margin-top:6px;
+ color:#ccc;font-size:11px
 }
-
-/* =========================================================
-   CATEGORIES
-========================================================= */
 
 .categories{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:13px;
+ display:grid;grid-template-columns:1fr 1fr;gap:13px
 }
-
 .category{
- position:relative;
- height:180px;
- padding:0;
+ position:relative;height:180px;padding:0;
  border:1px solid rgba(255,255,255,.09);
- border-radius:22px;
- overflow:hidden;
- background:#171719;
- color:#fff;
+ border-radius:22px;overflow:hidden;
+ background:#171719;color:#fff;
  box-shadow:
  0 16px 45px rgba(0,0,0,.28),
- inset 0 0 0 1px rgba(255,255,255,.02);
+ inset 0 0 0 1px rgba(255,255,255,.02)
 }
-
 .category img{
- width:100%;
- height:100%;
- object-fit:cover;
- transition:transform .6s cubic-bezier(.2,.8,.2,1);
+ width:100%;height:100%;object-fit:cover;
+ transition:transform .6s cubic-bezier(.2,.8,.2,1)
 }
-
-.category:hover img{
- transform:scale(1.055);
-}
-
+.category:hover img{transform:scale(1.055)}
 .categoryShade{
- position:absolute;
- inset:0;
+ position:absolute;inset:0;
  background:
  linear-gradient(
  180deg,
  rgba(0,0,0,.03) 5%,
  rgba(0,0,0,.25) 35%,
  rgba(0,0,0,.95) 100%
- );
+ )
 }
-
 .categoryText{
- position:absolute;
- left:16px;
- right:16px;
- bottom:16px;
- text-align:left;
+ position:absolute;left:16px;right:16px;
+ bottom:16px;text-align:left
 }
-
 .categoryText strong{
- display:block;
- font-size:18px;
- letter-spacing:-.025em;
+ display:block;font-size:18px;letter-spacing:-.025em
 }
-
 .categoryText span{
- display:block;
- color:#b4b4b4;
- font-size:10px;
- margin-top:5px;
+ display:block;color:#b4b4b4;
+ font-size:10px;margin-top:5px
 }
-
-/* =========================================================
-   CATEGORY PAGE
-========================================================= */
 
 .categoryTitle{
- display:flex;
- align-items:center;
- justify-content:flex-start;
- gap:12px;
- margin-bottom:20px;
- padding-bottom:15px;
- border-bottom:1px solid rgba(255,255,255,.07);
+ display:flex;align-items:center;
+ justify-content:flex-start;gap:12px;
+ margin-bottom:20px;padding-bottom:15px;
+ border-bottom:1px solid rgba(255,255,255,.07)
 }
-
 .categoryTitle h2{
- flex:1;
- margin:0;
- font-size:22px!important;
- letter-spacing:-.035em;
+ flex:1;margin:0;font-size:22px!important;
+ letter-spacing:-.035em
 }
-
 .backBtn{
  border:1px solid rgba(255,255,255,.08);
  background:
@@ -592,29 +335,17 @@ button:active{transform:scale(.97)}
  rgba(255,255,255,.07),
  rgba(255,255,255,.025)
  );
- color:#fff;
- padding:10px 13px;
- border-radius:12px;
- font-size:11px;
- font-weight:850;
+ color:#fff;padding:10px 13px;
+ border-radius:12px;font-size:11px;font-weight:850
 }
-
-/* =========================================================
-   PRODUCTS
-========================================================= */
 
 .products{
- display:flex;
- flex-direction:column;
- gap:13px;
- margin-top:0;
+ display:flex;flex-direction:column;
+ gap:13px;margin-top:0
 }
-
 .product{
- display:grid;
- grid-template-columns:126px 1fr;
- min-height:130px;
- overflow:hidden;
+ display:grid;grid-template-columns:126px 1fr;
+ min-height:130px;overflow:hidden;
  border:1px solid rgba(255,255,255,.075);
  border-radius:var(--cardRadius);
  background:
@@ -626,961 +357,469 @@ button:active{transform:scale(.97)}
  cursor:pointer;
  box-shadow:
  0 14px 42px rgba(0,0,0,.24),
- 0 1px 0 rgba(255,255,255,.025) inset;
+ 0 1px 0 rgba(255,255,255,.025) inset
 }
-
 .product:hover{
  border-color:rgba(214,168,61,.2);
- transform:translateY(-1px);
+ transform:translateY(-1px)
 }
-
 .productImage{
- height:130px;
- background:#1c1c1e;
- overflow:hidden;
- position:relative;
+ height:130px;background:#1c1c1e;
+ overflow:hidden;position:relative
 }
-
-.productImage img,
-.productImage video{
- width:100%;
- height:100%;
- object-fit:cover;
+.productImage img,.productImage video{
+ width:100%;height:100%;object-fit:cover
 }
-
-.productInfo{
- min-width:0;
- padding:15px 14px;
-}
-
+.productInfo{min-width:0;padding:15px 14px}
 .productInfo h3{
- margin:0;
- color:var(--cardText);
- font-size:15px;
- font-weight:850;
- white-space:nowrap;
- overflow:hidden;
- text-overflow:ellipsis;
+ margin:0;color:var(--cardText);
+ font-size:15px;font-weight:850;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis
 }
-
 .productInfo p{
- margin:6px 0;
- color:#929292;
- font-size:11px;
- line-height:1.48;
- display:-webkit-box;
- -webkit-line-clamp:2;
- -webkit-box-orient:vertical;
- overflow:hidden;
+ margin:6px 0;color:#929292;font-size:11px;
+ line-height:1.48;display:-webkit-box;
+ -webkit-line-clamp:2;-webkit-box-orient:vertical;
+ overflow:hidden
 }
-
-.tags{
- display:flex;
- flex-wrap:wrap;
- gap:5px;
-}
-
+.tags{display:flex;flex-wrap:wrap;gap:5px}
 .tag{
- padding:4px 7px;
- border-radius:7px;
- background:#222225;
- color:#aaa;
- font-size:9px;
- border:1px solid rgba(255,255,255,.025);
+ padding:4px 7px;border-radius:7px;
+ background:#222225;color:#aaa;
+ font-size:9px;border:1px solid rgba(255,255,255,.025)
 }
-
-.tag.sold{
- background:#7f1d1d;
- color:#fff;
-}
-
+.tag.sold{background:#7f1d1d;color:#fff}
 .price{
- margin-top:8px;
- color:var(--price);
- font-weight:950;
- font-size:14px;
+ margin-top:8px;color:var(--price);
+ font-weight:950;font-size:14px
 }
-
-/* =========================================================
-   OVERLAYS
-========================================================= */
 
 .overlay{
- position:fixed;
- inset:0;
- z-index:100;
+ position:fixed;inset:0;z-index:100;
  background:rgba(0,0,0,.72);
- backdrop-filter:blur(6px);
+ backdrop-filter:blur(6px)
 }
-
 .drawer{
- width:min(88%,390px);
- height:100%;
- overflow:auto;
- padding:20px;
- background:#101011;
+ width:min(88%,390px);height:100%;overflow:auto;
+ padding:20px;background:#101011;
  box-shadow:10px 0 50px #000;
- animation:drawerIn .25s cubic-bezier(.2,.8,.2,1);
+ animation:drawerIn .25s cubic-bezier(.2,.8,.2,1)
 }
-
 .drawerHead{
- display:flex;
- align-items:center;
- justify-content:space-between;
+ display:flex;align-items:center;
+ justify-content:space-between
 }
-
-.drawerLogo{
- color:var(--accent);
- font:700 25px Georgia,serif;
-}
-
-.drawerSection{
- margin-top:25px;
-}
-
+.drawerLogo{color:var(--accent);font:700 25px Georgia,serif}
+.drawerSection{margin-top:25px}
 .drawerLabel{
- color:#666;
- font-size:10px;
- letter-spacing:.15em;
- margin-bottom:8px;
+ color:#666;font-size:10px;
+ letter-spacing:.15em;margin-bottom:8px
 }
-
 .drawerLink{
- display:block;
- width:100%;
- border:0;
- background:#18181a;
- color:#aaa;
- padding:13px;
- border-radius:10px;
- font-size:11px;
- text-align:left;
- margin-top:7px;
+ display:block;width:100%;border:0;
+ background:#18181a;color:#aaa;
+ padding:13px;border-radius:10px;
+ font-size:11px;text-align:left;margin-top:7px
 }
-
-/* =========================================================
-   MODAL
-========================================================= */
 
 .modalOverlay{
- position:fixed;
- inset:0;
- z-index:150;
- display:flex;
- align-items:flex-end;
+ position:fixed;inset:0;z-index:150;
+ display:flex;align-items:flex-end;
  justify-content:center;
  background:rgba(0,0,0,.76);
- backdrop-filter:blur(7px);
+ backdrop-filter:blur(7px)
 }
-
 .modal{
- width:min(100%,650px);
- max-height:92vh;
- overflow:auto;
- border-radius:27px 27px 0 0;
- background:#101011;
- box-shadow:0 -15px 60px rgba(0,0,0,.5);
- animation:modalUp .28s cubic-bezier(.2,.8,.2,1);
+ width:min(100%,650px);max-height:92vh;
+ overflow:auto;border-radius:27px 27px 0 0;
+ background:#101011;box-shadow:0 -15px 60px rgba(0,0,0,.5);
+ animation:modalUp .28s cubic-bezier(.2,.8,.2,1)
 }
-
 .modalImage{
- position:relative;
- height:310px;
- background:#18181a;
+ position:relative;height:310px;background:#18181a
 }
-
-.modalImage img,
-.modalImage video{
- width:100%;
- height:100%;
- object-fit:cover;
+.modalImage img,.modalImage video{
+ width:100%;height:100%;object-fit:cover
 }
-
 .closeBtn{
- position:absolute;
- top:13px;
- right:13px;
- width:41px;
- height:41px;
- border:0;
- border-radius:50%;
- background:rgba(0,0,0,.72);
- color:#fff;
- font-size:23px;
+ position:absolute;top:13px;right:13px;
+ width:41px;height:41px;border:0;
+ border-radius:50%;background:rgba(0,0,0,.72);
+ color:#fff;font-size:23px
 }
-
-.modalBody{
- padding:21px;
-}
-
-.modalBody h2{
- margin:0;
- font-size:27px;
-}
-
+.modalBody{padding:21px}
+.modalBody h2{margin:0;font-size:27px}
 .modalBody p{
- color:#999;
- font-size:13px;
- line-height:1.65;
+ color:#999;font-size:13px;line-height:1.65
 }
-
 .infoRow{
- display:flex;
- justify-content:space-between;
- gap:20px;
- padding:13px 0;
- border-bottom:1px solid #252527;
- font-size:12px;
+ display:flex;justify-content:space-between;
+ gap:20px;padding:13px 0;
+ border-bottom:1px solid #252527;font-size:12px
 }
-
 .modalPrice{
- margin-top:18px;
- color:var(--price);
- font-size:26px;
- font-weight:950;
+ margin-top:18px;color:var(--price);
+ font-size:26px;font-weight:950
 }
-
-/* =========================================================
-   ADMIN
-========================================================= */
 
 .adminOverlay{
- position:fixed;
- inset:0;
- z-index:250;
+ position:fixed;inset:0;z-index:250;
  background:rgba(0,0,0,.84);
- display:flex;
- justify-content:flex-end;
+ display:flex;justify-content:flex-end
 }
-
 .admin{
- width:min(100%,780px);
- height:100%;
- overflow-y:auto;
- overflow-x:hidden;
+ width:min(100%,780px);height:100%;
+ overflow-y:auto;overflow-x:hidden;
  overscroll-behavior:contain;
  -webkit-overflow-scrolling:touch;
  background:#0b0b0d;
- animation:adminIn .28s cubic-bezier(.2,.8,.2,1);
+ animation:adminIn .28s cubic-bezier(.2,.8,.2,1)
 }
-
 .adminHeader{
- position:sticky;
- top:0;
- z-index:50;
+ position:sticky;top:0;z-index:50;
  padding:18px 20px 14px;
  background:rgba(11,11,13,.94);
  border-bottom:1px solid rgba(255,255,255,.07);
- backdrop-filter:blur(24px);
+ backdrop-filter:blur(24px)
 }
-
 .adminTop{
- display:flex;
- justify-content:space-between;
- align-items:center;
+ display:flex;justify-content:space-between;
+ align-items:center
 }
-
-.adminTitle{
- display:flex;
- align-items:center;
- gap:12px;
-}
-
+.adminTitle{display:flex;align-items:center;gap:12px}
 .adminTitleIcon{
- width:44px;
- height:44px;
- border-radius:13px;
+ width:44px;height:44px;border-radius:13px;
  background:linear-gradient(135deg,var(--accent),var(--accent2));
- color:#111;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:19px;
- font-weight:1000;
+ color:#111;display:flex;
+ align-items:center;justify-content:center;
+ font-size:19px;font-weight:1000
 }
-
-.adminTitleText b{
- display:block;
- font-size:15px;
-}
-
+.adminTitleText b{display:block;font-size:15px}
 .adminTitleText span{
- display:block;
- margin-top:3px;
- color:#666;
- font-size:9px;
- text-transform:uppercase;
- letter-spacing:.12em;
+ display:block;margin-top:3px;color:#666;
+ font-size:9px;text-transform:uppercase;
+ letter-spacing:.12em
 }
-
 .adminTabs{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:7px;
- margin-top:15px;
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:7px;margin-top:15px
 }
-
 .adminTabs button{
  padding:12px 8px;
  border:1px solid rgba(255,255,255,.06);
- border-radius:12px;
- background:#151518;
- color:#777;
- font-size:11px;
- font-weight:850;
+ border-radius:12px;background:#151518;
+ color:#777;font-size:11px;font-weight:850
 }
-
 .adminTabs button.active{
  background:rgba(214,168,61,.15);
  border-color:rgba(214,168,61,.35);
- color:var(--accent2);
+ color:var(--accent2)
 }
-
-.adminBody{
- padding:20px;
- padding-bottom:100px;
-}
-
-.adminSectionHeader{
- margin:4px 0 15px;
-}
-
-.adminSectionHeader h2{
- margin:0;
- font-size:24px;
-}
-
+.adminBody{padding:20px;padding-bottom:100px}
+.adminSectionHeader{margin:4px 0 15px}
+.adminSectionHeader h2{margin:0;font-size:24px}
 .adminSectionHeader p{
- margin:5px 0 0;
- color:#666;
- font-size:10px;
+ margin:5px 0 0;color:#666;font-size:10px
 }
-
 .statsGrid{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:10px;
- margin-bottom:18px;
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:10px;margin-bottom:18px
 }
-
 .statCard{
- padding:15px;
- min-height:105px;
+ padding:15px;min-height:105px;
  border:1px solid rgba(255,255,255,.07);
  border-radius:17px;
  background:linear-gradient(
- 145deg,
- rgba(255,255,255,.045),
- rgba(255,255,255,.012)
- );
+ 145deg,rgba(255,255,255,.045),
+  rgba(255,255,255,.012)
+ )
 }
-
 .statIcon{
- width:34px;
- height:34px;
- border-radius:10px;
- display:flex;
- align-items:center;
+ width:34px;height:34px;border-radius:10px;
+ display:flex;align-items:center;
  justify-content:center;
  background:rgba(214,168,61,.11);
- color:var(--accent2);
- margin-bottom:12px;
+ color:var(--accent2);margin-bottom:12px
 }
-
 .statLabel{
- color:#666;
- font-size:9px;
- text-transform:uppercase;
+ color:#666;font-size:9px;text-transform:uppercase
 }
-
 .statValue{
- margin-top:5px;
- font-size:24px;
- font-weight:950;
+ margin-top:5px;font-size:24px;font-weight:950
 }
-
-.statSub{
- margin-top:3px;
- color:#777;
- font-size:9px;
-}
+.statSub{margin-top:3px;color:#777;font-size:9px}
 
 .adminCard{
- padding:17px;
- margin-bottom:12px;
+ padding:17px;margin-bottom:12px;
  border:1px solid rgba(255,255,255,.07);
  border-radius:17px;
  background:linear-gradient(
- 145deg,
- rgba(255,255,255,.035),
- rgba(255,255,255,.012)
- );
+ 145deg,rgba(255,255,255,.035),
+  rgba(255,255,255,.012)
+ )
 }
-
-.adminCardTitle{
- font-size:15px;
- font-weight:900;
-}
-
+.adminCardTitle{font-size:15px;font-weight:900}
 .adminCardDescription{
- margin-top:4px;
- color:#666;
- font-size:10px;
- line-height:1.5;
+ margin-top:4px;color:#666;
+ font-size:10px;line-height:1.5
 }
-
-.field{
- margin-top:13px;
-}
-
+.field{margin-top:13px}
 .field label{
- display:block;
- margin-bottom:6px;
- color:#777;
- font-size:10px;
- font-weight:700;
+ display:block;margin-bottom:6px;
+ color:#777;font-size:10px;font-weight:700
 }
-
-.field input,
-.field textarea,
-.field select{
- width:100%;
- padding:13px;
- border:1px solid #303034;
- border-radius:11px;
- background:#141416;
- color:#fff;
- outline:none;
+.field input,.field textarea,.field select{
+ width:100%;padding:13px;
+ border:1px solid #303034;border-radius:11px;
+ background:#141416;color:#fff;outline:none
 }
-
-.field textarea{
- min-height:88px;
- resize:vertical;
-}
-
-.row{
- display:flex;
- gap:9px;
-}
-
-.row>*{
- flex:1;
- min-width:0;
-}
+.field textarea{min-height:88px;resize:vertical}
+.row{display:flex;gap:9px}
+.row>*{flex:1;min-width:0}
 
 .adminButton{
- min-height:42px;
- border:1px solid rgba(255,255,255,.07);
- border-radius:11px;
- padding:10px 14px;
- background:#1b1b1e;
- color:#fff;
- font-size:11px;
- font-weight:850;
+ min-height:42px;border:1px solid rgba(255,255,255,.07);
+ border-radius:11px;padding:10px 14px;
+ background:#1b1b1e;color:#fff;
+ font-size:11px;font-weight:850
 }
-
 .adminButton.gold{
  border-color:transparent;
  background:linear-gradient(135deg,var(--accent),var(--accent2));
- color:#111;
+ color:#111
 }
-
 .adminButton.danger{
- background:#3a1719;
- color:#ff9a9a;
- border-color:#572024;
+ background:#3a1719;color:#ff9a9a;
+ border-color:#572024
 }
-
-.full{
- width:100%;
-}
+.full{width:100%}
 
 .quickActions{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:9px;
- margin-bottom:18px;
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:9px;margin-bottom:18px
 }
-
 .quickAction{
- display:flex;
- align-items:center;
- gap:11px;
- padding:13px;
- border:1px solid rgba(255,255,255,.07);
- border-radius:14px;
- background:#151517;
- color:#ddd;
- text-align:left;
+ display:flex;align-items:center;gap:11px;
+ padding:13px;border:1px solid rgba(255,255,255,.07);
+ border-radius:14px;background:#151517;
+ color:#ddd;text-align:left
 }
-
 .quickActionIcon{
- width:34px;
- height:34px;
- border-radius:10px;
- display:flex;
- align-items:center;
+ width:34px;height:34px;border-radius:10px;
+ display:flex;align-items:center;
  justify-content:center;
  background:rgba(214,168,61,.08);
- color:var(--accent2);
+ color:var(--accent2)
 }
 
 .adminBreadcrumb{
- display:flex;
- align-items:center;
- gap:8px;
- margin-bottom:15px;
- color:#666;
- font-size:10px;
+ display:flex;align-items:center;gap:8px;
+ margin-bottom:15px;color:#666;font-size:10px
 }
-
 .adminBreadcrumb button{
- border:0;
- background:transparent;
- color:var(--accent2);
+ border:0;background:transparent;color:var(--accent2)
 }
-
-.adminCategoryList,
-.adminProductList{
- display:flex;
- flex-direction:column;
- gap:9px;
+.adminCategoryList,.adminProductList{
+ display:flex;flex-direction:column;gap:9px
 }
-
-.adminCategoryItem,
-.adminProductItem{
- display:flex;
- align-items:center;
- gap:12px;
- padding:12px;
- width:100%;
+.adminCategoryItem,.adminProductItem{
+ display:flex;align-items:center;gap:12px;
+ padding:12px;width:100%;
  border:1px solid rgba(255,255,255,.07);
- border-radius:15px;
- background:#141416;
- color:#fff;
- text-align:left;
+ border-radius:15px;background:#141416;
+ color:#fff;text-align:left
 }
-
-.adminCategoryThumb,
-.adminProductThumb{
- width:58px;
- height:58px;
- flex:0 0 58px;
- border-radius:12px;
- overflow:hidden;
- background:#202023;
+.adminCategoryThumb,.adminProductThumb{
+ width:58px;height:58px;flex:0 0 58px;
+ border-radius:12px;overflow:hidden;background:#202023
 }
-
-.adminCategoryThumb img,
-.adminProductThumb img{
- width:100%;
- height:100%;
- object-fit:cover;
+.adminCategoryThumb img,.adminProductThumb img{
+ width:100%;height:100%;object-fit:cover
 }
-
-.adminCategoryInfo,
-.adminProductInfo{
- flex:1;
- min-width:0;
+.adminCategoryInfo,.adminProductInfo{
+ flex:1;min-width:0
 }
-
-.adminCategoryInfo strong,
-.adminProductInfo strong{
- display:block;
- font-size:13px;
- white-space:nowrap;
- overflow:hidden;
- text-overflow:ellipsis;
+.adminCategoryInfo strong,.adminProductInfo strong{
+ display:block;font-size:13px;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis
 }
-
-.adminCategoryInfo span,
-.adminProductInfo span{
- display:block;
- margin-top:4px;
- color:#666;
- font-size:9px;
+.adminCategoryInfo span,.adminProductInfo span{
+ display:block;margin-top:4px;color:#666;font-size:9px
 }
-
-.adminProductInfo span{
- color:var(--accent2);
-}
-
+.adminProductInfo span{color:var(--accent2)}
 .adminArrow{
- width:28px;
- height:28px;
- border-radius:9px;
- display:flex;
- align-items:center;
+ width:28px;height:28px;border-radius:9px;
+ display:flex;align-items:center;
  justify-content:center;
- background:#1e1e21;
- color:#777;
- font-size:17px;
+ background:#1e1e21;color:#777;font-size:17px
 }
-
-.fileBox{
- display:flex;
- gap:7px;
-}
-
+.fileBox{display:flex;gap:7px}
 .fileBtn{
- display:inline-flex;
- align-items:center;
- justify-content:center;
- gap:5px;
- flex:1;
- min-height:42px;
- padding:10px;
- border:1px solid #303034;
- border-radius:10px;
- background:#171719;
- color:#ddd;
- font-size:10px;
- font-weight:800;
- cursor:pointer;
+ display:inline-flex;align-items:center;
+ justify-content:center;gap:5px;flex:1;
+ min-height:42px;padding:10px;
+ border:1px solid #303034;border-radius:10px;
+ background:#171719;color:#ddd;
+ font-size:10px;font-weight:800;cursor:pointer
 }
-
 .preview{
- width:100%;
- max-height:200px;
- object-fit:cover;
- border-radius:12px;
- margin-top:9px;
- border:1px solid #303034;
+ width:100%;max-height:200px;object-fit:cover;
+ border-radius:12px;margin-top:9px;
+ border:1px solid #303034
 }
-
 .designGrid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:9px;
+ display:grid;grid-template-columns:1fr 1fr;gap:9px
 }
-
 .designCard{
- padding:13px;
- border-radius:13px;
+ padding:13px;border-radius:13px;
  background:#151517;
- border:1px solid rgba(255,255,255,.06);
+ border:1px solid rgba(255,255,255,.06)
 }
-
 .designCard h4{
- margin:0 0 10px;
- font-size:10px;
- color:#bbb;
+ margin:0 0 10px;font-size:10px;color:#bbb
 }
-
 .colorInput{
- width:100%;
- height:43px;
- padding:3px;
+ width:100%;height:43px;padding:3px;
  border:1px solid #303034;
- border-radius:10px;
- background:#171719;
+ border-radius:10px;background:#171719
 }
-
-.presetRow{
- display:flex;
- flex-wrap:wrap;
- gap:8px;
-}
-
+.presetRow{display:flex;flex-wrap:wrap;gap:8px}
 .preset{
- width:38px;
- height:38px;
- border-radius:11px;
- border:2px solid transparent;
+ width:38px;height:38px;border-radius:11px;
+ border:2px solid transparent
 }
-
 .preset.active{
  border-color:#fff;
- box-shadow:0 0 0 2px var(--accent);
+ box-shadow:0 0 0 2px var(--accent)
 }
-
-.rangeRow{
- display:flex;
- align-items:center;
- gap:10px;
-}
-
-.rangeRow input{
- flex:1;
-}
-
+.rangeRow{display:flex;align-items:center;gap:10px}
+.rangeRow input{flex:1}
 .rangeValue{
- width:48px;
- text-align:right;
- color:var(--accent2);
- font-size:10px;
+ width:48px;text-align:right;
+ color:var(--accent2);font-size:10px
 }
-
 .toggle{
- display:flex;
- align-items:center;
+ display:flex;align-items:center;
  justify-content:space-between;
- padding:12px;
- margin:7px 0;
+ padding:12px;margin:7px 0;
  border:1px solid rgba(255,255,255,.06);
- border-radius:11px;
- background:#161618;
- color:#ddd;
- font-size:11px;
+ border-radius:11px;background:#161618;
+ color:#ddd;font-size:11px
 }
-
 .toggle input{
- width:18px;
- height:18px;
- accent-color:var(--accent);
+ width:18px;height:18px;
+ accent-color:var(--accent)
 }
-
 .simpleProductHero{
- padding:16px;
- margin-bottom:12px;
+ padding:16px;margin-bottom:12px;
  border:1px solid rgba(214,168,61,.18);
  border-radius:16px;
  background:linear-gradient(
- 135deg,
- rgba(214,168,61,.10),
+ 135deg,rgba(214,168,61,.10),
  rgba(255,255,255,.015)
- );
+ )
 }
-
 .simpleProductHero strong{
- display:block;
- font-size:16px;
+ display:block;font-size:16px
 }
-
 .simpleProductHero span{
- display:block;
- margin-top:5px;
- color:#777;
- font-size:10px;
- line-height:1.5;
+ display:block;margin-top:5px;color:#777;
+ font-size:10px;line-height:1.5
 }
-
 .advancedButton{
- width:100%;
- padding:13px;
- border:1px solid #303034;
- border-radius:11px;
- background:#18181a;
- color:#ddd;
- font-size:11px;
- font-weight:850;
+ width:100%;padding:13px;
+ border:1px solid #303034;border-radius:11px;
+ background:#18181a;color:#ddd;
+ font-size:11px;font-weight:850
 }
-
 .saveBar{
- position:sticky;
- bottom:0;
- z-index:60;
+ position:sticky;bottom:0;z-index:60;
  padding:12px 20px;
  background:rgba(11,11,13,.95);
  border-top:1px solid rgba(255,255,255,.07);
- backdrop-filter:blur(20px);
+ backdrop-filter:blur(20px)
 }
-
-.saveBar button{
- width:100%;
- min-height:47px;
-}
-
-/* =========================================================
-   LOGIN
-========================================================= */
+.saveBar button{width:100%;min-height:47px}
 
 .adminLoginOverlay{
- position:fixed;
- inset:0;
- z-index:500;
- display:flex;
- align-items:center;
- justify-content:center;
- padding:20px;
+ position:fixed;inset:0;z-index:500;
+ display:flex;align-items:center;
+ justify-content:center;padding:20px;
  background:rgba(0,0,0,.93);
- backdrop-filter:blur(14px);
+ backdrop-filter:blur(14px)
 }
-
 .adminLogin{
- width:min(100%,390px);
- padding:27px;
+ width:min(100%,390px);padding:27px;
  border:1px solid rgba(255,255,255,.1);
- border-radius:23px;
- background:#111113;
- box-shadow:0 30px 90px #000;
+ border-radius:23px;background:#111113;
+ box-shadow:0 30px 90px #000
 }
-
 .adminLoginLogo{
- width:68px;
- height:68px;
- margin:0 auto 18px;
- display:flex;
- align-items:center;
+ width:68px;height:68px;margin:0 auto 18px;
+ display:flex;align-items:center;
  justify-content:center;
  border:1px solid var(--accent);
- border-radius:50%;
- color:var(--accent);
- font:30px Georgia,serif;
+ border-radius:50%;color:var(--accent);
+ font:30px Georgia,serif
 }
-
-.adminLogin h2{
- margin:0;
- text-align:center;
- font-size:22px;
-}
-
+.adminLogin h2{margin:0;text-align:center;font-size:22px}
 .adminLogin p{
- margin:7px 0 21px;
- text-align:center;
- color:#777;
- font-size:10px;
+ margin:7px 0 21px;text-align:center;
+ color:#777;font-size:10px
 }
-
 .adminPassword{
- width:100%;
- padding:15px;
- border:1px solid #303034;
- border-radius:12px;
- background:#18181a;
- color:#fff;
- outline:none;
- text-align:center;
- letter-spacing:.18em;
+ width:100%;padding:15px;
+ border:1px solid #303034;border-radius:12px;
+ background:#18181a;color:#fff;outline:none;
+ text-align:center;letter-spacing:.18em
 }
-
 .adminLoginButton{
- width:100%;
- margin-top:10px;
- padding:14px;
- border:0;
- border-radius:12px;
+ width:100%;margin-top:10px;padding:14px;
+ border:0;border-radius:12px;
  background:linear-gradient(135deg,var(--accent),var(--accent2));
- color:#111;
- font-weight:950;
+ color:#111;font-weight:950
 }
-
 .loginError{
- display:none;
- margin-top:10px;
- padding:9px;
- border-radius:9px;
- background:#3a1717;
- color:#ff8d8d;
- text-align:center;
- font-size:10px;
+ display:none;margin-top:10px;padding:9px;
+ border-radius:9px;background:#3a1717;
+ color:#ff8d8d;text-align:center;font-size:10px
 }
-
-.empty{
- padding:30px 10px;
- text-align:center;
- color:#666;
-}
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
+.empty{padding:30px 10px;text-align:center;color:#666}
 .footer{
- margin-top:20px;
- padding:35px 0 45px;
- text-align:center;
- color:#555;
- font-size:10px;
- background:transparent;
+ margin-top:20px;padding:35px 0 45px;
+ text-align:center;color:#555;font-size:10px
 }
-
-/* =========================================================
-   HELP
-========================================================= */
-
-.help{
- margin-top:8px;
- color:#666;
- font-size:9px;
-}
-
-.hidden{
- display:none!important;
-}
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+.help{margin-top:8px;color:#666;font-size:9px}
+.hidden{display:none!important}
 
 @media(max-width:600px){
-
- .admin{
-  width:100%;
- }
-
- .adminBody{
-  padding:16px;
-  padding-bottom:100px;
- }
-
- .adminHeader{
-  padding:14px 16px;
- }
-
- .saveBar{
-  padding:11px 16px;
- }
-
+ .admin{width:100%}
+ .adminBody{padding:16px;padding-bottom:100px}
+ .adminHeader{padding:14px 16px}
+ .saveBar{padding:11px 16px}
 }
-
 @media(max-width:430px){
-
- .product{
-  grid-template-columns:105px 1fr;
- }
-
- .productImage{
-  height:118px;
- }
-
+ .product{grid-template-columns:105px 1fr}
+ .productImage{height:118px}
 }
-
 @media(max-width:390px){
-
- .categories{
-  grid-template-columns:1fr;
- }
-
- .designGrid{
-  grid-template-columns:1fr;
- }
-
- .row{
-  flex-direction:column;
-  gap:0;
- }
-
- .quickActions{
-  grid-template-columns:1fr;
- }
-
+ .categories{grid-template-columns:1fr}
+ .designGrid{grid-template-columns:1fr}
+ .row{flex-direction:column;gap:0}
+ .quickActions{grid-template-columns:1fr}
 }
-
 [dir="rtl"] .featureText,
 [dir="rtl"] .eventText,
 [dir="rtl"] .categoryText,
-[dir="rtl"] .productInfo{
- text-align:right;
-}
-
-[dir="rtl"] .quickPopup{
- right:auto;
- left:0;
-}
+[dir="rtl"] .productInfo{text-align:right}
+[dir="rtl"] .quickPopup{right:auto;left:0}
 </style>
 </head>
 
 <body>
-
 <div id="app"></div>
 
 <script>
-/* =========================================================
-   NEARMENU PREMIUM
-   DATA SAFE VERSION
-========================================================= */
-
 const DEFAULT_ADMIN_PIN="1234";
 const STORAGE_KEY="nearMenuData";
 const PIN_KEY="nearMenuAdminPin";
@@ -1591,210 +830,172 @@ const DB_VERSION=1;
 const MEDIA_STORE="media";
 
 /* =========================================================
-   DEFAULT IMAGES
+   RESİMLER
 ========================================================= */
 
 const IMAGES={
- breakfast:"https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=900&q=80",
- burger:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80",
- pizza:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80",
- grill:"https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
- salad:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80",
- dessert:"https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=80",
- drink:"https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=900&q=80",
- music:"https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1000&q=80"
+ breakfast:[
+  "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=900&q=80"
+ ],
+ pizza:[
+  "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=900&q=80"
+ ],
+ burger:[
+  "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=900&q=80"
+ ],
+ meat:[
+  "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=900&q=80"
+ ],
+ chicken:[
+  "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1608039829572-78524f79c4c7?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
+ ],
+ pasta:[
+  "https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1556761223-4c4282c73f77?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1595295333158-4742f28fbd85?auto=format&fit=crop&w=900&q=80"
+ ],
+ gozleme:[
+  "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1565299507177-b0ac66763828?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80"
+ ],
+ toast:[
+  "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1481070414801-51fd732d7184?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1567234669003-dce7a7a88809?auto=format&fit=crop&w=900&q=80"
+ ],
+ drink:[
+  "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=80"
+ ],
+ coffee:[
+  "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1461988091159-192b6df7054f?auto=format&fit=crop&w=900&q=80"
+ ],
+ redbull:[
+  "https://images.unsplash.com/photo-1622543925917-763c34d1a86e?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1613769033025-0e9c8f6d9f2e?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1577511801140-0b9c9e5c2b16?auto=format&fit=crop&w=900&q=80"
+ ],
+ tea:[
+  "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1597318181409-cf64d0f5d8a9?auto=format&fit=crop&w=900&q=80"
+ ]
 };
 
 /* =========================================================
-   TEXT
+   YARDIMCI
 ========================================================= */
 
 const TEXT={
  tr:{
-  welcome:"HOŞ GELDİNİZ",
-  best:"Çok Satanlar",
-  events:"Etkinlikler",
-  categories:"Kategoriler",
-  swipe:"Sağa kaydır",
-  back:"Geri",
-  portion:"Porsiyon / Gramaj",
-  calories:"Kalori",
-  allergens:"Alerjenler",
-  spicy:"Acılık",
-  sold:"Tükendi",
-  dish:"Günün Ürünü",
-  reserve:"Rezervasyon Yap",
-  call:"Ara",
-  language:"Dil",
-  admin:"Yönetim Paneli",
-  general:"Genel",
-  products:"Menü",
-  settings:"Tasarım",
-  save:"Kaydet",
-  search:"Ürün ara...",
-  add:"Ekle",
-  edit:"Düzenle",
-  delete:"Sil",
-  cancel:"İptal",
+  welcome:"HOŞ GELDİNİZ",best:"Çok Satanlar",
+  events:"Etkinlikler",categories:"Kategoriler",
+  swipe:"Sağa kaydır",back:"Geri",
+  portion:"Porsiyon / Gramaj",calories:"Kalori",
+  allergens:"Alerjenler",spicy:"Acılık",
+  sold:"Tükendi",dish:"Günün Ürünü",
+  reserve:"Rezervasyon Yap",call:"Ara",
+  admin:"Yönetim Paneli",general:"Genel",
+  products:"Menü",settings:"Tasarım",save:"Kaydet",
+  search:"Ürün ara...",add:"Ekle",edit:"Düzenle",
+  delete:"Sil",cancel:"İptal",
   saveProduct:"Ürünü Kaydet",
   saveCategory:"Kategoriyi Kaydet",
   addCategory:"+ Kategori Ekle",
   addProduct:"+ Ürün Ekle",
-  basic:"Temel Bilgiler",
-  advanced:"Ek Bilgiler",
+  basic:"Temel Bilgiler",advanced:"Ek Bilgiler",
   hideAdvanced:"Ek Bilgileri Gizle",
-  productName:"Ürün adı",
-  productPrice:"Fiyat (TL)",
-  description:"Açıklama",
-  photo:"Fotoğraf",
-  categoryName:"Kategori adı",
-  noProducts:"Henüz ürün yok.",
+  productName:"Ürün adı",productPrice:"Fiyat (TL)",
+  description:"Açıklama",photo:"Fotoğraf",
+  categoryName:"Kategori adı",noProducts:"Henüz ürün yok.",
   noCategories:"Henüz kategori yok.",
-  usd:"Dolar",
-  eur:"Euro",
-  try:"Türk Lirası",
-  font:"Font",
-  colors:"Renkler",
-  sizes:"Boyutlar",
-  background:"Arka Plan",
-  visibility:"Görünürlük",
-  image:"Fotoğraf",
-  video:"Video",
-  pin:"Yönetici PIN",
-  changePin:"PIN Değiştir",
-  newPin:"Yeni PIN",
-  confirmPin:"Yeni PIN Tekrar",
-  pinSaved:"PIN başarıyla değiştirildi.",
-  translation:"Otomatik Çeviri",
-  translating:"Çeviriler hazırlanıyor...",
-  translationReady:"Çeviri hazır.",
-  translationInfo:"Türkçe metinleri yazman yeterli. İngilizce ve Arapça otomatik oluşturulur."
+  usd:"Dolar",eur:"Euro",try:"Türk Lirası",
+  translationInfo:"Türkçe metinleri yazman yeterli."
  },
  en:{
-  welcome:"WELCOME",
-  best:"Best Sellers",
-  events:"Events",
-  categories:"Categories",
-  swipe:"Swipe",
-  back:"Back",
-  portion:"Portion",
-  calories:"Calories",
-  allergens:"Allergens",
-  spicy:"Spiciness",
-  sold:"Sold Out",
-  dish:"Dish of the Day",
-  reserve:"Reserve",
-  call:"Call",
-  language:"Language",
-  admin:"Admin Panel",
-  general:"General",
-  products:"Menu",
-  settings:"Design",
-  save:"Save",
-  search:"Search products...",
-  add:"Add",
-  edit:"Edit",
-  delete:"Delete",
-  cancel:"Cancel",
-  saveProduct:"Save Product",
-  saveCategory:"Save Category",
-  addCategory:"+ Add Category",
-  addProduct:"+ Add Product",
-  basic:"Basic Information",
+  welcome:"WELCOME",best:"Best Sellers",events:"Events",
+  categories:"Categories",swipe:"Swipe",back:"Back",
+  portion:"Portion",calories:"Calories",
+  allergens:"Allergens",spicy:"Spiciness",
+  sold:"Sold Out",dish:"Dish of the Day",
+  reserve:"Reserve",call:"Call",admin:"Admin Panel",
+  general:"General",products:"Menu",settings:"Design",
+  save:"Save",search:"Search products...",
+  add:"Add",edit:"Edit",delete:"Delete",
+  cancel:"Cancel",saveProduct:"Save Product",
+  saveCategory:"Save Category",addCategory:"+ Add Category",
+  addProduct:"+ Add Product",basic:"Basic Information",
   advanced:"Additional Information",
   hideAdvanced:"Hide Additional Information",
-  productName:"Product name",
-  productPrice:"Price",
-  description:"Description",
-  photo:"Photo",
+  productName:"Product name",productPrice:"Price",
+  description:"Description",photo:"Photo",
   categoryName:"Category name",
   noProducts:"No products yet.",
   noCategories:"No categories yet.",
-  usd:"US Dollar",
-  eur:"Euro",
-  try:"Turkish Lira",
-  font:"Font",
-  colors:"Colors",
-  sizes:"Sizes",
-  background:"Background",
-  visibility:"Visibility",
-  image:"Image",
-  video:"Video",
-  pin:"Admin PIN",
-  changePin:"Change PIN",
-  newPin:"New PIN",
-  confirmPin:"Confirm New PIN",
-  pinSaved:"PIN changed successfully.",
-  translation:"Automatic Translation",
-  translating:"Preparing translations...",
-  translationReady:"Translation ready.",
-  translationInfo:"Write Turkish text and English and Arabic versions will be generated automatically."
+  usd:"US Dollar",eur:"Euro",try:"Turkish Lira",
+  translationInfo:"Write Turkish text and translations will be generated."
  },
  ar:{
-  welcome:"مرحباً بكم",
-  best:"الأكثر مبيعاً",
-  events:"الفعاليات",
-  categories:"التصنيفات",
-  swipe:"اسحب",
-  back:"رجوع",
-  portion:"الحصة",
-  calories:"السعرات",
-  allergens:"مسببات الحساسية",
-  spicy:"الحار",
-  sold:"نفد",
-  dish:"طبق اليوم",
-  reserve:"حجز",
-  call:"اتصال",
-  language:"اللغة",
-  admin:"لوحة الإدارة",
-  general:"عام",
-  products:"القائمة",
-  settings:"التصميم",
-  save:"حفظ",
-  search:"ابحث عن منتج...",
-  add:"إضافة",
-  edit:"تعديل",
-  delete:"حذف",
-  cancel:"إلغاء",
-  saveProduct:"حفظ المنتج",
+  welcome:"مرحباً بكم",best:"الأكثر مبيعاً",
+  events:"الفعاليات",categories:"التصنيفات",
+  swipe:"اسحب",back:"رجوع",portion:"الحصة",
+  calories:"السعرات",allergens:"مسببات الحساسية",
+  spicy:"الحار",sold:"نفد",dish:"طبق اليوم",
+  reserve:"حجز",call:"اتصال",admin:"لوحة الإدارة",
+  general:"عام",products:"القائمة",settings:"التصميم",
+  save:"حفظ",search:"ابحث عن منتج...",
+  add:"إضافة",edit:"تعديل",delete:"حذف",
+  cancel:"إلغاء",saveProduct:"حفظ المنتج",
   saveCategory:"حفظ التصنيف",
   addCategory:"+ إضافة تصنيف",
   addProduct:"+ إضافة منتج",
   basic:"المعلومات الأساسية",
   advanced:"معلومات إضافية",
   hideAdvanced:"إخفاء المعلومات الإضافية",
-  productName:"اسم المنتج",
-  productPrice:"السعر",
-  description:"الوصف",
-  photo:"الصورة",
+  productName:"اسم المنتج",productPrice:"السعر",
+  description:"الوصف",photo:"الصورة",
   categoryName:"اسم التصنيف",
   noProducts:"لا توجد منتجات.",
   noCategories:"لا توجد تصنيفات.",
-  usd:"الدولار",
-  eur:"اليورو",
-  try:"الليرة التركية",
-  font:"الخط",
-  colors:"الألوان",
-  sizes:"الأحجام",
-  background:"الخلفية",
-  visibility:"العرض",
-  image:"صورة",
-  video:"فيديو",
-  pin:"رمز المدير",
-  changePin:"تغيير الرمز",
-  newPin:"الرمز الجديد",
-  confirmPin:"تأكيد الرمز",
-  pinSaved:"تم تغيير الرمز بنجاح.",
-  translation:"الترجمة التلقائية",
-  translating:"جاري إعداد الترجمات...",
-  translationReady:"الترجمة جاهزة.",
-  translationInfo:"يكفي كتابة النص التركي. سيتم إنشاء الإنجليزية والعربية تلقائياً."
+  usd:"الدولار",eur:"اليورو",try:"الليرة التركية",
+  translationInfo:"اكتب النص التركي وسيتم إنشاء الترجمات."
  }
 };
-
-/* =========================================================
-   DEFAULT DATA
-========================================================= */
 
 const DATA={
  name:"NEARMENU DEMO",
@@ -1802,302 +1003,302 @@ const DATA={
  phone:"+90 555 555 55 55",
  whatsapp:"905555555555",
  logo:"",
- rates:{
-  USD:40,
-  EUR:47
- },
+ rates:{USD:40,EUR:47},
  theme:{
-  accent:"#d6a83d",
-  accent2:"#f0c45a",
-  text:"#ffffff",
-  cardText:"#ffffff",
-  price:"#f0c45a",
-  overlay:.55,
-  cardOpacity:.94,
-  cardRadius:20,
-  logoSize:112,
-  titleSize:34,
-  bodySize:13,
-  fontFamily:"system",
+  accent:"#d6a83d",accent2:"#f0c45a",
+  text:"#ffffff",cardText:"#ffffff",
+  price:"#f0c45a",overlay:.55,
+  cardOpacity:.94,cardRadius:20,
+  logoSize:112,titleSize:34,
+  bodySize:13,fontFamily:"system",
   titleFont:"Georgia"
  },
  settings:{
-  portion:true,
-  calories:true,
-  allergens:true,
-  spicy:true,
-  sold:true,
-  hours:true,
-  dish:true,
-  featured:true,
-  events:true,
-  search:true
+  portion:true,calories:true,allergens:true,
+  spicy:true,sold:true,hours:true,
+  dish:true,featured:true,events:true,search:true
  },
  background:{
-  type:"color",
-  value:"#171719",
-  image:"",
-  video:""
+  type:"color",value:"#171719",
+  image:"",video:""
  },
  hours:"09:00 - 23:00",
- categories:[
-  {
-   id:"kahvalti",
-   name:"Kahvaltı",
-   names:{
-    tr:"Kahvaltı",
-    en:"Breakfast",
-    ar:"الفطور"
-   },
-   image:IMAGES.breakfast,
-   items:[
-    {
-     id:"serpme",
-     name:"Serpme Kahvaltı",
-     names:{
-      tr:"Serpme Kahvaltı",
-      en:"Turkish Breakfast",
-      ar:"فطور تركي"
-     },
-     description:"Peynir çeşitleri, zeytin, reçel, bal, yumurta ve sıcak ürünlerden oluşan zengin kahvaltı.",
-     descriptions:{
-      tr:"Peynir çeşitleri, zeytin, reçel, bal, yumurta ve sıcak ürünlerden oluşan zengin kahvaltı.",
-      en:"A rich breakfast with cheeses, olives, jam, honey, eggs and hot dishes.",
-      ar:"فطور غني بالجبن والزيتون والمربى والعسل والبيض والأطباق الساخنة."
-     },
-     portion:"2 kişilik",
-     calories:"1250",
-     allergens:["Süt","Gluten","Yumurta"],
-     spicy:0,
-     price:650,
-     image:IMAGES.breakfast,
-     video:"",
-     featured:true,
-     dish:true,
-     sold:false
-    }
-   ]
-  },
-  {
-   id:"izgara",
-   name:"Izgaralar",
-   image:IMAGES.grill,
-   items:[
-    {
-     id:"izgara-et",
-     name:"Izgara Et",
-     description:"Günlük seçilen et, közlenmiş sebzeler ve garnitür.",
-     portion:"300 g",
-     calories:"820",
-     allergens:[],
-     spicy:0,
-     price:790,
-     image:IMAGES.grill,
-     video:"",
-     featured:true,
-     dish:false,
-     sold:false
-    }
-   ]
-  },
-  {
-   id:"burger",
-   name:"Burgerler",
-   image:IMAGES.burger,
-   items:[
-    {
-     id:"classic-burger",
-     name:"Classic Burger",
-     description:"Dana köfte, cheddar, marul, domates ve özel sos.",
-     portion:"180 g",
-     calories:"840",
-     allergens:["Gluten","Süt"],
-     spicy:0,
-     price:295,
-     image:IMAGES.burger,
-     video:"",
-     featured:true,
-     dish:false,
-     sold:false
-    }
-   ]
-  }
- ],
- events:[
-  {
-   id:"canli-muzik",
-   name:"Canlı Müzik Gecesi",
-   date:"Cumartesi",
-   time:"20:30",
-   description:"Canlı müzik eşliğinde keyifli bir akşam.",
-   image:IMAGES.music,
-   video:""
-  }
- ]
+ categories:[],
+ events:[]
 };
 
 /* =========================================================
-   YENİ ÜRÜNLER
-   EKRAN GÖRÜNTÜSÜNDEKİ ÜRÜNLER
+   TÜM MENÜ
 ========================================================= */
 
-const SPECIAL_DRINK_PRODUCTS=[
- {
-  id:"sorrel",
-  name:"SORREL",
-  description:"Taze kuzukulağı yapraklarının kendine has ekşi aromasıyla hazırlanan ferahlatıcı özel içecek.",
-  price:230
- },
- {
-  id:"nebula",
-  name:"NEBULA",
-  description:"Tatlı karamel zenginliği ve taze lime dokunuşuyla hazırlanan özel içecek.",
-  price:230
- },
- {
-  id:"bliss",
-  name:"BLISS",
-  description:"Zengin vanilya şurubu ve kadifemsi krema ile hazırlanan yumuşak ve tatlı özel içecek.",
-  price:230
- },
- {
-  id:"mandela",
-  name:"MANDELA",
-  description:"Klasik limonata ferahlığı ve tropikal passion fruit aromasıyla hazırlanan özel içecek.",
-  price:230
- },
- {
-  id:"aloha",
-  name:"ALOHA",
-  description:"Egzotik liçi ve tropikal Hindistan cevizi şuruplarıyla hazırlanan ferahlatıcı içecek.",
-  price:230
- },
- {
-  id:"babycus",
-  name:"BABYCUS",
-  description:"Demleme hibiskus çayı ve yoğun hibiskus bazının eşsiz birleşimi.",
-  price:250
- },
- {
-  id:"babylime",
-  name:"BABYLIME",
-  description:"Yeşil çayın bitkisel zindeliği, misket limonunun ferah aromasıyla buluşuyor.",
-  price:250
- },
- {
-  id:"lush",
-  name:"LUSH",
-  description:"Taze fesleğen yaprakları ve elma suyunun canlı aromalarıyla hazırlanan ferah içecek.",
-  price:230
- },
- {
-  id:"rosa",
-  name:"ROSA",
-  description:"Taronun hafif tatlı aroması, kadifemsi dokusu ve büyüleyici özel karışımı.",
-  price:230
- },
- {
-  id:"stalk",
-  name:"STALK",
-  description:"Taze kereviz sapı ve elma suyunun canlandırıcı aromalarıyla hazırlanan özel içecek.",
-  price:230
- },
- {
-  id:"vita",
-  name:"VITA",
-  description:"Taze salatalık ve elma püresinin canlandırıcı etkisiyle hazırlanan özel içecek.",
-  price:230
- }
+const MENU_DATA=[
+
+{
+ id:"kahvalti",
+ name:"Kahvaltı",
+ image:IMAGES.breakfast[0],
+ products:[
+  ["Serpme Kahvaltı","Peynir çeşitleri, zeytin, bal, reçel, yumurta, domates, salatalık ve sıcak kahvaltılıklar.","650",IMAGES.breakfast[0]],
+  ["Kahvaltı Tabağı","Beyaz peynir, kaşar, zeytin, yumurta, domates, salatalık ve bal.","390",IMAGES.breakfast[1]],
+  ["Menemen","Domates, biber ve yumurta ile hazırlanan geleneksel menemen.","220",IMAGES.breakfast[2]],
+  ["Sucuklu Yumurta","Tavada özel baharatlı sucuk ve yumurta.","240",IMAGES.breakfast[3]],
+  ["Kaşarlı Omlet","Üç yumurta ve bol kaşar peyniri ile hazırlanan omlet.","210",IMAGES.breakfast[4]],
+  ["Sahanda Yumurta","Tereyağında iki yumurta.","150",IMAGES.breakfast[0]]
+ ]
+},
+
+{
+ id:"pizza",
+ name:"Pizza",
+ image:IMAGES.pizza[0],
+ products:[
+  ["Margherita Pizza","Domates sosu, mozzarella ve fesleğen.","320",IMAGES.pizza[0]],
+  ["Karışık Pizza","Sucuk, salam, sosis, mantar, biber, mısır ve mozzarella.","390",IMAGES.pizza[1]],
+  ["Sucuklu Pizza","Bol sucuk, mozzarella ve özel pizza sosu.","370",IMAGES.pizza[2]],
+  ["Tavuklu Pizza","Tavuk parçaları, mantar, biber, mısır ve mozzarella.","385",IMAGES.pizza[3]],
+  ["Dört Peynirli Pizza","Mozzarella, cheddar, parmesan ve beyaz peynir.","410",IMAGES.pizza[4]],
+  ["Ton Balıklı Pizza","Ton balığı, mısır, soğan, zeytin ve mozzarella.","395",IMAGES.pizza[5]]
+ ]
+},
+
+{
+ id:"hamburger",
+ name:"Hamburger",
+ image:IMAGES.burger[0],
+ products:[
+  ["Classic Burger","180 g dana burger köftesi, cheddar, marul, domates ve özel sos.","295",IMAGES.burger[0]],
+  ["Cheeseburger","180 g dana köfte, cheddar peyniri, turşu, soğan ve özel sos.","325",IMAGES.burger[1]],
+  ["Double Burger","İki adet dana burger köftesi, cheddar ve özel burger sosu.","420",IMAGES.burger[2]],
+  ["BBQ Burger","Dana köfte, cheddar, karamelize soğan, çıtır soğan ve BBQ sos.","355",IMAGES.burger[3]],
+  ["Mushroom Burger","Dana köfte, cheddar, sotelenmiş mantar ve özel sos.","350",IMAGES.burger[4]],
+  ["Tavuk Burger","Çıtır tavuk, marul, turşu ve özel burger sosu.","290",IMAGES.burger[0]]
+ ]
+},
+
+{
+ id:"et-urunleri",
+ name:"Et Ürünleri",
+ image:IMAGES.meat[0],
+ products:[
+  ["Izgara Köfte","Özel baharatlarla hazırlanmış dana köfte, garnitür ve pilav.","430",IMAGES.meat[0]],
+  ["Antrikot","Izgara antrikot, közlenmiş sebze ve patates.","690",IMAGES.meat[1]],
+  ["Lokum Et","Yumuşak dana bonfile parçaları, tereyağı ve garnitür.","650",IMAGES.meat[2]],
+  ["Et Şiş","Marine edilmiş dana eti, közlenmiş biber ve domates.","590",IMAGES.meat[3]],
+  ["Karışık Izgara","Köfte, kuzu şiş, tavuk ve dana eti ile karışık ızgara.","780",IMAGES.meat[4]],
+  ["Et Sote","Dana eti, renkli biber, domates ve özel sos.","510",IMAGES.meat[5]]
+ ]
+},
+
+{
+ id:"beyaz-et",
+ name:"Beyaz Et Ürünleri",
+ image:IMAGES.chicken[0],
+ products:[
+  ["Izgara Tavuk","Marine edilmiş tavuk göğsü, pilav ve mevsim salatası.","350",IMAGES.chicken[0]],
+  ["Tavuk Şiş","Özel marine edilmiş tavuk parçaları, köz sebze ve pilav.","370",IMAGES.chicken[1]],
+  ["Tavuk Sote","Tavuk, renkli biber, mantar ve özel krema sos.","390",IMAGES.chicken[2]],
+  ["Çıtır Tavuk","Çıtır kaplamalı tavuk parçaları ve özel dip sos.","340",IMAGES.chicken[3]],
+  ["Kremalı Tavuk","Tavuk parçaları, mantar ve krema sos.","400",IMAGES.chicken[4]],
+  ["Tavuk Fajita","Tavuk, renkli biber ve soğan ile fajita sunumu.","420",IMAGES.chicken[0]]
+ ]
+},
+
+{
+ id:"makarnalar",
+ name:"Makarnalar",
+ image:IMAGES.pasta[0],
+ products:[
+  ["Penne Arrabbiata","Penne makarna, domates sosu, sarımsak ve acı biber.","290",IMAGES.pasta[0]],
+  ["Fettuccine Alfredo","Fettuccine, tavuk, mantar ve krema sos.","370",IMAGES.pasta[1]],
+  ["Spaghetti Bolognese","Spaghetti, dana kıymalı bolonez sos ve parmesan.","350",IMAGES.pasta[2]],
+  ["Kremalı Mantarlı Makarna","Makarna, mantar, parmesan ve krema sos.","330",IMAGES.pasta[3]],
+  ["Pesto Soslu Makarna","Fesleğenli pesto, parmesan ve cherry domates.","340",IMAGES.pasta[4]],
+  ["Tavuklu Penne","Penne, tavuk parçaları, sebzeler ve krema sos.","360",IMAGES.pasta[0]]
+ ]
+},
+
+{
+ id:"gozlemeler",
+ name:"Gözlemeler",
+ image:IMAGES.gozleme[0],
+ products:[
+  ["Kaşarlı Gözleme","Bol kaşar peyniri ile hazırlanan sac gözlemesi.","210",IMAGES.gozleme[0]],
+  ["Patatesli Gözleme","Baharatlı patates harcı ile hazırlanan geleneksel gözleme.","190",IMAGES.gozleme[1]],
+  ["Ispanaklı Gözleme","Ispanak, beyaz peynir ve baharatlar.","210",IMAGES.gozleme[2]],
+  ["Sucuklu Kaşarlı Gözleme","Sucuk ve kaşar peyniri ile hazırlanan gözleme.","250",IMAGES.gozleme[3]],
+  ["Kıymalı Gözleme","Baharatlı dana kıyma ve soğan harcı.","260",IMAGES.gozleme[0]]
+ ]
+},
+
+{
+ id:"tostlar",
+ name:"Tostlar",
+ image:IMAGES.toast[0],
+ products:[
+  ["Kaşarlı Tost","Bol kaşar peyniri ile hazırlanan klasik tost.","190",IMAGES.toast[0]],
+  ["Karışık Tost","Kaşar, sucuk, salam ve domates.","230",IMAGES.toast[1]],
+  ["Sucuklu Tost","Sucuk ve bol kaşar peyniri.","225",IMAGES.toast[2]],
+  ["Ayvalık Tostu","Sucuk, salam, sosis, kaşar, turşu ve özel sos.","280",IMAGES.toast[3]],
+  ["Kavurmalı Tost","Dana kavurma ve kaşar peyniri.","320",IMAGES.toast[0]],
+  ["Beyaz Peynirli Tost","Beyaz peynir, domates ve zeytin.","200",IMAGES.toast[1]]
+ ]
+},
+
+{
+ id:"soguk-icecekler",
+ name:"Soğuk İçecekler",
+ image:IMAGES.drink[0],
+ products:[
+  ["Coca Cola","330 ml soğuk Coca Cola.","90",IMAGES.drink[0]],
+  ["Coca Cola Zero","330 ml Coca Cola Zero.","90",IMAGES.drink[1]],
+  ["Fanta","330 ml soğuk Fanta.","90",IMAGES.drink[2]],
+  ["Sprite","330 ml soğuk Sprite.","90",IMAGES.drink[3]],
+  ["Ice Tea Şeftali","Soğuk şeftalili ice tea.","90",IMAGES.drink[4]],
+  ["Ev Yapımı Limonata","Taze limonlarla hazırlanan ev yapımı limonata.","140",IMAGES.drink[0]],
+  ["Taze Portakal Suyu","Taze sıkılmış portakal suyu.","170",IMAGES.drink[1]],
+  ["Ayran","Geleneksel köpüklü ayran.","75",IMAGES.drink[2]],
+  ["Su","500 ml doğal kaynak suyu.","40",IMAGES.drink[3]]
+ ]
+},
+
+{
+ id:"soguk-kahveler",
+ name:"Soğuk Kahveler",
+ image:IMAGES.coffee[0],
+ products:[
+  ["Iced Americano","Espresso ve soğuk su ile hazırlanan ferah kahve.","180",IMAGES.coffee[0]],
+  ["Iced Latte","Espresso, soğuk süt ve buz.","210",IMAGES.coffee[1]],
+  ["Iced Mocha","Espresso, süt, çikolata ve buz.","230",IMAGES.coffee[2]],
+  ["Caramel Iced Latte","Karamel şurubu, espresso, süt ve buz.","240",IMAGES.coffee[3]],
+  ["Vanilla Iced Latte","Vanilya şurubu, espresso, süt ve buz.","240",IMAGES.coffee[4]],
+  ["Cold Brew","Uzun süre soğuk demleme yöntemiyle hazırlanan kahve.","220",IMAGES.coffee[0]],
+  ["Iced Spanish Latte","Espresso, süt ve yoğunlaştırılmış süt.","250",IMAGES.coffee[1]]
+ ]
+},
+
+{
+ id:"redbull",
+ name:"Red Bull",
+ image:IMAGES.redbull[0],
+ products:[
+  ["Red Bull Energy Drink 250 ml","Klasik Red Bull Energy Drink.","140",IMAGES.redbull[0]],
+  ["Red Bull Sugarfree 250 ml","Şekersiz Red Bull Energy Drink.","140",IMAGES.redbull[1]],
+  ["Red Bull Zero 250 ml","Şekersiz ve kalorisiz enerji içeceği.","140",IMAGES.redbull[2]],
+  ["Red Bull Tropical","Tropikal aromalı Red Bull.","155",IMAGES.redbull[0]],
+  ["Red Bull Watermelon","Karpuz aromalı Red Bull.","155",IMAGES.redbull[1]]
+ ]
+},
+
+{
+ id:"caylar",
+ name:"Çaylar",
+ image:IMAGES.tea[0],
+ products:[
+  ["Çay","Geleneksel Türk çayı.","65",IMAGES.tea[0]],
+  ["Fincan Çay","Özel harman çay, fincan servis.","75",IMAGES.tea[1]],
+  ["Demlik Çay","İki kişilik taze demlenmiş çay.","190",IMAGES.tea[2]],
+  ["Ada Çayı","Aromatik ada çayı.","100",IMAGES.tea[3]],
+  ["Ihlamur","Sıcak ıhlamur çayı.","110",IMAGES.tea[0]],
+  ["Yeşil Çay","Hafif ve ferah yeşil çay.","100",IMAGES.tea[1]],
+  ["Kış Çayı","Elma, tarçın, karanfil ve özel bitki karışımı.","120",IMAGES.tea[2]]
+ ]
+}
+
 ];
 
 /* =========================================================
-   YENİ ÜRÜNLERİ MEVCUT VERİYE GÜVENLİ EKLE
-   MEVCUT VERİLER SİLİNMEZ
+   MENÜYÜ GÜVENLİ EKLE
+   MEVCUT VERİLER ASLA EZİLMEZ
 ========================================================= */
 
-function ensureSpecialDrinkProducts(){
+function createProduct(data,index){
 
- const categoryId="ozel-icecekler";
+ const id=data[0]
+  .toLocaleLowerCase("tr-TR")
+  .replace(/[^a-z0-9çğıöşü]+/gi,"-")
+  .replace(/^-|-$/g,"")
+  +"-"+index;
 
- let category=DATA.categories.find(
-  c=>c.id===categoryId
- );
+ return {
+  id,
+  name:data[0],
+  names:{
+   tr:data[0],
+   en:"",
+   ar:""
+  },
+  description:data[1],
+  descriptions:{
+   tr:data[1],
+   en:"",
+   ar:""
+  },
+  portion:"",
+  calories:"",
+  allergens:[],
+  spicy:0,
+  price:Number(data[2]),
+  image:data[3],
+  video:"",
+  featured:index===0,
+  dish:false,
+  sold:false
+ };
+}
 
- if(!category){
+function ensureFullMenu(){
 
-  category={
-   id:categoryId,
-   name:"Özel İçecekler",
-   names:{
-    tr:"Özel İçecekler",
-    en:"Special Drinks",
-    ar:"المشروبات الخاصة"
-   },
-   image:IMAGES.drink,
-   items:[]
-  };
+ MENU_DATA.forEach(source=>{
 
-  DATA.categories.push(category);
- }
-
- if(!Array.isArray(category.items))
-  category.items=[];
-
- SPECIAL_DRINK_PRODUCTS.forEach(source=>{
-
-  const existing=category.items.find(
-   p=>p.id===source.id
+  let category=DATA.categories.find(
+   c=>c.id===source.id
   );
 
-  if(existing){
+  if(!category){
 
-   /*
-    Mevcut ürün varsa kullanıcı tarafından değiştirilmiş
-    olabilecek bilgileri ezmiyoruz.
-   */
+   category={
+    id:source.id,
+    name:source.name,
+    names:{
+     tr:source.name,
+     en:"",
+     ar:""
+    },
+    image:source.image,
+    items:[]
+   };
 
-   return;
+   DATA.categories.push(category);
+
+  }else{
+
+   if(!Array.isArray(category.items))
+    category.items=[];
+
+   if(!category.image)
+    category.image=source.image;
+
+   if(!category.names)
+    category.names={};
+
+   if(!category.names.tr)
+    category.names.tr=category.name;
   }
 
-  category.items.push({
+  source.products.forEach((product,index)=>{
 
-   id:source.id,
+   const name=product[0];
 
-   name:source.name,
+   const exists=category.items.some(
+    p=>p.name===name
+   );
 
-   names:{
-    tr:source.name,
-    en:"",
-    ar:""
-   },
+   if(!exists){
+    category.items.push(
+     createProduct(product,index)
+    );
+   }
 
-   description:source.description,
-
-   descriptions:{
-    tr:source.description,
-    en:"",
-    ar:""
-   },
-
-   portion:"",
-
-   calories:"",
-
-   allergens:[],
-
-   spicy:0,
-
-   price:source.price,
-
-   image:IMAGES.drink,
-
-   video:"",
-
-   featured:false,
-
-   dish:false,
-
-   sold:false
   });
 
  });
@@ -2105,34 +1306,174 @@ function ensureSpecialDrinkProducts(){
 }
 
 /* =========================================================
-   STATE
+   STORAGE
 ========================================================= */
 
-let language=localStorage.getItem("nearMenuLanguage")||"tr";
-let currency=localStorage.getItem("nearMenuCurrency")||"TRY";
+function storageAvailable(){
 
-let selectedCategory=null;
-let selectedProduct=null;
-let selectedEvent=null;
+ try{
+  const x="__near_test__";
+  localStorage.setItem(x,x);
+  localStorage.removeItem(x);
+  return true;
+ }catch(e){return false}
+}
 
-let drawerOpen=false;
-let adminOpen=false;
-let adminAuthenticated=false;
+function safeGet(key){
 
-let adminTab="general";
-let adminCategoryView=null;
-let adminProductView=null;
+ if(!storageAvailable())return null;
 
-let searchOpen=false;
-let searchText="";
+ try{return localStorage.getItem(key)}
+ catch(e){return null}
+}
 
-let currencyMenu=false;
-let languageMenu=false;
-let advancedProduct=false;
-let translating=false;
+function safeSet(key,value){
 
-let savedWindowScroll=0;
-let savedAdminScroll=0;
+ if(!storageAvailable())return false;
+
+ try{
+  localStorage.setItem(key,value);
+  return true
+ }catch(e){
+  console.error(e);
+  return false
+ }
+}
+
+function mergeData(saved){
+
+ if(!saved)return;
+
+ Object.keys(saved).forEach(key=>{
+
+  if(["theme","settings","background","rates"].includes(key)){
+
+   DATA[key]=Object.assign(
+    {},DATA[key]||{},saved[key]||{}
+   );
+
+  }else{
+
+   DATA[key]=saved[key];
+
+  }
+
+ });
+
+ DATA.theme=Object.assign({
+  accent:"#d6a83d",accent2:"#f0c45a",
+  text:"#ffffff",cardText:"#ffffff",
+  price:"#f0c45a",overlay:.55,
+  cardOpacity:.94,cardRadius:20,
+  logoSize:112,titleSize:34,
+  bodySize:13,fontFamily:"system",
+  titleFont:"Georgia"
+ },DATA.theme||{});
+
+ DATA.settings=Object.assign({
+  portion:true,calories:true,allergens:true,
+  spicy:true,sold:true,hours:true,
+  dish:true,featured:true,events:true,search:true
+ },DATA.settings||{});
+
+ DATA.background=Object.assign({
+  type:"color",value:"#171719",
+  image:"",video:""
+ },DATA.background||{});
+
+ DATA.rates=Object.assign({
+  USD:40,EUR:47
+ },DATA.rates||{});
+
+ if(!Array.isArray(DATA.categories))
+  DATA.categories=[];
+
+ if(!Array.isArray(DATA.events))
+  DATA.events=[];
+
+ DATA.categories.forEach(c=>{
+
+  if(!c.id)c.id="cat-"+Date.now();
+
+  if(!c.names)c.names={};
+  if(!c.names.tr)c.names.tr=c.name||"";
+
+  if(!Array.isArray(c.items))
+   c.items=[];
+
+  c.items.forEach(p=>{
+
+   if(!p.id)
+    p.id="product-"+Date.now()+Math.random();
+
+   if(!p.names)p.names={};
+   if(!p.descriptions)p.descriptions={};
+
+   if(!p.names.tr)p.names.tr=p.name||"";
+   if(!p.descriptions.tr)
+    p.descriptions.tr=p.description||"";
+
+   if(!Array.isArray(p.allergens))
+    p.allergens=[];
+
+   if(typeof p.sold==="undefined")p.sold=false;
+   if(typeof p.featured==="undefined")p.featured=false;
+   if(typeof p.dish==="undefined")p.dish=false;
+   if(typeof p.spicy==="undefined")p.spicy=0;
+   if(typeof p.video==="undefined")p.video="";
+  });
+ });
+}
+
+try{
+
+ const saved=safeGet(STORAGE_KEY);
+
+ if(saved){
+  mergeData(JSON.parse(saved));
+ }
+
+ ensureFullMenu();
+
+}catch(e){
+
+ console.error("Veri yükleme hatası:",e);
+ ensureFullMenu();
+}
+
+function saveData(){
+
+ try{
+
+  const json=JSON.stringify(DATA);
+
+  if(!safeSet(STORAGE_KEY,json)){
+   alert("⚠️ Veriler kaydedilemedi.");
+   return false;
+  }
+
+  if(safeGet(STORAGE_KEY)!==json){
+   alert("⚠️ Kayıt doğrulanamadı.");
+   return false;
+  }
+
+  return true;
+
+ }catch(e){
+
+  console.error(e);
+  alert("⚠️ Kayıt sırasında hata oluştu.");
+  return false;
+ }
+}
+
+function getAdminPin(){
+ return safeGet(PIN_KEY)||DEFAULT_ADMIN_PIN;
+}
+
+function setAdminPin(pin){
+ return safeSet(PIN_KEY,String(pin));
+}
 
 /* =========================================================
    INDEXED DB
@@ -2147,23 +1488,22 @@ function openMediaDB(){
  dbPromise=new Promise((resolve,reject)=>{
 
   if(!("indexedDB" in window)){
-   reject(new Error("IndexedDB desteklenmiyor."));
+   reject(new Error("IndexedDB yok."));
    return;
   }
 
-  const request=indexedDB.open(DB_NAME,DB_VERSION);
+  const req=indexedDB.open(DB_NAME,DB_VERSION);
 
-  request.onupgradeneeded=e=>{
+  req.onupgradeneeded=e=>{
 
    const db=e.target.result;
 
-   if(!db.objectStoreNames.contains(MEDIA_STORE)){
+   if(!db.objectStoreNames.contains(MEDIA_STORE))
     db.createObjectStore(MEDIA_STORE);
-   }
   };
 
-  request.onsuccess=()=>resolve(request.result);
-  request.onerror=()=>reject(request.error);
+  req.onsuccess=()=>resolve(req.result);
+  req.onerror=()=>reject(req.error);
  });
 
  return dbPromise;
@@ -2176,9 +1516,7 @@ async function mediaPut(key,blob){
  return new Promise((resolve,reject)=>{
 
   const tx=db.transaction(MEDIA_STORE,"readwrite");
-  const store=tx.objectStore(MEDIA_STORE);
-
-  const req=store.put(blob,key);
+  const req=tx.objectStore(MEDIA_STORE).put(blob,key);
 
   req.onsuccess=()=>resolve(true);
   req.onerror=()=>reject(req.error);
@@ -2194,17 +1532,13 @@ async function mediaGet(key){
   return await new Promise((resolve,reject)=>{
 
    const tx=db.transaction(MEDIA_STORE,"readonly");
-   const store=tx.objectStore(MEDIA_STORE);
-   const req=store.get(key);
+   const req=tx.objectStore(MEDIA_STORE).get(key);
 
    req.onsuccess=()=>resolve(req.result||null);
    req.onerror=()=>reject(req.error);
-
   });
 
  }catch(e){
-
-  console.warn("Medya okunamadı:",e);
 
   return null;
  }
@@ -2223,13 +1557,9 @@ async function mediaDelete(key){
 
    req.onsuccess=()=>resolve(true);
    req.onerror=()=>reject(req.error);
-
   });
 
- }catch(e){
-
-  return false;
- }
+ }catch(e){return false}
 }
 
 function mediaKey(type,id){
@@ -2262,314 +1592,42 @@ async function loadMediaReference(value){
 }
 
 /* =========================================================
-   STORAGE
+   STATE
 ========================================================= */
 
-function storageAvailable(){
+let language=
+ localStorage.getItem("nearMenuLanguage")||"tr";
 
- try{
+let currency=
+ localStorage.getItem("nearMenuCurrency")||"TRY";
 
-  const x="__near_test__";
+let selectedCategory=null;
+let selectedProduct=null;
+let selectedEvent=null;
 
-  localStorage.setItem(x,x);
-  localStorage.removeItem(x);
+let drawerOpen=false;
+let adminOpen=false;
+let adminAuthenticated=false;
 
-  return true;
+let adminTab="general";
+let adminCategoryView=null;
+let adminProductView=null;
 
- }catch(e){
+let searchOpen=false;
+let searchText="";
 
-  return false;
- }
-}
+let currencyMenu=false;
+let languageMenu=false;
+let advancedProduct=false;
 
-function safeGet(key){
-
- if(!storageAvailable())return null;
-
- try{
-  return localStorage.getItem(key);
- }catch(e){
-  return null;
- }
-}
-
-function safeSet(key,value){
-
- if(!storageAvailable())return false;
-
- try{
-
-  localStorage.setItem(key,value);
-
-  return true;
-
- }catch(e){
-
-  console.error("localStorage kayıt hatası:",e);
-
-  return false;
- }
-}
-
-/* =========================================================
-   DEEP MERGE
-========================================================= */
-
-function mergeData(saved){
-
- if(!saved)return;
-
- Object.keys(saved).forEach(key=>{
-
-  if(
-   key==="theme"||
-   key==="settings"||
-   key==="background"||
-   key==="rates"
-  ){
-
-   DATA[key]=Object.assign(
-    {},
-    DATA[key]||{},
-    saved[key]||{}
-   );
-
-  }else{
-
-   DATA[key]=saved[key];
-
-  }
-
- });
-
- DATA.theme=Object.assign({
-  accent:"#d6a83d",
-  accent2:"#f0c45a",
-  text:"#ffffff",
-  cardText:"#ffffff",
-  price:"#f0c45a",
-  overlay:.55,
-  cardOpacity:.94,
-  cardRadius:20,
-  logoSize:112,
-  titleSize:34,
-  bodySize:13,
-  fontFamily:"system",
-  titleFont:"Georgia"
- },DATA.theme||{});
-
- DATA.settings=Object.assign({
-  portion:true,
-  calories:true,
-  allergens:true,
-  spicy:true,
-  sold:true,
-  hours:true,
-  dish:true,
-  featured:true,
-  events:true,
-  search:true
- },DATA.settings||{});
-
- DATA.background=Object.assign({
-  type:"color",
-  value:"#171719",
-  image:"",
-  video:""
- },DATA.background||{});
-
- DATA.rates=Object.assign({
-  USD:40,
-  EUR:47
- },DATA.rates||{});
-
- if(!Array.isArray(DATA.categories))
-  DATA.categories=[];
-
- if(!Array.isArray(DATA.events))
-  DATA.events=[];
-
- DATA.categories.forEach(c=>{
-
-  if(!c.id)c.id=uid("category");
-
-  if(!Array.isArray(c.items))
-   c.items=[];
-
-  if(!c.names)c.names={};
-
-  if(!c.names.tr)
-   c.names.tr=c.name||"";
-
-  c.items.forEach(p=>{
-
-   if(!p.id)p.id=uid("product");
-
-   if(!p.names)p.names={};
-   if(!p.descriptions)p.descriptions={};
-
-   if(!p.names.tr)
-    p.names.tr=p.name||"";
-
-   if(!p.descriptions.tr)
-    p.descriptions.tr=p.description||"";
-
-   if(typeof p.video==="undefined")
-    p.video="";
-
-   if(typeof p.image==="undefined")
-    p.image="";
-
-   if(typeof p.description==="undefined")
-    p.description="";
-
-   if(typeof p.portion==="undefined")
-    p.portion="";
-
-   if(typeof p.calories==="undefined")
-    p.calories="";
-
-   if(typeof p.spicy==="undefined")
-    p.spicy=0;
-
-   if(typeof p.featured==="undefined")
-    p.featured=false;
-
-   if(typeof p.dish==="undefined")
-    p.dish=false;
-
-   if(typeof p.sold==="undefined")
-    p.sold=false;
-
-   if(typeof p.price==="undefined")
-    p.price=0;
-
-   if(!Array.isArray(p.allergens))
-    p.allergens=[];
-  });
- });
-
- DATA.events.forEach(e=>{
-
-  if(!e.id)e.id=uid("event");
-
-  if(!e.names)e.names={};
-  if(!e.descriptions)e.descriptions={};
-
-  if(!e.names.tr)
-   e.names.tr=e.name||"";
-
-  if(!e.descriptions.tr)
-   e.descriptions.tr=e.description||"";
-
-  if(typeof e.video==="undefined")
-   e.video="";
-
-  if(typeof e.image==="undefined")
-   e.image="";
-
-  if(typeof e.description==="undefined")
-   e.description="";
- });
-}
-
-/* =========================================================
-   INITIAL LOAD
-========================================================= */
-
-try{
-
- const old=safeGet(STORAGE_KEY);
-
- if(old){
-  mergeData(JSON.parse(old));
- }
-
- /*
-  ÖNEMLİ:
-  Mevcut kayıtlar yüklendikten SONRA özel ürünleri ekliyoruz.
-  Böylece eski menü silinmiyor.
- */
- ensureSpecialDrinkProducts();
-
-}catch(e){
-
- console.error("Eski veriler okunamadı:",e);
-
- /*
-  Veri bozuk olsa bile varsayılan özel ürünler
-  kullanılabilir durumda kalsın.
- */
- ensureSpecialDrinkProducts();
-}
-
-/* =========================================================
-   SAVE
-========================================================= */
-
-function saveData(){
-
- try{
-
-  const data=JSON.stringify(DATA);
-
-  const result=safeSet(
-   STORAGE_KEY,
-   data
-  );
-
-  if(!result){
-
-   alert(
-    "⚠️ KAYIT BAŞARISIZ\n\n"+
-    "Veriler tarayıcıya kaydedilemedi."
-   );
-
-   return false;
-  }
-
-  const verification=safeGet(STORAGE_KEY);
-
-  if(verification!==data){
-
-   alert(
-    "⚠️ KAYIT DOĞRULANAMADI\n\n"+
-    "Değişiklikler güvenli şekilde saklanamadı."
-   );
-
-   return false;
-  }
-
-  return true;
-
- }catch(error){
-
-  console.error(error);
-
-  alert(
-   "⚠️ KAYIT HATASI\n\n"+
-   (error?.message||"Bilinmeyen hata")
-  );
-
-  return false;
- }
-}
-
-function getAdminPin(){
- return safeGet(PIN_KEY)||DEFAULT_ADMIN_PIN;
-}
-
-function setAdminPin(pin){
- return safeSet(PIN_KEY,String(pin));
-}
+let savedWindowScroll=0;
+let savedAdminScroll=0;
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
-function $(id){
- return document.getElementById(id);
-}
+function $(id){return document.getElementById(id)}
 
 function esc(value){
 
@@ -2579,13 +1637,6 @@ function esc(value){
   .replace(/>/g,"&gt;")
   .replace(/"/g,"&quot;")
   .replace(/'/g,"&#039;");
-}
-
-function uid(prefix){
-
- return prefix+"-"+Date.now()+"-"+Math.random()
-  .toString(36)
-  .slice(2,7);
 }
 
 function t(key){
@@ -2667,97 +1718,13 @@ function money(price){
  return Math.round(value).toLocaleString("tr-TR")+" ₺";
 }
 
-/* =========================================================
-   TRANSLATION
-========================================================= */
-
-function translationCache(){
-
- try{
-
-  return JSON.parse(
-   safeGet(TRANSLATION_CACHE_KEY)||"{}"
-  );
-
- }catch(e){
-
-  return {};
- }
-}
-
-async function translateText(text,target){
-
- if(!text||target==="tr")
-  return text||"";
-
- const cache=translationCache();
-
- const key="tr|"+target+"|"+text.trim();
-
- if(cache[key])
-  return cache[key];
-
- try{
-
-  const url=
-   "https://translate.googleapis.com/translate_a/single"+
-   "?client=gtx"+
-   "&sl=tr"+
-   "&tl="+encodeURIComponent(target)+
-   "&dt=t"+
-   "&q="+encodeURIComponent(text);
-
-  const response=await fetch(url);
-
-  if(!response.ok)
-   throw new Error("translation");
-
-  const data=await response.json();
-
-  let result="";
-
-  if(Array.isArray(data?.[0])){
-
-   data[0].forEach(x=>{
-
-    if(x?.[0])
-     result+=x[0];
-
-   });
-  }
-
-  result=result.trim();
-
-  if(result){
-
-   cache[key]=result;
-
-   safeSet(
-    TRANSLATION_CACHE_KEY,
-    JSON.stringify(cache)
-   );
-
-   return result;
-  }
-
- }catch(e){
-
-  console.warn("Çeviri başarısız:",e);
- }
-
- return text;
-}
-
 function markProductTranslationDirty(p){
-
- if(!p)return;
 
  if(!p.names)p.names={};
  if(!p.descriptions)p.descriptions={};
 
  p.names.tr=p.name||"";
  p.descriptions.tr=p.description||"";
-
  p.names.en="";
  p.names.ar="";
  p.descriptions.en="";
@@ -2766,8 +1733,6 @@ function markProductTranslationDirty(p){
 
 function markCategoryTranslationDirty(c){
 
- if(!c)return;
-
  if(!c.names)c.names={};
 
  c.names.tr=c.name||"";
@@ -2775,66 +1740,8 @@ function markCategoryTranslationDirty(c){
  c.names.ar="";
 }
 
-function markEventTranslationDirty(e){
-
- if(!e)return;
-
- if(!e.names)e.names={};
- if(!e.descriptions)e.descriptions={};
-
- e.names.tr=e.name||"";
- e.descriptions.tr=e.description||"";
-
- e.names.en="";
- e.names.ar="";
- e.descriptions.en="";
- e.descriptions.ar="";
-}
-
-async function generateMissingTranslations(item){
-
- if(!item)return;
-
- if(!item.names)item.names={};
- if(!item.descriptions)item.descriptions={};
-
- item.names.tr=item.name||"";
- item.descriptions.tr=item.description||"";
-
- translating=true;
-
- rememberAdminScroll();
-
- render({
-  preserveAdminScroll:true
- });
-
- for(const target of ["en","ar"]){
-
-  item.names[target]=
-   await translateText(
-    item.name,
-    target
-   );
-
-  item.descriptions[target]=
-   await translateText(
-    item.description,
-    target
-   );
- }
-
- translating=false;
-
- saveData();
-
- render({
-  preserveAdminScroll:true
- });
-}
-
 /* =========================================================
-   THEME
+   TEMA
 ========================================================= */
 
 function resolveFont(font){
@@ -2895,8 +1802,7 @@ function renderBackground(){
  }
 
  return `
-  <div
-   class="background"
+  <div class="background"
    id="siteBackground"
    style="background-color:${esc(bg.value||"#171719")}">
   </div>
@@ -2913,7 +1819,6 @@ function renderHero(){
  <section class="hero">
 
   <div class="logo">
-
    ${
     DATA.logo
     ?
@@ -2921,12 +1826,9 @@ function renderHero(){
     :
     "N"
    }
-
   </div>
 
-  <div class="welcome">
-   ${t("welcome")}
-  </div>
+  <div class="welcome">${t("welcome")}</div>
 
   <h1>${esc(DATA.name)}</h1>
 
@@ -2938,8 +1840,7 @@ function renderHero(){
    `<div style="margin-top:9px;color:#666;font-size:10px">
     ${esc(DATA.hours)}
    </div>`
-   :
-   ""
+   :""
   }
 
  </section>
@@ -2952,9 +1853,7 @@ function renderHero(){
 
 async function resolveMediaElements(){
 
- const elements=document.querySelectorAll(
-  "[data-media-ref]"
- );
+ const elements=document.querySelectorAll("[data-media-ref]");
 
  for(const el of elements){
 
@@ -2964,8 +1863,7 @@ async function resolveMediaElements(){
 
   const url=await loadMediaReference(ref);
 
-  if(url)
-   el.src=url;
+  if(url)el.src=url;
  }
 }
 
@@ -2999,16 +1897,10 @@ function renderFeatured(){
       data-product="${esc(item.id)}">
 
       ${
-       item.video
-       ?
-       `<video autoplay muted loop playsinline
-        data-media-ref="${esc(item.video)}"></video>`
-       :
        item.image
        ?
        `<img data-media-ref="${esc(item.image)}" alt="">`
-       :
-       ""
+       :""
       }
 
       <div class="featureShade"></div>
@@ -3054,16 +1946,10 @@ function renderEvents(){
       data-event="${esc(event.id)}">
 
       ${
-       event.video
-       ?
-       `<video autoplay muted loop playsinline
-        data-media-ref="${esc(event.video)}"></video>`
-       :
        event.image
        ?
        `<img data-media-ref="${esc(event.image)}" alt="">`
-       :
-       ""
+       :""
       }
 
       <div class="eventShade"></div>
@@ -3122,7 +2008,6 @@ function renderCategories(){
        <div class="categoryShade"></div>
 
        <div class="categoryText">
-
         <strong>${esc(localizedCategoryName(c))}</strong>
 
         <span>
@@ -3136,7 +2021,6 @@ function renderCategories(){
           :"ürün"
          }
         </span>
-
        </div>
 
       </button>
@@ -3166,40 +2050,35 @@ function renderTags(item){
    DATA.settings.portion&&item.portion
    ?
    `<span class="tag">${esc(item.portion)}</span>`
-   :
-   ""
+   :""
   }
 
   ${
    DATA.settings.calories&&item.calories
    ?
    `<span class="tag">${esc(item.calories)} kcal</span>`
-   :
-   ""
+   :""
   }
 
   ${
    DATA.settings.spicy&&Number(item.spicy)>0
    ?
    `<span class="tag">${"🌶️".repeat(Math.min(5,Number(item.spicy)||0))}</span>`
-   :
-   ""
+   :""
   }
 
   ${
    DATA.settings.allergens&&item.allergens?.length
    ?
    `<span class="tag">${esc(item.allergens.join(", "))}</span>`
-   :
-   ""
+   :""
   }
 
   ${
    DATA.settings.sold&&item.sold
    ?
    `<span class="tag sold">${t("sold")}</span>`
-   :
-   ""
+   :""
   }
 
  </div>
@@ -3207,39 +2086,28 @@ function renderTags(item){
 }
 
 /* =========================================================
-   PRODUCT CARD
+   PRODUCT
 ========================================================= */
 
 function renderProductCard(item){
 
  return `
- <article
-  class="product"
+ <article class="product"
   data-product="${esc(item.id)}">
 
   <div class="productImage">
 
    ${
-    item.video
-    ?
-    `<video autoplay muted loop playsinline
-     data-media-ref="${esc(item.video)}"></video>`
-    :
     item.image
     ?
     `<img data-media-ref="${esc(item.image)}"
      alt="${esc(localizedName(item))}">`
     :
     `<div style="
-     width:100%;
-     height:100%;
-     display:flex;
-     align-items:center;
+     width:100%;height:100%;
+     display:flex;align-items:center;
      justify-content:center;
-     color:#555;
-     font-size:28px">
-     N
-    </div>`
+     color:#555;font-size:28px">N</div>`
    }
 
   </div>
@@ -3255,10 +2123,8 @@ function renderProductCard(item){
    <div class="price">
     ${
      DATA.settings.sold&&item.sold
-     ?
-     t("sold")
-     :
-     money(item.price)
+     ?t("sold")
+     :money(item.price)
     }
    </div>
 
@@ -3287,9 +2153,7 @@ function renderCategoryPage(){
     ← ${t("back")}
    </button>
 
-   <h2>
-    ${esc(localizedCategoryName(category))}
-   </h2>
+   <h2>${esc(localizedCategoryName(category))}</h2>
 
   </div>
 
@@ -3338,14 +2202,7 @@ function renderSearch(){
  <section class="section pageContent">
 
   <div class="sectionHead">
-   <h2>${products.length} ${
-    language==="ar"
-    ?"منتج"
-    :
-    language==="en"
-    ?"products"
-    :"ürün"
-   }</h2>
+   <h2>${products.length} ürün</h2>
   </div>
 
   <div class="products">
@@ -3371,7 +2228,7 @@ function renderHome(){
 }
 
 /* =========================================================
-   POPUPS
+   POPUP
 ========================================================= */
 
 function renderCurrencyPopup(){
@@ -3383,20 +2240,17 @@ function renderCurrencyPopup(){
 
   <button class="${currency==="TRY"?"active":""}"
    data-currency="TRY">
-   <span>🇹🇷 ${t("try")}</span>
-   <span>₺</span>
+   <span>🇹🇷 ${t("try")}</span><span>₺</span>
   </button>
 
   <button class="${currency==="USD"?"active":""}"
    data-currency="USD">
-   <span>🇺🇸 ${t("usd")}</span>
-   <span>$</span>
+   <span>🇺🇸 ${t("usd")}</span><span>$</span>
   </button>
 
   <button class="${currency==="EUR"?"active":""}"
    data-currency="EUR">
-   <span>🇪🇺 ${t("eur")}</span>
-   <span>€</span>
+   <span>🇪🇺 ${t("eur")}</span><span>€</span>
   </button>
 
  </div>
@@ -3412,20 +2266,17 @@ function renderLanguagePopup(){
 
   <button class="${language==="tr"?"active":""}"
    data-language="tr">
-   <span>🇹🇷 Türkçe</span>
-   <span>TR</span>
+   <span>🇹🇷 Türkçe</span><span>TR</span>
   </button>
 
   <button class="${language==="en"?"active":""}"
    data-language="en">
-   <span>🇬🇧 English</span>
-   <span>EN</span>
+   <span>🇬🇧 English</span><span>EN</span>
   </button>
 
   <button class="${language==="ar"?"active":""}"
    data-language="ar">
-   <span>🇸🇦 العربية</span>
-   <span>AR</span>
+   <span>🇸🇦 العربية</span><span>AR</span>
   </button>
 
  </div>
@@ -3460,15 +2311,13 @@ function renderDrawer(){
     ${
      DATA.whatsapp
      ?
-     `<a
-      class="drawerLink"
+     `<a class="drawerLink"
       target="_blank"
       rel="noopener"
       href="https://wa.me/${esc(DATA.whatsapp)}">
       WhatsApp
      </a>`
-     :
-     ""
+     :""
     }
 
     ${
@@ -3478,8 +2327,7 @@ function renderDrawer(){
       href="tel:${esc(DATA.phone)}">
       ${t("call")}
      </a>`
-     :
-     ""
+     :""
     }
 
    </div>
@@ -3516,21 +2364,14 @@ function renderProductModal(){
    <div class="modalImage">
 
     ${
-     item.video
-     ?
-     `<video controls autoplay muted playsinline
-      data-media-ref="${esc(item.video)}"></video>`
-     :
      item.image
      ?
      `<img data-media-ref="${esc(item.image)}"
       alt="${esc(localizedName(item))}">`
-     :
-     ""
+     :""
     }
 
-    <button class="closeBtn"
-     id="closeProduct">×</button>
+    <button class="closeBtn" id="closeProduct">×</button>
 
    </div>
 
@@ -3547,8 +2388,7 @@ function renderProductModal(){
        ⭐ ${t("dish")}
       </span>
      </div>`
-     :
-     ""
+     :""
     }
 
     <p>${esc(localizedDescription(item))}</p>
@@ -3560,8 +2400,7 @@ function renderProductModal(){
       <span>${t("portion")}</span>
       <span>${esc(item.portion)}</span>
      </div>`
-     :
-     ""
+     :""
     }
 
     ${
@@ -3571,8 +2410,7 @@ function renderProductModal(){
       <span>${t("calories")}</span>
       <span>${esc(item.calories)} kcal</span>
      </div>`
-     :
-     ""
+     :""
     }
 
     ${
@@ -3582,28 +2420,14 @@ function renderProductModal(){
       <span>${t("allergens")}</span>
       <span>${esc(item.allergens.join(", "))}</span>
      </div>`
-     :
-     ""
-    }
-
-    ${
-     DATA.settings.spicy&&item.spicy
-     ?
-     `<div class="infoRow">
-      <span>${t("spicy")}</span>
-      <span>${"🌶️".repeat(Math.min(5,Number(item.spicy)||0))}</span>
-     </div>`
-     :
-     ""
+     :""
     }
 
     <div class="modalPrice">
      ${
       DATA.settings.sold&&item.sold
-      ?
-      t("sold")
-      :
-      money(item.price)
+      ?t("sold")
+      :money(item.price)
      }
     </div>
 
@@ -3614,85 +2438,7 @@ function renderProductModal(){
 }
 
 /* =========================================================
-   EVENT MODAL
-========================================================= */
-
-function renderEventModal(){
-
- if(!selectedEvent)return "";
-
- const event=selectedEvent;
-
- const whatsapp=DATA.whatsapp
-  ?
-  "https://wa.me/"+
-  DATA.whatsapp+
-  "?text="+
-  encodeURIComponent(
-   "Merhaba, "+
-   localizedEventName(event)+
-   " için rezervasyon yapmak istiyorum."
-  )
-  :
-  "";
-
- return `
- <div class="modalOverlay" id="eventOverlay">
-
-  <div class="modal">
-
-   <div class="modalImage">
-
-    ${
-     event.video
-     ?
-     `<video controls autoplay muted playsinline
-      data-media-ref="${esc(event.video)}"></video>`
-     :
-     event.image
-     ?
-     `<img data-media-ref="${esc(event.image)}" alt="">`
-     :
-     ""
-    }
-
-    <button class="closeBtn"
-     id="closeEvent">×</button>
-
-   </div>
-
-   <div class="modalBody">
-
-    <h2>${esc(localizedEventName(event))}</h2>
-
-    <p>${esc(event.date)} • ${esc(event.time)}</p>
-
-    <p>${esc(localizedEventDescription(event))}</p>
-
-    ${
-     whatsapp
-     ?
-     `<a
-      class="adminButton gold"
-      style="display:block;text-align:center"
-      target="_blank"
-      rel="noopener"
-      href="${esc(whatsapp)}">
-      ${t("reserve")}
-     </a>`
-     :
-     ""
-    }
-
-   </div>
-
-  </div>
- </div>
- `;
-}
-
-/* =========================================================
-   INPUT HELPERS
+   ADMIN INPUT
 ========================================================= */
 
 function input(key,label,value,type="text"){
@@ -3726,11 +2472,6 @@ function textarea(key,label,value){
 
 function fileField(type,id,label,value,accept){
 
- const video=
-  type==="productVideo"||
-  type==="eventVideo"||
-  type==="backgroundVideo";
-
  return `
  <div class="field">
 
@@ -3740,7 +2481,7 @@ function fileField(type,id,label,value,accept){
 
    <label class="fileBtn">
 
-    📁 ${video?t("video"):t("image")}
+    📁 ${type.includes("Video")?t("video")||"Video":t("image")}
 
     <input
      hidden
@@ -3754,14 +2495,12 @@ function fileField(type,id,label,value,accept){
    ${
     value
     ?
-    `<button
-     type="button"
+    `<button type="button"
      class="fileBtn"
      data-clear-file="${type}|${esc(id)}">
      Temizle
     </button>`
-    :
-    ""
+    :""
    }
 
   </div>
@@ -3769,19 +2508,10 @@ function fileField(type,id,label,value,accept){
   ${
    value
    ?
-   video
-   ?
-   `<video class="preview"
-    controls
-    data-media-ref="${esc(value)}"></video>`
-   :
    `<img class="preview"
-    data-media-ref="${esc(value)}"
-    alt="">`
+    data-media-ref="${esc(value)}" alt="">`
    :
-   `<div class="help">
-    Henüz dosya seçilmedi.
-   </div>`
+   `<div class="help">Henüz dosya seçilmedi.</div>`
   }
 
  </div>
@@ -3795,12 +2525,6 @@ function fileField(type,id,label,value,accept){
 function renderAdminGeneral(){
 
  const products=allProducts();
-
- const categories=DATA.categories.length;
- const events=DATA.events.length;
-
- const sold=products.filter(p=>p.sold).length;
- const featured=products.filter(p=>p.featured).length;
 
  return `
 
@@ -3821,22 +2545,26 @@ function renderAdminGeneral(){
   <div class="statCard">
    <div class="statIcon">▦</div>
    <div class="statLabel">Kategori</div>
-   <div class="statValue">${categories}</div>
+   <div class="statValue">${DATA.categories.length}</div>
    <div class="statSub">Aktif kategoriler</div>
   </div>
 
   <div class="statCard">
    <div class="statIcon">🔥</div>
    <div class="statLabel">Çok Satan</div>
-   <div class="statValue">${featured}</div>
+   <div class="statValue">
+    ${products.filter(p=>p.featured).length}
+   </div>
    <div class="statSub">Öne çıkarılan ürün</div>
   </div>
 
   <div class="statCard">
    <div class="statIcon">⚠</div>
    <div class="statLabel">Tükenen</div>
-   <div class="statValue">${sold}</div>
-   <div class="statSub">${events} etkinlik kayıtlı</div>
+   <div class="statValue">
+    ${products.filter(p=>p.sold).length}
+   </div>
+   <div class="statSub">Satış dışı ürün</div>
   </div>
 
  </div>
@@ -3862,7 +2590,7 @@ function renderAdminGeneral(){
 
    <div>
     <strong>Tasarımı Düzenle</strong>
-    <span>Renk, font ve görünüm</span>
+    <span>Renk ve görünüm</span>
    </div>
 
   </button>
@@ -3873,10 +2601,6 @@ function renderAdminGeneral(){
 
   <div class="adminCardTitle">İşletme Bilgileri</div>
 
-  <div class="adminCardDescription">
-   Menüde ziyaretçilerin gördüğü temel bilgileri yönet.
-  </div>
-
   ${input("businessName","İşletme adı",DATA.name)}
   ${input("subtitle","Alt başlık",DATA.subtitle)}
   ${input("phone","Telefon",DATA.phone)}
@@ -3884,11 +2608,8 @@ function renderAdminGeneral(){
   ${input("hours","Çalışma saatleri",DATA.hours)}
 
   ${fileField(
-   "logo",
-   "logo",
-   "Logo",
-   DATA.logo,
-   "image/*"
+   "logo","logo","Logo",
+   DATA.logo,"image/*"
   )}
 
  </div>
@@ -3896,10 +2617,6 @@ function renderAdminGeneral(){
  <div class="adminCard">
 
   <div class="adminCardTitle">🔐 Güvenlik</div>
-
-  <div class="adminCardDescription">
-   Yönetici PIN'ini değiştir.
-  </div>
 
   ${input("newPin","Yeni PIN","","password")}
   ${input("confirmPin","Yeni PIN Tekrar","","password")}
@@ -3920,87 +2637,12 @@ function renderAdminGeneral(){
 
  </div>
 
- <div class="adminCard">
-
-  <div class="adminCardTitle">✨ Etkinlikler</div>
-
-  ${
-   DATA.events.length
-   ?
-   DATA.events.map(event=>`
-
-    <div class="adminCard"
-     style="margin:15px 0 10px;background:#0f0f11">
-
-     ${input(
-      "eventName-"+event.id,
-      "Etkinlik adı",
-      event.name
-     )}
-
-     <div class="row">
-
-      ${input(
-       "eventDate-"+event.id,
-       "Gün",
-       event.date
-      )}
-
-      ${input(
-       "eventTime-"+event.id,
-       "Saat",
-       event.time
-      )}
-
-     </div>
-
-     ${textarea(
-      "eventDescription-"+event.id,
-      "Açıklama",
-      event.description
-     )}
-
-     ${fileField(
-      "eventImage",
-      event.id,
-      "Etkinlik fotoğrafı",
-      event.image,
-      "image/*"
-     )}
-
-     ${fileField(
-      "eventVideo",
-      event.id,
-      "Etkinlik videosu",
-      event.video||"",
-      "video/*"
-     )}
-
-     <button
-      class="adminButton danger full"
-      data-delete-event="${esc(event.id)}">
-      Etkinliği Sil
-     </button>
-
-    </div>
-
-   `).join("")
-   :
-   `<div class="empty">Henüz etkinlik yok.</div>`
-  }
-
-  <button
-   class="adminButton gold full"
-   id="addEvent">
-   + Etkinlik Ekle
-  </button>
-
  </div>
  `;
 }
 
 /* =========================================================
-   ADMIN CATEGORIES
+   ADMIN CATEGORY LIST
 ========================================================= */
 
 function renderAdminCategories(){
@@ -4009,15 +2651,14 @@ function renderAdminCategories(){
 
  <div class="adminSectionHeader">
   <h2>Menü Yönetimi</h2>
-  <p>Kategorilerini ve ürünlerini yönet.</p>
+  <p>Tüm kategori ve ürünlerini yönet.</p>
  </div>
 
  <div class="adminCard">
 
   <div class="adminCardTitle">Kategori Yönetimi</div>
 
-  <button
-   class="adminButton gold full"
+  <button class="adminButton gold full"
    id="addCategory"
    style="margin-top:14px">
    ${t("addCategory")}
@@ -4028,12 +2669,9 @@ function renderAdminCategories(){
  <div class="adminCategoryList">
 
  ${
-  DATA.categories.length
-  ?
   DATA.categories.map(category=>`
 
-   <button
-    class="adminCategoryItem"
+   <button class="adminCategoryItem"
     data-admin-category="${esc(category.id)}">
 
     <div class="adminCategoryThumb">
@@ -4044,12 +2682,9 @@ function renderAdminCategories(){
       `<img data-media-ref="${esc(category.image)}" alt="">`
       :
       `<div style="
-       width:100%;
-       height:100%;
-       display:flex;
-       align-items:center;
-       justify-content:center;
-       color:#555">
+       width:100%;height:100%;
+       display:flex;align-items:center;
+       justify-content:center;color:#555">
        N
       </div>`
      }
@@ -4073,8 +2708,6 @@ function renderAdminCategories(){
    </button>
 
   `).join("")
-  :
-  `<div class="empty">${t("noCategories")}</div>`
  }
 
  </div>
@@ -4089,20 +2722,13 @@ function renderAdminCategory(){
 
  const category=findCategory(adminCategoryView);
 
- if(!category){
-
-  adminCategoryView=null;
-
-  return renderAdminCategories();
- }
+ if(!category)return renderAdminCategories();
 
  return `
 
  <div class="adminBreadcrumb">
 
-  <button id="adminProductsBack">
-   ‹ Menü
-  </button>
+  <button id="adminProductsBack">‹ Menü</button>
 
   <span>›</span>
 
@@ -4114,17 +2740,13 @@ function renderAdminCategory(){
 
   <h2>${esc(category.name)}</h2>
 
-  <p>
-   Kategori bilgilerini ve ürünlerini yönet.
-  </p>
+  <p>Kategori bilgilerini ve ürünlerini yönet.</p>
 
  </div>
 
  <div class="adminCard">
 
-  <div class="adminCardTitle">
-   Kategori Ayarları
-  </div>
+  <div class="adminCardTitle">Kategori Ayarları</div>
 
   ${input(
    "categoryName-"+category.id,
@@ -4140,8 +2762,7 @@ function renderAdminCategory(){
    "image/*"
   )}
 
-  <button
-   class="adminButton gold full"
+  <button class="adminButton gold full"
    id="saveCategoryNow">
    ✓ ${t("saveCategory")}
   </button>
@@ -4183,12 +2804,9 @@ function renderAdminCategory(){
  <div class="adminProductList">
 
  ${
-  category.items?.length
-  ?
   category.items.map(item=>`
 
-   <button
-    class="adminProductItem"
+   <button class="adminProductItem"
     data-admin-product="${esc(item.id)}">
 
     <div class="adminProductThumb">
@@ -4199,12 +2817,9 @@ function renderAdminCategory(){
       `<img data-media-ref="${esc(item.image)}" alt="">`
       :
       `<div style="
-       width:100%;
-       height:100%;
-       display:flex;
-       align-items:center;
-       justify-content:center;
-       color:#555">
+       width:100%;height:100%;
+       display:flex;align-items:center;
+       justify-content:center;color:#555">
        N
       </div>`
      }
@@ -4224,8 +2839,6 @@ function renderAdminCategory(){
    </button>
 
   `).join("")
-  :
-  `<div class="empty">${t("noProducts")}</div>`
  }
 
  </div>
@@ -4245,16 +2858,13 @@ function renderAdminProduct(){
  if(item){
 
   category=DATA.categories.find(
-   c=>(c.items||[]).some(
-    p=>p.id===item.id
-   )
+   c=>(c.items||[]).some(p=>p.id===item.id)
   );
  }
 
  if(!item||!category){
 
   adminProductView=null;
-
   return renderAdminCategory();
  }
 
@@ -4281,36 +2891,18 @@ function renderAdminProduct(){
   </strong>
 
   <span>
-   Türkçe adı ve açıklamayı yaz.
-   Kaydettiğinde diğer diller hazırlanır.
+   Ürün bilgilerini buradan değiştirebilirsin.
   </span>
-
-  ${
-   translating
-   ?
-   `<div style="
-    margin-top:10px;
-    color:var(--accent2);
-    animation:pulse 1s infinite">
-    ● Çeviriler hazırlanıyor...
-   </div>`
-   :
-   `<div style="margin-top:8px;color:#666;font-size:9px">
-    🌐 ${t("translationInfo")}
-   </div>`
-  }
 
  </div>
 
  <div class="adminCard">
 
-  <div class="adminCardTitle">
-   ${t("basic")}
-  </div>
+  <div class="adminCardTitle">${t("basic")}</div>
 
   ${input(
    "productName-"+item.id,
-   t("productName")+" 🇹🇷",
+   t("productName"),
    item.name
   )}
 
@@ -4323,7 +2915,7 @@ function renderAdminProduct(){
 
   ${textarea(
    "productDescription-"+item.id,
-   t("description")+" 🇹🇷",
+   t("description"),
    item.description
   )}
 
@@ -4339,18 +2931,11 @@ function renderAdminProduct(){
 
  <div class="adminCard">
 
-  <button
-   class="advancedButton"
+  <button class="advancedButton"
    data-toggle-advanced="product">
 
    ⚙
-   ${
-    advancedProduct
-    ?
-    t("hideAdvanced")
-    :
-    t("advanced")
-   }
+   ${advancedProduct?t("hideAdvanced"):t("advanced")}
 
   </button>
 
@@ -4384,14 +2969,6 @@ function renderAdminProduct(){
      "number"
     )}
 
-    ${fileField(
-     "productVideo",
-     item.id,
-     "Ürün videosu",
-     item.video||"",
-     "video/*"
-    )}
-
     <label class="toggle">
      Tükendi
      <input
@@ -4417,8 +2994,7 @@ function renderAdminProduct(){
     </label>
 
    </div>`
-   :
-   ""
+   :""
   }
 
  </div>
@@ -4468,16 +3044,13 @@ function renderAdminDesign(){
 
  <div class="adminCard">
 
-  <div class="adminCardTitle">
-   🎨 Renk Sistemi
-  </div>
+  <div class="adminCardTitle">🎨 Renk Sistemi</div>
 
   <div class="designGrid" style="margin-top:13px">
 
    <div class="designCard">
     <h4>Ana renk</h4>
-    <input
-     class="colorInput"
+    <input class="colorInput"
      type="color"
      data-color-setting="accent"
      value="${esc(th.accent)}">
@@ -4485,8 +3058,7 @@ function renderAdminDesign(){
 
    <div class="designCard">
     <h4>Vurgu</h4>
-    <input
-     class="colorInput"
+    <input class="colorInput"
      type="color"
      data-color-setting="accent2"
      value="${esc(th.accent2)}">
@@ -4494,8 +3066,7 @@ function renderAdminDesign(){
 
    <div class="designCard">
     <h4>Genel yazı</h4>
-    <input
-     class="colorInput"
+    <input class="colorInput"
      type="color"
      data-color-setting="text"
      value="${esc(th.text||"#ffffff")}">
@@ -4503,8 +3074,7 @@ function renderAdminDesign(){
 
    <div class="designCard">
     <h4>Ürün yazısı</h4>
-    <input
-     class="colorInput"
+    <input class="colorInput"
      type="color"
      data-color-setting="cardText"
      value="${esc(th.cardText||"#ffffff")}">
@@ -4512,8 +3082,7 @@ function renderAdminDesign(){
 
    <div class="designCard">
     <h4>Fiyat</h4>
-    <input
-     class="colorInput"
+    <input class="colorInput"
      type="color"
      data-color-setting="price"
      value="${esc(th.price||"#f0c45a")}">
@@ -4521,8 +3090,7 @@ function renderAdminDesign(){
 
    <div class="designCard">
     <h4>Arka plan</h4>
-    <input
-     class="colorInput"
+    <input class="colorInput"
      type="color"
      data-color-setting="background"
      value="${esc(DATA.background.value||"#171719")}">
@@ -4540,15 +3108,9 @@ function renderAdminDesign(){
 
    ${
     [
-     "#d6a83d",
-     "#c96b2c",
-     "#b83b5e",
-     "#5b8def",
-     "#43a047",
-     "#9c6ade",
-     "#00a99d",
-     "#f1f1f1",
-     "#e85d04",
+     "#d6a83d","#c96b2c","#b83b5e",
+     "#5b8def","#43a047","#9c6ade",
+     "#00a99d","#f1f1f1","#e85d04",
      "#ef476f"
     ].map(c=>`
 
@@ -4625,8 +3187,6 @@ function renderAdminDesign(){
    ${designRange("titleSize","Başlık",22,52,th.titleSize||34,"px")}
    ${designRange("bodySize","Genel yazı",11,20,th.bodySize||13,"px")}
    ${designRange("cardRadius","Kart köşesi",8,34,th.cardRadius||20,"px")}
-   ${designRange("cardOpacity","Kart şeffaflığı",55,100,Math.round((th.cardOpacity??.94)*100),"%")}
-   ${designRange("overlay","Arka plan karartma",0,90,Math.round((th.overlay??.55)*100),"%")}
 
   </div>
 
@@ -4639,8 +3199,7 @@ function renderAdminDesign(){
   <div style="
    display:grid;
    grid-template-columns:repeat(3,1fr);
-   gap:7px;
-   margin-top:13px">
+   gap:7px;margin-top:13px">
 
    <button
     class="adminButton ${DATA.background.type==="color"?"gold":""}"
@@ -4672,8 +3231,7 @@ function renderAdminDesign(){
     DATA.background.image,
     "image/*"
    )
-   :
-   ""
+   :""
   }
 
   ${
@@ -4686,17 +3244,14 @@ function renderAdminDesign(){
     DATA.background.video,
     "video/*"
    )
-   :
-   ""
+   :""
   }
 
  </div>
 
  <div class="adminCard">
 
-  <div class="adminCardTitle">
-   👁️ Görünürlük
-  </div>
+  <div class="adminCardTitle">👁️ Görünürlük</div>
 
   ${
    [
@@ -4807,9 +3362,7 @@ function renderAdmin(){
 
      </div>
 
-     <button class="iconBtn" id="closeAdmin">
-      ×
-     </button>
+     <button class="iconBtn" id="closeAdmin">×</button>
 
     </div>
 
@@ -4837,9 +3390,7 @@ function renderAdmin(){
 
    </div>
 
-   <div class="adminBody">
-    ${body}
-   </div>
+   <div class="adminBody">${body}</div>
 
    <div class="saveBar">
 
@@ -4904,7 +3455,7 @@ function renderAdminLogin(){
 }
 
 /* =========================================================
-   COLLECT ADMIN
+   ADMIN COLLECT
 ========================================================= */
 
 function collectAdmin(){
@@ -4950,7 +3501,6 @@ function collectAdmin(){
    if(c&&c.name!==value){
 
     c.name=value;
-
     markCategoryTranslationDirty(c);
    }
   }
@@ -4963,7 +3513,6 @@ function collectAdmin(){
    if(p&&p.name!==value){
 
     p.name=value;
-
     markProductTranslationDirty(p);
    }
   }
@@ -4976,7 +3525,6 @@ function collectAdmin(){
    if(p&&p.description!==value){
 
     p.description=value;
-
     markProductTranslationDirty(p);
    }
   }
@@ -5033,53 +3581,11 @@ function collectAdmin(){
    }
   }
 
-  else if(key.startsWith("eventName-")){
-
-   const id=key.replace("eventName-","");
-   const e=findEvent(id);
-
-   if(e&&e.name!==value){
-
-    e.name=value;
-
-    markEventTranslationDirty(e);
-   }
-  }
-
-  else if(key.startsWith("eventDate-")){
-
-   const id=key.replace("eventDate-","");
-   const e=findEvent(id);
-
-   if(e)e.date=value;
-  }
-
-  else if(key.startsWith("eventTime-")){
-
-   const id=key.replace("eventTime-","");
-   const e=findEvent(id);
-
-   if(e)e.time=value;
-  }
-
-  else if(key.startsWith("eventDescription-")){
-
-   const id=key.replace("eventDescription-","");
-   const e=findEvent(id);
-
-   if(e&&e.description!==value){
-
-    e.description=value;
-
-    markEventTranslationDirty(e);
-   }
-  }
-
  });
 }
 
 /* =========================================================
-   FILE HANDLING
+   FILE
 ========================================================= */
 
 async function handleFile(type,id,file){
@@ -5088,37 +3594,27 @@ async function handleFile(type,id,file){
 
  const maxImage=8*1024*1024;
  const maxVideo=100*1024*1024;
-
  const isVideo=file.type.startsWith("video/");
 
  if(isVideo&&file.size>maxVideo){
-
   alert("Video en fazla 100 MB olabilir.");
-
   return;
  }
 
  if(!isVideo&&file.size>maxImage){
-
   alert("Fotoğraf en fazla 8 MB olabilir.");
-
   return;
  }
 
  try{
 
   const reference=
-   await saveMedia(
-    type,
-    id,
-    file
-   );
+   await saveMedia(type,id,file);
 
-  if(type==="logo"){
-
+  if(type==="logo")
    DATA.logo=reference;
 
-  }else if(type==="backgroundImage"){
+  else if(type==="backgroundImage"){
 
    DATA.background.image=reference;
    DATA.background.type="image";
@@ -5131,156 +3627,13 @@ async function handleFile(type,id,file){
   }else if(type==="categoryImage"){
 
    const c=findCategory(id);
-
    if(c)c.image=reference;
 
   }else if(type==="productImage"){
 
    const p=findProduct(id);
-
    if(p)p.image=reference;
 
-  }else if(type==="productVideo"){
-
-   const p=findProduct(id);
-
-   if(p)p.video=reference;
-
-  }else if(type==="eventImage"){
-
-   const e=findEvent(id);
-
-   if(e)e.image=reference;
-
-  }else if(type==="eventVideo"){
-
-   const e=findEvent(id);
-
-   if(e)e.video=reference;
-  }
-
-  const saved=saveData();
-
-  if(!saved)
-   return;
-
-  rememberAdminScroll();
-
-  render({
-   preserveAdminScroll:true
-  });
-
- }catch(error){
-
-  console.error(error);
-
-  alert(
-   "⚠️ DOSYA KAYDEDİLEMEDİ\n\n"+
-   (error?.message||"Bilinmeyen hata")
-  );
- }
-}
-
-async function clearFile(type,id){
-
- try{
-
-  if(type==="logo"){
-
-   if(String(DATA.logo).startsWith("indexeddb:"))
-    await mediaDelete(
-     String(DATA.logo).replace("indexeddb:","")
-    );
-
-   DATA.logo="";
-
-  }else if(type==="backgroundImage"){
-
-   if(String(DATA.background.image).startsWith("indexeddb:"))
-    await mediaDelete(
-     String(DATA.background.image).replace("indexeddb:","")
-    );
-
-   DATA.background.image="";
-
-  }else if(type==="backgroundVideo"){
-
-   if(String(DATA.background.video).startsWith("indexeddb:"))
-    await mediaDelete(
-     String(DATA.background.video).replace("indexeddb:","")
-    );
-
-   DATA.background.video="";
-
-  }else if(type==="categoryImage"){
-
-   const c=findCategory(id);
-
-   if(c){
-
-    if(String(c.image).startsWith("indexeddb:"))
-     await mediaDelete(
-      String(c.image).replace("indexeddb:","")
-     );
-
-    c.image="";
-   }
-
-  }else if(type==="productImage"){
-
-   const p=findProduct(id);
-
-   if(p){
-
-    if(String(p.image).startsWith("indexeddb:"))
-     await mediaDelete(
-      String(p.image).replace("indexeddb:","")
-     );
-
-    p.image="";
-   }
-
-  }else if(type==="productVideo"){
-
-   const p=findProduct(id);
-
-   if(p){
-
-    if(String(p.video).startsWith("indexeddb:"))
-     await mediaDelete(
-      String(p.video).replace("indexeddb:","")
-     );
-
-    p.video="";
-   }
-
-  }else if(type==="eventImage"){
-
-   const e=findEvent(id);
-
-   if(e){
-
-    if(String(e.image).startsWith("indexeddb:"))
-     await mediaDelete(
-      String(e.image).replace("indexeddb:","")
-     );
-
-    e.image="";
-   }
-
-  }else if(type==="eventVideo"){
-
-   const e=findEvent(id);
-
-   if(e){
-
-    if(String(e.video).startsWith("indexeddb:"))
-     await mediaDelete(
-      String(e.video).replace("indexeddb:","")
-     );
-
-    e.video="";
-   }
   }
 
   saveData();
@@ -5291,10 +3644,61 @@ async function clearFile(type,id){
    preserveAdminScroll:true
   });
 
- }catch(error){
+ }catch(e){
 
-  alert("Dosya silinemedi.");
+  console.error(e);
+  alert("Dosya kaydedilemedi.");
  }
+}
+
+async function clearFile(type,id){
+
+ if(type==="logo"){
+
+  if(String(DATA.logo).startsWith("indexeddb:"))
+   await mediaDelete(
+    String(DATA.logo).replace("indexeddb:","")
+   );
+
+  DATA.logo="";
+
+ }else if(type==="categoryImage"){
+
+  const c=findCategory(id);
+
+  if(c){
+
+   if(String(c.image).startsWith("indexeddb:"))
+    await mediaDelete(
+     String(c.image).replace("indexeddb:","")
+    );
+
+   c.image="";
+  }
+
+ }else if(type==="productImage"){
+
+  const p=findProduct(id);
+
+  if(p){
+
+   if(String(p.image).startsWith("indexeddb:"))
+    await mediaDelete(
+     String(p.image).replace("indexeddb:","")
+    );
+
+   p.image="";
+  }
+
+ }
+
+ saveData();
+
+ rememberAdminScroll();
+
+ render({
+  preserveAdminScroll:true
+ });
 }
 
 /* =========================================================
@@ -5338,13 +3742,13 @@ function restoreAdminScroll(){
 
    if(admin)
     admin.scrollTop=y;
-
   });
+
  });
 }
 
 /* =========================================================
-   CLOSE ADMIN AFTER SAVE
+   PANELİ KAPAT
 ========================================================= */
 
 function closeAdminAfterSave(){
@@ -5364,7 +3768,7 @@ function closeAdminAfterSave(){
 }
 
 /* =========================================================
-   MAIN RENDER
+   RENDER
 ========================================================= */
 
 function render(options={}){
@@ -5401,27 +3805,18 @@ function render(options={}){
 
     <div class="topRow">
 
-     <button class="iconBtn"
-      id="openDrawer">
-      ☰
-     </button>
+     <button class="iconBtn" id="openDrawer">☰</button>
 
      <div class="topRight">
 
       ${
        DATA.settings.search
        ?
-       `<button class="iconBtn"
-        id="searchButton">
-        ⌕
-       </button>`
-       :
-       ""
+       `<button class="iconBtn" id="searchButton">⌕</button>`
+       :""
       }
 
-      <button
-       class="currencyBtn"
-       id="currencyButton">
+      <button class="currencyBtn" id="currencyButton">
 
        ${
         currency==="TRY"
@@ -5468,8 +3863,7 @@ function render(options={}){
        placeholder="${t("search")}">
 
      </div>`
-     :
-     ""
+     :""
     }
 
    </div>
@@ -5488,7 +3882,6 @@ function render(options={}){
 
   ${renderDrawer()}
   ${renderProductModal()}
-  ${renderEventModal()}
   ${renderAdmin()}
   ${renderAdminLogin()}
  `;
@@ -5520,12 +3913,9 @@ function render(options={}){
 
 function bindEvents(){
 
- /* DRAWER */
-
  $("openDrawer")?.addEventListener("click",()=>{
 
   rememberWindowScroll();
-
   drawerOpen=true;
 
   render({
@@ -5536,7 +3926,6 @@ function bindEvents(){
  $("closeDrawer")?.addEventListener("click",()=>{
 
   rememberWindowScroll();
-
   drawerOpen=false;
 
   render({
@@ -5549,7 +3938,6 @@ function bindEvents(){
   if(e.target.id==="drawerOverlay"){
 
    rememberWindowScroll();
-
    drawerOpen=false;
 
    render({
@@ -5561,17 +3949,12 @@ function bindEvents(){
  $("openAdmin")?.addEventListener("click",()=>{
 
   drawerOpen=false;
-
   adminOpen=true;
   adminAuthenticated=false;
-
   adminTab="general";
-
   adminCategoryView=null;
   adminProductView=null;
-
   advancedProduct=false;
-
   savedAdminScroll=0;
 
   render();
@@ -5581,8 +3964,6 @@ function bindEvents(){
    50
   );
  });
-
- /* CURRENCY */
 
  $("currencyButton")?.addEventListener("click",e=>{
 
@@ -5620,8 +4001,6 @@ function bindEvents(){
   };
  });
 
- /* LANGUAGE */
-
  $("languageButton")?.addEventListener("click",e=>{
 
   e.stopPropagation();
@@ -5639,7 +4018,7 @@ function bindEvents(){
  document.querySelectorAll("[data-language]")
  .forEach(btn=>{
 
-  btn.onclick=async e=>{
+  btn.onclick=e=>{
 
    e.stopPropagation();
 
@@ -5655,51 +4034,8 @@ function bindEvents(){
    render({
     preserveWindowScroll:true
    });
-
-   if(language!=="tr"){
-
-    await Promise.all(
-
-     DATA.categories.map(async c=>{
-
-      if(!c.names)c.names={};
-
-      c.names[language]=
-       await translateText(
-        c.name,
-        language
-       );
-
-      for(const p of c.items||[]){
-
-       if(!p.names)p.names={};
-       if(!p.descriptions)p.descriptions={};
-
-       p.names[language]=
-        await translateText(
-         p.name,
-         language
-        );
-
-       p.descriptions[language]=
-        await translateText(
-         p.description,
-         language
-        );
-      }
-     })
-    );
-
-    saveData();
-
-    render({
-     preserveWindowScroll:true
-    });
-   }
   };
  });
-
- /* SEARCH */
 
  $("searchButton")?.addEventListener("click",()=>{
 
@@ -5714,26 +4050,10 @@ function bindEvents(){
    preserveWindowScroll:true
   });
 
-  setTimeout(()=>{
-
-   const input=$("searchInput");
-
-   if(input){
-
-    input.focus();
-
-    input.setSelectionRange(
-     input.value.length,
-     input.value.length
-    );
-   }
-
-  },30);
+  setTimeout(()=>$("searchInput")?.focus(),30);
  });
 
  $("searchInput")?.addEventListener("input",e=>{
-
-  rememberWindowScroll();
 
   searchText=e.target.value;
 
@@ -5758,15 +4078,12 @@ function bindEvents(){
   },0);
  });
 
- /* CATEGORY */
-
  document.querySelectorAll("[data-category]")
  .forEach(btn=>{
 
   btn.onclick=()=>{
 
    selectedCategory=btn.dataset.category;
-
    selectedProduct=null;
    selectedEvent=null;
    searchText="";
@@ -5785,8 +4102,6 @@ function bindEvents(){
    resetScroll:true
   });
  });
-
- /* PRODUCT */
 
  document.querySelectorAll("[data-product]")
  .forEach(el=>{
@@ -5835,64 +4150,13 @@ function bindEvents(){
   }
  });
 
- /* EVENT */
+ $("adminLoginButton")?.addEventListener("click",login);
 
- document.querySelectorAll("[data-event]")
- .forEach(btn=>{
+ $("adminPassword")?.addEventListener("keydown",e=>{
 
-  btn.onclick=()=>{
-
-   rememberWindowScroll();
-
-   selectedEvent=findEvent(
-    btn.dataset.event
-   );
-
-   render({
-    preserveWindowScroll:true
-   });
-  };
+  if(e.key==="Enter")
+   login();
  });
-
- $("closeEvent")?.addEventListener("click",()=>{
-
-  rememberWindowScroll();
-
-  selectedEvent=null;
-
-  render({
-   preserveWindowScroll:true
-  });
- });
-
- $("eventOverlay")?.addEventListener("click",e=>{
-
-  if(e.target.id==="eventOverlay"){
-
-   rememberWindowScroll();
-
-   selectedEvent=null;
-
-   render({
-    preserveWindowScroll:true
-   });
-  }
- });
-
- /* LOGIN */
-
- $("adminLoginButton")?.addEventListener(
-  "click",
-  login
- );
-
- $("adminPassword")?.addEventListener(
-  "keydown",
-  e=>{
-   if(e.key==="Enter")
-    login();
-  }
- );
 
  function login(){
 
@@ -5918,15 +4182,11 @@ function bindEvents(){
   }
  }
 
- /* CLOSE ADMIN */
-
  $("closeAdmin")?.addEventListener("click",()=>{
 
   collectAdmin();
 
-  const saved=saveData();
-
-  if(!saved)return;
+  if(!saveData())return;
 
   adminOpen=false;
   adminAuthenticated=false;
@@ -5934,13 +4194,15 @@ function bindEvents(){
   adminCategoryView=null;
   adminProductView=null;
 
-  render();
+  render({
+   preserveWindowScroll:true
+  });
  });
 
- /* =========================================================
-    SAVE ADMIN
-    KAYDET → KAYDET → PANELİ KAPAT
- ========================================================= */
+ /* ======================================================
+    ANA KAYDET
+    KAYDETTİKTEN SONRA PANEL KAPANIR
+ ====================================================== */
 
  $("saveAdmin")?.addEventListener("click",()=>{
 
@@ -5948,13 +4210,10 @@ function bindEvents(){
 
   const saved=saveData();
 
-  if(!saved)
-   return;
+  if(!saved)return;
 
   closeAdminAfterSave();
  });
-
- /* ADMIN TABS */
 
  document.querySelectorAll("[data-admin-tab]")
  .forEach(btn=>{
@@ -5965,7 +4224,6 @@ function bindEvents(){
    rememberAdminScroll();
 
    adminTab=btn.dataset.adminTab;
-
    adminCategoryView=null;
    adminProductView=null;
    advancedProduct=false;
@@ -5984,10 +4242,8 @@ function bindEvents(){
   btn.onclick=()=>{
 
    collectAdmin();
-   rememberAdminScroll();
 
    adminTab=btn.dataset.adminTabDirect;
-
    adminCategoryView=null;
    adminProductView=null;
 
@@ -5996,8 +4252,6 @@ function bindEvents(){
    });
   };
  });
-
- /* CHANGE PIN */
 
  $("changePinButton")?.addEventListener("click",()=>{
 
@@ -6009,14 +4263,12 @@ function bindEvents(){
   if(!newPin||!confirmPin){
 
    alert("Yeni PIN'i iki alana da gir.");
-
    return;
   }
 
   if(newPin!==confirmPin){
 
    alert("PIN'ler aynı değil.");
-
    return;
   }
 
@@ -6029,20 +4281,11 @@ function bindEvents(){
    return;
   }
 
-  if(setAdminPin(newPin)){
-
-   $("newPin").value="";
-   $("confirmPin").value="";
-
-   alert(t("pinSaved"));
-
-  }else{
-
+  if(setAdminPin(newPin))
+   alert("PIN başarıyla değiştirildi.");
+  else
    alert("PIN kaydedilemedi.");
-  }
  });
-
- /* ADMIN CATEGORY */
 
  document.querySelectorAll("[data-admin-category]")
  .forEach(btn=>{
@@ -6076,21 +4319,14 @@ function bindEvents(){
   });
  });
 
- /* SAVE CATEGORY */
-
  $("saveCategoryNow")?.addEventListener("click",()=>{
 
   collectAdmin();
 
-  const saved=saveData();
-
-  if(!saved)
-   return;
+  if(!saveData())return;
 
   closeAdminAfterSave();
  });
-
- /* ADMIN PRODUCT */
 
  document.querySelectorAll("[data-admin-product]")
  .forEach(btn=>{
@@ -6124,8 +4360,6 @@ function bindEvents(){
   });
  });
 
- /* ADVANCED */
-
  document.querySelectorAll("[data-toggle-advanced]")
  .forEach(btn=>{
 
@@ -6142,8 +4376,6 @@ function bindEvents(){
   };
  });
 
- /* SETTINGS */
-
  document.querySelectorAll("[data-setting]")
  .forEach(input=>{
 
@@ -6156,16 +4388,12 @@ function bindEvents(){
   };
  });
 
- /* PRODUCT TOGGLES */
-
  document.querySelectorAll("[data-sold]")
  .forEach(input=>{
 
   input.onchange=()=>{
 
-   const p=findProduct(
-    input.dataset.sold
-   );
+   const p=findProduct(input.dataset.sold);
 
    if(p)p.sold=input.checked;
 
@@ -6178,9 +4406,7 @@ function bindEvents(){
 
   input.onchange=()=>{
 
-   const p=findProduct(
-    input.dataset.featured
-   );
+   const p=findProduct(input.dataset.featured);
 
    if(p)p.featured=input.checked;
 
@@ -6193,17 +4419,13 @@ function bindEvents(){
 
   input.onchange=()=>{
 
-   const p=findProduct(
-    input.dataset.dish
-   );
+   const p=findProduct(input.dataset.dish);
 
    if(p)p.dish=input.checked;
 
    saveData();
   };
  });
-
- /* COLORS */
 
  document.querySelectorAll("[data-theme-color]")
  .forEach(btn=>{
@@ -6217,7 +4439,6 @@ function bindEvents(){
    DATA.theme.price=color;
 
    applyTheme();
-
    saveData();
 
    document.querySelectorAll(
@@ -6226,8 +4447,7 @@ function bindEvents(){
 
     x.classList.toggle(
      "active",
-     x.dataset.themeColor===
-     DATA.theme.accent
+     x.dataset.themeColor===DATA.theme.accent
     );
    });
   };
@@ -6253,15 +4473,12 @@ function bindEvents(){
    }else{
 
     DATA.theme[key]=input.value;
-
     applyTheme();
    }
 
    saveData();
   };
  });
-
- /* RANGES */
 
  document.querySelectorAll("[data-design]")
  .forEach(input=>{
@@ -6271,35 +4488,20 @@ function bindEvents(){
    const key=input.dataset.design;
    const value=Number(input.value);
 
-   if(key==="overlay")
-    DATA.theme.overlay=value/100;
-
-   else if(key==="cardOpacity")
+   if(key==="cardOpacity")
     DATA.theme.cardOpacity=value/100;
-
    else
     DATA.theme[key]=value;
 
    const label=$(key+"Value");
 
-   if(label){
-
-    label.textContent=
-     key==="overlay"||
-     key==="cardOpacity"
-     ?
-     value+"%"
-     :
-     value+"px";
-   }
+   if(label)
+    label.textContent=value+"px";
 
    applyTheme();
-
    saveData();
   };
  });
-
- /* BACKGROUND */
 
  document.querySelectorAll("[data-background]")
  .forEach(btn=>{
@@ -6320,8 +4522,6 @@ function bindEvents(){
   };
  });
 
- /* FILE INPUT */
-
  document.querySelectorAll("[data-file-type]")
  .forEach(input=>{
 
@@ -6335,14 +4535,10 @@ function bindEvents(){
   };
  });
 
- /* CLEAR FILE */
-
  document.querySelectorAll("[data-clear-file]")
  .forEach(btn=>{
 
   btn.onclick=async()=>{
-
-   rememberAdminScroll();
 
    const parts=
     btn.dataset.clearFile.split("|");
@@ -6353,8 +4549,6 @@ function bindEvents(){
    );
   };
  });
-
- /* DELETE CATEGORY */
 
  document.querySelectorAll("[data-delete-category]")
  .forEach(btn=>{
@@ -6373,17 +4567,13 @@ function bindEvents(){
    adminCategoryView=null;
    adminProductView=null;
 
-   const saved=saveData();
-
-   if(!saved)return;
+   if(!saveData())return;
 
    render({
     preserveAdminScroll:true
    });
   };
  });
-
- /* DELETE PRODUCT */
 
  document.querySelectorAll("[data-delete-product]")
  .forEach(btn=>{
@@ -6407,49 +4597,21 @@ function bindEvents(){
 
    adminProductView=null;
 
-   const saved=saveData();
-
-   if(!saved)return;
+   if(!saveData())return;
 
    render({
     preserveAdminScroll:true
    });
   };
  });
-
- /* DELETE EVENT */
-
- document.querySelectorAll("[data-delete-event]")
- .forEach(btn=>{
-
-  btn.onclick=()=>{
-
-   if(!confirm("Bu etkinlik silinsin mi?"))
-    return;
-
-   DATA.events=
-    DATA.events.filter(
-     e=>e.id!==btn.dataset.deleteEvent
-    );
-
-   const saved=saveData();
-
-   if(!saved)return;
-
-   render({
-    preserveAdminScroll:true
-   });
-  };
- });
-
- /* ADD CATEGORY */
 
  $("addCategory")?.addEventListener("click",()=>{
 
   collectAdmin();
   rememberAdminScroll();
 
-  const id=uid("category");
+  const id=
+   "category-"+Date.now();
 
   DATA.categories.push({
 
@@ -6469,16 +4631,12 @@ function bindEvents(){
   adminCategoryView=id;
   adminProductView=null;
 
-  const saved=saveData();
-
-  if(!saved)return;
+  saveData();
 
   render({
    preserveAdminScroll:true
   });
  });
-
- /* ADD PRODUCT */
 
  document.querySelectorAll("[data-add-product]")
  .forEach(btn=>{
@@ -6494,7 +4652,8 @@ function bindEvents(){
 
    if(!category)return;
 
-   const id=uid("product");
+   const id=
+    "product-"+Date.now();
 
    category.items.push({
 
@@ -6527,9 +4686,7 @@ function bindEvents(){
    adminProductView=id;
    advancedProduct=false;
 
-   const saved=saveData();
-
-   if(!saved)return;
+   saveData();
 
    render({
     preserveAdminScroll:true
@@ -6537,61 +4694,11 @@ function bindEvents(){
   };
  });
 
- /* ADD EVENT */
-
- $("addEvent")?.addEventListener("click",()=>{
-
-  collectAdmin();
-  rememberAdminScroll();
-
-  DATA.events.push({
-
-   id:uid("event"),
-
-   name:"Yeni Etkinlik",
-
-   names:{
-    tr:"Yeni Etkinlik"
-   },
-
-   date:"Cumartesi",
-
-   time:"20:00",
-
-   description:"",
-
-   descriptions:{
-    tr:""
-   },
-
-   image:"",
-   video:""
-  });
-
-  const saved=saveData();
-
-  if(!saved)return;
-
-  render({
-   preserveAdminScroll:true
-  });
- });
-
- /* =========================================================
-    SAVE PRODUCT
-    KAYDET → ÇEVİR → KAYDET → PANELİ KAPAT
- ========================================================= */
-
  $("saveProductNow")?.addEventListener(
   "click",
-  async()=>{
+  ()=>{
 
    collectAdmin();
-
-   const firstSave=saveData();
-
-   if(!firstSave)
-    return;
 
    const item=findProduct(
     adminProductView
@@ -6600,43 +4707,21 @@ function bindEvents(){
    if(!item){
 
     alert("Ürün bulunamadı.");
-
     return;
    }
 
-   if(item.name.trim()===""){
+   if(!item.name.trim()){
 
     alert("Ürün adı boş bırakılamaz.");
-
     return;
    }
 
-   if(item.description.trim()){
-
-    await generateMissingTranslations(item);
-
-   }else{
-
-    if(!item.names)
-     item.names={};
-
-    if(!item.descriptions)
-     item.descriptions={};
-
-    item.names.tr=item.name;
-    item.descriptions.tr="";
-
-    saveData();
-   }
-
-   const finalSave=saveData();
-
-   if(!finalSave)
+   if(!saveData())
     return;
 
    /*
-      KAYIT BAŞARILIYSA PANEL DİREKT KAPANIR.
-      ALERT YOK.
+    ÖNEMLİ:
+    Ürün kaydedildiği anda yönetim paneli kapanıyor.
    */
 
    closeAdminAfterSave();
@@ -6645,8 +4730,10 @@ function bindEvents(){
 }
 
 /* =========================================================
-   START
+   BAŞLAT
 ========================================================= */
+
+saveData();
 
 render({
  resetScroll:true
