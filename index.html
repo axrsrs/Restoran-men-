@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#09090b">
+<meta name="theme-color" content="#171719">
 <title>NearMenu Premium</title>
 
 <style>
@@ -13,7 +13,7 @@ html,body{
  margin:0;
  padding:0;
  min-height:100%;
- background:#09090b;
+ background:#171719;
  color:#fff;
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
@@ -52,7 +52,14 @@ body{
  font-size:var(--bodySize);
 }
 
-html{scroll-behavior:smooth}
+html{
+ scroll-behavior:smooth;
+ background:#171719;
+}
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
 
 .background{
  position:fixed;
@@ -61,7 +68,7 @@ html{scroll-behavior:smooth}
  height:100%;
  z-index:0;
  overflow:hidden;
- background:#0b0b0c;
+ background:#171719;
  pointer-events:none;
 }
 
@@ -80,11 +87,20 @@ html{scroll-behavior:smooth}
  background:rgba(0,0,0,var(--overlay));
 }
 
+/* =========================================================
+   APP
+========================================================= */
+
 #app{
  position:relative;
  z-index:1;
  min-height:100vh;
+ background:transparent;
 }
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
 
 @keyframes fadeIn{
  from{opacity:0}
@@ -145,24 +161,33 @@ select{
 
 button:active{transform:scale(.97)}
 
+/* =========================================================
+   CONTAINER
+========================================================= */
+
 .container{
  position:relative;
  z-index:2;
  width:100%;
  max-width:650px;
  margin:auto;
- padding:0 16px 80px;
+ padding:0 16px 0;
+ background:transparent;
 }
+
+/* =========================================================
+   TOP BAR - BLACK BACKGROUND REMOVED
+========================================================= */
 
 .top{
  position:sticky;
  top:0;
  z-index:90;
  padding:11px 0;
- background:rgba(10,10,11,.84);
- backdrop-filter:blur(24px);
- -webkit-backdrop-filter:blur(24px);
- border-bottom:1px solid rgba(255,255,255,.05);
+ background:transparent;
+ backdrop-filter:none;
+ -webkit-backdrop-filter:none;
+ border-bottom:0;
 }
 
 .topRow{
@@ -231,6 +256,10 @@ button:active{transform:scale(.97)}
  box-shadow:0 0 0 3px rgba(214,168,61,.1);
 }
 
+/* =========================================================
+   POPUP
+========================================================= */
+
 .quickPopup{
  position:absolute;
  right:0;
@@ -267,6 +296,10 @@ button:active{transform:scale(.97)}
  background:var(--accent);
  color:#111;
 }
+
+/* =========================================================
+   HERO
+========================================================= */
 
 .hero{
  text-align:center;
@@ -325,7 +358,13 @@ button:active{transform:scale(.97)}
  line-height:1.65;
 }
 
-.section{margin-top:34px}
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.section{
+ margin-top:34px;
+}
 
 .sectionHead{
  display:flex;
@@ -346,6 +385,10 @@ button:active{transform:scale(.97)}
  font-size:10px;
 }
 
+/* =========================================================
+   HORIZONTAL
+========================================================= */
+
 .horizontal{
  display:flex;
  gap:13px;
@@ -355,7 +398,9 @@ button:active{transform:scale(.97)}
  padding:3px 0 7px;
 }
 
-.horizontal::-webkit-scrollbar{display:none}
+.horizontal::-webkit-scrollbar{
+ display:none;
+}
 
 .feature,
 .event{
@@ -415,7 +460,10 @@ button:active{transform:scale(.97)}
  text-align:left;
 }
 
-.featureText strong{font-size:21px;letter-spacing:-.02em}
+.featureText strong{
+ font-size:21px;
+ letter-spacing:-.02em;
+}
 
 .featureText span{
  display:block;
@@ -447,6 +495,10 @@ button:active{transform:scale(.97)}
  font-size:11px;
 }
 
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
 .categories{
  display:grid;
  grid-template-columns:1fr 1fr;
@@ -474,7 +526,9 @@ button:active{transform:scale(.97)}
  transition:transform .6s cubic-bezier(.2,.8,.2,1);
 }
 
-.category:hover img{transform:scale(1.055)}
+.category:hover img{
+ transform:scale(1.055);
+}
 
 .categoryShade{
  position:absolute;
@@ -509,6 +563,10 @@ button:active{transform:scale(.97)}
  margin-top:5px;
 }
 
+/* =========================================================
+   CATEGORY PAGE
+========================================================= */
+
 .categoryTitle{
  display:flex;
  align-items:center;
@@ -540,6 +598,10 @@ button:active{transform:scale(.97)}
  font-size:11px;
  font-weight:850;
 }
+
+/* =========================================================
+   PRODUCTS
+========================================================= */
 
 .products{
  display:flex;
@@ -639,6 +701,10 @@ button:active{transform:scale(.97)}
  font-size:14px;
 }
 
+/* =========================================================
+   OVERLAYS
+========================================================= */
+
 .overlay{
  position:fixed;
  inset:0;
@@ -668,7 +734,9 @@ button:active{transform:scale(.97)}
  font:700 25px Georgia,serif;
 }
 
-.drawerSection{margin-top:25px}
+.drawerSection{
+ margin-top:25px;
+}
 
 .drawerLabel{
  color:#666;
@@ -689,6 +757,10 @@ button:active{transform:scale(.97)}
  text-align:left;
  margin-top:7px;
 }
+
+/* =========================================================
+   MODAL
+========================================================= */
 
 .modalOverlay{
  position:fixed;
@@ -737,7 +809,9 @@ button:active{transform:scale(.97)}
  font-size:23px;
 }
 
-.modalBody{padding:21px}
+.modalBody{
+ padding:21px;
+}
 
 .modalBody h2{
  margin:0;
@@ -766,7 +840,9 @@ button:active{transform:scale(.97)}
  font-weight:950;
 }
 
-/* ADMIN */
+/* =========================================================
+   ADMIN
+========================================================= */
 
 .adminOverlay{
  position:fixed;
@@ -953,7 +1029,9 @@ button:active{transform:scale(.97)}
  line-height:1.5;
 }
 
-.field{margin-top:13px}
+.field{
+ margin-top:13px;
+}
 
 .field label{
  display:block;
@@ -1013,7 +1091,9 @@ button:active{transform:scale(.97)}
  border-color:#572024;
 }
 
-.full{width:100%}
+.full{
+ width:100%;
+}
 
 .quickActions{
  display:grid;
@@ -1121,7 +1201,9 @@ button:active{transform:scale(.97)}
  font-size:9px;
 }
 
-.adminProductInfo span{color:var(--accent2)}
+.adminProductInfo span{
+ color:var(--accent2);
+}
 
 .adminArrow{
  width:28px;
@@ -1218,7 +1300,9 @@ button:active{transform:scale(.97)}
  gap:10px;
 }
 
-.rangeRow input{flex:1}
+.rangeRow input{
+ flex:1;
+}
 
 .rangeValue{
  width:48px;
@@ -1296,6 +1380,10 @@ button:active{transform:scale(.97)}
  width:100%;
  min-height:47px;
 }
+
+/* =========================================================
+   LOGIN
+========================================================= */
 
 .adminLoginOverlay{
  position:fixed;
@@ -1384,32 +1472,89 @@ button:active{transform:scale(.97)}
  color:#666;
 }
 
+/* =========================================================
+   FOOTER - NO BLACK BACKGROUND
+========================================================= */
+
 .footer{
- padding:35px 0;
+ margin-top:20px;
+ padding:35px 0 45px;
  text-align:center;
  color:#555;
  font-size:10px;
+ background:transparent;
 }
 
-.hidden{display:none!important}
+/* =========================================================
+   HELP
+========================================================= */
+
+.help{
+ margin-top:8px;
+ color:#666;
+ font-size:9px;
+}
+
+.hidden{
+ display:none!important;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media(max-width:600px){
- .admin{width:100%}
- .adminBody{padding:16px;padding-bottom:100px}
- .adminHeader{padding:14px 16px}
- .saveBar{padding:11px 16px}
+
+ .admin{
+  width:100%;
+ }
+
+ .adminBody{
+  padding:16px;
+  padding-bottom:100px;
+ }
+
+ .adminHeader{
+  padding:14px 16px;
+ }
+
+ .saveBar{
+  padding:11px 16px;
+ }
+
 }
 
 @media(max-width:430px){
- .product{grid-template-columns:105px 1fr}
- .productImage{height:118px}
+
+ .product{
+  grid-template-columns:105px 1fr;
+ }
+
+ .productImage{
+  height:118px;
+ }
+
 }
 
 @media(max-width:390px){
- .categories{grid-template-columns:1fr}
- .designGrid{grid-template-columns:1fr}
- .row{flex-direction:column;gap:0}
- .quickActions{grid-template-columns:1fr}
+
+ .categories{
+  grid-template-columns:1fr;
+ }
+
+ .designGrid{
+  grid-template-columns:1fr;
+ }
+
+ .row{
+  flex-direction:column;
+  gap:0;
+ }
+
+ .quickActions{
+  grid-template-columns:1fr;
+ }
+
 }
 
 [dir="rtl"] .featureText,
@@ -1432,7 +1577,8 @@ button:active{transform:scale(.97)}
 
 <script>
 /* =========================================================
-   NEARMENU PREMIUM - FIXED STORAGE VERSION
+   NEARMENU PREMIUM
+   DATA SAFE VERSION
 ========================================================= */
 
 const DEFAULT_ADMIN_PIN="1234";
@@ -1689,7 +1835,7 @@ const DATA={
  },
  background:{
   type:"color",
-  value:"#0b0b0c",
+  value:"#171719",
   image:"",
   video:""
  },
@@ -1889,7 +2035,9 @@ async function mediaGet(key){
   });
 
  }catch(e){
+
   console.warn("Medya okunamadı:",e);
+
   return null;
  }
 }
@@ -1911,6 +2059,7 @@ async function mediaDelete(key){
   });
 
  }catch(e){
+
   return false;
  }
 }
@@ -2056,7 +2205,7 @@ function mergeData(saved){
 
  DATA.background=Object.assign({
   type:"color",
-  value:"#0b0b0c",
+  value:"#171719",
   image:"",
   video:""
  },DATA.background||{});
@@ -2174,7 +2323,7 @@ try{
 }
 
 /* =========================================================
-   SAVE - FIXED
+   SAVE
 ========================================================= */
 
 function saveData(){
@@ -2568,7 +2717,7 @@ function renderBackground(){
   <div
    class="background"
    id="siteBackground"
-   style="background-color:${esc(bg.value||"#0b0b0c")}">
+   style="background-color:${esc(bg.value||"#171719")}">
   </div>
  `;
 }
@@ -2617,7 +2766,7 @@ function renderHero(){
 }
 
 /* =========================================================
-   MEDIA RESOLUTION
+   MEDIA
 ========================================================= */
 
 async function resolveMediaElements(){
@@ -4196,7 +4345,7 @@ function renderAdminDesign(){
      class="colorInput"
      type="color"
      data-color-setting="background"
-     value="${esc(DATA.background.value||"#0b0b0c")}">
+     value="${esc(DATA.background.value||"#171719")}">
    </div>
 
   </div>
@@ -4750,7 +4899,7 @@ function collectAdmin(){
 }
 
 /* =========================================================
-   FILE HANDLING - FIXED
+   FILE HANDLING
 ========================================================= */
 
 async function handleFile(type,id,file){
@@ -5011,6 +5160,26 @@ function restoreAdminScroll(){
     admin.scrollTop=y;
 
   });
+ });
+}
+
+/* =========================================================
+   CLOSE ADMIN AFTER SAVE
+========================================================= */
+
+function closeAdminAfterSave(){
+
+ adminOpen=false;
+ adminAuthenticated=false;
+
+ adminCategoryView=null;
+ adminProductView=null;
+
+ advancedProduct=false;
+ savedAdminScroll=0;
+
+ render({
+  preserveWindowScroll:true
  });
 }
 
@@ -5588,6 +5757,23 @@ function bindEvents(){
   render();
  });
 
+ /* =========================================================
+    SAVE ADMIN
+    KAYDET -> KAYDET -> PANELİ KAPAT
+ ========================================================= */
+
+ $("saveAdmin")?.addEventListener("click",()=>{
+
+  collectAdmin();
+
+  const saved=saveData();
+
+  if(!saved)
+   return;
+
+  closeAdminAfterSave();
+ });
+
  /* ADMIN TABS */
 
  document.querySelectorAll("[data-admin-tab]")
@@ -5715,17 +5901,13 @@ function bindEvents(){
  $("saveCategoryNow")?.addEventListener("click",()=>{
 
   collectAdmin();
-  rememberAdminScroll();
 
   const saved=saveData();
 
-  if(!saved)return;
+  if(!saved)
+   return;
 
-  alert("✓ Kategori başarıyla kaydedildi.");
-
-  render({
-   preserveAdminScroll:true
-  });
+  closeAdminAfterSave();
  });
 
  /* ADMIN PRODUCT */
@@ -6215,15 +6397,16 @@ function bindEvents(){
   });
  });
 
- /* SAVE PRODUCT - FIXED */
+ /* =========================================================
+    SAVE PRODUCT
+    KAYDET -> ÇEVİR -> KAYDET -> PANELİ KAPAT
+ ========================================================= */
 
  $("saveProductNow")?.addEventListener(
   "click",
   async()=>{
 
    collectAdmin();
-
-   rememberAdminScroll();
 
    const firstSave=saveData();
 
@@ -6271,14 +6454,12 @@ function bindEvents(){
    if(!finalSave)
     return;
 
-   alert("✓ Ürün başarıyla kaydedildi.");
+   /*
+      BURADA ARTIK ALERT YOK.
+      KAYIT BAŞARILIYSA PANEL DİREKT KAPANIYOR.
+   */
 
-   adminProductView=null;
-   advancedProduct=false;
-
-   render({
-    preserveAdminScroll:true
-   });
+   closeAdminAfterSave();
   }
  );
 }
