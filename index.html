@@ -12,12 +12,16 @@ html,body{
  margin:0;
  padding:0;
  min-height:100%;
- background:#09090a;
+ background:#0b0b0c;
  color:#fff;
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
-body{min-height:100vh}
-body.modalOpen{overflow:hidden}
+html{scroll-behavior:smooth}
+body{
+ min-height:100vh;
+ overflow-x:hidden;
+ font-size:13px;
+}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
 a{text-decoration:none;color:inherit}
@@ -41,22 +45,135 @@ a{text-decoration:none;color:inherit}
  --titleFont:Georgia,serif;
 }
 
-body{
- font-family:var(--fontFamily);
- color:var(--text);
- font-size:var(--bodySize);
-}
-
+body{font-family:var(--fontFamily);color:var(--text);font-size:var(--bodySize)}
 #app{min-height:100vh}
 
-.container{
- width:100%;
- max-width:650px;
- margin:auto;
- padding:0 16px 80px;
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes fadeIn{
+ from{opacity:0}
+ to{opacity:1}
 }
 
-/* BACKGROUND */
+@keyframes pageIn{
+ from{
+  opacity:0;
+  transform:translateY(12px);
+ }
+ to{
+  opacity:1;
+  transform:none;
+ }
+}
+
+@keyframes cardIn{
+ from{
+  opacity:0;
+  transform:translateY(18px) scale(.985);
+ }
+ to{
+  opacity:1;
+  transform:none;
+ }
+}
+
+@keyframes popupIn{
+ from{
+  opacity:0;
+  transform:translateY(-6px) scale(.97);
+ }
+ to{
+  opacity:1;
+  transform:none;
+ }
+}
+
+@keyframes drawerIn{
+ from{transform:translateX(-100%);opacity:.5}
+ to{transform:none;opacity:1}
+}
+
+@keyframes modalUp{
+ from{
+  opacity:0;
+  transform:translateY(100%);
+ }
+ to{
+  opacity:1;
+  transform:none;
+ }
+}
+
+@keyframes adminIn{
+ from{transform:translateX(100%);opacity:.7}
+ to{transform:none;opacity:1}
+}
+
+@keyframes pulseSoft{
+ 0%,100%{box-shadow:0 0 0 0 rgba(214,168,61,0)}
+ 50%{box-shadow:0 0 0 6px rgba(214,168,61,.07)}
+}
+
+.pageContent{
+ animation:pageIn .28s ease both;
+}
+
+.section{
+ animation:pageIn .32s ease both;
+}
+
+.product,
+.category,
+.feature,
+.event{
+ animation:cardIn .38s ease both;
+}
+
+.product:nth-child(2),
+.category:nth-child(2),
+.feature:nth-child(2),
+.event:nth-child(2){animation-delay:.035s}
+
+.product:nth-child(3),
+.category:nth-child(3),
+.feature:nth-child(3),
+.event:nth-child(3){animation-delay:.07s}
+
+.product:nth-child(4),
+.category:nth-child(4),
+.feature:nth-child(4),
+.event:nth-child(4){animation-delay:.105s}
+
+button,
+a,
+input,
+select,
+textarea{
+ transition:
+  transform .18s ease,
+  background-color .18s ease,
+  border-color .18s ease,
+  color .18s ease,
+  box-shadow .18s ease,
+  opacity .18s ease;
+}
+
+button:active{
+ transform:scale(.965);
+}
+
+.category:active,
+.feature:active,
+.event:active,
+.product:active{
+ transform:scale(.985);
+}
+
+/* =========================
+   BACKGROUND
+========================= */
 
 .background{
  position:fixed;
@@ -64,6 +181,7 @@ body{
  z-index:-10;
  overflow:hidden;
  background:#0b0b0c;
+ transition:background .35s ease;
 }
 
 .background img,
@@ -77,9 +195,23 @@ body{
  position:absolute;
  inset:0;
  background:rgba(0,0,0,var(--overlay));
+ transition:background .35s ease;
 }
 
-/* TOP */
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+ width:100%;
+ max-width:650px;
+ margin:auto;
+ padding:0 16px 80px;
+}
+
+/* =========================
+   TOP BAR
+========================= */
 
 .top{
  position:sticky;
@@ -118,10 +250,12 @@ body{
  align-items:center;
  justify-content:center;
  font-size:18px;
- transition:.2s;
 }
 
-.iconBtn:active{transform:scale(.93)}
+.iconBtn:hover{
+ background:#29292d;
+ border-color:rgba(255,255,255,.16);
+}
 
 .currencyBtn{
  height:43px;
@@ -135,13 +269,20 @@ body{
  box-shadow:0 7px 22px rgba(0,0,0,.22);
 }
 
+.currencyBtn:hover{
+ filter:brightness(1.08);
+}
+
 .languageBtn{
  font-size:10px;
  font-weight:900;
  letter-spacing:.02em;
 }
 
-.searchBox{margin-top:9px}
+.searchBox{
+ margin-top:9px;
+ animation:pageIn .2s ease;
+}
 
 .searchBox input{
  width:100%;
@@ -158,7 +299,9 @@ body{
  box-shadow:0 0 0 3px rgba(214,168,61,.10);
 }
 
-/* POPUPS */
+/* =========================
+   POPUPS
+========================= */
 
 .quickPopup{
  position:absolute;
@@ -173,7 +316,7 @@ body{
  backdrop-filter:blur(25px);
  -webkit-backdrop-filter:blur(25px);
  z-index:500;
- animation:popupIn .16s ease;
+ animation:popupIn .18s ease both;
 }
 
 .quickPopup button{
@@ -204,16 +347,14 @@ body{
  color:#111;
 }
 
-@keyframes popupIn{
- from{opacity:0;transform:translateY(-5px) scale(.98)}
- to{opacity:1;transform:none}
-}
-
-/* HERO */
+/* =========================
+   HERO
+========================= */
 
 .hero{
  text-align:center;
  padding:48px 0 28px;
+ animation:pageIn .45s ease both;
 }
 
 .logo{
@@ -232,7 +373,11 @@ body{
   0 0 0 7px rgba(214,168,61,.035),
   0 0 55px rgba(214,168,61,.15);
  overflow:hidden;
- transition:.25s;
+ transition:
+  width .3s ease,
+  height .3s ease,
+  box-shadow .3s ease,
+  border-color .3s ease;
 }
 
 .logo img{
@@ -255,6 +400,7 @@ body{
  font:700 var(--titleSize) var(--titleFont);
  line-height:1.05;
  letter-spacing:-.03em;
+ transition:font-size .3s ease;
 }
 
 .hero p{
@@ -265,9 +411,13 @@ body{
  line-height:1.6;
 }
 
-/* SECTION */
+/* =========================
+   SECTION
+========================= */
 
-.section{margin-top:31px}
+.section{
+ margin-top:31px;
+}
 
 .sectionHead{
  display:flex;
@@ -288,7 +438,9 @@ body{
  font-size:10px;
 }
 
-/* HORIZONTAL */
+/* =========================
+   HORIZONTAL
+========================= */
 
 .horizontal{
  display:flex;
@@ -296,12 +448,16 @@ body{
  overflow-x:auto;
  scrollbar-width:none;
  scroll-snap-type:x mandatory;
- padding-bottom:3px;
+ padding:3px 0 6px;
 }
 
-.horizontal::-webkit-scrollbar{display:none}
+.horizontal::-webkit-scrollbar{
+ display:none;
+}
 
-/* FEATURE */
+/* =========================
+   FEATURE
+========================= */
 
 .feature{
  position:relative;
@@ -314,6 +470,7 @@ body{
  background:#171719;
  scroll-snap-align:start;
  box-shadow:0 18px 50px rgba(0,0,0,.30);
+ color:#fff;
 }
 
 .feature img,
@@ -321,6 +478,12 @@ body{
  width:100%;
  height:100%;
  object-fit:cover;
+ transition:transform .5s ease;
+}
+
+.feature:hover img,
+.feature:hover video{
+ transform:scale(1.035);
 }
 
 .featureShade{
@@ -355,7 +518,9 @@ body{
  font-weight:950;
 }
 
-/* EVENTS */
+/* =========================
+   EVENTS
+========================= */
 
 .event{
  position:relative;
@@ -367,6 +532,7 @@ body{
  overflow:hidden;
  background:#171719;
  scroll-snap-align:start;
+ color:#fff;
 }
 
 .event img,
@@ -374,6 +540,12 @@ body{
  width:100%;
  height:100%;
  object-fit:cover;
+ transition:transform .5s ease;
+}
+
+.event:hover img,
+.event:hover video{
+ transform:scale(1.035);
 }
 
 .eventShade{
@@ -407,7 +579,9 @@ body{
  text-align:left;
 }
 
-.eventText strong{font-size:18px}
+.eventText strong{
+ font-size:18px;
+}
 
 .eventText span{
  display:block;
@@ -416,7 +590,9 @@ body{
  font-size:11px;
 }
 
-/* CATEGORIES */
+/* =========================
+   CATEGORIES
+========================= */
 
 .categories{
  display:grid;
@@ -433,12 +609,18 @@ body{
  overflow:hidden;
  background:#171719;
  box-shadow:0 14px 38px rgba(0,0,0,.20);
+ color:#fff;
 }
 
 .category img{
  width:100%;
  height:100%;
  object-fit:cover;
+ transition:transform .5s ease;
+}
+
+.category:hover img{
+ transform:scale(1.045);
 }
 
 .categoryShade{
@@ -472,7 +654,9 @@ body{
  margin-top:4px;
 }
 
-/* CATEGORY PAGE */
+/* =========================
+   CATEGORY PAGE
+========================= */
 
 .categoryTitle{
  display:flex;
@@ -490,6 +674,10 @@ body{
  border-radius:11px;
  font-size:11px;
  font-weight:850;
+}
+
+.backBtn:hover{
+ background:#29292d;
 }
 
 .stickyCategories{
@@ -511,7 +699,9 @@ body{
  scrollbar-width:none;
 }
 
-.categoryTabs::-webkit-scrollbar{display:none}
+.categoryTabs::-webkit-scrollbar{
+ display:none;
+}
 
 .categoryTabs button{
  flex:0 0 auto;
@@ -524,12 +714,19 @@ body{
  font-weight:850;
 }
 
+.categoryTabs button:hover{
+ background:#28282b;
+ color:#fff;
+}
+
 .categoryTabs button.active{
  background:var(--accent);
  color:#111;
 }
 
-/* PRODUCTS */
+/* =========================
+   PRODUCTS
+========================= */
 
 .products{
  display:flex;
@@ -548,14 +745,21 @@ body{
  background:rgba(20,20,22,var(--cardOpacity));
  cursor:pointer;
  box-shadow:0 13px 35px rgba(0,0,0,.18);
- transition:.2s;
+ transition:
+  transform .2s ease,
+  box-shadow .2s ease,
+  border-color .2s ease;
 }
 
-.product:active{transform:scale(.985)}
+.product:hover{
+ border-color:rgba(255,255,255,.14);
+ box-shadow:0 18px 45px rgba(0,0,0,.27);
+}
 
 .productImage{
  height:122px;
  background:#1c1c1e;
+ overflow:hidden;
 }
 
 .productImage img,
@@ -563,6 +767,12 @@ body{
  width:100%;
  height:100%;
  object-fit:cover;
+ transition:transform .5s ease;
+}
+
+.product:hover .productImage img,
+.product:hover .productImage video{
+ transform:scale(1.05);
 }
 
 .productInfo{
@@ -616,7 +826,9 @@ body{
  font-size:14px;
 }
 
-/* DRAWER */
+/* =========================
+   DRAWER
+========================= */
 
 .overlay{
  position:fixed;
@@ -625,6 +837,7 @@ body{
  background:rgba(0,0,0,.72);
  backdrop-filter:blur(6px);
  -webkit-backdrop-filter:blur(6px);
+ animation:fadeIn .2s ease;
 }
 
 .drawer{
@@ -634,12 +847,7 @@ body{
  padding:20px;
  background:#101011;
  box-shadow:10px 0 50px #000;
- animation:drawerIn .2s ease;
-}
-
-@keyframes drawerIn{
- from{transform:translateX(-100%)}
- to{transform:none}
+ animation:drawerIn .25s cubic-bezier(.2,.8,.2,1);
 }
 
 .drawerHead{
@@ -653,7 +861,9 @@ body{
  font:700 25px Georgia,serif;
 }
 
-.drawerSection{margin-top:25px}
+.drawerSection{
+ margin-top:25px;
+}
 
 .drawerLabel{
  color:#666;
@@ -675,7 +885,14 @@ body{
  margin-top:7px;
 }
 
-/* MODAL */
+.drawerLink:hover{
+ background:#28282b;
+ color:#fff;
+}
+
+/* =========================
+   MODAL
+========================= */
 
 .modalOverlay{
  position:fixed;
@@ -687,6 +904,7 @@ body{
  background:rgba(0,0,0,.76);
  backdrop-filter:blur(7px);
  -webkit-backdrop-filter:blur(7px);
+ animation:fadeIn .2s ease;
 }
 
 .modal{
@@ -696,12 +914,7 @@ body{
  border-radius:27px 27px 0 0;
  background:#101011;
  box-shadow:0 -15px 60px rgba(0,0,0,.5);
- animation:modalUp .22s ease;
-}
-
-@keyframes modalUp{
- from{transform:translateY(100%)}
- to{transform:none}
+ animation:modalUp .28s cubic-bezier(.2,.8,.2,1);
 }
 
 .modalImage{
@@ -730,7 +943,14 @@ body{
  font-size:23px;
 }
 
-.modalBody{padding:21px}
+.closeBtn:hover{
+ background:#000;
+ transform:rotate(4deg);
+}
+
+.modalBody{
+ padding:21px;
+}
 
 .modalBody h2{
  margin:0;
@@ -765,7 +985,9 @@ body{
  font-weight:950;
 }
 
-/* ADMIN */
+/* =========================
+   ADMIN
+========================= */
 
 .adminOverlay{
  position:fixed;
@@ -774,6 +996,7 @@ body{
  background:rgba(0,0,0,.82);
  display:flex;
  justify-content:flex-end;
+ animation:fadeIn .2s ease;
 }
 
 .admin{
@@ -781,12 +1004,7 @@ body{
  height:100%;
  overflow:auto;
  background:#0e0e0f;
- animation:adminIn .22s ease;
-}
-
-@keyframes adminIn{
- from{transform:translateX(100%)}
- to{transform:none}
+ animation:adminIn .28s cubic-bezier(.2,.8,.2,1);
 }
 
 .adminHeader{
@@ -846,9 +1064,13 @@ body{
  font-weight:950;
 }
 
-.adminBody{padding:16px}
+.adminBody{
+ padding:16px;
+}
 
-.field{margin-bottom:13px}
+.field{
+ margin-bottom:13px;
+}
 
 .field label{
  display:block;
@@ -887,6 +1109,7 @@ body{
  border:1px solid var(--line);
  border-radius:16px;
  background:#151517;
+ animation:pageIn .25s ease both;
 }
 
 .adminCardTitle{
@@ -905,18 +1128,21 @@ body{
  font-weight:850;
 }
 
+.adminButton:hover{
+ background:#2c2c30;
+}
+
 .adminButton.gold{
  background:var(--accent);
  color:#111;
 }
 
-.adminButton.danger{
- background:#7f1d1d;
- color:#fff;
+.adminButton.gold:hover{
+ filter:brightness(1.08);
 }
 
-.adminButton.green{
- background:#166534;
+.adminButton.danger{
+ background:#7f1d1d;
  color:#fff;
 }
 
@@ -928,6 +1154,7 @@ body{
  border-top:1px solid var(--line);
  z-index:20;
  backdrop-filter:blur(15px);
+ -webkit-backdrop-filter:blur(15px);
 }
 
 .row{
@@ -953,7 +1180,35 @@ body{
  margin-top:5px;
 }
 
-/* ADMIN LISTS */
+/* =========================
+   ADMIN BREADCRUMB
+========================= */
+
+.adminBreadcrumb{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ margin-bottom:13px;
+ padding:3px 0;
+ color:#777;
+ font-size:11px;
+}
+
+.adminBreadcrumb button{
+ border:0;
+ background:transparent;
+ color:var(--accent2);
+ font-size:11px;
+ padding:7px 0;
+}
+
+.adminBreadcrumb strong{
+ color:#fff;
+}
+
+/* =========================
+   ADMIN LISTS
+========================= */
 
 .adminCategoryList,
 .adminProductList{
@@ -975,6 +1230,12 @@ body{
  color:#fff;
  text-align:left;
  width:100%;
+}
+
+.adminCategoryItem:hover,
+.adminProductItem:hover{
+ background:#1c1c1f;
+ border-color:#3a3a3e;
 }
 
 .adminCategoryThumb,
@@ -1017,35 +1278,18 @@ body{
  font-size:10px;
 }
 
-.adminProductInfo span{color:var(--accent2)}
+.adminProductInfo span{
+ color:var(--accent2);
+}
 
 .adminArrow{
  color:#777;
  font-size:20px;
 }
 
-/* BREADCRUMB */
-
-.adminBreadcrumb{
- display:flex;
- align-items:center;
- gap:9px;
- margin-bottom:13px;
- color:#777;
- font-size:12px;
-}
-
-.adminBreadcrumb button{
- border:0;
- background:none;
- color:var(--accent2);
- padding:4px 0;
- font-weight:800;
-}
-
-.adminBreadcrumb strong{color:#fff}
-
-/* FILE */
+/* =========================
+   FILE
+========================= */
 
 .fileBox{
  display:flex;
@@ -1068,6 +1312,10 @@ body{
  cursor:pointer;
 }
 
+.fileBtn:hover{
+ background:#29292d;
+}
+
 .preview{
  width:100%;
  max-height:180px;
@@ -1077,7 +1325,9 @@ body{
  border:1px solid #303034;
 }
 
-/* DESIGN */
+/* =========================
+   DESIGN
+========================= */
 
 .designGrid{
  display:grid;
@@ -1131,7 +1381,9 @@ body{
  gap:10px;
 }
 
-.rangeRow input{flex:1}
+.rangeRow input{
+ flex:1;
+}
 
 .rangeValue{
  width:48px;
@@ -1159,7 +1411,41 @@ body{
  accent-color:var(--accent);
 }
 
-/* PRODUCT FORM */
+/* =========================
+   TRANSLATION
+========================= */
+
+.translationStatus{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ padding:10px 12px;
+ margin-top:10px;
+ border-radius:10px;
+ background:rgba(214,168,61,.08);
+ border:1px solid rgba(214,168,61,.15);
+ color:#bbb;
+ font-size:10px;
+}
+
+.translationDot{
+ width:8px;
+ height:8px;
+ border-radius:50%;
+ background:var(--accent);
+ animation:pulseSoft 1.2s infinite;
+}
+
+.translationInfo{
+ margin-top:7px;
+ color:#666;
+ font-size:9px;
+ line-height:1.5;
+}
+
+/* =========================
+   SIMPLE PRODUCT FORM
+========================= */
 
 .simpleProductHero{
  padding:14px;
@@ -1197,39 +1483,33 @@ body{
  font-weight:850;
 }
 
-/* LANGUAGE FORM */
+/* =========================
+   PIN
+========================= */
 
-.langSection{
+.pinBox{
  padding:13px;
- margin-top:10px;
- border:1px solid #29292d;
+ border:1px solid rgba(214,168,61,.18);
  border-radius:13px;
- background:#111113;
+ background:rgba(214,168,61,.05);
 }
 
-.langSectionTitle{
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:8px;
+.pinBoxTitle{
+ font-size:13px;
+ font-weight:900;
+ margin-bottom:5px;
+}
+
+.pinBoxInfo{
+ color:#777;
+ font-size:10px;
+ line-height:1.5;
  margin-bottom:12px;
 }
 
-.langBadge{
- padding:5px 8px;
- border-radius:7px;
- background:#222225;
- color:#aaa;
- font-size:9px;
- font-weight:900;
-}
-
-.langBadge.active{
- background:var(--accent);
- color:#111;
-}
-
-/* LOGIN */
+/* =========================
+   LOGIN
+========================= */
 
 .adminLoginOverlay{
  position:fixed;
@@ -1241,6 +1521,7 @@ body{
  padding:20px;
  background:rgba(0,0,0,.92);
  backdrop-filter:blur(12px);
+ animation:fadeIn .2s ease;
 }
 
 .adminLogin{
@@ -1250,6 +1531,7 @@ body{
  border-radius:22px;
  background:#111113;
  box-shadow:0 20px 70px #000;
+ animation:pageIn .3s ease;
 }
 
 .adminLoginLogo{
@@ -1290,6 +1572,11 @@ body{
  letter-spacing:.15em;
 }
 
+.adminPassword:focus{
+ border-color:var(--accent);
+ box-shadow:0 0 0 3px rgba(214,168,61,.1);
+}
+
 .adminLoginButton{
  width:100%;
  margin-top:10px;
@@ -1312,27 +1599,9 @@ body{
  font-size:10px;
 }
 
-/* PIN */
-
-.pinBox{
- padding:14px;
- border-radius:14px;
- background:#111113;
- border:1px solid #29292d;
-}
-
-.pinInfo{
- padding:10px;
- margin-bottom:12px;
- border-radius:10px;
- background:rgba(214,168,61,.08);
- border:1px solid rgba(214,168,61,.16);
- color:#aaa;
- font-size:10px;
- line-height:1.5;
-}
-
-/* FOOTER */
+/* =========================
+   FOOTER
+========================= */
 
 .footer{
  padding:35px 0;
@@ -1347,18 +1616,57 @@ body{
  color:#666;
 }
 
-.hidden{display:none!important}
+.hidden{
+ display:none!important;
+}
 
 @media(max-width:430px){
- .categories{grid-template-columns:1fr 1fr}
- .product{grid-template-columns:105px 1fr}
- .productImage{height:118px}
+ .categories{
+  grid-template-columns:1fr 1fr;
+ }
+ .product{
+  grid-template-columns:105px 1fr;
+ }
+ .productImage{
+  height:118px;
+ }
 }
 
 @media(max-width:390px){
- .categories{grid-template-columns:1fr}
- .designGrid{grid-template-columns:1fr}
- .row{flex-direction:column;gap:0}
+ .categories{
+  grid-template-columns:1fr;
+ }
+ .designGrid{
+  grid-template-columns:1fr;
+ }
+ .row{
+  flex-direction:column;
+  gap:0;
+ }
+}
+
+/* RTL */
+[dir="rtl"] .featureText,
+[dir="rtl"] .eventText,
+[dir="rtl"] .categoryText,
+[dir="rtl"] .productInfo{
+ text-align:right;
+}
+
+[dir="rtl"] .quickPopup{
+ right:auto;
+ left:0;
+}
+
+[dir="rtl"] .drawer{
+ margin-left:auto;
+ margin-right:0;
+ animation-name:drawerInRTL;
+}
+
+@keyframes drawerInRTL{
+ from{transform:translateX(100%);opacity:.5}
+ to{transform:none;opacity:1}
 }
 </style>
 </head>
@@ -1371,16 +1679,13 @@ body{
 
 /* =========================================================
    NEARMENU PREMIUM V3
-   - PIN değiştirme
-   - Tam çoklu dil
-   - Eski verileri koruyan veri migrasyonu
-   - Daha güvenli storage işlemleri
-   - RTL desteği
-========================================================= */
+   ========================================================= */
 
 const DEFAULT_ADMIN_PIN="1234";
+
 const STORAGE_KEY="nearMenuData";
 const PIN_KEY="nearMenuAdminPin";
+const TRANSLATION_CACHE_KEY="nearMenuTranslations";
 
 const IMAGES={
  breakfast:"https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=900&q=80",
@@ -1445,31 +1750,15 @@ const TEXT={
   visibility:"Görünürlük",
   image:"Fotoğraf",
   video:"Video",
-  pin:"PIN",
+  pin:"Yönetici PIN",
   changePin:"PIN Değiştir",
-  currentPin:"Mevcut PIN",
   newPin:"Yeni PIN",
-  repeatPin:"Yeni PIN Tekrar",
-  pinChanged:"PIN başarıyla değiştirildi.",
-  pinWrong:"Mevcut PIN yanlış.",
-  pinMismatch:"Yeni PIN'ler aynı değil.",
-  pinLength:"PIN 4-12 haneli olmalıdır.",
-  pinOnlyNumbers:"PIN sadece rakamlardan oluşmalıdır.",
-  languages:"Diller",
-  turkish:"Türkçe",
-  english:"English",
-  arabic:"العربية",
-  categoryLanguages:"Kategori Dilleri",
-  productLanguages:"Ürün Dilleri",
-  eventLanguages:"Etkinlik Dilleri",
-  eventName:"Etkinlik adı",
-  eventDescription:"Etkinlik açıklaması",
-  eventDate:"Gün",
-  eventTime:"Saat",
-  saveChanges:"Değişiklikleri Kaydet",
-  saved:"Kaydedildi.",
-  clear:"Temizle",
-  current:"Mevcut"
+  confirmPin:"Yeni PIN Tekrar",
+  pinSaved:"PIN başarıyla değiştirildi.",
+  translation:"Otomatik Çeviri",
+  translating:"Çeviriler hazırlanıyor...",
+  translationReady:"Çeviri hazır.",
+  translationInfo:"Türkçe metinleri yazman yeterli. İngilizce ve Arapça otomatik oluşturulur."
  },
  en:{
   welcome:"WELCOME",
@@ -1522,31 +1811,15 @@ const TEXT={
   visibility:"Visibility",
   image:"Image",
   video:"Video",
-  pin:"PIN",
+  pin:"Admin PIN",
   changePin:"Change PIN",
-  currentPin:"Current PIN",
   newPin:"New PIN",
-  repeatPin:"Repeat New PIN",
-  pinChanged:"PIN changed successfully.",
-  pinWrong:"Current PIN is incorrect.",
-  pinMismatch:"New PINs do not match.",
-  pinLength:"PIN must be 4-12 digits.",
-  pinOnlyNumbers:"PIN must contain numbers only.",
-  languages:"Languages",
-  turkish:"Türkçe",
-  english:"English",
-  arabic:"العربية",
-  categoryLanguages:"Category Languages",
-  productLanguages:"Product Languages",
-  eventLanguages:"Event Languages",
-  eventName:"Event name",
-  eventDescription:"Event description",
-  eventDate:"Day",
-  eventTime:"Time",
-  saveChanges:"Save Changes",
-  saved:"Saved.",
-  clear:"Clear",
-  current:"Current"
+  confirmPin:"Confirm New PIN",
+  pinSaved:"PIN changed successfully.",
+  translation:"Automatic Translation",
+  translating:"Preparing translations...",
+  translationReady:"Translation ready.",
+  translationInfo:"You only need to write Turkish text. English and Arabic are generated automatically."
  },
  ar:{
   welcome:"مرحباً بكم",
@@ -1582,6 +1855,7 @@ const TEXT={
   basic:"المعلومات الأساسية",
   advanced:"معلومات إضافية",
   hideAdvanced:"إخفاء المعلومات الإضافية",
+  advanced:"معلومات إضافية",
   productName:"اسم المنتج",
   productPrice:"السعر",
   description:"الوصف",
@@ -1599,31 +1873,15 @@ const TEXT={
   visibility:"العرض",
   image:"صورة",
   video:"فيديو",
-  pin:"رمز PIN",
-  changePin:"تغيير PIN",
-  currentPin:"PIN الحالي",
-  newPin:"PIN الجديد",
-  repeatPin:"تأكيد PIN الجديد",
-  pinChanged:"تم تغيير PIN بنجاح.",
-  pinWrong:"PIN الحالي غير صحيح.",
-  pinMismatch:"رمزا PIN غير متطابقين.",
-  pinLength:"يجب أن يكون PIN من 4 إلى 12 رقماً.",
-  pinOnlyNumbers:"يجب أن يحتوي PIN على أرقام فقط.",
-  languages:"اللغات",
-  turkish:"Türkçe",
-  english:"English",
-  arabic:"العربية",
-  categoryLanguages:"لغات التصنيف",
-  productLanguages:"لغات المنتج",
-  eventLanguages:"لغات الفعالية",
-  eventName:"اسم الفعالية",
-  eventDescription:"وصف الفعالية",
-  eventDate:"اليوم",
-  eventTime:"الوقت",
-  saveChanges:"حفظ التغييرات",
-  saved:"تم الحفظ.",
-  clear:"مسح",
-  current:"الحالي"
+  pin:"رمز المدير",
+  changePin:"تغيير الرمز",
+  newPin:"الرمز الجديد",
+  confirmPin:"تأكيد الرمز",
+  pinSaved:"تم تغيير الرمز بنجاح.",
+  translation:"الترجمة التلقائية",
+  translating:"جاري إعداد الترجمات...",
+  translationReady:"الترجمة جاهزة.",
+  translationInfo:"يكفي كتابة النص التركي. سيتم إنشاء الإنجليزية والعربية تلقائياً."
  }
 };
 
@@ -1633,25 +1891,10 @@ const TEXT={
 
 const DATA={
  name:"NEARMENU DEMO",
-
- nameTranslations:{
-  tr:"NEARMENU DEMO",
-  en:"NEARMENU DEMO",
-  ar:"NEARMENU DEMO"
- },
-
  subtitle:"Lezzetin en güzel hali burada.",
-
- subtitleTranslations:{
-  tr:"Lezzetin en güzel hali burada.",
-  en:"The best taste is here.",
-  ar:"ألذ النكهات هنا."
- },
-
  phone:"+90 555 555 55 55",
  whatsapp:"905555555555",
  logo:"",
-
  rates:{
   USD:40,
   EUR:47
@@ -1699,11 +1942,6 @@ const DATA={
   {
    id:"kahvalti",
    name:"Kahvaltı",
-   names:{
-    tr:"Kahvaltı",
-    en:"Breakfast",
-    ar:"الفطور"
-   },
    image:IMAGES.breakfast,
    items:[
     {
@@ -1721,18 +1959,8 @@ const DATA={
       ar:"فطور غني بالجبن والزيتون والمربى والعسل والبيض والأطباق الساخنة."
      },
      portion:"2 kişilik",
-     portionTranslations:{
-      tr:"2 kişilik",
-      en:"For 2 people",
-      ar:"لشخصين"
-     },
      calories:"1250",
      allergens:["Süt","Gluten","Yumurta"],
-     allergensTranslations:{
-      tr:["Süt","Gluten","Yumurta"],
-      en:["Milk","Gluten","Egg"],
-      ar:["حليب","غلوتين","بيض"]
-     },
      spicy:0,
      price:650,
      image:IMAGES.breakfast,
@@ -1744,30 +1972,10 @@ const DATA={
     {
      id:"kahvalti-tabagi",
      name:"Kahvaltı Tabağı",
-     names:{
-      tr:"Kahvaltı Tabağı",
-      en:"Breakfast Plate",
-      ar:"طبق الفطور"
-     },
      description:"Peynir, zeytin, yumurta, domates ve salatalık.",
-     descriptions:{
-      tr:"Peynir, zeytin, yumurta, domates ve salatalık.",
-      en:"Cheese, olives, egg, tomatoes and cucumber.",
-      ar:"جبن وزيتون وبيض وطماطم وخيار."
-     },
      portion:"1 kişilik",
-     portionTranslations:{
-      tr:"1 kişilik",
-      en:"For 1 person",
-      ar:"لشخص واحد"
-     },
      calories:"720",
      allergens:["Süt","Yumurta"],
-     allergensTranslations:{
-      tr:["Süt","Yumurta"],
-      en:["Milk","Egg"],
-      ar:["حليب","بيض"]
-     },
      spicy:0,
      price:320,
      image:IMAGES.breakfast,
@@ -1779,30 +1987,10 @@ const DATA={
     {
      id:"menemen",
      name:"Sahanda Menemen",
-     names:{
-      tr:"Sahanda Menemen",
-      en:"Menemen",
-      ar:"منمن"
-     },
      description:"Domates, biber ve yumurta ile hazırlanan sıcak menemen.",
-     descriptions:{
-      tr:"Domates, biber ve yumurta ile hazırlanan sıcak menemen.",
-      en:"Hot Turkish scrambled eggs with tomatoes and peppers.",
-      ar:"بيض تركي ساخن مع الطماطم والفلفل."
-     },
      portion:"250 g",
-     portionTranslations:{
-      tr:"250 g",
-      en:"250 g",
-      ar:"250 غ"
-     },
      calories:"410",
      allergens:["Yumurta"],
-     allergensTranslations:{
-      tr:["Yumurta"],
-      en:["Egg"],
-      ar:["بيض"]
-     },
      spicy:1,
      price:220,
      image:IMAGES.breakfast,
@@ -1817,40 +2005,15 @@ const DATA={
   {
    id:"izgara",
    name:"Izgaralar",
-   names:{
-    tr:"Izgaralar",
-    en:"Grills",
-    ar:"المشاوي"
-   },
    image:IMAGES.grill,
    items:[
     {
      id:"izgara-et",
      name:"Izgara Et",
-     names:{
-      tr:"Izgara Et",
-      en:"Grilled Meat",
-      ar:"لحم مشوي"
-     },
      description:"Günlük seçilen et, közlenmiş sebzeler ve garnitür.",
-     descriptions:{
-      tr:"Günlük seçilen et, közlenmiş sebzeler ve garnitür.",
-      en:"Daily selected meat with grilled vegetables and garnish.",
-      ar:"لحم مختار يومياً مع الخضار المشوية والمقبلات."
-     },
      portion:"300 g",
-     portionTranslations:{
-      tr:"300 g",
-      en:"300 g",
-      ar:"300 غ"
-     },
      calories:"820",
      allergens:[],
-     allergensTranslations:{
-      tr:[],
-      en:[],
-      ar:[]
-     },
      spicy:0,
      price:790,
      image:IMAGES.grill,
@@ -1862,30 +2025,10 @@ const DATA={
     {
      id:"izgara-tavuk",
      name:"Izgara Tavuk",
-     names:{
-      tr:"Izgara Tavuk",
-      en:"Grilled Chicken",
-      ar:"دجاج مشوي"
-     },
      description:"Marine edilmiş tavuk ve günlük garnitür.",
-     descriptions:{
-      tr:"Marine edilmiş tavuk ve günlük garnitür.",
-      en:"Marinated chicken with daily garnish.",
-      ar:"دجاج متبل مع المقبلات اليومية."
-     },
      portion:"250 g",
-     portionTranslations:{
-      tr:"250 g",
-      en:"250 g",
-      ar:"250 غ"
-     },
      calories:"610",
      allergens:[],
-     allergensTranslations:{
-      tr:[],
-      en:[],
-      ar:[]
-     },
      spicy:0,
      price:420,
      image:IMAGES.grill,
@@ -1900,40 +2043,15 @@ const DATA={
   {
    id:"burger",
    name:"Burgerler",
-   names:{
-    tr:"Burgerler",
-    en:"Burgers",
-    ar:"البرغر"
-   },
    image:IMAGES.burger,
    items:[
     {
      id:"classic-burger",
      name:"Classic Burger",
-     names:{
-      tr:"Classic Burger",
-      en:"Classic Burger",
-      ar:"برغر كلاسيك"
-     },
      description:"Dana köfte, cheddar, marul, domates ve özel sos.",
-     descriptions:{
-      tr:"Dana köfte, cheddar, marul, domates ve özel sos.",
-      en:"Beef patty, cheddar, lettuce, tomato and special sauce.",
-      ar:"قطعة لحم بقري، شيدر، خس، طماطم وصلصة خاصة."
-     },
      portion:"180 g",
-     portionTranslations:{
-      tr:"180 g",
-      en:"180 g",
-      ar:"180 غ"
-     },
      calories:"840",
      allergens:["Gluten","Süt"],
-     allergensTranslations:{
-      tr:["Gluten","Süt"],
-      en:["Gluten","Milk"],
-      ar:["غلوتين","حليب"]
-     },
      spicy:0,
      price:295,
      image:IMAGES.burger,
@@ -1945,30 +2063,10 @@ const DATA={
     {
      id:"spicy-burger",
      name:"Spicy Burger",
-     names:{
-      tr:"Acılı Burger",
-      en:"Spicy Burger",
-      ar:"برغر حار"
-     },
      description:"Dana köfte, cheddar, jalapeño ve acılı özel sos.",
-     descriptions:{
-      tr:"Dana köfte, cheddar, jalapeño ve acılı özel sos.",
-      en:"Beef patty, cheddar, jalapeño and spicy special sauce.",
-      ar:"قطعة لحم بقري، شيدر، هالبينو وصلصة حارة خاصة."
-     },
      portion:"180 g",
-     portionTranslations:{
-      tr:"180 g",
-      en:"180 g",
-      ar:"180 غ"
-     },
      calories:"900",
      allergens:["Gluten","Süt"],
-     allergensTranslations:{
-      tr:["Gluten","Süt"],
-      en:["Gluten","Milk"],
-      ar:["غلوتين","حليب"]
-     },
      spicy:3,
      price:320,
      image:IMAGES.burger,
@@ -1983,40 +2081,15 @@ const DATA={
   {
    id:"pizza",
    name:"Pizzalar",
-   names:{
-    tr:"Pizzalar",
-    en:"Pizzas",
-    ar:"البيتزا"
-   },
    image:IMAGES.pizza,
    items:[
     {
      id:"margherita",
      name:"Margherita",
-     names:{
-      tr:"Margherita",
-      en:"Margherita",
-      ar:"مارغريتا"
-     },
      description:"Domates sosu, mozzarella ve fesleğen.",
-     descriptions:{
-      tr:"Domates sosu, mozzarella ve fesleğen.",
-      en:"Tomato sauce, mozzarella and basil.",
-      ar:"صلصة الطماطم والموزاريلا والريحان."
-     },
      portion:"30 cm",
-     portionTranslations:{
-      tr:"30 cm",
-      en:"30 cm",
-      ar:"30 سم"
-     },
      calories:"780",
      allergens:["Gluten","Süt"],
-     allergensTranslations:{
-      tr:["Gluten","Süt"],
-      en:["Gluten","Milk"],
-      ar:["غلوتين","حليب"]
-     },
      spicy:0,
      price:340,
      image:IMAGES.pizza,
@@ -2028,30 +2101,10 @@ const DATA={
     {
      id:"karisik-pizza",
      name:"Karışık Pizza",
-     names:{
-      tr:"Karışık Pizza",
-      en:"Mixed Pizza",
-      ar:"بيتزا مشكلة"
-     },
      description:"Sucuk, mantar, biber, mısır, zeytin ve mozzarella.",
-     descriptions:{
-      tr:"Sucuk, mantar, biber, mısır, zeytin ve mozzarella.",
-      en:"Turkish sausage, mushrooms, peppers, corn, olives and mozzarella.",
-      ar:"سجق تركي وفطر وفلفل وذرة وزيتون وموزاريلا."
-     },
      portion:"30 cm",
-     portionTranslations:{
-      tr:"30 cm",
-      en:"30 cm",
-      ar:"30 سم"
-     },
      calories:"980",
      allergens:["Gluten","Süt"],
-     allergensTranslations:{
-      tr:["Gluten","Süt"],
-      en:["Gluten","Milk"],
-      ar:["غلوتين","حليب"]
-     },
      spicy:1,
      price:420,
      image:IMAGES.pizza,
@@ -2066,40 +2119,15 @@ const DATA={
   {
    id:"salata",
    name:"Salatalar",
-   names:{
-    tr:"Salatalar",
-    en:"Salads",
-    ar:"السلطات"
-   },
    image:IMAGES.salad,
    items:[
     {
      id:"sezar",
      name:"Sezar Salata",
-     names:{
-      tr:"Sezar Salata",
-      en:"Caesar Salad",
-      ar:"سلطة سيزر"
-     },
      description:"Göbek marul, parmesan, kruton ve özel sos.",
-     descriptions:{
-      tr:"Göbek marul, parmesan, kruton ve özel sos.",
-      en:"Romaine lettuce, parmesan, croutons and special dressing.",
-      ar:"خس روماني وبارميزان وقطع خبز وصلصة خاصة."
-     },
      portion:"350 g",
-     portionTranslations:{
-      tr:"350 g",
-      en:"350 g",
-      ar:"350 غ"
-     },
      calories:"460",
      allergens:["Süt","Gluten"],
-     allergensTranslations:{
-      tr:["Süt","Gluten"],
-      en:["Milk","Gluten"],
-      ar:["حليب","غلوتين"]
-     },
      spicy:0,
      price:280,
      image:IMAGES.salad,
@@ -2114,40 +2142,15 @@ const DATA={
   {
    id:"tatli",
    name:"Tatlılar",
-   names:{
-    tr:"Tatlılar",
-    en:"Desserts",
-    ar:"الحلويات"
-   },
    image:IMAGES.dessert,
    items:[
     {
      id:"gunun-tatlisi",
      name:"Günün Tatlısı",
-     names:{
-      tr:"Günün Tatlısı",
-      en:"Dessert of the Day",
-      ar:"حلوى اليوم"
-     },
      description:"Şefin günlük hazırladığı özel tatlı.",
-     descriptions:{
-      tr:"Şefin günlük hazırladığı özel tatlı.",
-      en:"A special dessert prepared fresh by the chef every day.",
-      ar:"حلوى خاصة يحضرها الشيف يومياً."
-     },
      portion:"1 porsiyon",
-     portionTranslations:{
-      tr:"1 porsiyon",
-      en:"1 portion",
-      ar:"حصة واحدة"
-     },
      calories:"520",
      allergens:["Gluten","Süt","Yumurta"],
-     allergensTranslations:{
-      tr:["Gluten","Süt","Yumurta"],
-      en:["Gluten","Milk","Egg"],
-      ar:["غلوتين","حليب","بيض"]
-     },
      spicy:0,
      price:190,
      image:IMAGES.dessert,
@@ -2162,40 +2165,15 @@ const DATA={
   {
    id:"icecek",
    name:"İçecekler",
-   names:{
-    tr:"İçecekler",
-    en:"Drinks",
-    ar:"المشروبات"
-   },
    image:IMAGES.drink,
    items:[
     {
      id:"soguk-icecek",
      name:"Soğuk İçecek",
-     names:{
-      tr:"Soğuk İçecek",
-      en:"Cold Drink",
-      ar:"مشروب بارد"
-     },
      description:"Çeşitli soğuk içecek seçenekleri.",
-     descriptions:{
-      tr:"Çeşitli soğuk içecek seçenekleri.",
-      en:"Various cold drink options.",
-      ar:"مجموعة متنوعة من المشروبات الباردة."
-     },
      portion:"330 ml",
-     portionTranslations:{
-      tr:"330 ml",
-      en:"330 ml",
-      ar:"330 مل"
-     },
      calories:"140",
      allergens:[],
-     allergensTranslations:{
-      tr:[],
-      en:[],
-      ar:[]
-     },
      spicy:0,
      price:90,
      image:IMAGES.drink,
@@ -2212,24 +2190,9 @@ const DATA={
   {
    id:"canli-muzik",
    name:"Canlı Müzik Gecesi",
-   names:{
-    tr:"Canlı Müzik Gecesi",
-    en:"Live Music Night",
-    ar:"ليلة موسيقية مباشرة"
-   },
    date:"Cumartesi",
-   dateTranslations:{
-    tr:"Cumartesi",
-    en:"Saturday",
-    ar:"السبت"
-   },
    time:"20:30",
    description:"Canlı müzik eşliğinde keyifli bir akşam.",
-   descriptions:{
-    tr:"Canlı müzik eşliğinde keyifli bir akşam.",
-    en:"Enjoy a pleasant evening with live music.",
-    ar:"استمتعوا بأمسية جميلة مع الموسيقى الحية."
-   },
    image:IMAGES.music,
    video:""
   }
@@ -2262,9 +2225,10 @@ let currencyMenu=false;
 let languageMenu=false;
 
 let advancedProduct=false;
+let translating=false;
 
 /* =========================================================
-   STORAGE
+   SAFE STORAGE
 ========================================================= */
 
 function storageAvailable(){
@@ -2280,12 +2244,16 @@ function storageAvailable(){
 
 function safeGet(key){
  if(!storageAvailable())return null;
- try{return localStorage.getItem(key)}
- catch(e){return null}
+ try{
+  return localStorage.getItem(key);
+ }catch(e){
+  return null;
+ }
 }
 
 function safeSet(key,value){
  if(!storageAvailable())return false;
+
  try{
   localStorage.setItem(key,value);
   return true;
@@ -2295,124 +2263,23 @@ function safeSet(key,value){
  }
 }
 
-function getAdminPin(){
- return safeGet(PIN_KEY)||DEFAULT_ADMIN_PIN;
-}
-
 /* =========================================================
-   DATA MIGRATION
+   LOAD DATA
 ========================================================= */
 
-function ensureTranslations(obj,baseKey,translationsKey){
+try{
+ const saved=safeGet(STORAGE_KEY);
 
- if(!obj)return;
-
- if(!obj[translationsKey]||
-    typeof obj[translationsKey]!=="object"){
-  obj[translationsKey]={
-   tr:obj[baseKey]||"",
-   en:obj[baseKey]||"",
-   ar:obj[baseKey]||""
-  };
+ if(saved){
+  mergeData(JSON.parse(saved));
  }
-
- ["tr","en","ar"].forEach(lang=>{
-  if(
-   obj[translationsKey][lang]===undefined||
-   obj[translationsKey][lang]===null||
-   obj[translationsKey][lang]===""
-  ){
-   obj[translationsKey][lang]=obj[baseKey]||"";
-  }
- });
-
-}
-
-function ensureArrayTranslations(obj,baseKey,translationsKey){
-
- if(!obj)return;
-
- if(!obj[translationsKey]||
-    typeof obj[translationsKey]!=="object"){
-  obj[translationsKey]={
-   tr:Array.isArray(obj[baseKey])?obj[baseKey].slice():[],
-   en:Array.isArray(obj[baseKey])?obj[baseKey].slice():[],
-   ar:Array.isArray(obj[baseKey])?obj[baseKey].slice():[]
-  };
- }
-
- ["tr","en","ar"].forEach(lang=>{
-  if(!Array.isArray(obj[translationsKey][lang])){
-   obj[translationsKey][lang]=
-    Array.isArray(obj[baseKey])
-    ?obj[baseKey].slice()
-    :[];
-  }
- });
-
-}
-
-function normalizeProduct(p){
-
- if(!p.id)p.id=uid("product");
-
- if(typeof p.name==="undefined")p.name="Yeni Ürün";
- if(typeof p.description==="undefined")p.description="";
- if(typeof p.portion==="undefined")p.portion="";
- if(typeof p.calories==="undefined")p.calories="";
- if(!Array.isArray(p.allergens))p.allergens=[];
- if(typeof p.spicy==="undefined")p.spicy=0;
- if(typeof p.price==="undefined")p.price=0;
- if(typeof p.image==="undefined")p.image="";
- if(typeof p.video==="undefined")p.video="";
- if(typeof p.featured==="undefined")p.featured=false;
- if(typeof p.dish==="undefined")p.dish=false;
- if(typeof p.sold==="undefined")p.sold=false;
-
- ensureTranslations(p,"name","names");
- ensureTranslations(p,"description","descriptions");
- ensureTranslations(p,"portion","portionTranslations");
- ensureArrayTranslations(p,"allergens","allergensTranslations");
-
- return p;
-}
-
-function normalizeCategory(c){
-
- if(!c.id)c.id=uid("category");
-
- if(typeof c.name==="undefined")c.name="Yeni Kategori";
- if(typeof c.image==="undefined")c.image="";
- if(!Array.isArray(c.items))c.items=[];
-
- ensureTranslations(c,"name","names");
-
- c.items=c.items.map(normalizeProduct);
-
- return c;
-}
-
-function normalizeEvent(e){
-
- if(!e.id)e.id=uid("event");
-
- if(typeof e.name==="undefined")e.name="Yeni Etkinlik";
- if(typeof e.date==="undefined")e.date="Cumartesi";
- if(typeof e.time==="undefined")e.time="20:00";
- if(typeof e.description==="undefined")e.description="";
- if(typeof e.image==="undefined")e.image="";
- if(typeof e.video==="undefined")e.video="";
-
- ensureTranslations(e,"name","names");
- ensureTranslations(e,"date","dateTranslations");
- ensureTranslations(e,"description","descriptions");
-
- return e;
+}catch(e){
+ console.log("Veri yükleme:",e);
 }
 
 function mergeData(saved){
 
- if(!saved||typeof saved!=="object")return;
+ if(!saved)return;
 
  Object.keys(saved).forEach(key=>{
 
@@ -2428,11 +2295,6 @@ function mergeData(saved){
     DATA[key]||{},
     saved[key]||{}
    );
-
-  }else if(key==="categories"||key==="events"){
-
-   if(Array.isArray(saved[key]))
-    DATA[key]=saved[key];
 
   }else{
 
@@ -2489,30 +2351,87 @@ function mergeData(saved){
  if(!Array.isArray(DATA.events))
   DATA.events=[];
 
- ensureTranslations(DATA,"name","nameTranslations");
- ensureTranslations(DATA,"subtitle","subtitleTranslations");
+ DATA.categories.forEach(c=>{
 
- DATA.categories=
-  DATA.categories.map(normalizeCategory);
+  if(!c.id)
+   c.id=uid("category");
 
- DATA.events=
-  DATA.events.map(normalizeEvent);
-}
+  if(!Array.isArray(c.items))
+   c.items=[];
 
-/* LOAD */
+  if(typeof c.name!=="string")
+   c.name="Yeni Kategori";
 
-try{
- const saved=safeGet(STORAGE_KEY);
+  c.items.forEach(p=>{
 
- if(saved){
-  mergeData(JSON.parse(saved));
- }else{
-  DATA.categories=DATA.categories.map(normalizeCategory);
-  DATA.events=DATA.events.map(normalizeEvent);
- }
+   if(!p.id)
+    p.id=uid("product");
 
-}catch(e){
- console.log("Veri yükleme:",e);
+   if(typeof p.video==="undefined")
+    p.video="";
+
+   if(typeof p.image==="undefined")
+    p.image="";
+
+   if(typeof p.description==="undefined")
+    p.description="";
+
+   if(typeof p.portion==="undefined")
+    p.portion="";
+
+   if(typeof p.calories==="undefined")
+    p.calories="";
+
+   if(typeof p.spicy==="undefined")
+    p.spicy=0;
+
+   if(typeof p.featured==="undefined")
+    p.featured=false;
+
+   if(typeof p.dish==="undefined")
+    p.dish=false;
+
+   if(typeof p.sold==="undefined")
+    p.sold=false;
+
+   if(typeof p.price==="undefined")
+    p.price=0;
+
+   if(!Array.isArray(p.allergens))
+    p.allergens=[];
+
+   if(!p.names)
+    p.names={};
+
+   if(!p.descriptions)
+    p.descriptions={};
+
+   if(!p.names.tr)
+    p.names.tr=p.name;
+
+   if(!p.descriptions.tr)
+    p.descriptions.tr=p.description;
+
+  });
+
+ });
+
+ DATA.events.forEach(e=>{
+
+  if(!e.id)
+   e.id=uid("event");
+
+  if(typeof e.video==="undefined")
+   e.video="";
+
+  if(typeof e.name==="undefined")
+   e.name="Yeni Etkinlik";
+
+  if(typeof e.description==="undefined")
+   e.description="";
+
+ });
+
 }
 
 /* =========================================================
@@ -2533,6 +2452,18 @@ function saveData(){
  }
 
  return ok;
+}
+
+/* =========================================================
+   PIN
+========================================================= */
+
+function getAdminPin(){
+ return safeGet(PIN_KEY)||DEFAULT_ADMIN_PIN;
+}
+
+function setAdminPin(pin){
+ return safeSet(PIN_KEY,String(pin));
 }
 
 /* =========================================================
@@ -2558,62 +2489,64 @@ function t(key){
         key;
 }
 
-function localizedValue(obj,key,translationsKey){
+function localizedName(item){
 
  if(
-  obj?.[translationsKey] &&
-  obj[translationsKey][language]!==undefined &&
-  obj[translationsKey][language]!==""
+  item?.names &&
+  item.names[language]
  ){
-  return obj[translationsKey][language];
+  return item.names[language];
  }
 
- return obj?.[key]||"";
-}
-
-function localizedName(item){
- return localizedValue(item,"name","names");
+ return item?.name||"";
 }
 
 function localizedDescription(item){
- return localizedValue(item,"description","descriptions");
+
+ if(
+  item?.descriptions &&
+  item.descriptions[language]
+ ){
+  return item.descriptions[language];
+ }
+
+ return item?.description||"";
 }
 
-function localizedPortion(item){
- return localizedValue(item,"portion","portionTranslations");
+function localizedCategoryName(category){
+
+ if(
+  category?.names &&
+  category.names[language]
+ ){
+  return category.names[language];
+ }
+
+ return category?.name||"";
 }
 
-function localizedDate(event){
- return localizedValue(event,"date","dateTranslations");
+function localizedEventName(event){
+
+ if(
+  event?.names &&
+  event.names[language]
+ ){
+  return event.names[language];
+ }
+
+ return event?.name||"";
 }
 
-function localizedAllergens(item){
+function localizedEventDescription(event){
 
- const values=
-  item?.allergensTranslations?.[language];
+ if(
+  event?.descriptions &&
+  event.descriptions[language]
+ ){
+  return event.descriptions[language];
+ }
 
- if(Array.isArray(values)&&values.length)
-  return values;
-
- return Array.isArray(item?.allergens)
-  ?item.allergens
-  :[];
-}
-
-function localizedBusinessName(){
- return localizedValue(
-  DATA,
-  "name",
-  "nameTranslations"
- );
-}
-
-function localizedSubtitle(){
- return localizedValue(
-  DATA,
-  "subtitle",
-  "subtitleTranslations"
- );
+ return event?.description||"";
 }
 
 function allProducts(){
@@ -2627,7 +2560,7 @@ function allProducts(){
    result.push(
     Object.assign({},item,{
      categoryId:category.id,
-     categoryName:localizedName(category)
+     categoryName:category.name
     })
    );
 
@@ -2666,12 +2599,16 @@ function money(price){
  const value=Number(price)||0;
 
  if(currency==="USD"){
+
   const rate=Number(DATA.rates.USD)||40;
+
   return "$"+(value/rate).toFixed(2);
  }
 
  if(currency==="EUR"){
+
   const rate=Number(DATA.rates.EUR)||47;
+
   return "€"+(value/rate).toFixed(2);
  }
 
@@ -2689,15 +2626,385 @@ function uid(prefix){
    .slice(2,7);
 }
 
-function normalizePhone(value){
- return String(value||"")
-  .replace(/[^\d+]/g,"")
-  .replace(/^00/,"");
+/* =========================================================
+   SCROLL PROTECTION
+========================================================= */
+
+let savedScrollY=0;
+
+function rememberScroll(){
+ savedScrollY=window.scrollY||window.pageYOffset||0;
 }
 
-function normalizeWhatsapp(value){
- return String(value||"")
-  .replace(/\D/g,"");
+function restoreScroll(delay=0){
+
+ const y=savedScrollY;
+
+ setTimeout(()=>{
+
+  window.scrollTo({
+   top:y,
+   left:0,
+   behavior:"instant"
+  });
+
+ },delay);
+}
+
+/*
+ Eğer gerçek bir sayfa geçişi yapılacaksa
+ scrollToHome() veya scrollToTop() çağrılır.
+*/
+
+function scrollToTop(){
+ setTimeout(()=>{
+  window.scrollTo({
+   top:0,
+   left:0,
+   behavior:"smooth"
+  });
+ },20);
+}
+
+/* =========================================================
+   AUTOMATIC TRANSLATION
+========================================================= */
+
+/*
+ Bu bölüm Türkçe metinleri otomatik olarak
+ İngilizce ve Arapçaya çevirir.
+
+ Çeviriler localStorage'da cache'lenir.
+ Böylece aynı metin tekrar tekrar çevrilmez.
+
+ Not:
+ Google Translate'in public endpoint'i resmi API değildir.
+ Gerçek ticari kullanımda Supabase Edge Function
+ üzerinden resmi bir çeviri API'sine geçirilmesi önerilir.
+*/
+
+function getTranslationCache(){
+
+ try{
+  return JSON.parse(
+   safeGet(TRANSLATION_CACHE_KEY)||"{}"
+  );
+ }catch(e){
+  return {};
+ }
+}
+
+function saveTranslationCache(cache){
+ safeSet(
+  TRANSLATION_CACHE_KEY,
+  JSON.stringify(cache)
+ );
+}
+
+async function translateText(text,target){
+
+ if(!text||target==="tr")
+  return text||"";
+
+ const cache=getTranslationCache();
+
+ const key=
+  "tr|"+
+  target+
+  "|"+
+  text.trim();
+
+ if(cache[key])
+  return cache[key];
+
+ try{
+
+  const url=
+   "https://translate.googleapis.com/translate_a/single"+
+   "?client=gtx"+
+   "&sl=tr"+
+   "&tl="+encodeURIComponent(target)+
+   "&dt=t"+
+   "&q="+encodeURIComponent(text);
+
+  const response=
+   await fetch(url);
+
+  if(!response.ok)
+   throw new Error("Translation failed");
+
+  const data=
+   await response.json();
+
+  let result="";
+
+  if(Array.isArray(data?.[0])){
+
+   data[0].forEach(part=>{
+    if(part?.[0])
+     result+=part[0];
+   });
+
+  }
+
+  result=result.trim();
+
+  if(result){
+
+   cache[key]=result;
+   saveTranslationCache(cache);
+
+   return result;
+  }
+
+ }catch(e){
+
+  console.warn(
+   "Otomatik çeviri başarısız:",
+   e
+  );
+
+ }
+
+ return text;
+}
+
+async function translateProduct(item){
+
+ if(!item)return;
+
+ if(!item.names)
+  item.names={};
+
+ if(!item.descriptions)
+  item.descriptions={};
+
+ item.names.tr=item.name||"";
+ item.descriptions.tr=item.description||"";
+
+ if(language==="tr")
+  return;
+
+ translating=true;
+ render();
+
+ const target=
+  language==="en"
+  ?"en"
+  :"ar";
+
+ const [
+  translatedName,
+  translatedDescription
+ ]=await Promise.all([
+  translateText(item.name,target),
+  translateText(item.description,target)
+ ]);
+
+ item.names[target]=translatedName||item.name;
+ item.descriptions[target]=
+  translatedDescription||item.description;
+
+ translating=false;
+
+ saveData();
+
+ render();
+}
+
+async function translateCategory(category){
+
+ if(!category)return;
+
+ if(!category.names)
+  category.names={};
+
+ category.names.tr=category.name||"";
+
+ if(language==="tr")
+  return;
+
+ translating=true;
+ render();
+
+ const target=
+  language==="en"
+  ?"en"
+  :"ar";
+
+ category.names[target]=
+  await translateText(
+   category.name,
+   target
+  );
+
+ translating=false;
+
+ saveData();
+ render();
+}
+
+async function translateEvent(event){
+
+ if(!event)return;
+
+ if(!event.names)
+  event.names={};
+
+ if(!event.descriptions)
+  event.descriptions={};
+
+ event.names.tr=event.name||"";
+ event.descriptions.tr=event.description||"";
+
+ if(language==="tr")
+  return;
+
+ translating=true;
+ render();
+
+ const target=
+  language==="en"
+  ?"en"
+  :"ar";
+
+ const [
+  translatedName,
+  translatedDescription
+ ]=await Promise.all([
+  translateText(event.name,target),
+  translateText(event.description,target)
+ ]);
+
+ event.names[target]=
+  translatedName||event.name;
+
+ event.descriptions[target]=
+  translatedDescription||event.description;
+
+ translating=false;
+
+ saveData();
+ render();
+}
+
+async function translateEverything(){
+
+ if(language==="tr")
+  return;
+
+ translating=true;
+ render();
+
+ const target=
+  language==="en"
+  ?"en"
+  :"ar";
+
+ try{
+
+  for(const category of DATA.categories){
+
+   if(!category.names)
+    category.names={};
+
+   category.names.tr=
+    category.name||"";
+
+   if(!category.names[target]){
+
+    category.names[target]=
+     await translateText(
+      category.name,
+      target
+     );
+
+   }
+
+   for(const item of category.items||[]){
+
+    if(!item.names)
+     item.names={};
+
+    if(!item.descriptions)
+     item.descriptions={};
+
+    item.names.tr=
+     item.name||"";
+
+    item.descriptions.tr=
+     item.description||"";
+
+    if(!item.names[target]){
+
+     item.names[target]=
+      await translateText(
+       item.name,
+       target
+      );
+
+    }
+
+    if(!item.descriptions[target]){
+
+     item.descriptions[target]=
+      await translateText(
+       item.description,
+       target
+      );
+
+    }
+
+   }
+
+  }
+
+  for(const event of DATA.events){
+
+   if(!event.names)
+    event.names={};
+
+   if(!event.descriptions)
+    event.descriptions={};
+
+   event.names.tr=event.name||"";
+   event.descriptions.tr=event.description||"";
+
+   if(!event.names[target]){
+
+    event.names[target]=
+     await translateText(
+      event.name,
+      target
+     );
+
+   }
+
+   if(!event.descriptions[target]){
+
+    event.descriptions[target]=
+     await translateText(
+      event.description,
+      target
+     );
+
+   }
+
+  }
+
+  saveData();
+
+ }catch(e){
+
+  console.warn(
+   "Toplu çeviri:",
+   e
+  );
+
+ }
+
+ translating=false;
+ render();
 }
 
 /* =========================================================
@@ -2713,6 +3020,7 @@ function renderBackground(){
 
   return `
    <div class="background">
+
     <video
      autoplay
      muted
@@ -2720,9 +3028,12 @@ function renderBackground(){
      playsinline
      src="${esc(DATA.background.video)}">
     </video>
+
     <div class="backgroundOverlay"></div>
+
    </div>
   `;
+
  }
 
  if(
@@ -2732,10 +3043,14 @@ function renderBackground(){
 
   return `
    <div class="background">
-    <img src="${esc(DATA.background.image)}" alt="">
+
+    <img src="${esc(DATA.background.image)}">
+
     <div class="backgroundOverlay"></div>
+
    </div>
   `;
+
  }
 
  return `
@@ -2746,6 +3061,7 @@ function renderBackground(){
    )}">
   </div>
  `;
+
 }
 
 /* =========================================================
@@ -2758,6 +3074,7 @@ function renderHero(){
  <section class="hero">
 
   <div class="logo">
+
    ${
     DATA.logo
     ?
@@ -2765,6 +3082,7 @@ function renderHero(){
     :
     "N"
    }
+
   </div>
 
   <div class="welcome">
@@ -2772,11 +3090,11 @@ function renderHero(){
   </div>
 
   <h1>
-   ${esc(localizedBusinessName())}
+   ${esc(DATA.name)}
   </h1>
 
   <p>
-   ${esc(localizedSubtitle())}
+   ${esc(DATA.subtitle)}
   </p>
 
   ${
@@ -2793,6 +3111,7 @@ function renderHero(){
 
  </section>
  `;
+
 }
 
 /* =========================================================
@@ -2801,19 +3120,26 @@ function renderHero(){
 
 function renderFeatured(){
 
- if(!DATA.settings.featured)return "";
+ if(!DATA.settings.featured)
+  return "";
 
  const products=allProducts()
   .filter(p=>p.featured&&!p.sold);
 
- if(!products.length)return "";
+ if(!products.length)
+  return "";
 
  return `
  <section class="section">
 
   <div class="sectionHead">
+
    <h2>🔥 ${t("best")}</h2>
-   <span class="hint">${t("swipe")}</span>
+
+   <span class="hint">
+    ${t("swipe")}
+   </span>
+
   </div>
 
   <div class="horizontal">
@@ -2845,8 +3171,15 @@ function renderFeatured(){
       <div class="featureShade"></div>
 
       <div class="featureText">
-       <strong>${esc(localizedName(item))}</strong>
-       <span>${money(item.price)}</span>
+
+       <strong>
+        ${esc(localizedName(item))}
+       </strong>
+
+       <span>
+        ${money(item.price)}
+       </span>
+
       </div>
 
      </button>
@@ -2858,6 +3191,7 @@ function renderFeatured(){
 
  </section>
  `;
+
 }
 
 /* =========================================================
@@ -2875,8 +3209,13 @@ function renderEvents(){
  <section class="section">
 
   <div class="sectionHead">
+
    <h2>✨ ${t("events")}</h2>
-   <span class="hint">${t("swipe")}</span>
+
+   <span class="hint">
+    ${t("swipe")}
+   </span>
+
   </div>
 
   <div class="horizontal">
@@ -2904,14 +3243,24 @@ function renderEvents(){
       <div class="eventShade"></div>
 
       <div class="eventDate">
-       ${esc(localizedDate(event))}
+       ${esc(
+        event.date||
+        (language==="en"?"":"")
+       )}
        •
        ${esc(event.time)}
       </div>
 
       <div class="eventText">
-       <strong>${esc(localizedName(event))}</strong>
-       <span>${t("reserve")}</span>
+
+       <strong>
+        ${esc(localizedEventName(event))}
+       </strong>
+
+       <span>
+        ${t("reserve")}
+       </span>
+
       </div>
 
      </button>
@@ -2923,6 +3272,7 @@ function renderEvents(){
 
  </section>
  `;
+
 }
 
 /* =========================================================
@@ -2935,7 +3285,11 @@ function renderCategories(){
  <section class="section">
 
   <div class="sectionHead">
-   <h2>${t("categories")}</h2>
+
+   <h2>
+    ${t("categories")}
+   </h2>
+
   </div>
 
   ${
@@ -2967,7 +3321,7 @@ function renderCategories(){
        <div class="categoryText">
 
         <strong>
-         ${esc(localizedName(category))}
+         ${esc(localizedCategoryName(category))}
         </strong>
 
         <span>
@@ -2983,11 +3337,14 @@ function renderCategories(){
 
    </div>`
    :
-   `<div class="empty">${t("noCategories")}</div>`
+   `<div class="empty">
+    ${t("noCategories")}
+   </div>`
   }
 
  </section>
  `;
+
 }
 
 /* =========================================================
@@ -2996,16 +3353,14 @@ function renderCategories(){
 
 function renderTags(item){
 
- const allergens=localizedAllergens(item);
-
  return `
  <div class="tags">
 
   ${
-   DATA.settings.portion&&localizedPortion(item)
+   DATA.settings.portion&&item.portion
    ?
    `<span class="tag">
-    ${esc(localizedPortion(item))}
+    ${esc(item.portion)}
    </span>`
    :
    ""
@@ -3025,17 +3380,19 @@ function renderTags(item){
    DATA.settings.spicy&&Number(item.spicy)>0
    ?
    `<span class="tag">
-    ${"🌶️".repeat(Math.min(5,Number(item.spicy)||0))}
+    ${"🌶️".repeat(
+     Math.min(5,Number(item.spicy)||0)
+    )}
    </span>`
    :
    ""
   }
 
   ${
-   DATA.settings.allergens&&allergens.length
+   DATA.settings.allergens&&item.allergens?.length
    ?
    `<span class="tag">
-    ${esc(allergens.join(", "))}
+    ${esc(item.allergens.join(", "))}
    </span>`
    :
    ""
@@ -3053,6 +3410,7 @@ function renderTags(item){
 
  </div>
  `;
+
 }
 
 /* =========================================================
@@ -3101,9 +3459,13 @@ function renderProductCard(item){
 
   <div class="productInfo">
 
-   <h3>${esc(localizedName(item))}</h3>
+   <h3>
+    ${esc(localizedName(item))}
+   </h3>
 
-   <p>${esc(localizedDescription(item))}</p>
+   <p>
+    ${esc(localizedDescription(item))}
+   </p>
 
    ${renderTags(item)}
 
@@ -3123,6 +3485,7 @@ function renderProductCard(item){
 
  </article>
  `;
+
 }
 
 /* =========================================================
@@ -3133,10 +3496,11 @@ function renderCategoryPage(){
 
  const category=findCategory(selectedCategory);
 
- if(!category)return renderHome();
+ if(!category)
+  return renderHome();
 
  return `
- <section class="section">
+ <section class="section pageContent">
 
   <div class="categoryTitle">
 
@@ -3147,7 +3511,7 @@ function renderCategoryPage(){
    </button>
 
    <h2 style="margin:0;font-size:19px">
-    ${esc(localizedName(category))}
+    ${esc(localizedCategoryName(category))}
    </h2>
 
   </div>
@@ -3187,13 +3551,16 @@ function renderCategoryPage(){
     ?
     category.items.map(renderProductCard).join("")
     :
-    `<div class="empty">${t("noProducts")}</div>`
+    `<div class="empty">
+     ${t("noProducts")}
+    </div>`
    }
 
   </div>
 
  </section>
  `;
+
 }
 
 /* =========================================================
@@ -3208,24 +3575,27 @@ function renderSearch(){
  const products=allProducts()
   .filter(item=>{
 
-   const allergens=localizedAllergens(item).join(" ");
-
    const text=[
     item.name,
     localizedName(item),
     item.description,
     localizedDescription(item),
     item.categoryName,
-    allergens
+    localizedCategoryName(
+     findCategory(item.categoryId)
+    )
    ].join(" ");
 
    return text
-    .toLocaleLowerCase(language==="tr"?"tr":"en")
+    .toLocaleLowerCase(
+     language==="tr"?"tr":"en"
+    )
     .includes(query);
+
   });
 
  return `
- <section class="section">
+ <section class="section pageContent">
 
   <div class="sectionHead">
    <h2>${products.length} ürün</h2>
@@ -3238,13 +3608,16 @@ function renderSearch(){
     ?
     products.map(renderProductCard).join("")
     :
-    `<div class="empty">Ürün bulunamadı.</div>`
+    `<div class="empty">
+     Ürün bulunamadı.
+    </div>`
    }
 
   </div>
 
  </section>
  `;
+
 }
 
 function renderHome(){
@@ -3254,74 +3627,91 @@ function renderHome(){
 }
 
 /* =========================================================
-   POPUPS
+   CURRENCY
 ========================================================= */
 
 function renderCurrencyPopup(){
 
- if(!currencyMenu)return "";
+ if(!currencyMenu)
+  return "";
 
  return `
- <div class="quickPopup" id="currencyPopup">
+ <div class="quickPopup">
 
   <button
    class="${currency==="TRY"?"active":""}"
    data-currency="TRY">
+
    <span>🇹🇷 ${t("try")}</span>
    <span>₺</span>
+
   </button>
 
   <button
    class="${currency==="USD"?"active":""}"
    data-currency="USD">
+
    <span>🇺🇸 ${t("usd")}</span>
    <span>$</span>
+
   </button>
 
   <button
    class="${currency==="EUR"?"active":""}"
    data-currency="EUR">
+
    <span>🇪🇺 ${t("eur")}</span>
    <span>€</span>
+
   </button>
 
  </div>
  `;
+
 }
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
 
 function renderLanguagePopup(){
 
- if(!languageMenu)return "";
+ if(!languageMenu)
+  return "";
 
  return `
- <div
-  class="quickPopup"
-  id="languagePopup"
-  style="width:170px">
+ <div class="quickPopup" style="width:170px">
 
   <button
    class="${language==="tr"?"active":""}"
    data-language="tr">
+
    <span>🇹🇷 Türkçe</span>
    <span>TR</span>
+
   </button>
 
   <button
    class="${language==="en"?"active":""}"
    data-language="en">
+
    <span>🇬🇧 English</span>
    <span>EN</span>
+
   </button>
 
   <button
    class="${language==="ar"?"active":""}"
    data-language="ar">
+
    <span>🇸🇦 العربية</span>
    <span>AR</span>
+
   </button>
 
  </div>
  `;
+
 }
 
 /* =========================================================
@@ -3330,7 +3720,8 @@ function renderLanguagePopup(){
 
 function renderDrawer(){
 
- if(!drawerOpen)return "";
+ if(!drawerOpen)
+  return "";
 
  return `
  <div
@@ -3341,7 +3732,9 @@ function renderDrawer(){
 
    <div class="drawerHead">
 
-    <div class="drawerLogo">NEARMENU</div>
+    <div class="drawerLogo">
+     NEARMENU
+    </div>
 
     <button
      class="iconBtn"
@@ -3354,7 +3747,7 @@ function renderDrawer(){
    <div class="drawerSection">
 
     <div class="drawerLabel">
-     ${language==="ar"?"اتصل بنا":"İLETİŞİM"}
+     İLETİŞİM
     </div>
 
     ${
@@ -3364,7 +3757,7 @@ function renderDrawer(){
       class="drawerLink"
       target="_blank"
       rel="noopener"
-      href="https://wa.me/${esc(normalizeWhatsapp(DATA.whatsapp))}">
+      href="https://wa.me/${esc(DATA.whatsapp)}">
       WhatsApp
      </a>`
      :
@@ -3376,7 +3769,7 @@ function renderDrawer(){
      ?
      `<a
       class="drawerLink"
-      href="tel:${esc(normalizePhone(DATA.phone))}">
+      href="tel:${esc(DATA.phone)}">
       ${t("call")}
      </a>`
      :
@@ -3399,6 +3792,7 @@ function renderDrawer(){
 
  </div>
  `;
+
 }
 
 /* =========================================================
@@ -3407,10 +3801,10 @@ function renderDrawer(){
 
 function renderProductModal(){
 
- if(!selectedProduct)return "";
+ if(!selectedProduct)
+  return "";
 
  const item=selectedProduct;
- const allergens=localizedAllergens(item);
 
  return `
  <div
@@ -3450,7 +3844,9 @@ function renderProductModal(){
 
    <div class="modalBody">
 
-    <h2>${esc(localizedName(item))}</h2>
+    <h2>
+     ${esc(localizedName(item))}
+    </h2>
 
     ${
      DATA.settings.dish&&item.dish
@@ -3458,7 +3854,9 @@ function renderProductModal(){
      `<div style="margin-top:10px">
       <span
        class="tag"
-       style="background:var(--accent);color:#111">
+       style="
+        background:var(--accent);
+        color:#111">
        ⭐ ${t("dish")}
       </span>
      </div>`
@@ -3466,14 +3864,16 @@ function renderProductModal(){
      ""
     }
 
-    <p>${esc(localizedDescription(item))}</p>
+    <p>
+     ${esc(localizedDescription(item))}
+    </p>
 
     ${
-     DATA.settings.portion&&localizedPortion(item)
+     DATA.settings.portion&&item.portion
      ?
      `<div class="infoRow">
       <span>${t("portion")}</span>
-      <span>${esc(localizedPortion(item))}</span>
+      <span>${esc(item.portion)}</span>
      </div>`
      :
      ""
@@ -3491,11 +3891,11 @@ function renderProductModal(){
     }
 
     ${
-     DATA.settings.allergens&&allergens.length
+     DATA.settings.allergens&&item.allergens?.length
      ?
      `<div class="infoRow">
       <span>${t("allergens")}</span>
-      <span>${esc(allergens.join(", "))}</span>
+      <span>${esc(item.allergens.join(", "))}</span>
      </div>`
      :
      ""
@@ -3507,7 +3907,9 @@ function renderProductModal(){
      `<div class="infoRow">
       <span>${t("spicy")}</span>
       <span>
-       ${"🌶️".repeat(Math.min(5,Number(item.spicy)||0))}
+       ${"🌶️".repeat(
+        Math.min(5,Number(item.spicy)||0)
+       )}
       </span>
      </div>`
      :
@@ -3532,6 +3934,7 @@ function renderProductModal(){
 
  </div>
  `;
+
 }
 
 /* =========================================================
@@ -3540,7 +3943,8 @@ function renderProductModal(){
 
 function renderEventModal(){
 
- if(!selectedEvent)return "";
+ if(!selectedEvent)
+  return "";
 
  const event=selectedEvent;
 
@@ -3548,18 +3952,12 @@ function renderEventModal(){
   DATA.whatsapp
   ?
   "https://wa.me/"+
-   normalizeWhatsapp(DATA.whatsapp)+
+   DATA.whatsapp+
    "?text="+
    encodeURIComponent(
-    language==="en"
-    ?
-    "Hello, I would like to make a reservation for "+localizedName(event)+"."
-    :
-    language==="ar"
-    ?
-    "مرحباً، أريد حجز "+localizedName(event)+"."
-    :
-    "Merhaba, "+localizedName(event)+" için rezervasyon yapmak istiyorum."
+    "Merhaba, "+
+    localizedEventName(event)+
+    " için rezervasyon yapmak istiyorum."
    )
   :
   "";
@@ -3598,22 +3996,28 @@ function renderEventModal(){
 
    <div class="modalBody">
 
-    <h2>${esc(localizedName(event))}</h2>
+    <h2>
+     ${esc(localizedEventName(event))}
+    </h2>
 
     <p>
-     ${esc(localizedDate(event))}
+     ${esc(event.date)}
      •
      ${esc(event.time)}
     </p>
 
-    <p>${esc(localizedDescription(event))}</p>
+    <p>
+     ${esc(localizedEventDescription(event))}
+    </p>
 
     ${
      whatsapp
      ?
      `<a
       class="adminButton gold"
-      style="display:block;text-align:center"
+      style="
+       display:block;
+       text-align:center"
       target="_blank"
       rel="noopener"
       href="${esc(whatsapp)}">
@@ -3629,10 +4033,11 @@ function renderEventModal(){
 
  </div>
  `;
+
 }
 
 /* =========================================================
-   ADMIN INPUT HELPERS
+   ADMIN INPUTS
 ========================================================= */
 
 function input(key,label,value,type="text"){
@@ -3640,7 +4045,7 @@ function input(key,label,value,type="text"){
  return `
  <div class="field">
 
-  <label>${esc(label)}</label>
+  <label>${label}</label>
 
   <input
    type="${type}"
@@ -3649,6 +4054,7 @@ function input(key,label,value,type="text"){
 
  </div>
  `;
+
 }
 
 function textarea(key,label,value){
@@ -3656,101 +4062,17 @@ function textarea(key,label,value){
  return `
  <div class="field">
 
-  <label>${esc(label)}</label>
+  <label>${label}</label>
 
   <textarea
    data-admin="${esc(key)}">${esc(value??"")}</textarea>
 
  </div>
  `;
+
 }
 
-function languageInput(
- key,
- label,
- value,
- lang,
- type="text"
-){
-
- return `
- <div class="field">
-
-  <label>${esc(label)}</label>
-
-  ${
-   type==="textarea"
-   ?
-   `<textarea
-    data-admin-lang="${esc(key)}"
-    data-lang="${lang}">${esc(value??"")}</textarea>`
-   :
-   `<input
-    type="text"
-    data-admin-lang="${esc(key)}"
-    data-lang="${lang}"
-    value="${esc(value??"")}">`
-  }
-
- </div>
- `;
-}
-
-function languageBlock(
- title,
- translations,
- keyPrefix,
- textareaMode=false
-){
-
- return `
- <div class="langSection">
-
-  <div class="langSectionTitle">
-
-   <strong>${esc(title)}</strong>
-
-   <span class="langBadge">
-    TR / EN / AR
-   </span>
-
-  </div>
-
-  ${languageInput(
-   keyPrefix+"-tr",
-   "🇹🇷 Türkçe",
-   translations?.tr||"",
-   "tr",
-   textareaMode?"textarea":"text"
-  )}
-
-  ${languageInput(
-   keyPrefix+"-en",
-   "🇬🇧 English",
-   translations?.en||"",
-   "en",
-   textareaMode?"textarea":"text"
-  )}
-
-  ${languageInput(
-   keyPrefix+"-ar",
-   "🇸🇦 العربية",
-   translations?.ar||"",
-   "ar",
-   textareaMode?"textarea":"text"
-  )}
-
- </div>
- `;
-}
-
-function fileField(
- type,
- id,
- label,
- value,
- accept
-){
+function fileField(type,id,label,value,accept){
 
  const isVideo=
   type==="productVideo"||
@@ -3760,13 +4082,13 @@ function fileField(
  return `
  <div class="field">
 
-  <label>${esc(label)}</label>
+  <label>${label}</label>
 
   <div class="fileBox">
 
    <label class="fileBtn">
 
-    📁 ${t("image")}${isVideo?" / "+t("video"):""}
+    📁 ${t("image")} ${isVideo?" / "+t("video"):""}
 
     <input
      hidden
@@ -3783,8 +4105,8 @@ function fileField(
     `<button
      type="button"
      class="fileBtn"
-     data-clear-file="${esc(type)}|${esc(id)}">
-     ${t("clear")}
+     data-clear-file="${type}|${esc(id)}">
+     Temizle
     </button>`
     :
     ""
@@ -3808,12 +4130,13 @@ function fileField(
     alt="">`
    :
    `<div class="help">
-    ${language==="ar"?"لم يتم اختيار ملف بعد.":"Henüz dosya seçilmedi."}
+    Henüz dosya seçilmedi.
    </div>`
   }
 
  </div>
  `;
+
 }
 
 /* =========================================================
@@ -3831,23 +4154,22 @@ function renderAdminGeneral(){
   </div>
 
   <div class="small">
-   İşletme bilgilerinin üç dilde görünmesini sağlayabilirsin.
+   Menüde görünen temel işletme bilgilerini buradan değiştir.
   </div>
 
-  ${languageBlock(
-   "İşletme Adı",
-   DATA.nameTranslations,
-   "businessName"
-  )}
+  <div style="margin-top:15px">
 
-  ${languageBlock(
-   "Alt Başlık",
-   DATA.subtitleTranslations,
-   "businessSubtitle",
-   true
-  )}
+   ${input(
+    "businessName",
+    "İşletme adı",
+    DATA.name
+   )}
 
-  <div style="margin-top:14px">
+   ${input(
+    "subtitle",
+    "Alt başlık",
+    DATA.subtitle
+   )}
 
    ${input(
     "phone",
@@ -3874,6 +4196,47 @@ function renderAdminGeneral(){
     DATA.logo,
     "image/*"
    )}
+
+  </div>
+
+ </div>
+
+ <div class="adminCard">
+
+  <div class="adminCardTitle">
+   🔐 ${t("pin")}
+  </div>
+
+  <div class="pinBox">
+
+   <div class="pinBoxTitle">
+    ${t("changePin")}
+   </div>
+
+   <div class="pinBoxInfo">
+    Yönetim paneline girişte kullanılacak PIN'i buradan değiştirebilirsin.
+   </div>
+
+   ${input(
+    "newPin",
+    t("newPin"),
+    "",
+    "password"
+   )}
+
+   ${input(
+    "confirmPin",
+    t("confirmPin"),
+    "",
+    "password"
+   )}
+
+   <button
+    class="adminButton gold"
+    id="changePinButton"
+    style="width:100%">
+    🔐 ${t("changePin")}
+   </button>
 
   </div>
 
@@ -3912,70 +4275,11 @@ function renderAdminGeneral(){
  <div class="adminCard">
 
   <div class="adminCardTitle">
-   🔐 ${t("changePin")}
-  </div>
-
-  <div class="small">
-   Yönetim paneline girişte kullanılan PIN'i istediğin zaman değiştirebilirsin.
-  </div>
-
-  <div class="pinBox" style="margin-top:13px">
-
-   <div class="pinInfo">
-    Güvenlik için mevcut PIN'i ve yeni PIN'i girmen gerekir.
-   </div>
-
-   ${input(
-    "currentPin",
-    t("currentPin"),
-    "",
-    "password"
-   )}
-
-   ${input(
-    "newPin",
-    t("newPin"),
-    "",
-    "password"
-   )}
-
-   ${input(
-    "repeatPin",
-    t("repeatPin"),
-    "",
-    "password"
-   )}
-
-   <button
-    class="adminButton gold"
-    id="changePinButton"
-    style="width:100%">
-    🔐 ${t("changePin")}
-   </button>
-
-   <div
-    id="pinMessage"
-    style="
-     display:none;
-     margin-top:9px;
-     padding:9px;
-     border-radius:9px;
-     font-size:10px;
-     text-align:center">
-   </div>
-
-  </div>
-
- </div>
-
- <div class="adminCard">
-
-  <div class="adminCardTitle">
    ✨ Etkinlikler
   </div>
 
   <div class="small">
-   Etkinlikleri üç dilde düzenleyebilirsin.
+   Etkinlik ekleyebilir, fotoğraf/video değiştirebilir veya silebilirsin.
   </div>
 
   <div style="margin-top:14px">
@@ -3987,62 +4291,36 @@ function renderAdminGeneral(){
 
     <div
      class="adminCard"
-     style="margin:0 0 10px;background:#101011">
+     style="
+      margin:0 0 10px;
+      background:#101011">
 
-     ${languageBlock(
-      t("eventName"),
-      event.names,
-      "eventName-"+event.id
+     ${input(
+      "eventName-"+event.id,
+      "Etkinlik adı",
+      event.name
      )}
 
      <div class="row">
 
       ${input(
        "eventDate-"+event.id,
-       t("eventDate")+" (TR temel)",
+       "Gün",
        event.date
       )}
 
       ${input(
        "eventTime-"+event.id,
-       t("eventTime"),
+       "Saat",
        event.time
       )}
 
      </div>
 
-     <div class="langSection">
-
-      <div class="langSectionTitle">
-       <strong>${t("eventDate")}</strong>
-       <span class="langBadge">TR / EN / AR</span>
-      </div>
-
-      ${input(
-       "eventDateTR-"+event.id,
-       "🇹🇷 Türkçe",
-       event.dateTranslations?.tr||event.date
-      )}
-
-      ${input(
-       "eventDateEN-"+event.id,
-       "🇬🇧 English",
-       event.dateTranslations?.en||event.date
-      )}
-
-      ${input(
-       "eventDateAR-"+event.id,
-       "🇸🇦 العربية",
-       event.dateTranslations?.ar||event.date
-      )}
-
-     </div>
-
-     ${languageBlock(
-      t("eventDescription"),
-      event.descriptions,
+     ${textarea(
       "eventDescription-"+event.id,
-      true
+      "Açıklama",
+      event.description
      )}
 
      ${fileField(
@@ -4071,7 +4349,9 @@ function renderAdminGeneral(){
 
    `).join("")
    :
-   `<div class="empty">Henüz etkinlik yok.</div>`
+   `<div class="empty">
+    Henüz etkinlik yok.
+   </div>`
   }
 
   </div>
@@ -4086,6 +4366,7 @@ function renderAdminGeneral(){
  </div>
 
  `;
+
 }
 
 /* =========================================================
@@ -4103,13 +4384,15 @@ function renderAdminCategories(){
   </div>
 
   <div class="small">
-   Kategoriye girip kategori adlarını üç dilde düzenleyebilir, ürünleri yönetebilirsin.
+   Önce kategoriye gir. Sonra ürünleri tek tek ekleyebilirsin.
   </div>
 
   <button
    class="adminButton gold"
    id="addCategory"
-   style="width:100%;margin-top:13px">
+   style="
+    width:100%;
+    margin-top:13px">
    ${t("addCategory")}
   </button>
 
@@ -4149,7 +4432,7 @@ function renderAdminCategories(){
     <div class="adminCategoryInfo">
 
      <strong>
-      ${esc(localizedName(category))}
+      ${esc(category.name)}
      </strong>
 
      <span>
@@ -4158,18 +4441,23 @@ function renderAdminCategories(){
 
     </div>
 
-    <div class="adminArrow">›</div>
+    <div class="adminArrow">
+     ›
+    </div>
 
    </button>
 
   `).join("")
   :
-  `<div class="empty">${t("noCategories")}</div>`
+  `<div class="empty">
+   ${t("noCategories")}
+  </div>`
  }
 
  </div>
 
  `;
+
 }
 
 /* =========================================================
@@ -4178,11 +4466,16 @@ function renderAdminCategories(){
 
 function renderAdminCategory(){
 
- const category=findCategory(adminCategoryView);
+ const category=findCategory(
+  adminCategoryView
+ );
 
  if(!category){
+
   adminCategoryView=null;
+
   return renderAdminCategories();
+
  }
 
  return `
@@ -4196,7 +4489,7 @@ function renderAdminCategory(){
   <span>›</span>
 
   <strong>
-   ${esc(localizedName(category))}
+   ${esc(category.name)}
   </strong>
 
  </div>
@@ -4207,10 +4500,10 @@ function renderAdminCategory(){
    Kategori Ayarları
   </div>
 
-  ${languageBlock(
-   t("categoryLanguages"),
-   category.names,
-   "categoryName-"+category.id
+  ${input(
+   "categoryName-"+category.id,
+   t("categoryName"),
+   category.name
   )}
 
   ${fileField(
@@ -4239,7 +4532,10 @@ function renderAdminCategory(){
    gap:10px">
 
    <div>
-    <div class="adminCardTitle">Ürünler</div>
+    <div class="adminCardTitle">
+     Ürünler
+    </div>
+
     <div class="small">
      ${(category.items||[]).length} ürün
     </div>
@@ -4289,7 +4585,7 @@ function renderAdminCategory(){
     <div class="adminProductInfo">
 
      <strong>
-      ${esc(localizedName(item))}
+      ${esc(item.name)}
      </strong>
 
      <span>
@@ -4298,18 +4594,23 @@ function renderAdminCategory(){
 
     </div>
 
-    <div class="adminArrow">›</div>
+    <div class="adminArrow">
+     ›
+    </div>
 
    </button>
 
   `).join("")
   :
-  `<div class="empty">${t("noProducts")}</div>`
+  `<div class="empty">
+   ${t("noProducts")}
+  </div>`
  }
 
  </div>
 
  `;
+
 }
 
 /* =========================================================
@@ -4318,19 +4619,29 @@ function renderAdminCategory(){
 
 function renderAdminProduct(){
 
- const item=findProduct(adminProductView);
+ const item=findProduct(
+  adminProductView
+ );
 
  let category=null;
 
  if(item){
+
   category=DATA.categories.find(
-   c=>(c.items||[]).some(p=>p.id===item.id)
+   c=>
+    (c.items||[]).some(
+     p=>p.id===item.id
+    )
   );
+
  }
 
  if(!item||!category){
+
   adminProductView=null;
+
   return renderAdminCategory();
+
  }
 
  return `
@@ -4338,13 +4649,13 @@ function renderAdminProduct(){
  <div class="adminBreadcrumb">
 
   <button id="adminProductBack">
-   ‹ ${esc(localizedName(category))}
+   ‹ ${esc(category.name)}
   </button>
 
   <span>›</span>
 
   <strong>
-   ${esc(localizedName(item))}
+   ${item.name==="Yeni Ürün"?"Yeni Ürün":"Ürün"}
   </strong>
 
  </div>
@@ -4358,8 +4669,21 @@ function renderAdminProduct(){
   </strong>
 
   <span>
-   Ürünün üç dilde adını ve açıklamasını ayrı ayrı girebilirsin.
+   Türkçe adı ve açıklamayı yazman yeterli. Diğer diller otomatik oluşturulur.
   </span>
+
+  ${
+   translating
+   ?
+   `<div class="translationStatus">
+    <span class="translationDot"></span>
+    ${t("translating")}
+   </div>`
+   :
+   `<div class="translationInfo">
+    🌐 ${t("translationInfo")}
+   </div>`
+  }
 
  </div>
 
@@ -4369,26 +4693,25 @@ function renderAdminProduct(){
    ${t("basic")}
   </div>
 
-  ${languageBlock(
-   t("productLanguages"),
-   item.names,
-   "productName-"+item.id
-  )}
-
-  ${languageBlock(
-   "Ürün Açıklaması",
-   item.descriptions,
-   "productDescription-"+item.id,
-   true
-  )}
-
   <div style="margin-top:14px">
+
+   ${input(
+    "productName-"+item.id,
+    t("productName")+" 🇹🇷",
+    item.name
+   )}
 
    ${input(
     "productPrice-"+item.id,
     t("productPrice"),
     item.price,
     "number"
+   )}
+
+   ${textarea(
+    "productDescription-"+item.id,
+    t("description")+" 🇹🇷",
+    item.description
    )}
 
    ${fileField(
@@ -4423,32 +4746,11 @@ function renderAdminProduct(){
    ?
    `<div style="margin-top:15px">
 
-    <div class="langSection">
-
-     <div class="langSectionTitle">
-      <strong>${t("portion")}</strong>
-      <span class="langBadge">TR / EN / AR</span>
-     </div>
-
-     ${input(
-      "productPortionTR-"+item.id,
-      "🇹🇷 Türkçe",
-      item.portionTranslations?.tr||item.portion||""
-     )}
-
-     ${input(
-      "productPortionEN-"+item.id,
-      "🇬🇧 English",
-      item.portionTranslations?.en||item.portion||""
-     )}
-
-     ${input(
-      "productPortionAR-"+item.id,
-      "🇸🇦 العربية",
-      item.portionTranslations?.ar||item.portion||""
-     )}
-
-    </div>
+    ${input(
+     "productPortion-"+item.id,
+     t("portion"),
+     item.portion||""
+    )}
 
     ${input(
      "productCalories-"+item.id,
@@ -4456,32 +4758,11 @@ function renderAdminProduct(){
      item.calories||""
     )}
 
-    <div class="langSection">
-
-     <div class="langSectionTitle">
-      <strong>${t("allergens")}</strong>
-      <span class="langBadge">TR / EN / AR</span>
-     </div>
-
-     ${input(
-      "productAllergensTR-"+item.id,
-      "🇹🇷 Türkçe (virgülle ayır)",
-      (item.allergensTranslations?.tr||item.allergens||[]).join(", ")
-     )}
-
-     ${input(
-      "productAllergensEN-"+item.id,
-      "🇬🇧 English (comma separated)",
-      (item.allergensTranslations?.en||item.allergens||[]).join(", ")
-     )}
-
-     ${input(
-      "productAllergensAR-"+item.id,
-      "🇸🇦 العربية (بفواصل)",
-      (item.allergensTranslations?.ar||item.allergens||[]).join(", ")
-     )}
-
-    </div>
+    ${input(
+     "productAllergens-"+item.id,
+     t("allergens")+" (virgülle ayır)",
+     (item.allergens||[]).join(", ")
+    )}
 
     ${input(
      "productSpicy-"+item.id,
@@ -4541,13 +4822,16 @@ function renderAdminProduct(){
   <button
    class="adminButton danger"
    data-delete-product="${esc(category.id)}|${esc(item.id)}"
-   style="width:100%;margin-top:8px">
+   style="
+    width:100%;
+    margin-top:8px">
    ${t("delete")} • Ürünü Sil
   </button>
 
  </div>
 
  `;
+
 }
 
 /* =========================================================
@@ -4567,8 +4851,13 @@ function renderAdminDesign(){
   ["Courier New","Courier New"]
  ];
 
- const fontValue=th.fontFamily||"system";
- const titleFontValue=th.titleFont||"Georgia";
+ const fontValue=
+  th.fontFamily||
+  "system";
+
+ const titleFontValue=
+  th.titleFont||
+  "Georgia";
 
  return `
 
@@ -4630,7 +4919,7 @@ function renderAdminDesign(){
    </div>
 
    <div class="designCard">
-    <h4>Arka plan</h4>
+    <h4>Arka plan rengi</h4>
     <input
      class="colorInput"
      type="color"
@@ -4644,7 +4933,9 @@ function renderAdminDesign(){
 
  <div class="adminCard">
 
-  <div class="adminCardTitle">Hazır Renkler</div>
+  <div class="adminCardTitle">
+   Hazır Renkler
+  </div>
 
   <div class="presetRow" style="margin-top:12px">
 
@@ -4663,7 +4954,9 @@ function renderAdminDesign(){
     ].map(c=>`
 
      <button
-      class="preset ${th.accent===c?"active":""}"
+      class="preset ${
+       th.accent===c?"active":""
+      }"
       style="background:${c}"
       data-theme-color="${c}">
      </button>
@@ -4692,7 +4985,11 @@ function renderAdminDesign(){
 
       <option
        value="${esc(f[0])}"
-       ${fontValue===f[0]?"selected":""}>
+       ${
+        fontValue===f[0]
+        ?"selected"
+        :""
+       }>
        ${esc(f[1])}
       </option>
 
@@ -4714,7 +5011,11 @@ function renderAdminDesign(){
 
       <option
        value="${esc(f[0])}"
-       ${titleFontValue===f[0]?"selected":""}>
+       ${
+        titleFontValue===f[0]
+        ?"selected"
+        :""
+       }>
        ${esc(f[1])}
       </option>
 
@@ -4736,93 +5037,141 @@ function renderAdminDesign(){
   <div class="designGrid" style="margin-top:13px">
 
    <div class="designCard">
+
     <h4>Logo büyüklüğü</h4>
+
     <div class="rangeRow">
+
      <input
       type="range"
       min="60"
       max="190"
       value="${th.logoSize||112}"
       data-design="logoSize">
-     <span class="rangeValue" id="logoSizeValue">
+
+     <span
+      class="rangeValue"
+      id="logoSizeValue">
       ${th.logoSize||112}px
      </span>
+
     </div>
+
    </div>
 
    <div class="designCard">
+
     <h4>Başlık büyüklüğü</h4>
+
     <div class="rangeRow">
+
      <input
       type="range"
       min="22"
       max="52"
       value="${th.titleSize||34}"
       data-design="titleSize">
-     <span class="rangeValue" id="titleSizeValue">
+
+     <span
+      class="rangeValue"
+      id="titleSizeValue">
       ${th.titleSize||34}px
      </span>
+
     </div>
+
    </div>
 
    <div class="designCard">
+
     <h4>Genel yazı</h4>
+
     <div class="rangeRow">
+
      <input
       type="range"
       min="11"
       max="20"
       value="${th.bodySize||13}"
       data-design="bodySize">
-     <span class="rangeValue" id="bodySizeValue">
+
+     <span
+      class="rangeValue"
+      id="bodySizeValue">
       ${th.bodySize||13}px
      </span>
+
     </div>
+
    </div>
 
    <div class="designCard">
+
     <h4>Kart köşesi</h4>
+
     <div class="rangeRow">
+
      <input
       type="range"
       min="8"
       max="34"
       value="${th.cardRadius||20}"
       data-design="cardRadius">
-     <span class="rangeValue" id="cardRadiusValue">
+
+     <span
+      class="rangeValue"
+      id="cardRadiusValue">
       ${th.cardRadius||20}px
      </span>
+
     </div>
+
    </div>
 
    <div class="designCard">
+
     <h4>Kart şeffaflığı</h4>
+
     <div class="rangeRow">
+
      <input
       type="range"
       min="55"
       max="100"
       value="${Math.round((th.cardOpacity??.94)*100)}"
       data-design="cardOpacity">
-     <span class="rangeValue" id="cardOpacityValue">
+
+     <span
+      class="rangeValue"
+      id="cardOpacityValue">
       ${Math.round((th.cardOpacity??.94)*100)}%
      </span>
+
     </div>
+
    </div>
 
    <div class="designCard">
+
     <h4>Arka plan karartma</h4>
+
     <div class="rangeRow">
+
      <input
       type="range"
       min="0"
       max="90"
       value="${Math.round((th.overlay??.55)*100)}"
       data-design="overlay">
-     <span class="rangeValue" id="overlayValue">
+
+     <span
+      class="rangeValue"
+      id="overlayValue">
       ${Math.round((th.overlay??.55)*100)}%
      </span>
+
     </div>
+
    </div>
 
   </div>
@@ -4842,24 +5191,40 @@ function renderAdminDesign(){
    margin-top:13px">
 
    <button
-    class="adminButton ${DATA.background.type==="color"?"gold":""}"
+    class="adminButton ${
+     DATA.background.type==="color"?"gold":""
+    }"
     data-background="color">
     Renk
    </button>
 
    <button
-    class="adminButton ${DATA.background.type==="image"?"gold":""}"
+    class="adminButton ${
+     DATA.background.type==="image"?"gold":""
+    }"
     data-background="image">
     Fotoğraf
    </button>
 
    <button
-    class="adminButton ${DATA.background.type==="video"?"gold":""}"
+    class="adminButton ${
+     DATA.background.type==="video"?"gold":""
+    }"
     data-background="video">
     Video
    </button>
 
   </div>
+
+  ${
+   DATA.background.type==="color"
+   ?
+   `<div class="help" style="margin-top:10px">
+    Yukarıdaki "Arka plan rengi" kutusundan istediğin rengi seç.
+   </div>`
+   :
+   ""
+  }
 
   ${
    DATA.background.type==="image"
@@ -4928,6 +5293,7 @@ function renderAdminDesign(){
  </div>
 
  `;
+
 }
 
 /* =========================================================
@@ -4936,7 +5302,8 @@ function renderAdminDesign(){
 
 function renderAdmin(){
 
- if(!adminOpen||!adminAuthenticated)return "";
+ if(!adminOpen||!adminAuthenticated)
+  return "";
 
  let body="";
 
@@ -4969,11 +5336,17 @@ function renderAdmin(){
 
      <div class="adminTitle">
 
-      <div class="adminTitleIcon">N</div>
+      <div class="adminTitleIcon">
+       N
+      </div>
 
       <div>
        <b>${t("admin")}</b>
-       <div class="small">NearMenu Premium</div>
+
+       <div class="small">
+        NearMenu Premium
+       </div>
+
       </div>
 
      </div>
@@ -5029,6 +5402,7 @@ function renderAdmin(){
 
  </div>
  `;
+
 }
 
 /* =========================================================
@@ -5037,7 +5411,8 @@ function renderAdmin(){
 
 function renderAdminLogin(){
 
- if(!adminOpen||adminAuthenticated)return "";
+ if(!adminOpen||adminAuthenticated)
+  return "";
 
  return `
  <div
@@ -5046,9 +5421,13 @@ function renderAdminLogin(){
 
   <div class="adminLogin">
 
-   <div class="adminLoginLogo">N</div>
+   <div class="adminLoginLogo">
+    N
+   </div>
 
-   <h2>${t("admin")}</h2>
+   <h2>
+    ${t("admin")}
+   </h2>
 
    <p>
     Devam etmek için yönetici PIN'ini girin.
@@ -5060,7 +5439,6 @@ function renderAdminLogin(){
     type="password"
     inputmode="numeric"
     autocomplete="off"
-    maxlength="12"
     placeholder="PIN">
 
    <button
@@ -5079,6 +5457,7 @@ function renderAdminLogin(){
 
  </div>
  `;
+
 }
 
 /* =========================================================
@@ -5094,34 +5473,28 @@ function collectAdmin(){
   const key=input.dataset.admin;
   const value=input.value;
 
-  if(key==="businessName"){
+  if(key==="businessName")
    DATA.name=value;
-   if(!DATA.nameTranslations)
-    DATA.nameTranslations={tr:"",en:"",ar:""};
-   DATA.nameTranslations.tr=value;
-  }
 
-  else if(key==="subtitle"){
+  else if(key==="subtitle")
    DATA.subtitle=value;
-   if(!DATA.subtitleTranslations)
-    DATA.subtitleTranslations={tr:"",en:"",ar:""};
-   DATA.subtitleTranslations.tr=value;
-  }
 
   else if(key==="phone")
    DATA.phone=value;
 
   else if(key==="whatsapp")
-   DATA.whatsapp=normalizeWhatsapp(value);
+   DATA.whatsapp=value;
 
   else if(key==="hours")
    DATA.hours=value;
 
   else if(key==="rateUSD")
-   DATA.rates.USD=Number(value)||0;
+   DATA.rates.USD=
+    Number(value)||0;
 
   else if(key==="rateEUR")
-   DATA.rates.EUR=Number(value)||0;
+   DATA.rates.EUR=
+    Number(value)||0;
 
   else if(key==="fontFamily")
    DATA.theme.fontFamily=value;
@@ -5131,358 +5504,206 @@ function collectAdmin(){
 
   else if(key.startsWith("categoryName-")){
 
-   const id=key.replace("categoryName-","");
+   const id=
+    key.replace("categoryName-","");
+
    const category=findCategory(id);
 
    if(category){
-    category.name=
-     category.names?.tr||
-     category.name||
-     "";
+
+    category.name=value;
+
+    if(!category.names)
+     category.names={};
+
+    category.names.tr=value;
+
    }
+
   }
 
   else if(key.startsWith("productName-")){
 
-   const id=key.replace("productName-","");
+   const id=
+    key.replace("productName-","");
+
    const item=findProduct(id);
 
    if(item){
-    item.name=
-     item.names?.tr||
-     item.name||
-     "";
+
+    item.name=value;
+
+    if(!item.names)
+     item.names={};
+
+    item.names.tr=value;
+
    }
+
   }
 
   else if(key.startsWith("productDescription-")){
 
-   const id=key.replace("productDescription-","");
+   const id=
+    key.replace("productDescription-","");
+
    const item=findProduct(id);
 
    if(item){
-    item.description=
-     item.descriptions?.tr||
-     item.description||
-     "";
+
+    item.description=value;
+
+    if(!item.descriptions)
+     item.descriptions={};
+
+    item.descriptions.tr=value;
+
    }
+
   }
 
   else if(key.startsWith("productPrice-")){
 
-   const id=key.replace("productPrice-","");
+   const id=
+    key.replace("productPrice-","");
+
    const item=findProduct(id);
 
    if(item)
     item.price=Number(value)||0;
+
+  }
+
+  else if(key.startsWith("productPortion-")){
+
+   const id=
+    key.replace("productPortion-","");
+
+   const item=findProduct(id);
+
+   if(item)
+    item.portion=value;
+
   }
 
   else if(key.startsWith("productCalories-")){
 
-   const id=key.replace("productCalories-","");
+   const id=
+    key.replace("productCalories-","");
+
    const item=findProduct(id);
 
    if(item)
     item.calories=value;
+
+  }
+
+  else if(key.startsWith("productAllergens-")){
+
+   const id=
+    key.replace("productAllergens-","");
+
+   const item=findProduct(id);
+
+   if(item){
+
+    item.allergens=
+     value
+     .split(",")
+     .map(x=>x.trim())
+     .filter(Boolean);
+
+   }
+
   }
 
   else if(key.startsWith("productSpicy-")){
 
-   const id=key.replace("productSpicy-","");
+   const id=
+    key.replace("productSpicy-","");
+
    const item=findProduct(id);
 
    if(item){
+
     item.spicy=Math.max(
      0,
-     Math.min(5,Number(value)||0)
+     Math.min(
+      5,
+      Number(value)||0
+     )
     );
+
    }
+
   }
 
   else if(key.startsWith("eventName-")){
 
-   const id=key.replace("eventName-","");
+   const id=
+    key.replace("eventName-","");
+
    const event=findEvent(id);
 
    if(event){
-    event.name=
-     event.names?.tr||
-     event.name||
-     "";
+
+    event.name=value;
+
+    if(!event.names)
+     event.names={};
+
+    event.names.tr=value;
+
    }
+
   }
 
   else if(key.startsWith("eventDate-")){
 
-   const id=key.replace("eventDate-","");
+   const id=
+    key.replace("eventDate-","");
+
    const event=findEvent(id);
 
-   if(event){
-    event.date=
-     event.dateTranslations?.tr||
-     event.date||
-     "";
-   }
+   if(event)
+    event.date=value;
+
   }
 
   else if(key.startsWith("eventTime-")){
 
-   const id=key.replace("eventTime-","");
+   const id=
+    key.replace("eventTime-","");
+
    const event=findEvent(id);
 
    if(event)
     event.time=value;
+
   }
 
   else if(key.startsWith("eventDescription-")){
 
-   const id=key.replace("eventDescription-","");
+   const id=
+    key.replace("eventDescription-","");
+
    const event=findEvent(id);
 
    if(event){
-    event.description=
-     event.descriptions?.tr||
-     event.description||
-     "";
-   }
-  }
 
- });
+    event.description=value;
 
- /* MULTI LANGUAGE FIELDS */
-
- document
- .querySelectorAll("[data-admin-lang]")
- .forEach(field=>{
-
-  const key=field.dataset.adminLang;
-  const lang=field.dataset.lang;
-  const value=field.value;
-
-  if(key.startsWith("businessName-")){
-
-   if(!DATA.nameTranslations)
-    DATA.nameTranslations={tr:"",en:"",ar:""};
-
-   DATA.nameTranslations[lang]=value;
-
-   if(lang==="tr")
-    DATA.name=value;
-  }
-
-  else if(key.startsWith("businessSubtitle-")){
-
-   if(!DATA.subtitleTranslations)
-    DATA.subtitleTranslations={tr:"",en:"",ar:""};
-
-   DATA.subtitleTranslations[lang]=value;
-
-   if(lang==="tr")
-    DATA.subtitle=value;
-  }
-
-  else if(key.startsWith("categoryName-")){
-
-   const id=key.replace("categoryName-","");
-   const category=findCategory(id);
-
-   if(category){
-    if(!category.names)
-     category.names={tr:"",en:"",ar:""};
-
-    category.names[lang]=value;
-
-    if(lang==="tr")
-     category.name=value;
-   }
-  }
-
-  else if(key.startsWith("productName-")){
-
-   const id=key.replace("productName-","");
-   const item=findProduct(id);
-
-   if(item){
-    if(!item.names)
-     item.names={tr:"",en:"",ar:""};
-
-    item.names[lang]=value;
-
-    if(lang==="tr")
-     item.name=value;
-   }
-  }
-
-  else if(key.startsWith("productDescription-")){
-
-   const id=key.replace("productDescription-","");
-   const item=findProduct(id);
-
-   if(item){
-    if(!item.descriptions)
-     item.descriptions={tr:"",en:"",ar:""};
-
-    item.descriptions[lang]=value;
-
-    if(lang==="tr")
-     item.description=value;
-   }
-  }
-
-  else if(key.startsWith("eventName-")){
-
-   const id=key.replace("eventName-","");
-   const event=findEvent(id);
-
-   if(event){
-    if(!event.names)
-     event.names={tr:"",en:"",ar:""};
-
-    event.names[lang]=value;
-
-    if(lang==="tr")
-     event.name=value;
-   }
-  }
-
-  else if(key.startsWith("eventDescription-")){
-
-   const id=key.replace("eventDescription-","");
-   const event=findEvent(id);
-
-   if(event){
     if(!event.descriptions)
-     event.descriptions={tr:"",en:"",ar:""};
+     event.descriptions={};
 
-    event.descriptions[lang]=value;
+    event.descriptions.tr=value;
 
-    if(lang==="tr")
-     event.description=value;
    }
+
   }
 
  });
 
- /* PORTION */
-
- document
- .querySelectorAll('[data-admin^="productPortion"]')
- .forEach(field=>{
-
-  const key=field.dataset.admin;
-
-  const match=
-   key.match(/^productPortion(TR|EN|AR)-(.+)$/);
-
-  if(!match)return;
-
-  const langMap={
-   TR:"tr",
-   EN:"en",
-   AR:"ar"
-  };
-
-  const lang=langMap[match[1]];
-  const id=match[2];
-
-  const item=findProduct(id);
-
-  if(item){
-   if(!item.portionTranslations)
-    item.portionTranslations={tr:"",en:"",ar:""};
-
-   item.portionTranslations[lang]=field.value;
-
-   if(lang==="tr")
-    item.portion=field.value;
-  }
- });
-
- /* ALLERGENS */
-
- document
- .querySelectorAll('[data-admin^="productAllergens"]')
- .forEach(field=>{
-
-  const key=field.dataset.admin;
-
-  const match=
-   key.match(/^productAllergens(TR|EN|AR)-(.+)$/);
-
-  if(!match)return;
-
-  const langMap={
-   TR:"tr",
-   EN:"en",
-   AR:"ar"
-  };
-
-  const lang=langMap[match[1]];
-  const id=match[2];
-
-  const item=findProduct(id);
-
-  if(item){
-
-   const values=
-    field.value
-    .split(",")
-    .map(x=>x.trim())
-    .filter(Boolean);
-
-   if(!item.allergensTranslations)
-    item.allergensTranslations={
-     tr:[],
-     en:[],
-     ar:[]
-    };
-
-   item.allergensTranslations[lang]=values;
-
-   if(lang==="tr")
-    item.allergens=values;
-  }
- });
-
- /* EVENT DATES */
-
- document
- .querySelectorAll('[data-admin^="eventDate"]')
- .forEach(field=>{
-
-  const key=field.dataset.admin;
-
-  const match=
-   key.match(/^eventDate(TR|EN|AR)-(.+)$/);
-
-  if(!match)return;
-
-  const langMap={
-   TR:"tr",
-   EN:"en",
-   AR:"ar"
-  };
-
-  const lang=langMap[match[1]];
-  const id=match[2];
-
-  const event=findEvent(id);
-
-  if(event){
-
-   if(!event.dateTranslations)
-    event.dateTranslations={
-     tr:"",
-     en:"",
-     ar:""
-    };
-
-   event.dateTranslations[lang]=field.value;
-
-   if(lang==="tr")
-    event.date=field.value;
-  }
- });
 }
 
 /* =========================================================
@@ -5511,66 +5732,109 @@ function handleFile(type,id,file){
  const maxImage=8*1024*1024;
  const maxVideo=20*1024*1024;
 
- const isVideo=file.type.startsWith("video/");
+ const isVideo=
+  file.type.startsWith("video/");
 
- if(isVideo&&file.size>maxVideo){
-  alert("Video en fazla 20 MB olabilir.");
+ if(
+  isVideo &&
+  file.size>maxVideo
+ ){
+
+  alert(
+   "Video en fazla 20 MB olabilir."
+  );
+
   return;
  }
 
- if(!isVideo&&file.size>maxImage){
-  alert("Fotoğraf en fazla 8 MB olabilir.");
+ if(
+  !isVideo &&
+  file.size>maxImage
+ ){
+
+  alert(
+   "Fotoğraf en fazla 8 MB olabilir."
+  );
+
   return;
  }
 
- readFileAsDataURL(file,data=>{
+ readFileAsDataURL(
+  file,
+  data=>{
 
-  if(type==="logo")
-   DATA.logo=data;
+   if(type==="logo")
+    DATA.logo=data;
 
-  else if(type==="backgroundImage"){
-   DATA.background.image=data;
-   DATA.background.type="image";
+   else if(type==="backgroundImage"){
+
+    DATA.background.image=data;
+    DATA.background.type="image";
+
+   }
+
+   else if(type==="backgroundVideo"){
+
+    DATA.background.video=data;
+    DATA.background.type="video";
+
+   }
+
+   else if(type==="categoryImage"){
+
+    const category=findCategory(id);
+
+    if(category)
+     category.image=data;
+
+   }
+
+   else if(type==="productImage"){
+
+    const item=findProduct(id);
+
+    if(item)
+     item.image=data;
+
+   }
+
+   else if(type==="productVideo"){
+
+    const item=findProduct(id);
+
+    if(item)
+     item.video=data;
+
+   }
+
+   else if(type==="eventImage"){
+
+    const event=findEvent(id);
+
+    if(event)
+     event.image=data;
+
+   }
+
+   else if(type==="eventVideo"){
+
+    const event=findEvent(id);
+
+    if(event)
+     event.video=data;
+
+   }
+
+   saveData();
+   render();
+
   }
+ );
 
-  else if(type==="backgroundVideo"){
-   DATA.background.video=data;
-   DATA.background.type="video";
-  }
-
-  else if(type==="categoryImage"){
-   const category=findCategory(id);
-   if(category)category.image=data;
-  }
-
-  else if(type==="productImage"){
-   const item=findProduct(id);
-   if(item)item.image=data;
-  }
-
-  else if(type==="productVideo"){
-   const item=findProduct(id);
-   if(item)item.video=data;
-  }
-
-  else if(type==="eventImage"){
-   const event=findEvent(id);
-   if(event)event.image=data;
-  }
-
-  else if(type==="eventVideo"){
-   const event=findEvent(id);
-   if(event)event.video=data;
-  }
-
-  saveData();
-  render();
-
- });
 }
 
 /* =========================================================
-   THEME
+   LIVE CSS
 ========================================================= */
 
 function applyTheme(){
@@ -5578,19 +5842,70 @@ function applyTheme(){
  const th=DATA.theme;
  const root=document.documentElement;
 
- root.style.setProperty("--accent",th.accent||"#d6a83d");
- root.style.setProperty("--accent2",th.accent2||"#f0c45a");
- root.style.setProperty("--text",th.text||"#fff");
- root.style.setProperty("--cardText",th.cardText||"#fff");
- root.style.setProperty("--price",th.price||th.accent2||"#f0c45a");
- root.style.setProperty("--overlay",th.overlay??.55);
- root.style.setProperty("--cardOpacity",th.cardOpacity??.94);
- root.style.setProperty("--cardRadius",(th.cardRadius||20)+"px");
- root.style.setProperty("--titleSize",(th.titleSize||34)+"px");
- root.style.setProperty("--bodySize",(th.bodySize||13)+"px");
- root.style.setProperty("--logoSize",(th.logoSize||112)+"px");
- root.style.setProperty("--fontFamily",resolveFont(th.fontFamily));
- root.style.setProperty("--titleFont",resolveFont(th.titleFont||"Georgia"));
+ root.style.setProperty(
+  "--accent",
+  th.accent||"#d6a83d"
+ );
+
+ root.style.setProperty(
+  "--accent2",
+  th.accent2||"#f0c45a"
+ );
+
+ root.style.setProperty(
+  "--text",
+  th.text||"#fff"
+ );
+
+ root.style.setProperty(
+  "--cardText",
+  th.cardText||"#fff"
+ );
+
+ root.style.setProperty(
+  "--price",
+  th.price||th.accent2||"#f0c45a"
+ );
+
+ root.style.setProperty(
+  "--overlay",
+  th.overlay??.55
+ );
+
+ root.style.setProperty(
+  "--cardOpacity",
+  th.cardOpacity??.94
+ );
+
+ root.style.setProperty(
+  "--cardRadius",
+  (th.cardRadius||20)+"px"
+ );
+
+ root.style.setProperty(
+  "--titleSize",
+  (th.titleSize||34)+"px"
+ );
+
+ root.style.setProperty(
+  "--bodySize",
+  (th.bodySize||13)+"px"
+ );
+
+ root.style.setProperty(
+  "--logoSize",
+  (th.logoSize||112)+"px"
+ );
+
+ root.style.setProperty(
+  "--fontFamily",
+  resolveFont(th.fontFamily)
+ );
+
+ root.style.setProperty(
+  "--titleFont",
+  resolveFont(th.titleFont||"Georgia")
+ );
 }
 
 function resolveFont(font){
@@ -5606,22 +5921,25 @@ function resolveFont(font){
    MAIN RENDER
 ========================================================= */
 
-function render(){
+function render(options={}){
+
+ /*
+  Ana hata burada düzeltildi:
+  Her render'da scroll konumu artık kaybolmuyor.
+ */
+
+ if(!options.resetScroll){
+  rememberScroll();
+ }
 
  document.documentElement.dir=
-  language==="ar"?"rtl":"ltr";
+  language==="ar"
+  ?
+  "rtl"
+  :
+  "ltr";
 
  applyTheme();
-
- document.body.classList.toggle(
-  "modalOpen",
-  !!(
-   selectedProduct||
-   selectedEvent||
-   adminOpen||
-   drawerOpen
-  )
- );
 
  let content="";
 
@@ -5724,7 +6042,9 @@ function render(){
 
    ${renderHero()}
 
-   ${content}
+   <main class="pageContent">
+    ${content}
+   </main>
 
    <div class="footer">
     NearMenu • Premium Menu
@@ -5741,41 +6061,106 @@ function render(){
  `;
 
  bindEvents();
+
+ if(!options.resetScroll){
+  restoreScroll(0);
+ }
+
+ if(options.resetScroll){
+  scrollToTop();
+ }
 }
 
 /* =========================================================
-   EVENTS
+   EVENT BINDING
 ========================================================= */
 
 function bindEvents(){
+
+ /*
+  Eski kodda her render() sonrasında document'a
+  yeni click listener ekleniyordu.
+
+  Bu da zamanla gereksiz listener birikmesine neden oluyordu.
+
+  Burada sadece tek global listener kullanıyoruz.
+ */
+
+ if(!window.nearMenuOutsideHandler){
+
+  window.nearMenuOutsideHandler=function(e){
+
+   if(
+    !e.target.closest("#currencyButton") &&
+    !e.target.closest("[data-currency]") &&
+    !e.target.closest("#languageButton") &&
+    !e.target.closest("[data-language]")
+   ){
+
+    if(currencyMenu||languageMenu){
+
+     rememberScroll();
+
+     currencyMenu=false;
+     languageMenu=false;
+
+     render();
+
+    }
+
+   }
+
+  };
+
+  document.addEventListener(
+   "click",
+   window.nearMenuOutsideHandler
+  );
+
+ }
 
  /* DRAWER */
 
  $("openDrawer")?.addEventListener(
   "click",
   ()=>{
+   rememberScroll();
+
    drawerOpen=true;
    currencyMenu=false;
    languageMenu=false;
+
    render();
+
   }
  );
 
  $("closeDrawer")?.addEventListener(
   "click",
   ()=>{
+   rememberScroll();
+
    drawerOpen=false;
+
    render();
+
   }
  );
 
  $("drawerOverlay")?.addEventListener(
   "click",
   e=>{
+
    if(e.target.id==="drawerOverlay"){
+
+    rememberScroll();
+
     drawerOpen=false;
+
     render();
+
    }
+
   }
  );
 
@@ -5784,12 +6169,16 @@ function bindEvents(){
  $("currencyButton")?.addEventListener(
   "click",
   e=>{
+
    e.stopPropagation();
+
+   rememberScroll();
 
    currencyMenu=!currencyMenu;
    languageMenu=false;
 
    render();
+
   }
  );
 
@@ -5801,7 +6190,10 @@ function bindEvents(){
 
    e.stopPropagation();
 
-   currency=button.dataset.currency;
+   rememberScroll();
+
+   currency=
+    button.dataset.currency;
 
    safeSet(
     "nearMenuCurrency",
@@ -5811,6 +6203,7 @@ function bindEvents(){
    currencyMenu=false;
 
    render();
+
   };
 
  });
@@ -5822,6 +6215,8 @@ function bindEvents(){
   e=>{
 
    e.stopPropagation();
+
+   rememberScroll();
 
    languageMenu=!languageMenu;
    currencyMenu=false;
@@ -5835,11 +6230,14 @@ function bindEvents(){
  .querySelectorAll("[data-language]")
  .forEach(button=>{
 
-  button.onclick=e=>{
+  button.onclick=async e=>{
 
    e.stopPropagation();
 
-   language=button.dataset.language;
+   rememberScroll();
+
+   language=
+    button.dataset.language;
 
    safeSet(
     "nearMenuLanguage",
@@ -5849,6 +6247,15 @@ function bindEvents(){
    languageMenu=false;
 
    render();
+
+   /*
+    Dil değişince mevcut bütün kategoriler,
+    ürünler ve etkinlikler otomatik çevrilir.
+   */
+
+   if(language!=="tr"){
+    await translateEverything();
+   }
 
   };
 
@@ -5860,6 +6267,8 @@ function bindEvents(){
   "click",
   ()=>{
 
+   rememberScroll();
+
    searchOpen=!searchOpen;
 
    if(!searchOpen)
@@ -5868,7 +6277,17 @@ function bindEvents(){
    render();
 
    setTimeout(
-    ()=>$("searchInput")?.focus(),
+    ()=>{
+     const input=$("searchInput");
+
+     if(input){
+      input.focus();
+      input.setSelectionRange(
+       input.value.length,
+       input.value.length
+      );
+     }
+    },
     30
    );
 
@@ -5879,9 +6298,13 @@ function bindEvents(){
   "input",
   e=>{
 
-   searchText=e.target.value;
+   /*
+    Arama sırasında scroll sıçramasını engelliyoruz.
+   */
 
-   const cursor=e.target.selectionStart;
+   rememberScroll();
+
+   searchText=e.target.value;
 
    render();
 
@@ -5893,12 +6316,11 @@ function bindEvents(){
 
      input.focus();
 
-     const pos=Math.min(
-      cursor??input.value.length,
+     input.setSelectionRange(
+      input.value.length,
       input.value.length
      );
 
-     input.setSelectionRange(pos,pos);
     }
 
    },0);
@@ -5912,7 +6334,9 @@ function bindEvents(){
  .querySelectorAll("[data-category]")
  .forEach(button=>{
 
-  button.onclick=()=>{
+  button.onclick=async ()=>{
+
+   rememberScroll();
 
    selectedCategory=
     button.dataset.category;
@@ -5921,9 +6345,28 @@ function bindEvents(){
    selectedEvent=null;
    searchText="";
 
-   render();
+   /*
+    Kategoriye gerçekten girildiği için
+    burada kontrollü şekilde yukarı gidiyoruz.
+   */
 
-   window.scrollTo(0,0);
+   render({
+    resetScroll:true
+   });
+
+   const category=
+    findCategory(
+     selectedCategory
+    );
+
+   if(
+    category &&
+    language!=="tr"
+   ){
+    await translateCategory(category);
+    await translateEverything();
+   }
+
   };
 
  });
@@ -5934,9 +6377,10 @@ function bindEvents(){
 
    selectedCategory=null;
 
-   render();
+   render({
+    resetScroll:true
+   });
 
-   window.scrollTo(0,0);
   }
  );
 
@@ -5948,14 +6392,19 @@ function bindEvents(){
 
   element.onclick=()=>{
 
-   const product=findProduct(
-    element.dataset.product
-   );
+   const product=
+    findProduct(
+     element.dataset.product
+    );
 
    if(product){
+
+    rememberScroll();
+
     selectedProduct=product;
-    selectedEvent=null;
+
     render();
+
    }
 
   };
@@ -5965,8 +6414,12 @@ function bindEvents(){
  $("closeProduct")?.addEventListener(
   "click",
   ()=>{
+   rememberScroll();
+
    selectedProduct=null;
+
    render();
+
   }
  );
 
@@ -5975,8 +6428,13 @@ function bindEvents(){
   e=>{
 
    if(e.target.id==="productOverlay"){
+
+    rememberScroll();
+
     selectedProduct=null;
+
     render();
+
    }
 
   }
@@ -5990,13 +6448,15 @@ function bindEvents(){
 
   button.onclick=()=>{
 
-   selectedEvent=findEvent(
-    button.dataset.event
-   );
+   rememberScroll();
 
-   selectedProduct=null;
+   selectedEvent=
+    findEvent(
+     button.dataset.event
+    );
 
    render();
+
   };
 
  });
@@ -6004,8 +6464,12 @@ function bindEvents(){
  $("closeEvent")?.addEventListener(
   "click",
   ()=>{
+   rememberScroll();
+
    selectedEvent=null;
+
    render();
+
   }
  );
 
@@ -6014,14 +6478,19 @@ function bindEvents(){
   e=>{
 
    if(e.target.id==="eventOverlay"){
+
+    rememberScroll();
+
     selectedEvent=null;
+
     render();
+
    }
 
   }
  );
 
- /* CATEGORY SCROLL */
+ /* CATEGORY PRODUCT SCROLL */
 
  document
  .querySelectorAll("[data-scroll-product]")
@@ -6039,7 +6508,7 @@ function bindEvents(){
 
     target.scrollIntoView({
      behavior:"smooth",
-     block:"start"
+     block:"center"
     });
 
    }
@@ -6094,7 +6563,10 @@ function bindEvents(){
 
   if(!input)return;
 
-  if(input.value===getAdminPin()){
+  if(
+   input.value===
+   getAdminPin()
+  ){
 
    adminAuthenticated=true;
 
@@ -6109,6 +6581,7 @@ function bindEvents(){
    input.focus();
 
   }
+
  }
 
  /* CLOSE ADMIN */
@@ -6128,6 +6601,7 @@ function bindEvents(){
    saveData();
 
    render();
+
   }
  );
 
@@ -6141,16 +6615,73 @@ function bindEvents(){
 
    collectAdmin();
 
-   adminTab=button.dataset.adminTab;
+   adminTab=
+    button.dataset.adminTab;
 
    adminCategoryView=null;
    adminProductView=null;
    advancedProduct=false;
 
    render();
+
   };
 
  });
+
+ /* CHANGE PIN */
+
+ $("changePinButton")?.addEventListener(
+  "click",
+  ()=>{
+
+   collectAdmin();
+
+   const newPin=
+    $("newPin")?.value?.trim();
+
+   const confirmPin=
+    $("confirmPin")?.value?.trim();
+
+   if(!newPin||!confirmPin){
+
+    alert("Yeni PIN'i iki alana da gir.");
+
+    return;
+   }
+
+   if(newPin!==confirmPin){
+
+    alert("Yeni PIN'ler aynı değil.");
+
+    return;
+   }
+
+   if(!/^\d{4,12}$/.test(newPin)){
+
+    alert(
+     "PIN sadece rakamlardan oluşmalı ve 4-12 haneli olmalı."
+    );
+
+    return;
+   }
+
+   if(setAdminPin(newPin)){
+
+    $("newPin").value="";
+    $("confirmPin").value="";
+
+    alert(t("pinSaved"));
+
+   }else{
+
+    alert(
+     "PIN kaydedilemedi."
+    );
+
+   }
+
+  }
+ );
 
  /* ADMIN CATEGORY */
 
@@ -6168,6 +6699,7 @@ function bindEvents(){
    adminProductView=null;
 
    render();
+
   };
 
  });
@@ -6182,6 +6714,7 @@ function bindEvents(){
    adminProductView=null;
 
    render();
+
   }
  );
 
@@ -6201,6 +6734,7 @@ function bindEvents(){
    advancedProduct=false;
 
    render();
+
   };
 
  });
@@ -6216,6 +6750,7 @@ function bindEvents(){
    advancedProduct=false;
 
    render();
+
   }
  );
 
@@ -6229,9 +6764,11 @@ function bindEvents(){
 
    collectAdmin();
 
-   advancedProduct=!advancedProduct;
+   advancedProduct=
+    !advancedProduct;
 
    render();
+
   };
 
  });
@@ -6249,6 +6786,12 @@ function bindEvents(){
    ]=input.checked;
 
    saveData();
+
+   /*
+    Burada komple render yerine sadece veri
+    kaydediliyor. Böylece sayfa sıçramıyor.
+   */
+
   };
 
  });
@@ -6261,14 +6804,16 @@ function bindEvents(){
 
   input.onchange=()=>{
 
-   const item=findProduct(
-    input.dataset.sold
-   );
+   const item=
+    findProduct(
+     input.dataset.sold
+    );
 
    if(item)
     item.sold=input.checked;
 
    saveData();
+
   };
 
  });
@@ -6279,14 +6824,16 @@ function bindEvents(){
 
   input.onchange=()=>{
 
-   const item=findProduct(
-    input.dataset.featured
-   );
+   const item=
+    findProduct(
+     input.dataset.featured
+    );
 
    if(item)
     item.featured=input.checked;
 
    saveData();
+
   };
 
  });
@@ -6297,14 +6844,16 @@ function bindEvents(){
 
   input.onchange=()=>{
 
-   const item=findProduct(
-    input.dataset.dish
-   );
+   const item=
+    findProduct(
+     input.dataset.dish
+    );
 
    if(item)
     item.dish=input.checked;
 
    saveData();
+
   };
 
  });
@@ -6330,9 +6879,25 @@ function bindEvents(){
 
    applyTheme();
 
+   /*
+    Render yerine kaydedip sayfayı bozmuyoruz.
+   */
+
    saveData();
 
-   render();
+   const presets=
+    document.querySelectorAll(
+     "[data-theme-color]"
+    );
+
+   presets.forEach(p=>{
+    p.classList.toggle(
+     "active",
+     p.dataset.themeColor===
+     DATA.theme.accent
+    );
+   });
+
   };
 
  });
@@ -6343,26 +6908,35 @@ function bindEvents(){
 
   input.oninput=()=>{
 
-   const key=input.dataset.colorSetting;
+   const key=
+    input.dataset.colorSetting;
 
    if(key==="background"){
 
     DATA.background.type="color";
-    DATA.background.value=input.value;
+    DATA.background.value=
+     input.value;
 
-    const bg=document.querySelector(".background");
+    const bg=
+     document.querySelector(".background");
 
-    if(bg)
-     bg.style.background=input.value;
+    if(bg){
+
+     bg.style.background=
+      input.value;
+
+    }
 
    }else{
 
     DATA.theme[key]=input.value;
 
     applyTheme();
+
    }
 
    saveData();
+
   };
 
  });
@@ -6375,8 +6949,11 @@ function bindEvents(){
 
   input.oninput=()=>{
 
-   const key=input.dataset.design;
-   const value=Number(input.value);
+   const key=
+    input.dataset.design;
+
+   const value=
+    Number(input.value);
 
    if(key==="overlay")
     DATA.theme.overlay=value/100;
@@ -6387,7 +6964,8 @@ function bindEvents(){
    else
     DATA.theme[key]=value;
 
-   const label=$(key+"Value");
+   const label=
+    $(key+"Value");
 
    if(label){
 
@@ -6400,10 +6978,11 @@ function bindEvents(){
      value+"%"
      :
      value+"px";
+
    }
 
    applyTheme();
-   saveData();
+
   };
 
  });
@@ -6424,6 +7003,7 @@ function bindEvents(){
    saveData();
 
    render();
+
   };
 
  });
@@ -6436,7 +7016,8 @@ function bindEvents(){
 
   input.onchange=e=>{
 
-   const file=e.target.files?.[0];
+   const file=
+    e.target.files?.[0];
 
    handleFile(
     input.dataset.fileType,
@@ -6476,6 +7057,7 @@ function bindEvents(){
     const c=findCategory(id);
 
     if(c)c.image="";
+
    }
 
    else if(type==="productImage"){
@@ -6483,6 +7065,7 @@ function bindEvents(){
     const p=findProduct(id);
 
     if(p)p.image="";
+
    }
 
    else if(type==="productVideo"){
@@ -6490,6 +7073,7 @@ function bindEvents(){
     const p=findProduct(id);
 
     if(p)p.video="";
+
    }
 
    else if(type==="eventImage"){
@@ -6497,6 +7081,7 @@ function bindEvents(){
     const e=findEvent(id);
 
     if(e)e.image="";
+
    }
 
    else if(type==="eventVideo"){
@@ -6504,10 +7089,13 @@ function bindEvents(){
     const e=findEvent(id);
 
     if(e)e.video="";
+
    }
 
    saveData();
+
    render();
+
   };
 
  });
@@ -6526,14 +7114,17 @@ function bindEvents(){
 
    DATA.categories=
     DATA.categories.filter(
-     c=>c.id!==button.dataset.deleteCategory
+     c=>
+      c.id!==button.dataset.deleteCategory
     );
 
    adminCategoryView=null;
    adminProductView=null;
 
    saveData();
+
    render();
+
   };
 
  });
@@ -6547,13 +7138,17 @@ function bindEvents(){
   button.onclick=()=>{
 
    const parts=
-    button.dataset.deleteProduct.split("|");
+    button.dataset.deleteProduct
+    .split("|");
 
-   const category=findCategory(parts[0]);
+   const category=
+    findCategory(parts[0]);
 
    if(!category)return;
 
-   if(!confirm("Bu ürün silinsin mi?"))return;
+   if(!confirm(
+    "Bu ürün silinsin mi?"
+   ))return;
 
    category.items=
     category.items.filter(
@@ -6563,7 +7158,9 @@ function bindEvents(){
    adminProductView=null;
 
    saveData();
+
    render();
+
   };
 
  });
@@ -6576,15 +7173,20 @@ function bindEvents(){
 
   button.onclick=()=>{
 
-   if(!confirm("Bu etkinlik silinsin mi?"))return;
+   if(!confirm(
+    "Bu etkinlik silinsin mi?"
+   ))return;
 
    DATA.events=
     DATA.events.filter(
-     e=>e.id!==button.dataset.deleteEvent
+     e=>
+      e.id!==button.dataset.deleteEvent
     );
 
    saveData();
+
    render();
+
   };
 
  });
@@ -6606,21 +7208,22 @@ function bindEvents(){
     name:"Yeni Kategori",
 
     names:{
-     tr:"Yeni Kategori",
-     en:"New Category",
-     ar:"تصنيف جديد"
+     tr:"Yeni Kategori"
     },
 
     image:"",
 
     items:[]
+
    });
 
    adminCategoryView=id;
    adminProductView=null;
 
    saveData();
+
    render();
+
   }
  );
 
@@ -6634,9 +7237,10 @@ function bindEvents(){
 
    collectAdmin();
 
-   const category=findCategory(
-    button.dataset.addProduct
-   );
+   const category=
+    findCategory(
+     button.dataset.addProduct
+    );
 
    if(!category)return;
 
@@ -6649,51 +7253,45 @@ function bindEvents(){
     name:"Yeni Ürün",
 
     names:{
-     tr:"Yeni Ürün",
-     en:"New Product",
-     ar:"منتج جديد"
+     tr:"Yeni Ürün"
     },
 
     description:"",
 
     descriptions:{
-     tr:"",
-     en:"",
-     ar:""
+     tr:""
     },
 
     portion:"",
-
-    portionTranslations:{
-     tr:"",
-     en:"",
-     ar:""
-    },
 
     calories:"",
 
     allergens:[],
 
-    allergensTranslations:{
-     tr:[],
-     en:[],
-     ar:[]
-    },
-
     spicy:0,
+
     price:0,
+
     image:"",
+
     video:"",
+
     featured:false,
+
     dish:false,
+
     sold:false
+
    });
 
    adminProductView=id;
+
    advancedProduct=false;
 
    saveData();
+
    render();
+
   };
 
  });
@@ -6706,44 +7304,35 @@ function bindEvents(){
 
    collectAdmin();
 
-   const id=uid("event");
-
    DATA.events.push({
 
-    id:id,
+    id:uid("event"),
 
     name:"Yeni Etkinlik",
 
     names:{
-     tr:"Yeni Etkinlik",
-     en:"New Event",
-     ar:"فعالية جديدة"
+     tr:"Yeni Etkinlik"
     },
 
     date:"Cumartesi",
-
-    dateTranslations:{
-     tr:"Cumartesi",
-     en:"Saturday",
-     ar:"السبت"
-    },
 
     time:"20:00",
 
     description:"",
 
     descriptions:{
-     tr:"",
-     en:"",
-     ar:""
+     tr:""
     },
 
     image:"",
     video:""
+
    });
 
    saveData();
+
    render();
+
   }
  );
 
@@ -6751,113 +7340,32 @@ function bindEvents(){
 
  $("saveProductNow")?.addEventListener(
   "click",
-  ()=>{
+  async ()=>{
 
    collectAdmin();
 
    saveData();
 
-   alert(t("saved"));
+   const item=
+    findProduct(adminProductView);
+
+   if(item){
+
+    /*
+     Kaydettiğin anda İngilizce ve Arapça
+     çevirileri hazırlanır.
+    */
+
+    await generateMissingTranslations(item);
+
+   }
+
+   alert("Ürün kaydedildi.");
 
    adminProductView=null;
    advancedProduct=false;
 
    render();
-  }
- );
-
- /* CHANGE PIN */
-
- $("changePinButton")?.addEventListener(
-  "click",
-  ()=>{
-
-   collectAdmin();
-
-   const current=$("[data-admin='currentPin']")?.value||"";
-   const newPin=$("[data-admin='newPin']")?.value||"";
-   const repeat=$("[data-admin='repeatPin']")?.value||"";
-
-   const message=$("pinMessage");
-
-   function showPinMessage(text,success){
-
-    if(!message)return;
-
-    message.style.display="block";
-    message.style.background=
-     success
-     ?"rgba(22,101,52,.25)"
-     :"rgba(127,29,29,.25)";
-    message.style.color=
-     success
-     ?" #86efac"
-     :"#fca5a5";
-    message.textContent=text;
-   }
-
-   if(current!==getAdminPin()){
-
-    showPinMessage(
-     t("pinWrong"),
-     false
-    );
-
-    return;
-   }
-
-   if(!/^\d+$/.test(newPin)){
-
-    showPinMessage(
-     t("pinOnlyNumbers"),
-     false
-    );
-
-    return;
-   }
-
-   if(newPin.length<4||newPin.length>12){
-
-    showPinMessage(
-     t("pinLength"),
-     false
-    );
-
-    return;
-   }
-
-   if(newPin!==repeat){
-
-    showPinMessage(
-     t("pinMismatch"),
-     false
-    );
-
-    return;
-   }
-
-   if(!safeSet(PIN_KEY,newPin)){
-
-    showPinMessage(
-     "PIN kaydedilemedi.",
-     false
-    );
-
-    return;
-   }
-
-   showPinMessage(
-    t("pinChanged"),
-    true
-   );
-
-   const currentInput=$("[data-admin='currentPin']");
-   const newInput=$("[data-admin='newPin']");
-   const repeatInput=$("[data-admin='repeatPin']");
-
-   if(currentInput)currentInput.value="";
-   if(newInput)newInput.value="";
-   if(repeatInput)repeatInput.value="";
 
   }
  );
@@ -6879,41 +7387,69 @@ function bindEvents(){
    adminProductView=null;
 
    render();
+
   }
  );
 
 }
 
 /* =========================================================
-   GLOBAL OUTSIDE POPUP CLICK
+   GENERATE MISSING TRANSLATIONS
 ========================================================= */
 
-document.addEventListener("click",e=>{
+async function generateMissingTranslations(item){
 
- if(
-  !currencyMenu &&
-  !languageMenu
- )return;
+ if(!item)return;
 
- if(
-  e.target.closest("#currencyButton")||
-  e.target.closest("#currencyPopup")||
-  e.target.closest("#languageButton")||
-  e.target.closest("#languagePopup")
- )return;
+ if(!item.names)
+  item.names={};
 
- currencyMenu=false;
- languageMenu=false;
+ if(!item.descriptions)
+  item.descriptions={};
 
+ item.names.tr=item.name||"";
+ item.descriptions.tr=item.description||"";
+
+ translating=true;
  render();
 
-});
+ for(const target of ["en","ar"]){
+
+  if(!item.names[target]){
+
+   item.names[target]=
+    await translateText(
+     item.name,
+     target
+    );
+
+  }
+
+  if(!item.descriptions[target]){
+
+   item.descriptions[target]=
+    await translateText(
+     item.description,
+     target
+    );
+
+  }
+
+ }
+
+ translating=false;
+
+ saveData();
+
+}
 
 /* =========================================================
    START
 ========================================================= */
 
-render();
+render({
+ resetScroll:true
+});
 
 </script>
 
