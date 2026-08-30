@@ -7,641 +7,785 @@
 <title>NearMenu</title>
 
 <style>
-:root{
-  --bg:#0b0b0c;
-  --card:#151517;
-  --line:#29292d;
-  --gold:#d6a83d;
-  --gold2:#f0c45a;
-  --text:#f7f7f7;
-  --muted:#999;
-}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-}
-button,input,textarea{font:inherit}
+html,body{margin:0;padding:0;background:#0b0b0c;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+body{min-height:100vh}
+button,input{font:inherit}
 button{cursor:pointer}
 a{text-decoration:none;color:inherit}
 
-.app{
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 50% 0,#292116 0,#0b0b0c 38%);
+:root{
+ --bg:#0b0b0c;
+ --card:#151517;
+ --card2:#1b1b1e;
+ --line:#29292d;
+ --gold:#d6a83d;
+ --gold2:#f0c45a;
+ --text:#fff;
+ --muted:#999;
 }
 
-.wrap{
-  max-width:560px;
-  margin:auto;
-  padding:0 18px 50px;
+#app{
+ min-height:100vh;
+ background:
+ radial-gradient(circle at 50% -10%,#3a2d16 0%,#15120d 18%,#0b0b0c 45%);
 }
 
-/* ÜST MENÜ */
+.container{
+ width:100%;
+ max-width:600px;
+ margin:auto;
+ padding:0 16px 60px;
+}
+
+/* TOP */
+
 .top{
-  position:sticky;
-  top:0;
-  z-index:30;
-  padding:12px 0;
-  background:linear-gradient(#0b0b0cf5,#0b0b0ccf,transparent);
-  backdrop-filter:blur(10px);
+ position:sticky;
+ top:0;
+ z-index:50;
+ padding:12px 0;
+ background:rgba(11,11,12,.92);
+ backdrop-filter:blur(15px);
 }
 
-.toprow{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.topRow{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
 }
 
-.round{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  border:1px solid var(--line);
-  background:#171719;
-  color:white;
-  font-size:21px;
+.topRight{
+ display:flex;
+ gap:7px;
 }
 
-.currency{
-  height:42px;
-  padding:0 15px;
-  border:0;
-  border-radius:22px;
-  background:var(--gold);
-  color:#111;
-  font-weight:900;
+.iconBtn{
+ width:42px;
+ height:42px;
+ border-radius:50%;
+ border:1px solid var(--line);
+ background:#171719;
+ color:#fff;
+ font-size:20px;
+}
+
+.currencyBtn{
+ height:42px;
+ padding:0 15px;
+ border:0;
+ border-radius:22px;
+ background:var(--gold);
+ color:#111;
+ font-weight:900;
+}
+
+.searchBox{
+ margin-top:8px;
+}
+
+.searchBox input{
+ width:100%;
+ padding:13px 15px;
+ border-radius:14px;
+ border:1px solid var(--line);
+ background:#151517;
+ color:#fff;
+ outline:none;
 }
 
 /* HERO */
+
 .hero{
-  text-align:center;
-  padding:35px 0 28px;
+ text-align:center;
+ padding:38px 0 28px;
 }
 
 .logo{
-  width:86px;
-  height:86px;
-  border:1px solid var(--gold);
-  border-radius:50%;
-  margin:auto;
-  display:grid;
-  place-items:center;
-  color:var(--gold);
-  font:38px Georgia,serif;
-  background:#111;
-  overflow:hidden;
+ width:92px;
+ height:92px;
+ margin:auto;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:50%;
+ border:1px solid var(--gold);
+ background:#111;
+ color:var(--gold);
+ font:42px Georgia,serif;
+ box-shadow:0 0 35px rgba(214,168,61,.12);
 }
 
-.logo img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.eyebrow{
-  margin-top:17px;
-  color:var(--gold2);
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:.28em;
+.welcome{
+ margin-top:17px;
+ color:var(--gold2);
+ font-size:10px;
+ font-weight:900;
+ letter-spacing:.3em;
 }
 
 .hero h1{
-  font:700 30px Georgia,serif;
-  margin:8px 0;
+ margin:9px 0 5px;
+ font:700 31px Georgia,serif;
 }
 
-.subtitle{
-  margin:0;
-  color:#aaa;
-  font-size:13px;
+.hero p{
+ margin:0;
+ color:#999;
+ font-size:13px;
 }
 
-/* SECTIONS */
+/* SECTION */
+
 .section{
-  margin:28px 0;
+ margin-top:28px;
 }
 
-.head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:12px;
+.sectionHead{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ margin-bottom:13px;
 }
 
-.head h2{
-  font-size:18px;
-  margin:0;
+.sectionHead h2{
+ margin:0;
+ font-size:19px;
 }
 
 .hint{
-  font-size:10px;
-  color:#666;
+ color:#666;
+ font-size:10px;
 }
 
-/* YATAY SLIDER */
-.scroll{
-  display:flex;
-  gap:12px;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  scrollbar-width:none;
+/* HORIZONTAL SLIDER */
+
+.horizontal{
+ display:flex;
+ gap:12px;
+ overflow-x:auto;
+ scrollbar-width:none;
+ scroll-snap-type:x mandatory;
 }
 
-.scroll::-webkit-scrollbar{
-  display:none;
+.horizontal::-webkit-scrollbar{
+ display:none;
 }
 
-.feature,
+.feature{
+ position:relative;
+ flex:0 0 84%;
+ height:210px;
+ padding:0;
+ border:1px solid var(--line);
+ border-radius:19px;
+ overflow:hidden;
+ background:#171719;
+ scroll-snap-align:start;
+}
+
+.feature img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.featureShade{
+ position:absolute;
+ inset:0;
+ background:linear-gradient(transparent 25%,rgba(0,0,0,.9));
+}
+
+.featureText{
+ position:absolute;
+ left:16px;
+ right:16px;
+ bottom:15px;
+ text-align:left;
+}
+
+.featureText strong{
+ font-size:18px;
+}
+
+.featureText span{
+ display:block;
+ margin-top:5px;
+ color:#ccc;
+ font-size:12px;
+}
+
+/* EVENTS */
+
 .event{
-  min-width:84%;
-  height:205px;
-  scroll-snap-align:start;
-  border-radius:18px;
-  overflow:hidden;
-  position:relative;
-  background:#171719;
-  border:1px solid var(--line);
-  padding:0;
+ position:relative;
+ flex:0 0 84%;
+ height:190px;
+ padding:0;
+ border:1px solid var(--line);
+ border-radius:19px;
+ overflow:hidden;
+ background:#171719;
+ scroll-snap-align:start;
 }
 
-.feature img,
-.event img,
-.cat img,
-.prodimg img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.event img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
 }
 
-.shade{
-  position:absolute;
-  inset:0;
-  background:linear-gradient(transparent 30%,#000e);
+.eventShade{
+ position:absolute;
+ inset:0;
+ background:linear-gradient(transparent 25%,rgba(0,0,0,.9));
 }
 
-.over{
-  position:absolute;
-  left:15px;
-  right:15px;
-  bottom:14px;
-  text-align:left;
+.eventDate{
+ position:absolute;
+ top:12px;
+ left:12px;
+ padding:7px 10px;
+ border-radius:20px;
+ background:rgba(0,0,0,.7);
+ color:var(--gold2);
+ font-size:10px;
 }
 
-.over b{
-  font-size:17px;
+.eventText{
+ position:absolute;
+ left:16px;
+ right:16px;
+ bottom:15px;
+ text-align:left;
 }
 
-.over small{
-  display:block;
-  color:#bbb;
-  margin-top:4px;
+.eventText strong{
+ font-size:18px;
 }
 
-.event{
-  height:185px;
+.eventText span{
+ display:block;
+ margin-top:5px;
+ color:#ccc;
+ font-size:12px;
 }
 
-.event .date{
-  position:absolute;
-  top:12px;
-  left:12px;
-  background:#000b;
-  border-radius:99px;
-  padding:6px 9px;
-  color:var(--gold2);
-  font-size:10px;
+/* CATEGORIES */
+
+.categories{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
 }
 
-/* KATEGORİLER */
-.cats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
+.category{
+ position:relative;
+ height:155px;
+ padding:0;
+ border:1px solid var(--line);
+ border-radius:18px;
+ overflow:hidden;
+ background:#171719;
 }
 
-.cat{
-  height:155px;
-  border-radius:18px;
-  overflow:hidden;
-  position:relative;
-  background:#171719;
-  border:1px solid var(--line);
-  color:white;
-  text-align:left;
-  padding:0;
+.category img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
 }
 
-.cat .over b{
-  font-size:18px;
+.categoryShade{
+ position:absolute;
+ inset:0;
+ background:linear-gradient(transparent 20%,rgba(0,0,0,.9));
 }
 
-.cat .over small{
-  font-size:10px;
+.categoryText{
+ position:absolute;
+ left:14px;
+ right:14px;
+ bottom:13px;
+ text-align:left;
 }
 
-/* ALT KATEGORİ MENÜSÜ */
-.sub{
-  position:sticky;
-  top:64px;
-  z-index:15;
-  margin:0 -18px;
-  padding:10px 18px;
-  background:#0b0b0cf0;
-  border-bottom:1px solid #202023;
-  backdrop-filter:blur(12px);
+.categoryText strong{
+ font-size:18px;
 }
 
-.sub .scroll button{
-  flex:0 0 auto;
-  background:#171719;
-  color:#aaa;
-  border:0;
-  border-radius:11px;
-  padding:9px 13px;
-  font-size:11px;
-  font-weight:800;
+.categoryText span{
+ display:block;
+ color:#aaa;
+ font-size:10px;
+ margin-top:4px;
 }
 
-.sub .scroll button.active{
-  background:var(--gold);
-  color:#111;
+/* CATEGORY PAGE */
+
+.categoryTitle{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ margin-bottom:12px;
 }
 
-/* ÜRÜNLER */
+.backBtn{
+ border:0;
+ background:#1b1b1e;
+ color:#fff;
+ padding:10px 13px;
+ border-radius:11px;
+ font-size:11px;
+ font-weight:800;
+}
+
+.stickyCategories{
+ position:sticky;
+ top:66px;
+ z-index:35;
+ margin:0 -16px;
+ padding:10px 16px;
+ background:rgba(11,11,12,.94);
+ backdrop-filter:blur(14px);
+ border-bottom:1px solid #202023;
+}
+
+.categoryTabs{
+ display:flex;
+ gap:8px;
+ overflow-x:auto;
+ scrollbar-width:none;
+}
+
+.categoryTabs::-webkit-scrollbar{
+ display:none;
+}
+
+.categoryTabs button{
+ flex:0 0 auto;
+ padding:10px 14px;
+ border:0;
+ border-radius:11px;
+ background:#18181a;
+ color:#aaa;
+ font-size:11px;
+ font-weight:800;
+}
+
+.categoryTabs button.active{
+ background:var(--gold);
+ color:#111;
+}
+
+/* PRODUCTS */
+
 .products{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-top:14px;
+ display:flex;
+ flex-direction:column;
+ gap:11px;
+ margin-top:15px;
 }
 
 .product{
-  display:grid;
-  grid-template-columns:112px 1fr;
-  min-height:118px;
-  border:1px solid var(--line);
-  background:#131315;
-  border-radius:16px;
-  overflow:hidden;
-  cursor:pointer;
+ display:grid;
+ grid-template-columns:115px 1fr;
+ min-height:120px;
+ overflow:hidden;
+ border:1px solid var(--line);
+ border-radius:16px;
+ background:#141416;
 }
 
-.prodimg{
-  height:118px;
-  background:#1b1b1d;
+.productImage{
+ height:120px;
+ background:#1c1c1e;
 }
 
-.prodbody{
-  padding:12px;
+.productImage img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
 }
 
-.prodbody h3{
-  margin:0;
-  font-size:14px;
+.productInfo{
+ padding:12px;
 }
 
-.prodbody p{
-  margin:5px 0;
-  color:#999;
-  font-size:11px;
-  line-height:1.45;
+.productInfo h3{
+ margin:0;
+ font-size:15px;
+}
+
+.productInfo p{
+ margin:6px 0;
+ color:#929292;
+ font-size:11px;
+ line-height:1.45;
 }
 
 .tags{
-  display:flex;
-  gap:5px;
-  flex-wrap:wrap;
+ display:flex;
+ flex-wrap:wrap;
+ gap:5px;
 }
 
 .tag{
-  font-size:9px;
-  padding:4px 6px;
-  background:#222;
-  border-radius:6px;
-  color:#bbb;
+ padding:4px 7px;
+ border-radius:6px;
+ background:#222225;
+ color:#aaa;
+ font-size:9px;
 }
 
-.sold{
-  background:#7f1d1d;
-  color:white;
+.tag.sold{
+ background:#7f1d1d;
+ color:#fff;
 }
 
 .price{
-  margin-top:7px;
-  color:var(--gold2);
-  font-weight:900;
+ margin-top:8px;
+ color:var(--gold2);
+ font-weight:900;
+ font-size:14px;
 }
 
 /* DRAWER */
-.drawerbg,
-.modalbg{
-  position:fixed;
-  inset:0;
-  z-index:100;
-  background:#000b;
-  backdrop-filter:blur(5px);
+
+.overlay{
+ position:fixed;
+ inset:0;
+ z-index:100;
+ background:rgba(0,0,0,.72);
+ backdrop-filter:blur(5px);
 }
 
 .drawer{
-  width:min(88%,380px);
-  height:100%;
-  background:#0f0f10;
-  padding:20px;
-  overflow:auto;
+ width:min(88%,390px);
+ height:100%;
+ overflow:auto;
+ padding:20px;
+ background:#101011;
+ box-shadow:10px 0 40px #000;
 }
 
-.drawerhead{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.drawerHead{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
 }
 
-.drawerlogo{
-  font:700 24px Georgia,serif;
-  color:var(--gold);
+.drawerLogo{
+ color:var(--gold);
+ font:700 25px Georgia,serif;
 }
 
-.label{
-  font-size:10px;
-  color:#666;
-  letter-spacing:.15em;
-  text-transform:uppercase;
-  margin:24px 0 8px;
+.drawerSection{
+ margin-top:25px;
 }
 
-.grid3{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:7px;
+.drawerLabel{
+ color:#666;
+ font-size:10px;
+ letter-spacing:.15em;
+ margin-bottom:8px;
 }
 
-.grid3 button,
-.linkbtn{
-  padding:11px;
-  border:0;
-  border-radius:10px;
-  background:#171719;
-  color:#aaa;
-  font-size:11px;
+.optionGrid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:7px;
 }
 
-.grid3 .on{
-  background:var(--gold);
-  color:#111;
-  font-weight:900;
+.optionGrid button,
+.drawerLink{
+ border:0;
+ background:#18181a;
+ color:#aaa;
+ padding:11px;
+ border-radius:10px;
+ font-size:11px;
 }
 
-.linkbtn{
-  display:block;
-  width:100%;
-  text-align:left;
-  margin:7px 0;
+.optionGrid button.active{
+ background:var(--gold);
+ color:#111;
+ font-weight:900;
 }
 
-/* ÜRÜN MODAL */
-.modalbg{
-  z-index:120;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
+.drawerLink{
+ display:block;
+ width:100%;
+ text-align:left;
+ margin-top:7px;
+}
+
+/* MODAL */
+
+.modalOverlay{
+ position:fixed;
+ inset:0;
+ z-index:150;
+ display:flex;
+ align-items:flex-end;
+ justify-content:center;
+ background:rgba(0,0,0,.75);
+ backdrop-filter:blur(5px);
 }
 
 .modal{
-  width:min(100%,560px);
-  max-height:92vh;
-  overflow:auto;
-  background:#0f0f10;
-  border-radius:24px 24px 0 0;
+ width:min(100%,600px);
+ max-height:92vh;
+ overflow:auto;
+ border-radius:25px 25px 0 0;
+ background:#101011;
 }
 
-.modalpic{
-  height:285px;
-  position:relative;
-  background:#19191b;
+.modalImage{
+ position:relative;
+ height:290px;
 }
 
-.modalpic img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.modalImage img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
 }
 
-.close{
-  position:absolute;
-  right:14px;
-  top:14px;
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:#000b;
-  color:white;
-  border:0;
-  font-size:24px;
+.closeBtn{
+ position:absolute;
+ top:13px;
+ right:13px;
+ width:40px;
+ height:40px;
+ border:0;
+ border-radius:50%;
+ background:rgba(0,0,0,.7);
+ color:#fff;
+ font-size:23px;
 }
 
-.modalbody{
-  padding:20px;
+.modalBody{
+ padding:20px;
 }
 
-.modalbody h2{
-  margin:0;
-  font-size:25px;
+.modalBody h2{
+ margin:0;
+ font-size:26px;
 }
 
-.modalbody p{
-  color:#aaa;
-  line-height:1.6;
-  font-size:13px;
+.modalBody p{
+ color:#999;
+ font-size:13px;
+ line-height:1.6;
 }
 
-.detail{
-  display:flex;
-  justify-content:space-between;
-  padding:13px 0;
-  border-bottom:1px solid #242427;
-  font-size:12px;
+.infoRow{
+ display:flex;
+ justify-content:space-between;
+ padding:13px 0;
+ border-bottom:1px solid #252527;
+ font-size:12px;
 }
 
-.detail span:last-child{
-  color:#ddd;
+.infoRow span:last-child{
+ color:#ddd;
+ text-align:right;
 }
 
-.actions{
-  display:flex;
-  gap:8px;
+.modalPrice{
+ margin-top:16px;
+ color:var(--gold2);
+ font-size:25px;
+ font-weight:900;
+}
+
+.actionRow{
+ display:flex;
+ gap:8px;
+ margin-top:18px;
 }
 
 .action{
-  flex:1;
-  padding:12px;
-  border-radius:11px;
-  text-align:center;
-  background:#202023;
+ flex:1;
+ padding:13px;
+ border-radius:12px;
+ text-align:center;
+ background:#202023;
+ font-size:12px;
+ font-weight:800;
 }
 
 .action.gold{
-  background:var(--gold);
-  color:#111;
-  font-weight:900;
+ background:var(--gold);
+ color:#111;
 }
 
 /* ADMIN */
-.adminbg{
-  position:fixed;
-  inset:0;
-  z-index:200;
-  background:#000b;
-  display:flex;
-  justify-content:flex-end;
+
+.adminOverlay{
+ position:fixed;
+ inset:0;
+ z-index:250;
+ background:rgba(0,0,0,.8);
+ display:flex;
+ justify-content:flex-end;
 }
 
 .admin{
-  width:min(100%,560px);
-  height:100%;
-  background:#0d0d0e;
-  overflow:auto;
+ width:min(100%,600px);
+ height:100%;
+ overflow:auto;
+ background:#0e0e0f;
 }
 
-.adminhead{
-  position:sticky;
-  top:0;
-  background:#0d0d0ef5;
-  padding:15px;
-  z-index:5;
-  border-bottom:1px solid var(--line);
+.adminHeader{
+ position:sticky;
+ top:0;
+ z-index:5;
+ padding:15px;
+ background:rgba(14,14,15,.97);
+ border-bottom:1px solid var(--line);
 }
 
-.adminheadrow{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.adminTop{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
 }
 
-.tabs{
-  display:flex;
-  gap:5px;
-  margin-top:12px;
+.adminTabs{
+ display:flex;
+ gap:6px;
+ margin-top:12px;
 }
 
-.tabs button{
-  flex:1;
-  padding:9px;
-  border:0;
-  border-radius:9px;
-  background:#18181a;
-  color:#888;
+.adminTabs button{
+ flex:1;
+ padding:10px;
+ border:0;
+ border-radius:9px;
+ background:#19191b;
+ color:#888;
+ font-size:11px;
 }
 
-.tabs .on{
-  background:var(--gold);
-  color:#111;
+.adminTabs button.active{
+ background:var(--gold);
+ color:#111;
+ font-weight:900;
 }
 
-.adminbody{
-  padding:16px;
+.adminBody{
+ padding:16px;
 }
 
 .field{
-  margin-bottom:12px;
+ margin-bottom:13px;
 }
 
 .field label{
-  display:block;
-  color:#777;
-  font-size:10px;
-  margin-bottom:5px;
+ display:block;
+ margin-bottom:5px;
+ color:#777;
+ font-size:10px;
 }
 
-.field input,
-.field textarea{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid #303034;
-  background:#171719;
-  color:#eee;
-  outline:0;
+.field input{
+ width:100%;
+ padding:11px;
+ border:1px solid #303034;
+ border-radius:10px;
+ background:#171719;
+ color:#fff;
+ outline:none;
+}
+
+.adminCard{
+ padding:13px;
+ margin-bottom:10px;
+ border:1px solid var(--line);
+ border-radius:13px;
+ background:#151517;
 }
 
 .toggle{
-  display:flex;
-  justify-content:space-between;
-  padding:12px;
-  margin:7px 0;
-  background:#171719;
-  border:1px solid #29292d;
-  border-radius:11px;
-  font-size:12px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:12px;
+ margin:7px 0;
+ border:1px solid var(--line);
+ border-radius:11px;
+ background:#18181a;
+ color:#ddd;
+ font-size:12px;
 }
 
-.btn{
-  border:0;
-  border-radius:10px;
-  padding:11px 14px;
-  background:#202023;
-  color:#eee;
-  font-weight:800;
-  font-size:11px;
+.toggle input{
+ width:18px;
+ height:18px;
+ accent-color:#d6a83d;
 }
 
-.btn.gold{
-  background:var(--gold);
-  color:#111;
+.adminButton{
+ border:0;
+ border-radius:10px;
+ padding:11px 14px;
+ background:#202023;
+ color:#fff;
+ font-size:11px;
+ font-weight:800;
 }
 
-.admincard{
-  background:#141416;
-  border:1px solid #29292d;
-  border-radius:13px;
-  padding:12px;
-  margin-bottom:10px;
+.adminButton.gold{
+ background:var(--gold);
+ color:#111;
+}
+
+.saveBar{
+ position:sticky;
+ bottom:0;
+ padding:12px 16px;
+ background:rgba(14,14,15,.97);
+ border-top:1px solid var(--line);
 }
 
 .footer{
-  text-align:center;
-  color:#555;
-  font-size:10px;
-  padding:30px 0;
+ padding:35px 0;
+ text-align:center;
+ color:#555;
+ font-size:10px;
 }
 
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:20px;
-  transform:translateX(-50%);
-  z-index:500;
-  background:#eee;
-  color:#111;
-  padding:10px 16px;
-  border-radius:99px;
-  font-size:12px;
-  font-weight:800;
+.empty{
+ padding:30px 10px;
+ text-align:center;
+ color:#666;
 }
 
-@media(max-width:380px){
-  .cats{
-    grid-template-columns:1fr;
-  }
+@media(max-width:390px){
+ .categories{
+  grid-template-columns:1fr;
+ }
 }
 </style>
 </head>
 
 <body>
 
-<div id="root"></div>
+<div id="app"></div>
 
 <script>
 
-/* =========================================================
-   GÖRSELLER
-========================================================= */
+/* ============================================================
+   NEARMENU
+   TEK DOSYA DEMO SİSTEMİ
+============================================================ */
 
-const IMG={
+
+/* ---------- GÖRSELLER ---------- */
+
+const IMAGES={
  breakfast:"https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=900&q=80",
  burger:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80",
  pizza:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80",
@@ -653,271 +797,371 @@ const IMG={
 };
 
 
-/* =========================================================
-   DEMO VERİLER
-========================================================= */
+/* ---------- DİL ---------- */
 
-const data={
+const TEXT={
+ tr:{
+  welcome:"HOŞ GELDİNİZ",
+  best:"Çok Satanlar",
+  events:"Etkinlikler",
+  categories:"Kategoriler",
+  swipe:"Sağa kaydır",
+  back:"Geri",
+  portion:"Porsiyon / Gramaj",
+  calories:"Kalori",
+  allergens:"Alerjenler",
+  spicy:"Acılık",
+  sold:"Tükendi",
+  dish:"Günün Ürünü",
+  reserve:"Rezervasyon Yap",
+  call:"Ara",
+  language:"Dil",
+  currency:"Para Birimi",
+  admin:"Yönetim Paneli",
+  general:"Genel",
+  products:"Ürünler",
+  settings:"Ayarlar",
+  save:"Kaydet",
+  search:"Ürün ara..."
+ },
+ en:{
+  welcome:"WELCOME",
+  best:"Best Sellers",
+  events:"Events",
+  categories:"Categories",
+  swipe:"Swipe",
+  back:"Back",
+  portion:"Portion",
+  calories:"Calories",
+  allergens:"Allergens",
+  spicy:"Spiciness",
+  sold:"Sold Out",
+  dish:"Dish of the Day",
+  reserve:"Reserve",
+  call:"Call",
+  language:"Language",
+  currency:"Currency",
+  admin:"Admin Panel",
+  general:"General",
+  products:"Products",
+  settings:"Settings",
+  save:"Save",
+  search:"Search products..."
+ },
+ ar:{
+  welcome:"مرحباً بكم",
+  best:"الأكثر مبيعاً",
+  events:"الفعاليات",
+  categories:"التصنيفات",
+  swipe:"اسحب",
+  back:"رجوع",
+  portion:"الحصة",
+  calories:"السعرات",
+  allergens:"مسببات الحساسية",
+  spicy:"الحار",
+  sold:"نفد",
+  dish:"طبق اليوم",
+  reserve:"حجز",
+  call:"اتصال",
+  language:"اللغة",
+  currency:"العملة",
+  admin:"لوحة الإدارة",
+  general:"عام",
+  products:"المنتجات",
+  settings:"الإعدادات",
+  save:"حفظ",
+  search:"ابحث عن منتج..."
+ }
+};
+
+
+/* ---------- VERİ ---------- */
+
+const DATA={
  name:"NEARMENU DEMO",
  subtitle:"Lezzetin en güzel hali burada.",
  phone:"+90 555 555 55 55",
  whatsapp:"905555555555",
 
- currency:"TRY",
-
  rates:{
-   USD:40,
-   EUR:47
+  USD:40,
+  EUR:47
  },
 
  settings:{
-   portion:true,
-   calories:true,
-   nutrition:true,
-   spicy:true,
-   allergens:true,
-   sold:true,
-   hours:true,
-   dish:true,
-   featured:true,
-   events:true,
-   search:true
+  portion:true,
+  calories:true,
+  allergens:true,
+  spicy:true,
+  sold:true,
+  hours:true,
+  dish:true,
+  featured:true,
+  events:true,
+  search:true
  },
 
- hours:{
-   monday:"09:00 - 23:00",
-   tuesday:"09:00 - 23:00",
-   wednesday:"09:00 - 23:00",
-   thursday:"09:00 - 23:00",
-   friday:"09:00 - 00:00",
-   saturday:"09:00 - 00:00",
-   sunday:"09:00 - 23:00"
+ background:{
+  type:"color",
+  value:"#0b0b0c",
+  image:"",
+  video:""
  },
+
+ hours:"09:00 - 23:00",
 
  categories:[
 
   {
    id:"kahvalti",
    name:"Kahvaltı",
-   image:IMG.breakfast,
+   image:IMAGES.breakfast,
 
    items:[
 
     {
      id:"serpme",
      name:"Serpme Kahvaltı",
-     desc:"Peynir çeşitleri, zeytin, reçel, bal ve sıcak ürünlerden oluşan zengin kahvaltı.",
+     description:"Peynir çeşitleri, zeytin, reçel, bal, yumurta ve sıcak ürünlerden oluşan zengin kahvaltı.",
      portion:"2 kişilik",
      calories:"1250",
+     allergens:["Süt","Gluten","Yumurta"],
+     spicy:0,
      price:650,
-     image:IMG.breakfast,
+     image:IMAGES.breakfast,
      featured:true,
      dish:true,
-     spicy:0,
-     allergens:["Süt","Gluten","Yumurta"],
      sold:false
     },
 
     {
-     id:"tabak",
-     name:"Klasik Kahvaltı Tabağı",
-     desc:"Peynir, zeytin, yumurta, domates ve salatalık.",
+     id:"kahvalti-tabagi",
+     name:"Kahvaltı Tabağı",
+     description:"Peynir, zeytin, yumurta, domates ve salatalık.",
      portion:"1 kişilik",
      calories:"720",
-     price:320,
-     image:IMG.breakfast,
-     spicy:0,
      allergens:["Süt","Yumurta"],
+     spicy:0,
+     price:320,
+     image:IMAGES.breakfast,
+     featured:false,
+     dish:false,
      sold:false
     },
 
     {
      id:"menemen",
      name:"Sahanda Menemen",
-     desc:"Domates, biber ve yumurta ile hazırlanan sıcak menemen.",
+     description:"Domates, biber ve yumurta ile hazırlanan sıcak menemen.",
      portion:"250 g",
      calories:"410",
-     price:220,
-     image:IMG.breakfast,
-     spicy:1,
      allergens:["Yumurta"],
+     spicy:1,
+     price:220,
+     image:IMAGES.breakfast,
+     featured:false,
+     dish:false,
      sold:false
     }
 
    ]
   },
+
 
   {
    id:"izgara",
    name:"Izgaralar",
-   image:IMG.grill,
+   image:IMAGES.grill,
 
    items:[
 
     {
-     id:"et",
+     id:"izgara-et",
      name:"Izgara Et",
-     desc:"Günlük seçilen et, közlenmiş sebzeler ve garnitür.",
+     description:"Günlük seçilen et, közlenmiş sebzeler ve garnitür.",
      portion:"300 g",
      calories:"820",
-     price:790,
-     image:IMG.grill,
-     featured:true,
-     spicy:0,
      allergens:[],
+     spicy:0,
+     price:790,
+     image:IMAGES.grill,
+     featured:true,
+     dish:false,
      sold:false
     },
 
     {
-     id:"tavuk",
+     id:"izgara-tavuk",
      name:"Izgara Tavuk",
-     desc:"Marine edilmiş tavuk ve günlük garnitür.",
+     description:"Marine edilmiş tavuk ve günlük garnitür.",
      portion:"250 g",
      calories:"610",
-     price:420,
-     image:IMG.grill,
-     spicy:0,
      allergens:[],
+     spicy:0,
+     price:420,
+     image:IMAGES.grill,
+     featured:false,
+     dish:false,
      sold:false
     }
 
    ]
   },
+
 
   {
    id:"burger",
    name:"Burgerler",
-   image:IMG.burger,
+   image:IMAGES.burger,
 
    items:[
 
     {
-     id:"classic",
+     id:"classic-burger",
      name:"Classic Burger",
-     desc:"Dana köfte, cheddar, marul, domates ve özel sos.",
+     description:"Dana köfte, cheddar, marul, domates ve özel sos.",
      portion:"180 g",
      calories:"840",
-     price:295,
-     image:IMG.burger,
-     featured:true,
-     spicy:0,
      allergens:["Gluten","Süt"],
+     spicy:0,
+     price:295,
+     image:IMAGES.burger,
+     featured:true,
+     dish:false,
      sold:false
     },
 
     {
-     id:"spicyburger",
+     id:"spicy-burger",
      name:"Spicy Burger",
-     desc:"Dana köfte, cheddar, jalapeño ve acılı özel sos.",
+     description:"Dana köfte, cheddar, jalapeño ve acılı özel sos.",
      portion:"180 g",
      calories:"900",
-     price:320,
-     image:IMG.burger,
-     spicy:3,
      allergens:["Gluten","Süt"],
+     spicy:3,
+     price:320,
+     image:IMAGES.burger,
+     featured:false,
+     dish:false,
      sold:false
     }
 
    ]
   },
+
 
   {
    id:"pizza",
    name:"Pizzalar",
-   image:IMG.pizza,
+   image:IMAGES.pizza,
 
    items:[
 
     {
-     id:"marg",
+     id:"margherita",
      name:"Margherita",
-     desc:"Domates sosu, mozzarella ve fesleğen.",
+     description:"Domates sosu, mozzarella ve fesleğen.",
      portion:"30 cm",
      calories:"780",
-     price:340,
-     image:IMG.pizza,
-     spicy:0,
      allergens:["Gluten","Süt"],
+     spicy:0,
+     price:340,
+     image:IMAGES.pizza,
+     featured:false,
+     dish:false,
      sold:false
     },
 
     {
-     id:"mix",
+     id:"karisik-pizza",
      name:"Karışık Pizza",
-     desc:"Sucuk, mantar, biber, mısır, zeytin ve mozzarella.",
+     description:"Sucuk, mantar, biber, mısır, zeytin ve mozzarella.",
      portion:"30 cm",
      calories:"980",
-     price:420,
-     image:IMG.pizza,
-     spicy:1,
      allergens:["Gluten","Süt"],
+     spicy:1,
+     price:420,
+     image:IMAGES.pizza,
+     featured:false,
+     dish:false,
      sold:false
     }
 
    ]
   },
 
+
   {
    id:"salata",
    name:"Salatalar",
-   image:IMG.salad,
+   image:IMAGES.salad,
 
    items:[
 
     {
      id:"sezar",
      name:"Sezar Salata",
-     desc:"Göbek marul, parmesan, kruton ve özel sos.",
+     description:"Göbek marul, parmesan, kruton ve özel sos.",
      portion:"350 g",
      calories:"460",
-     price:280,
-     image:IMG.salad,
-     spicy:0,
      allergens:["Süt","Gluten"],
+     spicy:0,
+     price:280,
+     image:IMAGES.salad,
+     featured:false,
+     dish:false,
      sold:false
     }
 
    ]
   },
+
 
   {
    id:"tatli",
    name:"Tatlılar",
-   image:IMG.dessert,
+   image:IMAGES.dessert,
 
    items:[
 
     {
-     id:"gunun",
+     id:"gunun-tatlisi",
      name:"Günün Tatlısı",
-     desc:"Şefin günlük hazırladığı tatlı.",
+     description:"Şefin günlük hazırladığı özel tatlı.",
      portion:"1 porsiyon",
      calories:"520",
-     price:190,
-     image:IMG.dessert,
-     dish:true,
      allergens:["Gluten","Süt","Yumurta"],
+     spicy:0,
+     price:190,
+     image:IMAGES.dessert,
+     featured:false,
+     dish:true,
      sold:false
     }
 
    ]
   },
 
+
   {
    id:"icecek",
    name:"İçecekler",
-   image:IMG.drink,
+   image:IMAGES.drink,
 
    items:[
 
     {
-     id:"soguk",
+     id:"soguk-icecek",
      name:"Soğuk İçecek",
-     desc:"Çeşitli soğuk içecek seçenekleri.",
+     description:"Çeşitli soğuk içecek seçenekleri.",
      portion:"330 ml",
      calories:"140",
+     allergens:[],
+     spicy:0,
      price:90,
-     image:IMG.drink,
+     image:IMAGES.drink,
+     featured:false,
+     dish:false,
      sold:false
     }
 
@@ -929,12 +1173,12 @@ const data={
  events:[
 
   {
-   id:"event1",
+   id:"canli-muzik",
    name:"Canlı Müzik Gecesi",
    date:"Cumartesi",
    time:"20:30",
-   desc:"Canlı müzik eşliğinde keyifli bir akşam. Rezervasyon için WhatsApp veya telefon.",
-   image:IMG.music
+   description:"Canlı müzik eşliğinde keyifli bir akşam. Rezervasyon için WhatsApp üzerinden bize ulaşabilirsiniz.",
+   image:IMAGES.music
   }
 
  ]
@@ -942,273 +1186,233 @@ const data={
 };
 
 
-/* =========================================================
-   DURUM
-========================================================= */
+/* ---------- STATE ---------- */
 
-let lang=localStorage.getItem("nmLang")||"tr";
-let currency=data.currency;
-let currentCategory=null;
-let currentProduct=null;
-let currentEvent=null;
-let drawer=false;
-let admin=false;
+let language=localStorage.getItem("nearMenuLanguage")||"tr";
+let currency=localStorage.getItem("nearMenuCurrency")||"TRY";
+
+let page="home";
+let selectedCategory=null;
+let selectedProduct=null;
+let selectedEvent=null;
+
+let drawerOpen=false;
+let adminOpen=false;
 let adminTab="general";
-let search="";
-let searchBox=false;
+let searchOpen=false;
+let searchText="";
 
 
-/* =========================================================
-   DİL
-========================================================= */
+/* ---------- LOCAL STORAGE ---------- */
 
-const T={
+try{
 
- tr:{
-  welcome:"HOŞ GELDİNİZ",
-  featured:"Çok Satanlar",
-  events:"Etkinlikler",
-  categories:"Kategoriler",
-  swipe:"Sağa kaydır",
-  back:"Geri",
-  portion:"Porsiyon / Gramaj",
-  calories:"Kalori",
-  allergens:"Alerjenler",
-  spicy:"Acılık",
-  sold:"Tükendi",
-  today:"Günün Ürünü",
-  reserve:"Rezervasyon",
-  call:"Ara",
-  language:"Dil",
-  currency:"Para Birimi",
-  admin:"Yönetim Paneli",
-  general:"Genel",
-  products:"Ürünler",
-  settings:"Ayarlar",
-  save:"Kaydet",
-  search:"Ürün ara..."
- },
+ const saved=localStorage.getItem("nearMenuData");
 
- en:{
-  welcome:"WELCOME",
-  featured:"Best Sellers",
-  events:"Events",
-  categories:"Categories",
-  swipe:"Swipe",
-  back:"Back",
-  portion:"Portion",
-  calories:"Calories",
-  allergens:"Allergens",
-  spicy:"Spiciness",
-  sold:"Sold Out",
-  today:"Dish of the Day",
-  reserve:"Reserve",
-  call:"Call",
-  language:"Language",
-  currency:"Currency",
-  admin:"Admin",
-  general:"General",
-  products:"Products",
-  settings:"Settings",
-  save:"Save",
-  search:"Search products..."
- },
+ if(saved){
 
- ar:{
-  welcome:"مرحباً بكم",
-  featured:"الأكثر مبيعاً",
-  events:"الفعاليات",
-  categories:"التصنيفات",
-  swipe:"اسحب",
-  back:"رجوع",
-  portion:"الحصة",
-  calories:"السعرات",
-  allergens:"مسببات الحساسية",
-  spicy:"الحار",
-  sold:"نفد",
-  today:"طبق اليوم",
-  reserve:"حجز",
-  call:"اتصال",
-  language:"اللغة",
-  currency:"العملة",
-  admin:"الإدارة",
-  general:"عام",
-  products:"المنتجات",
-  settings:"الإعدادات",
-  save:"حفظ",
-  search:"ابحث عن منتج..."
+  const parsed=JSON.parse(saved);
+
+  Object.assign(DATA,parsed);
+
  }
 
-};
-
-function tr(key){
- return T[lang]?.[key]||T.tr[key]||key;
+}catch(error){
+ console.log("Kayıt okunamadı",error);
 }
 
 
-/* =========================================================
-   YARDIMCI
-========================================================= */
+/* ---------- HELPERS ---------- */
 
-function esc(value){
- return String(value??"").replace(/[&<>"']/g,function(x){
-  return {
-   "&":"&amp;",
-   "<":"&lt;",
-   ">":"&gt;",
-   '"':"&quot;",
-   "'":"&#039;"
-  }[x];
- });
+function t(key){
+ return TEXT[language]?.[key]||TEXT.tr[key]||key;
 }
 
-function allItems(){
- return data.categories.flatMap(function(category){
-  return category.items.map(function(item){
-   return {...item,category:category};
+function escapeHTML(value){
+
+ return String(value??"")
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
+
+}
+
+function allProducts(){
+
+ let result=[];
+
+ DATA.categories.forEach(category=>{
+
+  category.items.forEach(item=>{
+
+   result.push({
+    ...item,
+    categoryId:category.id,
+    categoryName:category.name
+   });
+
   });
+
  });
+
+ return result;
 }
 
-function money(value){
+function findProduct(id){
 
- let n=Number(value)||0;
+ return allProducts().find(function(item){
+  return item.id===id;
+ })||null;
 
- if(currency==="USD") n/=data.rates.USD;
- if(currency==="EUR") n/=data.rates.EUR;
+}
 
- if(currency==="TRY")
-  return Math.round(n).toLocaleString("tr-TR")+" ₺";
+function money(price){
+
+ let value=Number(price)||0;
 
  if(currency==="USD")
-  return "$"+n.toFixed(2);
+  value=value/DATA.rates.USD;
 
- return "€"+n.toFixed(2);
+ if(currency==="EUR")
+  value=value/DATA.rates.EUR;
+
+ if(currency==="TRY")
+  return Math.round(value).toLocaleString("tr-TR")+" ₺";
+
+ if(currency==="USD")
+  return "$"+value.toFixed(2);
+
+ return "€"+value.toFixed(2);
 }
 
 
-/* =========================================================
-   HERO
-========================================================= */
+/* ---------- BACKGROUND ---------- */
 
-function hero(){
+function backgroundStyle(){
+
+ if(DATA.background?.type==="image" && DATA.background.image){
+
+  return `
+   background-image:
+   linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.85)),
+   url('${DATA.background.image}');
+   background-size:cover;
+   background-attachment:fixed;
+  `;
+
+ }
+
+ if(DATA.background?.type==="color"){
+
+  return `
+   background:${DATA.background.value||"#0b0b0c"};
+  `;
+
+ }
+
+ return "";
+
+}
+
+
+/* ---------- HERO ---------- */
+
+function renderHero(){
 
  return `
  <section class="hero">
 
-   <div class="logo">N</div>
+  <div class="logo">
+   N
+  </div>
 
-   <div class="eyebrow">
-     ${tr("welcome")}
-   </div>
+  <div class="welcome">
+   ${t("welcome")}
+  </div>
 
-   <h1>${esc(data.name)}</h1>
+  <h1>
+   ${escapeHTML(DATA.name)}
+  </h1>
 
-   <p class="subtitle">
-     ${esc(data.subtitle)}
-   </p>
+  <p>
+   ${escapeHTML(DATA.subtitle)}
+  </p>
 
-   ${
-    data.settings.hours
-    ?
-    `<div style="font-size:10px;color:#666;margin-top:8px">
-       ${data.hours.monday}
-     </div>`
-    :""
-   }
+  ${
+   DATA.settings.hours
+   ?
+   `<div style="margin-top:8px;color:#666;font-size:10px">
+     ${escapeHTML(DATA.hours)}
+    </div>`
+   :""
+  }
 
  </section>
  `;
+
 }
 
 
-/* =========================================================
-   ÇOK SATANLAR
-========================================================= */
+/* ---------- FEATURED ---------- */
 
-function featured(){
+function renderFeatured(){
 
- let items=allItems().filter(function(item){
-  return item.featured;
- });
+ if(!DATA.settings.featured)
+  return "";
 
- if(!items.length)return"";
+ const products=allProducts()
+  .filter(function(item){
+   return item.featured;
+  });
+
+ if(!products.length)
+  return "";
 
  return `
  <section class="section">
 
-  <div class="head">
-   <h2>🔥 ${tr("featured")}</h2>
-   <span class="hint">${tr("swipe")}</span>
+  <div class="sectionHead">
+
+   <h2>
+    🔥 ${t("best")}
+   </h2>
+
+   <span class="hint">
+    ${t("swipe")}
+   </span>
+
   </div>
 
-  <div class="scroll">
+
+  <div class="horizontal">
 
    ${
-    items.map(function(item){
+    products.map(function(item){
 
      return `
-     <button class="feature" data-product="${item.id}">
+     <button
+       class="feature"
+       data-product="${item.id}">
 
-       <img src="${item.image}" alt="">
+      <img
+        src="${item.image}"
+        alt="">
 
-       <div class="shade"></div>
+      <div class="featureShade"></div>
 
-       <div class="over">
-         <b>${esc(item.name)}</b>
-         <small>${money(item.price)}</small>
-       </div>
+      <div class="featureText">
 
-     </button>
-     `;
+       <strong>
+        ${escapeHTML(item.name)}
+       </strong>
 
-    }).join("")
-   }
-
-  </div>
-
- </section>
- `;
-}
-
-
-/* =========================================================
-   ETKİNLİKLER
-========================================================= */
-
-function events(){
-
- if(!data.settings.events || !data.events.length)
-  return"";
-
- return `
- <section class="section">
-
-  <div class="head">
-   <h2>✨ ${tr("events")}</h2>
-   <span class="hint">${tr("swipe")}</span>
-  </div>
-
-  <div class="scroll">
-
-   ${
-    data.events.map(function(event){
-
-     return `
-     <button class="event" data-event="${event.id}">
-
-       <img src="${event.image}" alt="">
-
-       <div class="shade"></div>
-
-       <span class="date">
-         ${esc(event.date)} • ${esc(event.time)}
+       <span>
+        ${money(item.price)}
        </span>
 
-       <div class="over">
-         <b>${esc(event.name)}</b>
-         <small>${tr("reserve")}</small>
-       </div>
+      </div>
 
      </button>
      `;
@@ -1220,38 +1424,69 @@ function events(){
 
  </section>
  `;
+
 }
 
 
-/* =========================================================
-   KATEGORİLER
-========================================================= */
+/* ---------- EVENTS ---------- */
 
-function categories(){
+function renderEvents(){
+
+ if(!DATA.settings.events)
+  return "";
+
+ if(!DATA.events.length)
+  return "";
 
  return `
  <section class="section">
 
-  <div class="head">
-   <h2>${tr("categories")}</h2>
+  <div class="sectionHead">
+
+   <h2>
+    ✨ ${t("events")}
+   </h2>
+
+   <span class="hint">
+    ${t("swipe")}
+   </span>
+
   </div>
 
-  <div class="cats">
+
+  <div class="horizontal">
 
    ${
-    data.categories.map(function(category){
+    DATA.events.map(function(event){
 
      return `
-     <button class="cat" data-category="${category.id}">
+     <button
+       class="event"
+       data-event="${event.id}">
 
-       <img src="${category.image}" alt="">
+      <img
+        src="${event.image}"
+        alt="">
 
-       <div class="shade"></div>
+      <div class="eventShade"></div>
 
-       <div class="over">
-         <b>${esc(category.name)}</b>
-         <small>${category.items.length} ürün</small>
-       </div>
+      <div class="eventDate">
+       ${escapeHTML(event.date)}
+       •
+       ${escapeHTML(event.time)}
+      </div>
+
+      <div class="eventText">
+
+       <strong>
+        ${escapeHTML(event.name)}
+       </strong>
+
+       <span>
+        ${t("reserve")}
+       </span>
+
+      </div>
 
      </button>
      `;
@@ -1263,111 +1498,204 @@ function categories(){
 
  </section>
  `;
+
 }
 
 
-/* =========================================================
-   ÜRÜN KARTI
-========================================================= */
+/* ---------- CATEGORIES ---------- */
 
-function productCard(item){
+function renderCategories(){
 
  return `
- <article class="product" data-product="${item.id}">
+ <section class="section">
 
-   <div class="prodimg">
-     <img src="${item.image}" alt="">
+  <div class="sectionHead">
+
+   <h2>
+    ${t("categories")}
+   </h2>
+
+  </div>
+
+
+  <div class="categories">
+
+   ${
+    DATA.categories.map(function(category){
+
+     return `
+     <button
+       class="category"
+       data-category="${category.id}">
+
+      <img
+        src="${category.image}"
+        alt="">
+
+      <div class="categoryShade"></div>
+
+      <div class="categoryText">
+
+       <strong>
+        ${escapeHTML(category.name)}
+       </strong>
+
+       <span>
+        ${category.items.length} ürün
+       </span>
+
+      </div>
+
+     </button>
+     `;
+
+    }).join("")
+   }
+
+  </div>
+
+ </section>
+ `;
+
+}
+
+
+/* ---------- PRODUCT CARD ---------- */
+
+function renderProductCard(item){
+
+ return `
+ <article
+   class="product"
+   id="product-${item.id}"
+   data-product="${item.id}">
+
+  <div class="productImage">
+
+   <img
+     src="${item.image}"
+     alt="${escapeHTML(item.name)}">
+
+  </div>
+
+
+  <div class="productInfo">
+
+   <h3>
+    ${escapeHTML(item.name)}
+   </h3>
+
+   <p>
+    ${escapeHTML(item.description)}
+   </p>
+
+
+   <div class="tags">
+
+    ${
+     DATA.settings.portion && item.portion
+     ?
+     `<span class="tag">
+       ${escapeHTML(item.portion)}
+      </span>`
+     :""
+    }
+
+
+    ${
+     DATA.settings.calories && item.calories
+     ?
+     `<span class="tag">
+       ${item.calories} kcal
+      </span>`
+     :""
+    }
+
+
+    ${
+     DATA.settings.spicy && item.spicy
+     ?
+     `<span class="tag">
+       ${"🌶️".repeat(item.spicy)}
+      </span>`
+     :""
+    }
+
+
+    ${
+     DATA.settings.allergens && item.allergens?.length
+     ?
+     `<span class="tag">
+       ${escapeHTML(item.allergens.join(", "))}
+      </span>`
+     :""
+    }
+
+
+    ${
+     DATA.settings.sold && item.sold
+     ?
+     `<span class="tag sold">
+       ${t("sold")}
+      </span>`
+     :""
+    }
+
    </div>
 
-   <div class="prodbody">
 
-     <h3>${esc(item.name)}</h3>
+   <div class="price">
 
-     <p>${esc(item.desc)}</p>
-
-     <div class="tags">
-
-       ${
-        data.settings.portion && item.portion
-        ?
-        `<span class="tag">${esc(item.portion)}</span>`
-        :""
-       }
-
-       ${
-        data.settings.calories && item.calories
-        ?
-        `<span class="tag">${item.calories} kcal</span>`
-        :""
-       }
-
-       ${
-        data.settings.spicy && item.spicy
-        ?
-        `<span class="tag">${"🌶️".repeat(item.spicy)}</span>`
-        :""
-       }
-
-       ${
-        data.settings.allergens && item.allergens?.length
-        ?
-        `<span class="tag">${item.allergens.join(", ")}</span>`
-        :""
-       }
-
-       ${
-        data.settings.sold && item.sold
-        ?
-        `<span class="tag sold">${tr("sold")}</span>`
-        :""
-       }
-
-     </div>
-
-     <div class="price">
-       ${
-        item.sold && data.settings.sold
-        ?tr("sold")
-        :money(item.price)
-       }
-     </div>
+    ${
+     DATA.settings.sold && item.sold
+     ?t("sold")
+     :money(item.price)
+    }
 
    </div>
+
+  </div>
 
  </article>
  `;
+
 }
 
 
-/* =========================================================
-   KATEGORİ SAYFASI
-========================================================= */
+/* ---------- CATEGORY PAGE ---------- */
 
-function categoryPage(){
+function renderCategoryPage(){
 
- let category=data.categories.find(function(x){
-  return x.id===currentCategory;
+ const category=DATA.categories.find(function(item){
+  return item.id===selectedCategory;
  });
 
- if(!category)return"";
+ if(!category)
+  return renderHome();
+
 
  return `
+
  <section class="section">
 
-  <div class="head">
+  <div class="categoryTitle">
 
-   <button class="btn" id="backHome">
-     ← ${tr("back")}
+   <button
+     class="backBtn"
+     id="backHome">
+     ← ${t("back")}
    </button>
 
-   <h2>${esc(category.name)}</h2>
+   <h2 style="margin:0;font-size:19px">
+    ${escapeHTML(category.name)}
+   </h2>
 
   </div>
 
 
-  <div class="sub">
+  <div class="stickyCategories">
 
-   <div class="scroll">
+   <div class="categoryTabs">
 
     ${
      category.items.map(function(item,index){
@@ -1375,8 +1703,10 @@ function categoryPage(){
       return `
       <button
         class="${index===0?"active":""}"
-        data-goto="${item.id}">
-        ${esc(item.name)}
+        data-scroll-product="${item.id}">
+
+       ${escapeHTML(item.name)}
+
       </button>
       `;
 
@@ -1391,254 +1721,305 @@ function categoryPage(){
   <div class="products">
 
    ${
-    category.items.map(productCard).join("")
+    category.items.length
+    ?
+    category.items.map(renderProductCard).join("")
+    :
+    `<div class="empty">Bu kategoride ürün bulunmuyor.</div>`
    }
 
   </div>
 
  </section>
+
  `;
+
 }
 
 
-/* =========================================================
-   ARAMA
-========================================================= */
+/* ---------- SEARCH ---------- */
 
-function searchPage(){
+function renderSearch(){
 
- let q=search.toLocaleLowerCase("tr");
+ let query=searchText
+  .toLocaleLowerCase("tr");
 
- let items=allItems().filter(function(item){
+ let products=allProducts().filter(function(item){
 
   return (
-   item.name+" "+item.desc
-  ).toLocaleLowerCase("tr").includes(q);
+   item.name+
+   " "+
+   item.description+
+   " "+
+   item.categoryName
+  )
+  .toLocaleLowerCase("tr")
+  .includes(query);
 
  });
+
 
  return `
  <section class="section">
 
-  <div class="head">
-   <h2>${items.length} ürün</h2>
+  <div class="sectionHead">
+
+   <h2>
+    ${products.length} ürün
+   </h2>
+
   </div>
+
 
   <div class="products">
 
    ${
-    items.length
+    products.length
     ?
-    items.map(productCard).join("")
+    products.map(renderProductCard).join("")
     :
-    `<div class="footer">Ürün bulunamadı.</div>`
+    `<div class="empty">
+      Ürün bulunamadı.
+     </div>`
    }
 
   </div>
 
  </section>
  `;
+
 }
 
 
-/* =========================================================
-   ANA SAYFA
-========================================================= */
+/* ---------- HOME ---------- */
 
-function homePage(){
+function renderHome(){
 
  return `
- ${data.settings.featured?featured():""}
- ${events()}
- ${categories()}
+ ${renderFeatured()}
+ ${renderEvents()}
+ ${renderCategories()}
  `;
+
 }
 
 
-/* =========================================================
-   SOL MENÜ
-========================================================= */
+/* ---------- DRAWER ---------- */
 
-function drawerUI(){
+function renderDrawer(){
 
- if(!drawer)return"";
+ if(!drawerOpen)
+  return "";
 
  return `
- <div class="drawerbg" id="drawerBg">
+ <div
+   class="overlay"
+   id="drawerOverlay">
 
   <aside class="drawer">
 
-   <div class="drawerhead">
+   <div class="drawerHead">
 
-    <div class="drawerlogo">
-      NEARMENU
+    <div class="drawerLogo">
+     NEARMENU
     </div>
 
-    <button class="round" id="closeDrawer">
+    <button
+      class="iconBtn"
+      id="closeDrawer">
       ×
     </button>
 
    </div>
 
 
-   <div class="label">
-     ${tr("language")}
-   </div>
+   <div class="drawerSection">
 
-   <div class="grid3">
+    <div class="drawerLabel">
+     ${t("language")}
+    </div>
 
-    <button
-      class="${lang==="tr"?"on":""}"
-      data-language="tr">
-      🇹🇷 TR
-    </button>
+    <div class="optionGrid">
 
-    <button
-      class="${lang==="en"?"on":""}"
-      data-language="en">
-      🇬🇧 EN
-    </button>
+     <button
+       class="${language==="tr"?"active":""}"
+       data-language="tr">
+       🇹🇷 TR
+     </button>
 
-    <button
-      class="${lang==="ar"?"on":""}"
-      data-language="ar">
-      🇸🇦 AR
-    </button>
+     <button
+       class="${language==="en"?"active":""}"
+       data-language="en">
+       🇬🇧 EN
+     </button>
 
-   </div>
+     <button
+       class="${language==="ar"?"active":""}"
+       data-language="ar">
+       🇸🇦 AR
+     </button>
 
-
-   <div class="label">
-     ${tr("currency")}
-   </div>
-
-   <div class="grid3">
-
-    <button
-      class="${currency==="TRY"?"on":""}"
-      data-currency="TRY">
-      ₺
-    </button>
-
-    <button
-      class="${currency==="USD"?"on":""}"
-      data-currency="USD">
-      $
-    </button>
-
-    <button
-      class="${currency==="EUR"?"on":""}"
-      data-currency="EUR">
-      €
-    </button>
+    </div>
 
    </div>
 
 
-   <div class="label">
-     İletişim
+   <div class="drawerSection">
+
+    <div class="drawerLabel">
+     ${t("currency")}
+    </div>
+
+    <div class="optionGrid">
+
+     <button
+       class="${currency==="TRY"?"active":""}"
+       data-currency="TRY">
+       ₺ TRY
+     </button>
+
+     <button
+       class="${currency==="USD"?"active":""}"
+       data-currency="USD">
+       $ USD
+     </button>
+
+     <button
+       class="${currency==="EUR"?"active":""}"
+       data-currency="EUR">
+       € EUR
+     </button>
+
+    </div>
+
    </div>
 
-   ${
-    data.whatsapp
-    ?
-    `<a
-      class="linkbtn"
-      target="_blank"
-      href="https://wa.me/${data.whatsapp}">
-      WhatsApp
-     </a>`
-    :""
-   }
+
+   <div class="drawerSection">
+
+    <div class="drawerLabel">
+     İLETİŞİM
+    </div>
 
 
-   ${
-    data.phone
-    ?
-    `<a
-      class="linkbtn"
-      href="tel:${data.phone}">
-      Telefon
-     </a>`
-    :""
-   }
+    ${
+     DATA.whatsapp
+     ?
+     `<a
+       class="drawerLink"
+       target="_blank"
+       href="https://wa.me/${DATA.whatsapp}">
+       WhatsApp
+      </a>`
+     :""
+    }
 
 
-   <button class="linkbtn" id="adminOpen">
-     ⚙ ${tr("admin")}
-   </button>
+    ${
+     DATA.phone
+     ?
+     `<a
+       class="drawerLink"
+       href="tel:${DATA.phone}">
+       Telefon
+      </a>`
+     :""
+    }
+
+   </div>
+
+
+   <div class="drawerSection">
+
+    <button
+      class="drawerLink"
+      id="openAdmin">
+      ⚙ ${t("admin")}
+    </button>
+
+   </div>
 
   </aside>
 
  </div>
  `;
+
 }
 
 
-/* =========================================================
-   ÜRÜN DETAY
-========================================================= */
+/* ---------- PRODUCT MODAL ---------- */
 
-function productModal(){
+function renderProductModal(){
 
- if(!currentProduct)return"";
+ if(!selectedProduct)
+  return "";
 
- let item=currentProduct;
+ const item=selectedProduct;
 
  return `
- <div class="modalbg" id="productModalBg">
+ <div
+   class="modalOverlay"
+   id="productOverlay">
 
   <div class="modal">
 
-   <div class="modalpic">
+   <div class="modalImage">
 
-    <img src="${item.image}" alt="">
+    <img
+      src="${item.image}"
+      alt="${escapeHTML(item.name)}">
 
-    <button class="close" id="closeProduct">
+    <button
+      class="closeBtn"
+      id="closeProduct">
       ×
     </button>
 
    </div>
 
 
-   <div class="modalbody">
+   <div class="modalBody">
 
-    <h2>${esc(item.name)}</h2>
+    <h2>
+     ${escapeHTML(item.name)}
+    </h2>
 
 
     ${
-     item.dish && data.settings.dish
+     DATA.settings.dish && item.dish
      ?
-     `<span
-       class="tag"
-       style="display:inline-block;margin-top:9px;background:var(--gold);color:#111">
-       ${tr("today")}
-      </span>`
+     `<div style="margin-top:9px">
+       <span
+        class="tag"
+        style="background:var(--gold);color:#111">
+        ⭐ ${t("dish")}
+       </span>
+      </div>`
      :""
     }
 
 
     <p>
-      ${esc(item.desc)}
+     ${escapeHTML(item.description)}
     </p>
 
 
     ${
-     data.settings.portion && item.portion
+     DATA.settings.portion && item.portion
      ?
-     `<div class="detail">
-       <span>${tr("portion")}</span>
-       <span>${esc(item.portion)}</span>
+     `<div class="infoRow">
+       <span>${t("portion")}</span>
+       <span>${escapeHTML(item.portion)}</span>
       </div>`
      :""
     }
 
 
     ${
-     data.settings.calories && item.calories
+     DATA.settings.calories && item.calories
      ?
-     `<div class="detail">
-       <span>${tr("calories")}</span>
+     `<div class="infoRow">
+       <span>${t("calories")}</span>
        <span>${item.calories} kcal</span>
       </div>`
      :""
@@ -1646,36 +2027,34 @@ function productModal(){
 
 
     ${
-     data.settings.allergens && item.allergens?.length
+     DATA.settings.allergens && item.allergens?.length
      ?
-     `<div class="detail">
-       <span>${tr("allergens")}</span>
-       <span>${item.allergens.join(", ")}</span>
+     `<div class="infoRow">
+       <span>${t("allergens")}</span>
+       <span>${escapeHTML(item.allergens.join(", "))}</span>
       </div>`
      :""
     }
 
 
     ${
-     data.settings.spicy && item.spicy
+     DATA.settings.spicy && item.spicy
      ?
-     `<div class="detail">
-       <span>${tr("spicy")}</span>
+     `<div class="infoRow">
+       <span>${t("spicy")}</span>
        <span>${"🌶️".repeat(item.spicy)}</span>
       </div>`
      :""
     }
 
 
-    <div
-      class="price"
-      style="font-size:23px">
+    <div class="modalPrice">
 
-      ${
-       item.sold && data.settings.sold
-       ?tr("sold")
-       :money(item.price)
-      }
+     ${
+      DATA.settings.sold && item.sold
+      ?t("sold")
+      :money(item.price)
+     }
 
     </div>
 
@@ -1685,75 +2064,94 @@ function productModal(){
 
  </div>
  `;
+
 }
 
 
-/* =========================================================
-   ETKİNLİK DETAY
-========================================================= */
+/* ---------- EVENT MODAL ---------- */
 
-function eventModal(){
+function renderEventModal(){
 
- if(!currentEvent)return"";
+ if(!selectedEvent)
+  return "";
+
+ const event=selectedEvent;
+
+ let whatsappLink=
+  "https://wa.me/"+
+  DATA.whatsapp+
+  "?text="+
+  encodeURIComponent(
+   "Merhaba, "+event.name+" için rezervasyon yapmak istiyorum."
+  );
+
 
  return `
- <div class="modalbg" id="eventModalBg">
+ <div
+   class="modalOverlay"
+   id="eventOverlay">
 
   <div class="modal">
 
-   <div class="modalpic">
+   <div class="modalImage">
 
-    <img src="${currentEvent.image}" alt="">
+    <img
+      src="${event.image}"
+      alt="${escapeHTML(event.name)}">
 
-    <button class="close" id="closeEvent">
+    <button
+      class="closeBtn"
+      id="closeEvent">
       ×
     </button>
 
    </div>
 
 
-   <div class="modalbody">
+   <div class="modalBody">
 
     <h2>
-      ${esc(currentEvent.name)}
+     ${escapeHTML(event.name)}
     </h2>
 
-    <p>
-      ${esc(currentEvent.date)}
-      •
-      ${esc(currentEvent.time)}
-    </p>
 
     <p>
-      ${esc(currentEvent.desc)}
+     ${escapeHTML(event.date)}
+     •
+     ${escapeHTML(event.time)}
     </p>
 
 
-    <div class="actions">
-
-      ${
-       data.whatsapp
-       ?
-       `<a
-         class="action gold"
-         target="_blank"
-         href="https://wa.me/${data.whatsapp}?text=${encodeURIComponent("Merhaba, "+currentEvent.name+" için rezervasyon yapmak istiyorum.")}">
-         ${tr("reserve")}
-        </a>`
-       :""
-      }
+    <p>
+     ${escapeHTML(event.description)}
+    </p>
 
 
-      ${
-       data.phone
-       ?
-       `<a
-         class="action"
-         href="tel:${data.phone}">
-         ${tr("call")}
-        </a>`
-       :""
-      }
+    <div class="actionRow">
+
+     ${
+      DATA.whatsapp
+      ?
+      `<a
+        class="action gold"
+        target="_blank"
+        href="${whatsappLink}">
+        ${t("reserve")}
+       </a>`
+      :""
+     }
+
+
+     ${
+      DATA.phone
+      ?
+      `<a
+        class="action"
+        href="tel:${DATA.phone}">
+        ${t("call")}
+       </a>`
+      :""
+     }
 
     </div>
 
@@ -1763,200 +2161,188 @@ function eventModal(){
 
  </div>
  `;
+
 }
 
 
-/* =========================================================
+/* ============================================================
    ADMIN
-========================================================= */
-
-function adminUI(){
-
- let body="";
-
- if(adminTab==="general")
-  body=adminGeneral();
-
- if(adminTab==="products")
-  body=adminProducts();
-
- if(adminTab==="settings")
-  body=adminSettings();
+============================================================ */
 
 
- return `
- <div class="adminbg">
-
-  <aside class="admin">
-
-   <div class="adminhead">
-
-    <div class="adminheadrow">
-
-     <b>${tr("admin")}</b>
-
-     <button class="round" id="closeAdmin">
-       ×
-     </button>
-
-    </div>
-
-
-    <div class="tabs">
-
-     <button
-       class="${adminTab==="general"?"on":""}"
-       data-tab="general">
-       ${tr("general")}
-     </button>
-
-     <button
-       class="${adminTab==="products"?"on":""}"
-       data-tab="products">
-       ${tr("products")}
-     </button>
-
-     <button
-       class="${adminTab==="settings"?"on":""}"
-       data-tab="settings">
-       ${tr("settings")}
-     </button>
-
-    </div>
-
-   </div>
-
-
-   <div class="adminbody">
-     ${body}
-   </div>
-
-
-   <div
-     style="
-       position:sticky;
-       bottom:0;
-       padding:12px;
-       background:#0d0d0ef5;
-       border-top:1px solid var(--line)
-     ">
-
-     <button
-       class="btn gold"
-       id="saveAdmin"
-       style="width:100%">
-       ${tr("save")}
-     </button>
-
-   </div>
-
-  </aside>
-
- </div>
- `;
-}
-
-
-/* =========================================================
-   ADMIN GENEL
-========================================================= */
+/* ---------- ADMIN INPUT ---------- */
 
 function adminInput(key,label,value){
 
  return `
  <div class="field">
 
-  <label>${label}</label>
+  <label>
+   ${label}
+  </label>
 
   <input
-    data-key="${key}"
-    value="${esc(value)}">
+    data-admin="${key}"
+    value="${escapeHTML(value)}">
 
  </div>
  `;
+
 }
 
-function adminGeneral(){
+
+/* ---------- ADMIN GENERAL ---------- */
+
+function renderAdminGeneral(){
 
  return `
 
- <h3>İşletme Bilgileri</h3>
+ <h3>
+  İşletme
+ </h3>
 
- ${adminInput("name","İşletme adı",data.name)}
+ ${adminInput(
+  "businessName",
+  "İşletme adı",
+  DATA.name
+ )}
 
- ${adminInput("subtitle","Başlık / açıklama",data.subtitle)}
+ ${adminInput(
+  "subtitle",
+  "Başlık / açıklama",
+  DATA.subtitle
+ )}
 
- ${adminInput("phone","Telefon",data.phone)}
+ ${adminInput(
+  "phone",
+  "Telefon",
+  DATA.phone
+ )}
 
- ${adminInput("whatsapp","WhatsApp",data.whatsapp)}
+ ${adminInput(
+  "whatsapp",
+  "WhatsApp numarası",
+  DATA.whatsapp
+ )}
 
 
- <div class="admincard">
+ <div class="adminCard">
 
-  <b>Arka Plan</b>
+  <b>
+   Arka Plan
+  </b>
 
-  <p style="font-size:11px;color:#777">
-    İlk versiyonda renk / fotoğraf / video seçilebilir.
+  <p style="color:#777;font-size:11px;line-height:1.5">
+   İşletme sahibi arka planı renk, fotoğraf veya video olarak seçebilecek.
   </p>
 
-  ${adminInput(
-    "background",
+
+  <div class="optionGrid">
+
+   <button
+     class="${DATA.background.type==="color"?"active":""}"
+     data-background="color">
+     Renk
+   </button>
+
+   <button
+     class="${DATA.background.type==="image"?"active":""}"
+     data-background="image">
+     Fotoğraf
+   </button>
+
+   <button
+     class="${DATA.background.type==="video"?"active":""}"
+     data-background="video">
+     Video
+   </button>
+
+  </div>
+
+
+  ${
+   DATA.background.type==="color"
+   ?
+   adminInput(
+    "backgroundColor",
     "Arka plan rengi",
-    "#0b0b0c"
-  )}
+    DATA.background.value
+   )
+   :""
+  }
+
+
+  ${
+   DATA.background.type==="image"
+   ?
+   adminInput(
+    "backgroundImage",
+    "Fotoğraf URL",
+    DATA.background.image
+   )
+   :""
+  }
+
+
+  ${
+   DATA.background.type==="video"
+   ?
+   `<p style="font-size:11px;color:#777">
+     Video desteği arayüzde hazır. Dosya / URL bağlantısı sonraki sürümde yönetim panelinden bağlanabilir.
+    </p>`
+   :""
+  }
 
  </div>
 
  `;
+
 }
 
 
-/* =========================================================
-   ADMIN ÜRÜNLER
-========================================================= */
+/* ---------- ADMIN PRODUCTS ---------- */
 
-function adminProducts(){
+function renderAdminProducts(){
 
  return `
 
  <button
-   class="btn gold"
+   class="adminButton gold"
    id="addCategory">
-   + Kategori
+   + Kategori Ekle
  </button>
 
 
  ${
-  data.categories.map(function(category){
+  DATA.categories.map(function(category){
 
    return `
 
-   <div class="admincard" style="margin-top:10px">
+   <div
+     class="adminCard"
+     style="margin-top:12px">
 
-    <div
-      style="
-       display:flex;
-       gap:7px;
-      ">
+    <div style="display:flex;gap:7px">
 
-      <input
-        data-category-name="${category.id}"
-        value="${esc(category.name)}"
-        style="
-         flex:1;
-         min-width:0;
-         padding:10px;
-         border-radius:10px;
-         border:1px solid #303034;
-         background:#171719;
-         color:#eee
-        ">
+     <input
+       data-category-name="${category.id}"
+       value="${escapeHTML(category.name)}"
+       style="
+        flex:1;
+        min-width:0;
+        padding:10px;
+        border-radius:10px;
+        border:1px solid #303034;
+        background:#171719;
+        color:#fff;
+        outline:none
+       ">
 
-      <button
-        class="btn"
-        data-delete-category="${category.id}">
-        Sil
-      </button>
+     <button
+       class="adminButton"
+       data-delete-category="${category.id}">
+       Sil
+     </button>
 
     </div>
 
@@ -1967,31 +2353,31 @@ function adminProducts(){
       return `
 
       <div
-        class="admincard"
-        style="margin-top:8px">
+        class="adminCard"
+        style="margin-top:9px">
 
        ${adminInput(
-         "name-"+item.id,
-         "Ürün",
-         item.name
+        "productName-"+item.id,
+        "Ürün adı",
+        item.name
        )}
 
        ${adminInput(
-         "price-"+item.id,
-         "Fiyat",
-         item.price
+        "productPrice-"+item.id,
+        "Fiyat",
+        item.price
        )}
 
        ${adminInput(
-         "portion-"+item.id,
-         "Gramaj / Porsiyon",
-         item.portion||""
+        "productPortion-"+item.id,
+        "Gramaj / Porsiyon",
+        item.portion||""
        )}
 
        ${adminInput(
-         "calories-"+item.id,
-         "Kalori",
-         item.calories||""
+        "productCalories-"+item.id,
+        "Kalori",
+        item.calories||""
        )}
 
 
@@ -2009,7 +2395,7 @@ function adminProducts(){
 
        <label class="toggle">
 
-        Çok Satan / Öne Çıkan
+        Çok Satanlar
 
         <input
           type="checkbox"
@@ -2020,8 +2406,8 @@ function adminProducts(){
 
 
        <button
-         class="btn"
-         data-delete-item="${category.id}|${item.id}">
+         class="adminButton"
+         data-delete-product="${category.id}|${item.id}">
          Ürünü Sil
        </button>
 
@@ -2034,9 +2420,9 @@ function adminProducts(){
 
 
     <button
-      class="btn"
-      data-add-item="${category.id}">
-      + Ürün
+      class="adminButton"
+      data-add-product="${category.id}">
+      + Ürün Ekle
     </button>
 
    </div>
@@ -2047,53 +2433,54 @@ function adminProducts(){
  }
 
  `;
+
 }
 
 
-/* =========================================================
-   ADMIN OPSİYONEL ALANLAR
-========================================================= */
+/* ---------- ADMIN SETTINGS ---------- */
 
-function adminSettings(){
+function renderAdminSettings(){
 
- let settings=[
+ const options=[
 
   ["portion","Gramaj / Porsiyon"],
   ["calories","Kalori"],
-  ["nutrition","Vegan / Vejetaryen"],
-  ["spicy","Acılık"],
   ["allergens","Alerjenler"],
+  ["spicy","Acılık"],
   ["sold","Tükendi"],
   ["hours","Çalışma Saatleri"],
   ["dish","Günün Ürünü"],
-  ["featured","Çok Satanlar / Öne Çıkanlar"],
+  ["featured","Çok Satanlar"],
   ["events","Etkinlikler"],
   ["search","Ürün Arama"]
 
  ];
 
+
  return `
 
- <h3>Opsiyonel Alanlar</h3>
+ <h3>
+  Opsiyonel Alanlar
+ </h3>
 
- <p style="color:#777;font-size:11px">
-   İşletme sahibi istediği alanı ayrı ayrı açıp kapatabilir.
+ <p style="color:#777;font-size:11px;line-height:1.5">
+  Bunların tamamı isteğe bağlıdır. İşletme sahibi istediğini açabilir, istemediğini kapatabilir.
  </p>
 
 
  ${
-  settings.map(function(item){
+  options.map(function(option){
 
    return `
 
    <label class="toggle">
 
-    ${item[1]}
+    ${option[1]}
 
     <input
       type="checkbox"
-      data-setting="${item[0]}"
-      ${data.settings[item[0]]?"checked":""}>
+      data-setting="${option[0]}"
+      ${DATA.settings[option[0]]?"checked":""}>
 
    </label>
 
@@ -2103,59 +2490,161 @@ function adminSettings(){
  }
 
  `;
+
 }
 
 
-/* =========================================================
-   RENDER
-========================================================= */
+/* ---------- ADMIN ---------- */
+
+function renderAdmin(){
+
+ if(!adminOpen)
+  return "";
+
+
+ let body="";
+
+ if(adminTab==="general")
+  body=renderAdminGeneral();
+
+ if(adminTab==="products")
+  body=renderAdminProducts();
+
+ if(adminTab==="settings")
+  body=renderAdminSettings();
+
+
+ return `
+
+ <div class="adminOverlay">
+
+  <aside class="admin">
+
+   <div class="adminHeader">
+
+    <div class="adminTop">
+
+     <b>
+      ${t("admin")}
+     </b>
+
+     <button
+       class="iconBtn"
+       id="closeAdmin">
+       ×
+     </button>
+
+    </div>
+
+
+    <div class="adminTabs">
+
+     <button
+       class="${adminTab==="general"?"active":""}"
+       data-admin-tab="general">
+       ${t("general")}
+     </button>
+
+     <button
+       class="${adminTab==="products"?"active":""}"
+       data-admin-tab="products">
+       ${t("products")}
+     </button>
+
+     <button
+       class="${adminTab==="settings"?"active":""}"
+       data-admin-tab="settings">
+       ${t("settings")}
+     </button>
+
+    </div>
+
+   </div>
+
+
+   <div class="adminBody">
+
+    ${body}
+
+   </div>
+
+
+   <div class="saveBar">
+
+    <button
+      class="adminButton gold"
+      id="saveAdmin"
+      style="width:100%">
+      ${t("save")}
+    </button>
+
+   </div>
+
+  </aside>
+
+ </div>
+
+ `;
+
+}
+
+
+/* ============================================================
+   ANA RENDER
+============================================================ */
 
 function render(){
 
  document.documentElement.dir=
-   lang==="ar" ? "rtl" : "ltr";
+  language==="ar"?"rtl":"ltr";
 
 
  let content="";
 
 
- if(search){
-   content=searchPage();
+ if(searchText){
+
+  content=renderSearch();
+
  }
- else if(currentCategory){
-   content=categoryPage();
+ else if(selectedCategory){
+
+  content=renderCategoryPage();
+
  }
  else{
-   content=homePage();
+
+  content=renderHome();
+
  }
 
 
- document.getElementById("root").innerHTML=`
+ document.getElementById("app").innerHTML=`
 
- <div class="app">
+ <div
+   style="${backgroundStyle()}">
 
-  <div class="wrap">
-
+  <div class="container">
 
    <div class="top">
 
-    <div class="toprow">
+    <div class="topRow">
 
      <button
-       class="round"
+       class="iconBtn"
        id="openDrawer">
        ☰
      </button>
 
 
-     <div>
+     <div class="topRight">
 
       ${
-       data.settings.search
+       DATA.settings.search
        ?
        `<button
-         class="round"
-         id="openSearch">
+         class="iconBtn"
+         id="searchButton">
          ⌕
         </button>`
        :""
@@ -2163,16 +2652,16 @@ function render(){
 
 
       <button
-        class="currency"
+        class="currencyBtn"
         id="currencyButton">
 
-        ${
-         currency==="TRY"
-         ?"₺"
-         :currency==="USD"
-         ?"$"
-         :"€"
-        }
+       ${
+        currency==="TRY"
+        ?"₺"
+        :currency==="USD"
+        ?"$"
+        :"€"
+       }
 
       </button>
 
@@ -2182,23 +2671,14 @@ function render(){
 
 
     ${
-     searchBox
+     searchOpen
      ?
-     `<div style="margin-top:8px">
+     `<div class="searchBox">
 
        <input
          id="searchInput"
-         value="${esc(search)}"
-         placeholder="${tr("search")}"
-         style="
-          width:100%;
-          padding:12px;
-          border-radius:13px;
-          border:1px solid var(--line);
-          background:#151517;
-          color:white;
-          outline:0
-         ">
+         value="${escapeHTML(searchText)}"
+         placeholder="${t("search")}">
 
       </div>`
      :""
@@ -2207,629 +2687,791 @@ function render(){
    </div>
 
 
-   ${hero()}
+   ${renderHero()}
+
 
    ${content}
 
 
    <div class="footer">
-     NearMenu • Demo
+    NearMenu • Demo
    </div>
-
 
   </div>
 
 
-  ${drawerUI()}
+  ${renderDrawer()}
 
-  ${productModal()}
+  ${renderProductModal()}
 
-  ${eventModal()}
+  ${renderEventModal()}
 
-  ${admin?adminUI():""}
+  ${renderAdmin()}
 
  </div>
 
  `;
 
- bind();
+
+ bindEvents();
+
 }
 
 
-/* =========================================================
-   EVENTLER
-========================================================= */
+/* ============================================================
+   EVENT BINDING
+============================================================ */
 
-function bind(){
+function bindEvents(){
 
  /* DRAWER */
 
- document
- .getElementById("openDrawer")
- ?.addEventListener("click",function(){
+ const openDrawer=document.getElementById("openDrawer");
 
-   drawer=true;
+ if(openDrawer){
+
+  openDrawer.onclick=function(){
+
+   drawerOpen=true;
    render();
 
- });
+  };
+
+ }
 
 
- document
- .getElementById("closeDrawer")
- ?.addEventListener("click",function(){
+ const closeDrawer=document.getElementById("closeDrawer");
 
-   drawer=false;
+ if(closeDrawer){
+
+  closeDrawer.onclick=function(){
+
+   drawerOpen=false;
    render();
 
- });
+  };
+
+ }
 
 
- document
- .getElementById("drawerBg")
- ?.addEventListener("click",function(e){
+ const drawerOverlay=document.getElementById("drawerOverlay");
 
-   if(e.target.id==="drawerBg"){
+ if(drawerOverlay){
 
-     drawer=false;
-     render();
+  drawerOverlay.onclick=function(event){
+
+   if(event.target===drawerOverlay){
+
+    drawerOpen=false;
+    render();
 
    }
 
- });
+  };
+
+ }
 
 
  /* SEARCH */
 
- document
- .getElementById("openSearch")
- ?.addEventListener("click",function(){
+ const searchButton=document.getElementById("searchButton");
 
-   searchBox=true;
+ if(searchButton){
+
+  searchButton.onclick=function(){
+
+   searchOpen=true;
    render();
 
    setTimeout(function(){
 
-     document
-       .getElementById("searchInput")
-       ?.focus();
+    const input=document.getElementById("searchInput");
+
+    if(input)
+     input.focus();
 
    },50);
 
- });
+  };
+
+ }
 
 
- document
- .getElementById("searchInput")
- ?.addEventListener("input",function(e){
+ const searchInput=document.getElementById("searchInput");
 
-   search=e.target.value;
+ if(searchInput){
+
+  searchInput.oninput=function(event){
+
+   searchText=event.target.value;
 
    render();
 
-   let input=document.getElementById("searchInput");
+   setTimeout(function(){
 
-   if(input){
+    const input=document.getElementById("searchInput");
+
+    if(input){
 
      input.focus();
 
      input.setSelectionRange(
-       input.value.length,
-       input.value.length
+      input.value.length,
+      input.value.length
      );
 
-   }
+    }
 
- });
+   },0);
+
+  };
+
+ }
 
 
- /* PARA BİRİMİ */
+ /* CURRENCY */
 
- document
- .getElementById("currencyButton")
- ?.addEventListener("click",function(){
+ const currencyButton=
+  document.getElementById("currencyButton");
 
-   drawer=true;
+ if(currencyButton){
+
+  currencyButton.onclick=function(){
+
+   drawerOpen=true;
    render();
 
- });
+  };
+
+ }
 
 
  document
  .querySelectorAll("[data-currency]")
  .forEach(function(button){
 
-   button.onclick=function(){
+  button.onclick=function(){
 
-     currency=button.dataset.currency;
+   currency=button.dataset.currency;
 
-     data.currency=currency;
+   localStorage.setItem(
+    "nearMenuCurrency",
+    currency
+   );
 
-     saveData();
+   drawerOpen=false;
 
-     drawer=false;
+   render();
 
-     render();
-
-   };
+  };
 
  });
 
 
- /* DİL */
+ /* LANGUAGE */
 
  document
  .querySelectorAll("[data-language]")
  .forEach(function(button){
 
-   button.onclick=function(){
+  button.onclick=function(){
 
-     lang=button.dataset.language;
+   language=button.dataset.language;
 
-     localStorage.setItem("nmLang",lang);
+   localStorage.setItem(
+    "nearMenuLanguage",
+    language
+   );
 
-     drawer=false;
+   drawerOpen=false;
 
-     render();
+   render();
 
-   };
+  };
 
  });
 
 
- /* KATEGORİ */
+ /* CATEGORY */
 
  document
  .querySelectorAll("[data-category]")
  .forEach(function(button){
 
-   button.onclick=function(){
+  button.onclick=function(){
 
-     currentCategory=button.dataset.category;
+   selectedCategory=
+    button.dataset.category;
 
-     search="";
-
-     render();
-
-     window.scrollTo(0,0);
-
-   };
-
- });
-
-
- /* GERİ */
-
- document
- .getElementById("backHome")
- ?.addEventListener("click",function(){
-
-   currentCategory=null;
+   selectedProduct=null;
+   selectedEvent=null;
+   searchText="";
 
    render();
 
    window.scrollTo(0,0);
 
- });
-
-
- /* ÜRÜN */
-
- document
- .querySelectorAll("[data-product]")
- .forEach(function(button){
-
-   button.onclick=function(){
-
-     let id=button.dataset.product;
-
-     currentProduct=
-       allItems().find(function(item){
-         return item.id===id;
-       })||null;
-
-     if(currentProduct){
-
-       render();
-
-     }
-
-   };
+  };
 
  });
 
 
- /* ÜRÜN KAPAT */
+ /* BACK */
 
- document
- .getElementById("closeProduct")
- ?.addEventListener("click",function(){
+ const backHome=document.getElementById("backHome");
 
-   currentProduct=null;
+ if(backHome){
+
+  backHome.onclick=function(){
+
+   selectedCategory=null;
 
    render();
 
- });
+   window.scrollTo(0,0);
 
+  };
+
+ }
+
+
+ /* PRODUCT */
 
  document
- .getElementById("productModalBg")
- ?.addEventListener("click",function(e){
+ .querySelectorAll("[data-product]")
+ .forEach(function(element){
 
-   if(e.target.id==="productModalBg"){
+  element.onclick=function(){
 
-     currentProduct=null;
+   const product=
+    findProduct(element.dataset.product);
 
-     render();
+   if(product){
+
+    selectedProduct=product;
+
+    render();
 
    }
 
+  };
+
  });
 
 
- /* ETKİNLİK */
+ /* PRODUCT CLOSE */
+
+ const closeProduct=
+  document.getElementById("closeProduct");
+
+ if(closeProduct){
+
+  closeProduct.onclick=function(){
+
+   selectedProduct=null;
+
+   render();
+
+  };
+
+ }
+
+
+ const productOverlay=
+  document.getElementById("productOverlay");
+
+ if(productOverlay){
+
+  productOverlay.onclick=function(event){
+
+   if(event.target===productOverlay){
+
+    selectedProduct=null;
+
+    render();
+
+   }
+
+  };
+
+ }
+
+
+ /* EVENT */
 
  document
  .querySelectorAll("[data-event]")
  .forEach(function(button){
 
-   button.onclick=function(){
+  button.onclick=function(){
 
-     currentEvent=
-       data.events.find(function(event){
-         return event.id===button.dataset.event;
-       })||null;
+   selectedEvent=
+    DATA.events.find(function(event){
 
-     render();
+     return event.id===
+      button.dataset.event;
 
-   };
-
- });
-
-
- document
- .getElementById("closeEvent")
- ?.addEventListener("click",function(){
-
-   currentEvent=null;
+    })||null;
 
    render();
 
+  };
+
  });
 
 
- document
- .getElementById("eventModalBg")
- ?.addEventListener("click",function(e){
+ /* EVENT CLOSE */
 
-   if(e.target.id==="eventModalBg"){
+ const closeEvent=
+  document.getElementById("closeEvent");
 
-     currentEvent=null;
+ if(closeEvent){
 
-     render();
+  closeEvent.onclick=function(){
+
+   selectedEvent=null;
+
+   render();
+
+  };
+
+ }
+
+
+ const eventOverlay=
+  document.getElementById("eventOverlay");
+
+ if(eventOverlay){
+
+  eventOverlay.onclick=function(event){
+
+   if(event.target===eventOverlay){
+
+    selectedEvent=null;
+
+    render();
 
    }
 
- });
+  };
+
+ }
 
 
- /* ALT KATEGORİ */
+ /* CATEGORY PRODUCT TABS */
 
  document
- .querySelectorAll("[data-goto]")
+ .querySelectorAll("[data-scroll-product]")
  .forEach(function(button){
 
-   button.onclick=function(){
+  button.onclick=function(){
 
-     let element=
-       document.getElementById(
-         "product-"+button.dataset.goto
-       );
+   const target=
+    document.getElementById(
+     "product-"+button.dataset.scrollProduct
+    );
 
-     if(element){
+   if(target){
 
-       element.scrollIntoView({
-         behavior:"smooth",
-         block:"start"
-       });
+    target.scrollIntoView({
+     behavior:"smooth",
+     block:"start"
+    });
 
-     }
+   }
 
-   };
+  };
 
  });
 
 
- /* ADMIN AÇ */
+ /* ADMIN OPEN */
 
- document
- .getElementById("adminOpen")
- ?.addEventListener("click",function(){
+ const openAdmin=
+  document.getElementById("openAdmin");
 
-   drawer=false;
-   admin=true;
+ if(openAdmin){
+
+  openAdmin.onclick=function(){
+
+   drawerOpen=false;
+   adminOpen=true;
 
    render();
 
- });
+  };
+
+ }
 
 
- /* ADMIN KAPAT */
+ /* ADMIN CLOSE */
 
- document
- .getElementById("closeAdmin")
- ?.addEventListener("click",function(){
+ const closeAdmin=
+  document.getElementById("closeAdmin");
 
-   admin=false;
+ if(closeAdmin){
+
+  closeAdmin.onclick=function(){
+
+   adminOpen=false;
 
    render();
 
- });
+  };
+
+ }
 
 
- /* ADMIN TAB */
+ /* ADMIN TABS */
 
  document
- .querySelectorAll("[data-tab]")
+ .querySelectorAll("[data-admin-tab]")
  .forEach(function(button){
 
-   button.onclick=function(){
+  button.onclick=function(){
 
-     adminTab=button.dataset.tab;
+   adminTab=
+    button.dataset.adminTab;
 
-     render();
+   render();
 
-   };
+  };
 
  });
 
 
- /* ADMIN AYARLARI */
+ /* SETTINGS */
 
  document
  .querySelectorAll("[data-setting]")
  .forEach(function(input){
 
-   input.onchange=function(){
+  input.onchange=function(){
 
-     data.settings[
-       input.dataset.setting
-     ]=input.checked;
+   DATA.settings[
+    input.dataset.setting
+   ]=input.checked;
 
-   };
+  };
 
  });
 
 
- /* TÜKENDİ */
+ /* SOLD */
 
  document
  .querySelectorAll("[data-sold]")
  .forEach(function(input){
 
-   input.onchange=function(){
+  input.onchange=function(){
 
-     let item=
-       allItems().find(function(x){
-         return x.id===input.dataset.sold;
-       });
+   const item=
+    findProduct(input.dataset.sold);
 
-     if(item)
-       item.sold=input.checked;
+   if(item)
+    item.sold=input.checked;
 
-   };
+  };
 
  });
 
 
- /* ÖNE ÇIKAN */
+ /* FEATURED */
 
  document
  .querySelectorAll("[data-featured]")
  .forEach(function(input){
 
-   input.onchange=function(){
+  input.onchange=function(){
 
-     let item=
-       allItems().find(function(x){
-         return x.id===input.dataset.featured;
-       });
+   const item=
+    findProduct(input.dataset.featured);
 
-     if(item)
-       item.featured=input.checked;
+   if(item)
+    item.featured=input.checked;
 
-   };
+  };
 
  });
 
 
- /* KATEGORİ ADI */
+ /* BACKGROUND TYPE */
 
  document
- .querySelectorAll("[data-category-name]")
- .forEach(function(input){
-
-   input.oninput=function(){
-
-     let category=
-       data.categories.find(function(x){
-         return x.id===input.dataset.categoryName;
-       });
-
-     if(category)
-       category.name=input.value;
-
-   };
-
- });
-
-
- /* ÜRÜN SİL */
-
- document
- .querySelectorAll("[data-delete-item]")
+ .querySelectorAll("[data-background]")
  .forEach(function(button){
 
-   button.onclick=function(){
+  button.onclick=function(){
 
-     let parts=
-       button.dataset.deleteItem.split("|");
+   DATA.background.type=
+    button.dataset.background;
 
-     let category=
-       data.categories.find(function(x){
-         return x.id===parts[0];
-       });
+   render();
 
-     if(category){
-
-       category.items=
-         category.items.filter(function(item){
-           return item.id!==parts[1];
-         });
-
-     }
-
-     render();
-
-   };
+  };
 
  });
 
 
- /* KATEGORİ SİL */
+ /* DELETE CATEGORY */
 
  document
  .querySelectorAll("[data-delete-category]")
  .forEach(function(button){
 
-   button.onclick=function(){
+  button.onclick=function(){
 
-     data.categories=
-       data.categories.filter(function(category){
-         return category.id!==button.dataset.deleteCategory;
-       });
+   DATA.categories=
+    DATA.categories.filter(function(category){
 
-     render();
+     return category.id!==
+      button.dataset.deleteCategory;
 
-   };
+    });
+
+   render();
+
+  };
 
  });
 
 
- /* YENİ KATEGORİ */
+ /* DELETE PRODUCT */
 
  document
- .getElementById("addCategory")
- ?.addEventListener("click",function(){
+ .querySelectorAll("[data-delete-product]")
+ .forEach(function(button){
 
-   data.categories.push({
+  button.onclick=function(){
 
-     id:"category-"+Date.now(),
+   const parts=
+    button.dataset.deleteProduct.split("|");
 
-     name:"Yeni Kategori",
+   const category=
+    DATA.categories.find(function(category){
 
-     image:IMG.breakfast,
+     return category.id===parts[0];
 
-     items:[]
+    });
+
+
+   if(category){
+
+    category.items=
+     category.items.filter(function(item){
+
+      return item.id!==parts[1];
+
+     });
+
+   }
+
+
+   render();
+
+  };
+
+ });
+
+
+ /* ADD CATEGORY */
+
+ const addCategory=
+  document.getElementById("addCategory");
+
+ if(addCategory){
+
+  addCategory.onclick=function(){
+
+   DATA.categories.push({
+
+    id:"category-"+Date.now(),
+
+    name:"Yeni Kategori",
+
+    image:IMAGES.breakfast,
+
+    items:[]
 
    });
 
    render();
 
- });
+  };
+
+ }
 
 
- /* YENİ ÜRÜN */
+ /* ADD PRODUCT */
 
  document
- .querySelectorAll("[data-add-item]")
+ .querySelectorAll("[data-add-product]")
  .forEach(function(button){
 
-   button.onclick=function(){
+  button.onclick=function(){
 
-     let category=
-       data.categories.find(function(x){
-         return x.id===button.dataset.addItem;
-       });
+   const category=
+    DATA.categories.find(function(category){
 
-     if(category){
+     return category.id===
+      button.dataset.addProduct;
 
-       category.items.push({
-
-         id:"item-"+Date.now(),
-
-         name:"Yeni Ürün",
-
-         desc:"",
-
-         portion:"",
-
-         calories:"",
-
-         price:0,
-
-         image:IMG.breakfast,
-
-         spicy:0,
-
-         allergens:[],
-
-         sold:false,
-
-         featured:false
-
-       });
-
-     }
-
-     render();
-
-   };
-
- });
+    });
 
 
- /* ADMIN KAYDET */
+   if(category){
 
- document
- .getElementById("saveAdmin")
- ?.addEventListener("click",function(){
+    category.items.push({
 
-   collectAdmin();
+     id:"product-"+Date.now(),
 
-   saveData();
+     name:"Yeni Ürün",
 
-   admin=false;
+     description:"Ürün açıklaması",
+
+     portion:"",
+
+     calories:"",
+
+     allergens:[],
+
+     spicy:0,
+
+     price:0,
+
+     image:IMAGES.breakfast,
+
+     featured:false,
+
+     dish:false,
+
+     sold:false
+
+    });
+
+   }
+
 
    render();
 
+  };
+
  });
+
+
+ /* SAVE ADMIN */
+
+ const saveAdmin=
+  document.getElementById("saveAdmin");
+
+ if(saveAdmin){
+
+  saveAdmin.onclick=function(){
+
+   collectAdmin();
+
+   try{
+
+    localStorage.setItem(
+     "nearMenuData",
+     JSON.stringify(DATA)
+    );
+
+   }catch(error){}
+
+
+   adminOpen=false;
+
+   render();
+
+  };
+
+ }
 
 }
 
 
-/* =========================================================
-   ADMIN VERİLERİNİ TOPLA
-========================================================= */
+/* ============================================================
+   ADMIN DATA
+============================================================ */
 
 function collectAdmin(){
 
  document
- .querySelectorAll("[data-key]")
+ .querySelectorAll("[data-admin]")
  .forEach(function(input){
 
-   let key=input.dataset.key;
+  const key=input.dataset.admin;
 
-   if(key==="name")
-     data.name=input.value;
+  if(key==="businessName")
+   DATA.name=input.value;
 
-   if(key==="subtitle")
-     data.subtitle=input.value;
+  if(key==="subtitle")
+   DATA.subtitle=input.value;
 
-   if(key==="phone")
-     data.phone=input.value;
+  if(key==="phone")
+   DATA.phone=input.value;
 
-   if(key==="whatsapp")
-     data.whatsapp=input.value;
+  if(key==="whatsapp")
+   DATA.whatsapp=input.value;
+
+  if(key==="backgroundColor")
+   DATA.background.value=input.value;
+
+  if(key==="backgroundImage")
+   DATA.background.image=input.value;
+
+
+  if(key.startsWith("productName-")){
+
+   const id=
+    key.replace("productName-","");
+
+   const item=findProduct(id);
+
+   if(item)
+    item.name=input.value;
+
+  }
+
+
+  if(key.startsWith("productPrice-")){
+
+   const id=
+    key.replace("productPrice-","");
+
+   const item=findProduct(id);
+
+   if(item)
+    item.price=Number(input.value)||0;
+
+  }
+
+
+  if(key.startsWith("productPortion-")){
+
+   const id=
+    key.replace("productPortion-","");
+
+   const item=findProduct(id);
+
+   if(item)
+    item.portion=input.value;
+
+  }
+
+
+  if(key.startsWith("productCalories-")){
+
+   const id=
+    key.replace("productCalories-","");
+
+   const item=findProduct(id);
+
+   if(item)
+    item.calories=input.value;
+
+  }
 
  });
 
@@ -2838,108 +3480,26 @@ function collectAdmin(){
  .querySelectorAll("[data-category-name]")
  .forEach(function(input){
 
-   let category=
-     data.categories.find(function(x){
-       return x.id===input.dataset.categoryName;
-     });
+  const category=
+   DATA.categories.find(function(category){
 
-   if(category)
-     category.name=input.value;
+    return category.id===
+     input.dataset.categoryName;
 
- });
+   });
 
 
- document
- .querySelectorAll("[data-key^='name-']")
- .forEach(function(input){
-
-   let id=input.dataset.key.replace("name-","");
-
-   let item=
-     allItems().find(function(x){
-       return x.id===id;
-     });
-
-   if(item)
-     item.name=input.value;
-
- });
-
-
- document
- .querySelectorAll("[data-key^='price-']")
- .forEach(function(input){
-
-   let id=input.dataset.key.replace("price-","");
-
-   let item=
-     allItems().find(function(x){
-       return x.id===id;
-     });
-
-   if(item)
-     item.price=Number(input.value)||0;
-
- });
-
-
- document
- .querySelectorAll("[data-key^='portion-']")
- .forEach(function(input){
-
-   let id=input.dataset.key.replace("portion-","");
-
-   let item=
-     allItems().find(function(x){
-       return x.id===id;
-     });
-
-   if(item)
-     item.portion=input.value;
-
- });
-
-
- document
- .querySelectorAll("[data-key^='calories-']")
- .forEach(function(input){
-
-   let id=input.dataset.key.replace("calories-","");
-
-   let item=
-     allItems().find(function(x){
-       return x.id===id;
-     });
-
-   if(item)
-     item.calories=input.value;
+  if(category)
+   category.name=input.value;
 
  });
 
 }
 
 
-/* =========================================================
-   LOCAL STORAGE
-========================================================= */
-
-function saveData(){
-
- try{
-
-   localStorage.setItem(
-     "nearMenuData",
-     JSON.stringify(data)
-   );
-
- }catch(error){}
-
-}
-
-
-/* =========================================================
-   BAŞLAT
-========================================================= */
+/* ============================================================
+   START
+============================================================ */
 
 render();
 
