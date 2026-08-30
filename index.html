@@ -9,8 +9,11 @@
 <style>
 *{box-sizing:border-box}
 html,body{
- margin:0;padding:0;
- background:#0b0b0c;color:#fff;
+ margin:0;
+ padding:0;
+ min-height:100%;
+ background:#09090a;
+ color:#fff;
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
 body{min-height:100vh}
@@ -37,21 +40,29 @@ a{text-decoration:none;color:inherit}
  --titleFont:Georgia,serif;
 }
 
+body{
+ font-family:var(--fontFamily);
+ color:var(--text);
+ font-size:var(--bodySize);
+}
+
 #app{min-height:100vh}
 
 .container{
  width:100%;
- max-width:620px;
+ max-width:650px;
  margin:auto;
- padding:0 16px 70px;
+ padding:0 16px 80px;
 }
 
-/* BACKGROUND */
+/* =========================
+   BACKGROUND
+========================= */
 
 .background{
  position:fixed;
  inset:0;
- z-index:-5;
+ z-index:-10;
  overflow:hidden;
  background:#0b0b0c;
 }
@@ -69,27 +80,26 @@ a{text-decoration:none;color:inherit}
  background:rgba(0,0,0,var(--overlay));
 }
 
-body{
- font-family:var(--fontFamily);
- color:var(--text);
- font-size:var(--bodySize);
-}
-
-/* TOP */
+/* =========================
+   TOP BAR
+========================= */
 
 .top{
  position:sticky;
  top:0;
- z-index:80;
- padding:12px 0;
- background:rgba(11,11,12,.88);
- backdrop-filter:blur(20px);
+ z-index:90;
+ padding:11px 0;
+ background:rgba(10,10,11,.82);
+ backdrop-filter:blur(24px);
+ -webkit-backdrop-filter:blur(24px);
+ border-bottom:1px solid rgba(255,255,255,.04);
 }
 
 .topRow{
  display:flex;
  align-items:center;
  justify-content:space-between;
+ gap:10px;
 }
 
 .topRight{
@@ -102,63 +112,90 @@ body{
 .iconBtn{
  width:43px;
  height:43px;
+ flex:0 0 43px;
+ border:1px solid rgba(255,255,255,.08);
  border-radius:50%;
- border:1px solid var(--line);
- background:#171719;
+ background:rgba(25,25,27,.92);
  color:#fff;
- font-size:19px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:18px;
  transition:.2s;
 }
 
-.iconBtn:active{transform:scale(.94)}
+.iconBtn:active{
+ transform:scale(.93);
+}
 
 .currencyBtn{
  height:43px;
+ min-width:49px;
  padding:0 15px;
- border:0;
+ border:1px solid rgba(255,255,255,.06);
  border-radius:23px;
  background:var(--accent);
  color:#111;
- font-weight:900;
+ font-weight:950;
+ box-shadow:0 7px 22px rgba(0,0,0,.22);
 }
 
-.searchBox{margin-top:9px}
+.languageBtn{
+ font-size:10px;
+ font-weight:900;
+ letter-spacing:.02em;
+}
+
+.searchBox{
+ margin-top:9px;
+}
 
 .searchBox input{
  width:100%;
  padding:14px 16px;
  border-radius:15px;
- border:1px solid var(--line);
+ border:1px solid rgba(255,255,255,.08);
  background:#151517;
  color:#fff;
  outline:none;
 }
 
-/* QUICK POPUP */
+.searchBox input:focus{
+ border-color:var(--accent);
+ box-shadow:0 0 0 3px rgba(214,168,61,.10);
+}
+
+/* =========================
+   SMALL POPUPS
+========================= */
 
 .quickPopup{
  position:absolute;
  right:0;
- top:52px;
- min-width:145px;
+ top:51px;
+ width:185px;
  padding:7px;
- border:1px solid #303034;
- border-radius:15px;
- background:rgba(20,20,22,.98);
- box-shadow:0 20px 50px rgba(0,0,0,.55);
- backdrop-filter:blur(20px);
- z-index:200;
+ border:1px solid rgba(255,255,255,.11);
+ border-radius:16px;
+ background:rgba(20,20,22,.97);
+ box-shadow:0 22px 60px rgba(0,0,0,.65);
+ backdrop-filter:blur(25px);
+ -webkit-backdrop-filter:blur(25px);
+ z-index:500;
+ animation:popupIn .16s ease;
 }
 
 .quickPopup button{
  width:100%;
+ min-height:43px;
  display:flex;
  align-items:center;
  justify-content:space-between;
- padding:11px 12px;
+ gap:10px;
+ padding:10px 12px;
  margin:2px 0;
  border:0;
- border-radius:10px;
+ border-radius:11px;
  background:transparent;
  color:#aaa;
  text-align:left;
@@ -166,26 +203,34 @@ body{
  font-weight:800;
 }
 
+.quickPopup button:hover{
+ background:#262629;
+ color:#fff;
+}
+
 .quickPopup button.active{
  background:var(--accent);
  color:#111;
 }
 
-.quickPopup button:hover{
- background:#242427;
- color:#fff;
+@keyframes popupIn{
+ from{
+  opacity:0;
+  transform:translateY(-5px) scale(.98);
+ }
+ to{
+  opacity:1;
+  transform:none;
+ }
 }
 
-.quickPopup button.active:hover{
- background:var(--accent);
- color:#111;
-}
-
-/* HERO */
+/* =========================
+   HERO
+========================= */
 
 .hero{
  text-align:center;
- padding:40px 0 28px;
+ padding:48px 0 28px;
 }
 
 .logo{
@@ -197,12 +242,14 @@ body{
  justify-content:center;
  border-radius:50%;
  border:1px solid var(--accent);
- background:#111;
+ background:rgba(15,15,16,.94);
  color:var(--accent);
  font:42px Georgia,serif;
- box-shadow:0 0 45px rgba(214,168,61,.14);
+ box-shadow:
+  0 0 0 7px rgba(214,168,61,.035),
+  0 0 55px rgba(214,168,61,.15);
  overflow:hidden;
- transition:.3s;
+ transition:.25s;
 }
 
 .logo img{
@@ -214,38 +261,47 @@ body{
 .welcome{
  margin-top:18px;
  color:var(--accent2);
- font-size:10px;
- font-weight:900;
- letter-spacing:.32em;
+ font-size:9px;
+ font-weight:950;
+ letter-spacing:.34em;
 }
 
 .hero h1{
- margin:10px 0 6px;
+ margin:10px 0 7px;
  color:var(--text);
  font:700 var(--titleSize) var(--titleFont);
- line-height:1.1;
+ line-height:1.05;
+ letter-spacing:-.03em;
 }
 
 .hero p{
- margin:0;
+ max-width:480px;
+ margin:0 auto;
  color:var(--muted);
  font-size:var(--bodySize);
+ line-height:1.6;
 }
 
-/* SECTION */
+/* =========================
+   SECTION
+========================= */
 
-.section{margin-top:30px}
+.section{
+ margin-top:31px;
+}
 
 .sectionHead{
  display:flex;
  align-items:center;
  justify-content:space-between;
- margin-bottom:13px;
+ gap:10px;
+ margin-bottom:14px;
 }
 
 .sectionHead h2{
  margin:0;
  font-size:20px;
+ letter-spacing:-.02em;
 }
 
 .hint{
@@ -253,7 +309,9 @@ body{
  font-size:10px;
 }
 
-/* HORIZONTAL */
+/* =========================
+   HORIZONTAL
+========================= */
 
 .horizontal{
  display:flex;
@@ -261,23 +319,28 @@ body{
  overflow-x:auto;
  scrollbar-width:none;
  scroll-snap-type:x mandatory;
+ padding-bottom:3px;
 }
 
-.horizontal::-webkit-scrollbar{display:none}
+.horizontal::-webkit-scrollbar{
+ display:none;
+}
 
-/* FEATURE */
+/* =========================
+   FEATURE
+========================= */
 
 .feature{
  position:relative;
- flex:0 0 86%;
- height:225px;
+ flex:0 0 88%;
+ height:235px;
  padding:0;
- border:1px solid var(--line);
+ border:1px solid rgba(255,255,255,.08);
  border-radius:var(--cardRadius);
  overflow:hidden;
  background:#171719;
  scroll-snap-align:start;
- box-shadow:0 15px 40px rgba(0,0,0,.22);
+ box-shadow:0 18px 50px rgba(0,0,0,.30);
 }
 
 .feature img,
@@ -290,40 +353,45 @@ body{
 .featureShade{
  position:absolute;
  inset:0;
- background:linear-gradient(
-  transparent 20%,
-  rgba(0,0,0,.9)
- );
+ background:
+  linear-gradient(
+   180deg,
+   transparent 20%,
+   rgba(0,0,0,.12) 45%,
+   rgba(0,0,0,.92) 100%
+  );
 }
 
 .featureText{
  position:absolute;
- left:17px;
- right:17px;
- bottom:16px;
+ left:18px;
+ right:18px;
+ bottom:17px;
  text-align:left;
 }
 
 .featureText strong{
  display:block;
- font-size:19px;
+ font-size:20px;
 }
 
 .featureText span{
  display:block;
- margin-top:5px;
+ margin-top:6px;
  color:var(--price);
- font-weight:900;
+ font-weight:950;
 }
 
-/* EVENTS */
+/* =========================
+   EVENTS
+========================= */
 
 .event{
  position:relative;
- flex:0 0 86%;
- height:195px;
+ flex:0 0 88%;
+ height:200px;
  padding:0;
- border:1px solid var(--line);
+ border:1px solid rgba(255,255,255,.08);
  border-radius:var(--cardRadius);
  overflow:hidden;
  background:#171719;
@@ -340,10 +408,12 @@ body{
 .eventShade{
  position:absolute;
  inset:0;
- background:linear-gradient(
-  transparent 20%,
-  rgba(0,0,0,.9)
- );
+ background:
+  linear-gradient(
+   180deg,
+   transparent 15%,
+   rgba(0,0,0,.92)
+  );
 }
 
 .eventDate{
@@ -355,17 +425,20 @@ body{
  background:rgba(0,0,0,.72);
  color:var(--accent2);
  font-size:10px;
+ backdrop-filter:blur(10px);
 }
 
 .eventText{
  position:absolute;
- left:16px;
- right:16px;
+ left:17px;
+ right:17px;
  bottom:15px;
  text-align:left;
 }
 
-.eventText strong{font-size:18px}
+.eventText strong{
+ font-size:18px;
+}
 
 .eventText span{
  display:block;
@@ -374,7 +447,9 @@ body{
  font-size:11px;
 }
 
-/* CATEGORIES */
+/* =========================
+   CATEGORIES
+========================= */
 
 .categories{
  display:grid;
@@ -384,13 +459,13 @@ body{
 
 .category{
  position:relative;
- height:165px;
+ height:170px;
  padding:0;
- border:1px solid var(--line);
+ border:1px solid rgba(255,255,255,.08);
  border-radius:var(--cardRadius);
  overflow:hidden;
  background:#171719;
- box-shadow:0 12px 35px rgba(0,0,0,.18);
+ box-shadow:0 14px 38px rgba(0,0,0,.20);
 }
 
 .category img{
@@ -402,17 +477,19 @@ body{
 .categoryShade{
  position:absolute;
  inset:0;
- background:linear-gradient(
-  transparent 15%,
-  rgba(0,0,0,.92)
- );
+ background:
+  linear-gradient(
+   180deg,
+   transparent 10%,
+   rgba(0,0,0,.94)
+  );
 }
 
 .categoryText{
  position:absolute;
- left:14px;
- right:14px;
- bottom:14px;
+ left:15px;
+ right:15px;
+ bottom:15px;
  text-align:left;
 }
 
@@ -428,33 +505,37 @@ body{
  margin-top:4px;
 }
 
-/* CATEGORY PAGE */
+/* =========================
+   CATEGORY PAGE
+========================= */
 
 .categoryTitle{
  display:flex;
  align-items:center;
  justify-content:space-between;
+ gap:10px;
  margin-bottom:13px;
 }
 
 .backBtn{
- border:0;
+ border:1px solid rgba(255,255,255,.07);
  background:#1b1b1e;
  color:#fff;
  padding:10px 13px;
  border-radius:11px;
  font-size:11px;
- font-weight:800;
+ font-weight:850;
 }
 
 .stickyCategories{
  position:sticky;
- top:67px;
+ top:68px;
  z-index:35;
  margin:0 -16px;
  padding:10px 16px;
  background:rgba(11,11,12,.94);
- backdrop-filter:blur(16px);
+ backdrop-filter:blur(17px);
+ -webkit-backdrop-filter:blur(17px);
  border-bottom:1px solid #202023;
 }
 
@@ -465,7 +546,9 @@ body{
  scrollbar-width:none;
 }
 
-.categoryTabs::-webkit-scrollbar{display:none}
+.categoryTabs::-webkit-scrollbar{
+ display:none;
+}
 
 .categoryTabs button{
  flex:0 0 auto;
@@ -475,7 +558,7 @@ body{
  background:#18181a;
  color:#aaa;
  font-size:11px;
- font-weight:800;
+ font-weight:850;
 }
 
 .categoryTabs button.active{
@@ -483,7 +566,9 @@ body{
  color:#111;
 }
 
-/* PRODUCTS */
+/* =========================
+   PRODUCTS
+========================= */
 
 .products{
  display:flex;
@@ -497,11 +582,11 @@ body{
  grid-template-columns:120px 1fr;
  min-height:122px;
  overflow:hidden;
- border:1px solid var(--line);
+ border:1px solid rgba(255,255,255,.07);
  border-radius:var(--cardRadius);
  background:rgba(20,20,22,var(--cardOpacity));
  cursor:pointer;
- box-shadow:0 12px 32px rgba(0,0,0,.16);
+ box-shadow:0 13px 35px rgba(0,0,0,.18);
  transition:.2s;
 }
 
@@ -522,6 +607,7 @@ body{
 }
 
 .productInfo{
+ min-width:0;
  padding:13px;
 }
 
@@ -529,6 +615,9 @@ body{
  margin:0;
  color:var(--cardText);
  font-size:15px;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
 }
 
 .productInfo p{
@@ -536,6 +625,10 @@ body{
  color:#929292;
  font-size:11px;
  line-height:1.45;
+ display:-webkit-box;
+ -webkit-line-clamp:2;
+ -webkit-box-orient:vertical;
+ overflow:hidden;
 }
 
 .tags{
@@ -560,18 +653,21 @@ body{
 .price{
  margin-top:8px;
  color:var(--price);
- font-weight:900;
+ font-weight:950;
  font-size:14px;
 }
 
-/* DRAWER */
+/* =========================
+   DRAWER
+========================= */
 
 .overlay{
  position:fixed;
  inset:0;
  z-index:100;
  background:rgba(0,0,0,.72);
- backdrop-filter:blur(5px);
+ backdrop-filter:blur(6px);
+ -webkit-backdrop-filter:blur(6px);
 }
 
 .drawer{
@@ -580,7 +676,13 @@ body{
  overflow:auto;
  padding:20px;
  background:#101011;
- box-shadow:10px 0 40px #000;
+ box-shadow:10px 0 50px #000;
+ animation:drawerIn .2s ease;
+}
+
+@keyframes drawerIn{
+ from{transform:translateX(-100%)}
+ to{transform:none}
 }
 
 .drawerHead{
@@ -594,7 +696,9 @@ body{
  font:700 25px Georgia,serif;
 }
 
-.drawerSection{margin-top:25px}
+.drawerSection{
+ margin-top:25px;
+}
 
 .drawerLabel{
  color:#666;
@@ -609,14 +713,16 @@ body{
  border:0;
  background:#18181a;
  color:#aaa;
- padding:12px;
+ padding:13px;
  border-radius:10px;
  font-size:11px;
  text-align:left;
  margin-top:7px;
 }
 
-/* MODAL */
+/* =========================
+   MODAL
+========================= */
 
 .modalOverlay{
  position:fixed;
@@ -625,22 +731,30 @@ body{
  display:flex;
  align-items:flex-end;
  justify-content:center;
- background:rgba(0,0,0,.75);
- backdrop-filter:blur(6px);
+ background:rgba(0,0,0,.76);
+ backdrop-filter:blur(7px);
+ -webkit-backdrop-filter:blur(7px);
 }
 
 .modal{
- width:min(100%,620px);
+ width:min(100%,650px);
  max-height:92vh;
  overflow:auto;
  border-radius:27px 27px 0 0;
  background:#101011;
- box-shadow:0 -15px 50px rgba(0,0,0,.4);
+ box-shadow:0 -15px 60px rgba(0,0,0,.5);
+ animation:modalUp .22s ease;
+}
+
+@keyframes modalUp{
+ from{transform:translateY(100%)}
+ to{transform:none}
 }
 
 .modalImage{
  position:relative;
- height:300px;
+ height:310px;
+ background:#18181a;
 }
 
 .modalImage img,
@@ -663,22 +777,26 @@ body{
  font-size:23px;
 }
 
-.modalBody{padding:20px}
+.modalBody{
+ padding:21px;
+}
 
 .modalBody h2{
  margin:0;
  font-size:27px;
+ letter-spacing:-.03em;
 }
 
 .modalBody p{
  color:#999;
  font-size:13px;
- line-height:1.6;
+ line-height:1.65;
 }
 
 .infoRow{
  display:flex;
  justify-content:space-between;
+ gap:20px;
  padding:13px 0;
  border-bottom:1px solid #252527;
  font-size:12px;
@@ -690,13 +808,15 @@ body{
 }
 
 .modalPrice{
- margin-top:17px;
+ margin-top:18px;
  color:var(--price);
  font-size:26px;
- font-weight:900;
+ font-weight:950;
 }
 
-/* ADMIN */
+/* =========================
+   ADMIN
+========================= */
 
 .adminOverlay{
  position:fixed;
@@ -708,26 +828,51 @@ body{
 }
 
 .admin{
- width:min(100%,620px);
+ width:min(100%,650px);
  height:100%;
  overflow:auto;
  background:#0e0e0f;
+ animation:adminIn .22s ease;
+}
+
+@keyframes adminIn{
+ from{transform:translateX(100%)}
+ to{transform:none}
 }
 
 .adminHeader{
  position:sticky;
  top:0;
- z-index:10;
+ z-index:20;
  padding:15px;
  background:rgba(14,14,15,.98);
  border-bottom:1px solid var(--line);
  backdrop-filter:blur(15px);
+ -webkit-backdrop-filter:blur(15px);
 }
 
 .adminTop{
  display:flex;
  justify-content:space-between;
  align-items:center;
+}
+
+.adminTitle{
+ display:flex;
+ align-items:center;
+ gap:9px;
+}
+
+.adminTitleIcon{
+ width:34px;
+ height:34px;
+ border-radius:10px;
+ background:var(--accent);
+ color:#111;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-weight:950;
 }
 
 .adminTabs{
@@ -749,16 +894,20 @@ body{
 .adminTabs button.active{
  background:var(--accent);
  color:#111;
- font-weight:900;
+ font-weight:950;
 }
 
-.adminBody{padding:16px}
+.adminBody{
+ padding:16px;
+}
 
-.field{margin-bottom:13px}
+.field{
+ margin-bottom:13px;
+}
 
 .field label{
  display:block;
- margin-bottom:5px;
+ margin-bottom:6px;
  color:#777;
  font-size:10px;
 }
@@ -775,17 +924,30 @@ body{
  outline:none;
 }
 
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+ border-color:var(--accent);
+ box-shadow:0 0 0 3px rgba(214,168,61,.08);
+}
+
 .field textarea{
- min-height:80px;
+ min-height:82px;
  resize:vertical;
 }
 
 .adminCard{
- padding:14px;
- margin-bottom:11px;
+ padding:15px;
+ margin-bottom:12px;
  border:1px solid var(--line);
- border-radius:15px;
+ border-radius:16px;
  background:#151517;
+}
+
+.adminCardTitle{
+ font-size:15px;
+ font-weight:900;
+ margin-bottom:5px;
 }
 
 .adminButton{
@@ -795,7 +957,7 @@ body{
  background:#202023;
  color:#fff;
  font-size:11px;
- font-weight:800;
+ font-weight:850;
 }
 
 .adminButton.gold{
@@ -815,11 +977,12 @@ body{
  background:rgba(14,14,15,.98);
  border-top:1px solid var(--line);
  z-index:20;
+ backdrop-filter:blur(15px);
 }
 
 .row{
  display:flex;
- gap:7px;
+ gap:8px;
 }
 
 .row>*{
@@ -833,7 +996,16 @@ body{
  line-height:1.5;
 }
 
-/* ADMIN LIST */
+.help{
+ color:#777;
+ font-size:10px;
+ line-height:1.55;
+ margin-top:5px;
+}
+
+/* =========================
+   ADMIN LISTS
+========================= */
 
 .adminCategoryList,
 .adminProductList{
@@ -903,28 +1075,12 @@ body{
 
 .adminArrow{
  color:#777;
- font-size:18px;
+ font-size:20px;
 }
 
-.adminBreadcrumb{
- display:flex;
- align-items:center;
- gap:7px;
- margin-bottom:15px;
- color:#777;
- font-size:11px;
-}
-
-.adminBreadcrumb button{
- border:0;
- background:none;
- padding:0;
- color:var(--accent2);
- font-size:11px;
- font-weight:800;
-}
-
-/* FILE */
+/* =========================
+   FILE
+========================= */
 
 .fileBox{
  display:flex;
@@ -956,7 +1112,9 @@ body{
  border:1px solid #303034;
 }
 
-/* DESIGN */
+/* =========================
+   DESIGN
+========================= */
 
 .designGrid{
  display:grid;
@@ -965,7 +1123,7 @@ body{
 }
 
 .designCard{
- padding:11px;
+ padding:12px;
  border-radius:12px;
  background:#18181a;
  border:1px solid #252527;
@@ -1015,16 +1173,10 @@ body{
 }
 
 .rangeValue{
- width:45px;
+ width:48px;
  text-align:right;
  color:var(--accent2);
  font-size:10px;
-}
-
-.switchGrid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:8px;
 }
 
 .toggle{
@@ -1046,7 +1198,49 @@ body{
  accent-color:var(--accent);
 }
 
-/* LOGIN */
+/* =========================
+   SIMPLE PRODUCT FORM
+========================= */
+
+.simpleProductHero{
+ padding:14px;
+ margin-bottom:12px;
+ border:1px solid rgba(214,168,61,.20);
+ border-radius:16px;
+ background:
+  linear-gradient(
+   135deg,
+   rgba(214,168,61,.10),
+   rgba(255,255,255,.02)
+  );
+}
+
+.simpleProductHero strong{
+ display:block;
+ font-size:16px;
+}
+
+.simpleProductHero span{
+ display:block;
+ margin-top:5px;
+ color:#777;
+ font-size:10px;
+}
+
+.advancedButton{
+ width:100%;
+ padding:12px;
+ border:1px solid #303034;
+ border-radius:11px;
+ background:#18181a;
+ color:#ddd;
+ font-size:11px;
+ font-weight:850;
+}
+
+/* =========================
+   LOGIN
+========================= */
 
 .adminLoginOverlay{
  position:fixed;
@@ -1056,7 +1250,7 @@ body{
  align-items:center;
  justify-content:center;
  padding:20px;
- background:rgba(0,0,0,.9);
+ background:rgba(0,0,0,.92);
  backdrop-filter:blur(12px);
 }
 
@@ -1066,7 +1260,7 @@ body{
  border:1px solid #29292d;
  border-radius:22px;
  background:#111113;
- box-shadow:0 20px 60px #000;
+ box-shadow:0 20px 70px #000;
 }
 
 .adminLoginLogo{
@@ -1115,7 +1309,7 @@ body{
  border-radius:12px;
  background:var(--accent);
  color:#111;
- font-weight:900;
+ font-weight:950;
 }
 
 .loginError{
@@ -1128,6 +1322,10 @@ body{
  text-align:center;
  font-size:10px;
 }
+
+/* =========================
+   FOOTER
+========================= */
 
 .footer{
  padding:35px 0;
@@ -1142,12 +1340,33 @@ body{
  color:#666;
 }
 
+.hidden{
+ display:none!important;
+}
+
+@media(max-width:430px){
+ .categories{
+  grid-template-columns:1fr 1fr;
+ }
+ .product{
+  grid-template-columns:105px 1fr;
+ }
+ .productImage{
+  height:118px;
+ }
+}
+
 @media(max-width:390px){
- .categories{grid-template-columns:1fr}
- .product{grid-template-columns:100px 1fr}
- .productImage{height:115px}
- .designGrid{grid-template-columns:1fr}
- .switchGrid{grid-template-columns:1fr}
+ .categories{
+  grid-template-columns:1fr;
+ }
+ .designGrid{
+  grid-template-columns:1fr;
+ }
+ .row{
+  flex-direction:column;
+  gap:0;
+ }
 }
 </style>
 </head>
@@ -1159,10 +1378,11 @@ body{
 <script>
 
 /* =========================================================
-   NEARMENU PREMIUM
+   NEARMENU PREMIUM V2
    ========================================================= */
 
 const ADMIN_PASSWORD="1234";
+const STORAGE_KEY="nearMenuData";
 
 const IMAGES={
  breakfast:"https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=900&q=80",
@@ -1198,7 +1418,35 @@ const TEXT={
   products:"Menü",
   settings:"Tasarım",
   save:"Kaydet",
-  search:"Ürün ara..."
+  search:"Ürün ara...",
+  add:"Ekle",
+  edit:"Düzenle",
+  delete:"Sil",
+  cancel:"İptal",
+  saveProduct:"Ürünü Kaydet",
+  saveCategory:"Kategoriyi Kaydet",
+  addCategory:"+ Kategori Ekle",
+  addProduct:"+ Ürün Ekle",
+  basic:"Temel Bilgiler",
+  advanced:"Ek Bilgiler",
+  hideAdvanced:"Ek Bilgileri Gizle",
+  productName:"Ürün adı",
+  productPrice:"Fiyat (TL)",
+  description:"Açıklama",
+  photo:"Fotoğraf",
+  categoryName:"Kategori adı",
+  noProducts:"Henüz ürün yok.",
+  noCategories:"Henüz kategori yok.",
+  usd:"Dolar",
+  eur:"Euro",
+  try:"Türk Lirası",
+  font:"Font",
+  colors:"Renkler",
+  sizes:"Boyutlar",
+  background:"Arka Plan",
+  visibility:"Görünürlük",
+  image:"Fotoğraf",
+  video:"Video"
  },
  en:{
   welcome:"WELCOME",
@@ -1222,7 +1470,35 @@ const TEXT={
   products:"Menu",
   settings:"Design",
   save:"Save",
-  search:"Search products..."
+  search:"Search products...",
+  add:"Add",
+  edit:"Edit",
+  delete:"Delete",
+  cancel:"Cancel",
+  saveProduct:"Save Product",
+  saveCategory:"Save Category",
+  addCategory:"+ Add Category",
+  addProduct:"+ Add Product",
+  basic:"Basic Information",
+  advanced:"Additional Information",
+  hideAdvanced:"Hide Additional Information",
+  productName:"Product name",
+  productPrice:"Price (TRY)",
+  description:"Description",
+  photo:"Photo",
+  categoryName:"Category name",
+  noProducts:"No products yet.",
+  noCategories:"No categories yet.",
+  usd:"US Dollar",
+  eur:"Euro",
+  try:"Turkish Lira",
+  font:"Font",
+  colors:"Colors",
+  sizes:"Sizes",
+  background:"Background",
+  visibility:"Visibility",
+  image:"Image",
+  video:"Video"
  },
  ar:{
   welcome:"مرحباً بكم",
@@ -1246,13 +1522,41 @@ const TEXT={
   products:"القائمة",
   settings:"التصميم",
   save:"حفظ",
-  search:"ابحث عن منتج..."
+  search:"ابحث عن منتج...",
+  add:"إضافة",
+  edit:"تعديل",
+  delete:"حذف",
+  cancel:"إلغاء",
+  saveProduct:"حفظ المنتج",
+  saveCategory:"حفظ التصنيف",
+  addCategory:"+ إضافة تصنيف",
+  addProduct:"+ إضافة منتج",
+  basic:"المعلومات الأساسية",
+  advanced:"معلومات إضافية",
+  hideAdvanced:"إخفاء المعلومات الإضافية",
+  productName:"اسم المنتج",
+  productPrice:"السعر",
+  description:"الوصف",
+  photo:"الصورة",
+  categoryName:"اسم التصنيف",
+  noProducts:"لا توجد منتجات.",
+  noCategories:"لا توجد تصنيفات.",
+  usd:"الدولار",
+  eur:"اليورو",
+  try:"الليرة التركية",
+  font:"الخط",
+  colors:"الألوان",
+  sizes:"الأحجام",
+  background:"الخلفية",
+  visibility:"العرض",
+  image:"صورة",
+  video:"فيديو"
  }
 };
 
 /* =========================================================
    DEFAULT DATA
-   ========================================================= */
+========================================================= */
 
 const DATA={
  name:"NEARMENU DEMO",
@@ -1312,7 +1616,17 @@ const DATA={
     {
      id:"serpme",
      name:"Serpme Kahvaltı",
+     names:{
+      tr:"Serpme Kahvaltı",
+      en:"Turkish Breakfast",
+      ar:"فطور تركي"
+     },
      description:"Peynir çeşitleri, zeytin, reçel, bal, yumurta ve sıcak ürünlerden oluşan zengin kahvaltı.",
+     descriptions:{
+      tr:"Peynir çeşitleri, zeytin, reçel, bal, yumurta ve sıcak ürünlerden oluşan zengin kahvaltı.",
+      en:"A rich breakfast with cheeses, olives, jam, honey, eggs and hot dishes.",
+      ar:"فطور غني بالجبن والزيتون والمربى والعسل والبيض والأطباق الساخنة."
+     },
      portion:"2 kişilik",
      calories:"1250",
      allergens:["Süt","Gluten","Yumurta"],
@@ -1556,7 +1870,7 @@ const DATA={
 
 /* =========================================================
    STATE
-   ========================================================= */
+========================================================= */
 
 let language=localStorage.getItem("nearMenuLanguage")||"tr";
 let currency=localStorage.getItem("nearMenuCurrency")||"TRY";
@@ -1582,12 +1896,56 @@ let languageMenu=false;
 let advancedProduct=false;
 
 /* =========================================================
-   LOAD OLD DATA WITHOUT DESTROYING IT
-   ========================================================= */
+   SAFE STORAGE
+========================================================= */
+
+function storageAvailable(){
+
+ try{
+  const x="__near_test__";
+  localStorage.setItem(x,x);
+  localStorage.removeItem(x);
+  return true;
+ }catch(e){
+  return false;
+ }
+}
+
+function safeGet(key){
+
+ if(!storageAvailable())return null;
+
+ try{
+  return localStorage.getItem(key);
+ }catch(e){
+  return null;
+ }
+}
+
+function safeSet(key,value){
+
+ if(!storageAvailable())return false;
+
+ try{
+  localStorage.setItem(key,value);
+  return true;
+ }catch(e){
+  console.warn("Storage:",e);
+  return false;
+ }
+
+}
+
+/* =========================================================
+   LOAD EXISTING DATA
+========================================================= */
 
 try{
- const saved=localStorage.getItem("nearMenuData");
- if(saved)mergeData(JSON.parse(saved));
+ const saved=safeGet(STORAGE_KEY);
+
+ if(saved){
+  mergeData(JSON.parse(saved));
+ }
 }catch(e){
  console.log("Veri yükleme:",e);
 }
@@ -1635,10 +1993,18 @@ function mergeData(saved){
   titleFont:"Georgia"
  },DATA.theme||{});
 
- DATA.settings=Object.assign(
-  {},
-  DATA.settings||{}
- );
+ DATA.settings=Object.assign({
+  portion:true,
+  calories:true,
+  allergens:true,
+  spicy:true,
+  sold:true,
+  hours:true,
+  dish:true,
+  featured:true,
+  events:true,
+  search:true
+ },DATA.settings||{});
 
  DATA.background=Object.assign({
   type:"color",
@@ -1652,12 +2018,24 @@ function mergeData(saved){
   EUR:47
  },DATA.rates||{});
 
- (DATA.categories||[]).forEach(c=>{
+ if(!Array.isArray(DATA.categories))
+  DATA.categories=[];
+
+ if(!Array.isArray(DATA.events))
+  DATA.events=[];
+
+ DATA.categories.forEach(c=>{
+
+  if(!c.id)
+   c.id="category-"+Date.now()+"-"+Math.random().toString(36).slice(2,6);
 
   if(!Array.isArray(c.items))
    c.items=[];
 
   c.items.forEach(p=>{
+
+   if(!p.id)
+    p.id="product-"+Date.now()+"-"+Math.random().toString(36).slice(2,6);
 
    if(typeof p.video==="undefined")
     p.video="";
@@ -1678,7 +2056,10 @@ function mergeData(saved){
 
  });
 
- (DATA.events||[]).forEach(e=>{
+ DATA.events.forEach(e=>{
+
+  if(!e.id)
+   e.id="event-"+Date.now();
 
   if(typeof e.video==="undefined")
    e.video="";
@@ -1687,28 +2068,31 @@ function mergeData(saved){
 
 }
 
+/* =========================================================
+   SAVE
+========================================================= */
+
 function saveData(){
 
- try{
+ const ok=safeSet(
+  STORAGE_KEY,
+  JSON.stringify(DATA)
+ );
 
-  localStorage.setItem(
-   "nearMenuData",
-   JSON.stringify(DATA)
-  );
-
- }catch(e){
+ if(!ok){
 
   alert(
-   "Veriler kaydedilemedi. Seçtiğiniz dosya çok büyük olabilir."
+   "Veriler tarayıcı hafızasına kaydedilemedi. Fotoğraf/video dosyası çok büyük olabilir."
   );
 
  }
 
+ return ok;
 }
 
 /* =========================================================
    HELPERS
-   ========================================================= */
+========================================================= */
 
 function $(id){
  return document.getElementById(id);
@@ -1730,6 +2114,32 @@ function t(key){
  return TEXT[language]?.[key]||
         TEXT.tr[key]||
         key;
+
+}
+
+function localizedName(item){
+
+ if(
+  item?.names &&
+  item.names[language]
+ ){
+  return item.names[language];
+ }
+
+ return item?.name||"";
+
+}
+
+function localizedDescription(item){
+
+ if(
+  item?.descriptions &&
+  item.descriptions[language]
+ ){
+  return item.descriptions[language];
+ }
+
+ return item?.description||"";
 
 }
 
@@ -1791,17 +2201,19 @@ function money(price){
 
  if(currency==="USD"){
 
+  const rate=Number(DATA.rates.USD)||40;
+
   return "$"+
-   (value/(Number(DATA.rates.USD)||40))
-   .toFixed(2);
+   (value/rate).toFixed(2);
 
  }
 
  if(currency==="EUR"){
 
+  const rate=Number(DATA.rates.EUR)||47;
+
   return "€"+
-   (value/(Number(DATA.rates.EUR)||47))
-   .toFixed(2);
+   (value/rate).toFixed(2);
 
  }
 
@@ -1810,9 +2222,21 @@ function money(price){
 
 }
 
+function uid(prefix){
+
+ return prefix+
+  "-"+
+  Date.now()+
+  "-"+
+  Math.random()
+   .toString(36)
+   .slice(2,7);
+
+}
+
 /* =========================================================
    BACKGROUND
-   ========================================================= */
+========================================================= */
 
 function renderBackground(){
 
@@ -1869,7 +2293,7 @@ function renderBackground(){
 
 /* =========================================================
    HERO
-   ========================================================= */
+========================================================= */
 
 function renderHero(){
 
@@ -1881,7 +2305,7 @@ function renderHero(){
    ${
     DATA.logo
     ?
-    `<img src="${esc(DATA.logo)}">`
+    `<img src="${esc(DATA.logo)}" alt="Logo">`
     :
     "N"
    }
@@ -1903,7 +2327,10 @@ function renderHero(){
   ${
    DATA.settings.hours
    ?
-   `<div style="margin-top:8px;color:#666;font-size:10px">
+   `<div style="
+    margin-top:9px;
+    color:#666;
+    font-size:10px">
     ${esc(DATA.hours)}
    </div>`
    :""
@@ -1916,7 +2343,7 @@ function renderHero(){
 
 /* =========================================================
    FEATURED
-   ========================================================= */
+========================================================= */
 
 function renderFeatured(){
 
@@ -1961,7 +2388,11 @@ function renderFeatured(){
         playsinline
         src="${esc(item.video)}"></video>`
        :
-       `<img src="${esc(item.image)}">`
+       item.image
+       ?
+       `<img src="${esc(item.image)}" alt="">`
+       :
+       ""
       }
 
       <div class="featureShade"></div>
@@ -1969,7 +2400,7 @@ function renderFeatured(){
       <div class="featureText">
 
        <strong>
-        ${esc(item.name)}
+        ${esc(localizedName(item))}
        </strong>
 
        <span>
@@ -1992,7 +2423,7 @@ function renderFeatured(){
 
 /* =========================================================
    EVENTS
-   ========================================================= */
+========================================================= */
 
 function renderEvents(){
 
@@ -2033,7 +2464,7 @@ function renderEvents(){
         playsinline
         src="${esc(event.video)}"></video>`
        :
-       `<img src="${esc(event.image)}">`
+       `<img src="${esc(event.image)}" alt="">`
       }
 
       <div class="eventShade"></div>
@@ -2070,7 +2501,7 @@ function renderEvents(){
 
 /* =========================================================
    CATEGORIES
-   ========================================================= */
+========================================================= */
 
 function renderCategories(){
 
@@ -2085,47 +2516,55 @@ function renderCategories(){
 
   </div>
 
-  <div class="categories">
+  ${
+   DATA.categories.length
+   ?
+   `<div class="categories">
 
-   ${
-    (DATA.categories||[]).map(category=>`
+    ${
+     DATA.categories.map(category=>`
 
-     <button
-      class="category"
-      data-category="${esc(category.id)}">
+      <button
+       class="category"
+       data-category="${esc(category.id)}">
 
-      ${
-       category.image
-       ?
-       `<img src="${esc(category.image)}">`
-       :
-       `<div style="
-        width:100%;
-        height:100%;
-        background:#222">
-       </div>`
-      }
+       ${
+        category.image
+        ?
+        `<img src="${esc(category.image)}" alt="">`
+        :
+        `<div style="
+         width:100%;
+         height:100%;
+         background:#222">
+        </div>`
+       }
 
-      <div class="categoryShade"></div>
+       <div class="categoryShade"></div>
 
-      <div class="categoryText">
+       <div class="categoryText">
 
-       <strong>
-        ${esc(category.name)}
-       </strong>
+        <strong>
+         ${esc(category.name)}
+        </strong>
 
-       <span>
-        ${(category.items||[]).length} ürün
-       </span>
+        <span>
+         ${(category.items||[]).length} ürün
+        </span>
 
-      </div>
+       </div>
 
-     </button>
+      </button>
 
-    `).join("")
-   }
+     `).join("")
+    }
 
-  </div>
+   </div>`
+   :
+   `<div class="empty">
+    ${t("noCategories")}
+   </div>`
+  }
 
  </section>
  `;
@@ -2134,7 +2573,7 @@ function renderCategories(){
 
 /* =========================================================
    PRODUCT TAGS
-   ========================================================= */
+========================================================= */
 
 function renderTags(item){
 
@@ -2200,12 +2639,13 @@ function renderTags(item){
 
 /* =========================================================
    PRODUCT CARD
-   ========================================================= */
+========================================================= */
 
 function renderProductCard(item){
 
  return `
  <article
+  id="product-${esc(item.id)}"
   class="product"
   data-product="${esc(item.id)}">
 
@@ -2225,7 +2665,7 @@ function renderProductCard(item){
     ?
     `<img
      src="${esc(item.image)}"
-     alt="${esc(item.name)}">`
+     alt="${esc(localizedName(item))}">`
     :
     `<div style="
      width:100%;
@@ -2244,11 +2684,11 @@ function renderProductCard(item){
   <div class="productInfo">
 
    <h3>
-    ${esc(item.name)}
+    ${esc(localizedName(item))}
    </h3>
 
    <p>
-    ${esc(item.description)}
+    ${esc(localizedDescription(item))}
    </p>
 
    ${renderTags(item)}
@@ -2274,7 +2714,7 @@ function renderProductCard(item){
 
 /* =========================================================
    CATEGORY PAGE
-   ========================================================= */
+========================================================= */
 
 function renderCategoryPage(){
 
@@ -2300,27 +2740,33 @@ function renderCategoryPage(){
 
   </div>
 
-  <div class="stickyCategories">
+  ${
+   category.items?.length
+   ?
+   `<div class="stickyCategories">
 
-   <div class="categoryTabs">
+    <div class="categoryTabs">
 
-    ${
-     (category.items||[]).map((item,i)=>`
+     ${
+      category.items.map((item,i)=>`
 
-      <button
-       class="${i===0?"active":""}"
-       data-scroll-product="${esc(item.id)}">
+       <button
+        class="${i===0?"active":""}"
+        data-scroll-product="${esc(item.id)}">
 
-       ${esc(item.name)}
+        ${esc(localizedName(item))}
 
-      </button>
+       </button>
 
-     `).join("")
-    }
+      `).join("")
+     }
 
-   </div>
+    </div>
 
-  </div>
+   </div>`
+   :
+   ""
+  }
 
   <div class="products">
 
@@ -2330,7 +2776,7 @@ function renderCategoryPage(){
     category.items.map(renderProductCard).join("")
     :
     `<div class="empty">
-     Bu kategoride ürün bulunmuyor.
+     ${t("noProducts")}
     </div>`
    }
 
@@ -2343,7 +2789,7 @@ function renderCategoryPage(){
 
 /* =========================================================
    SEARCH
-   ========================================================= */
+========================================================= */
 
 function renderSearch(){
 
@@ -2351,15 +2797,21 @@ function renderSearch(){
   .toLocaleLowerCase("tr");
 
  const products=allProducts()
-  .filter(item=>
-   (
-    item.name+" "+
-    item.description+" "+
+  .filter(item=>{
+
+   const text=[
+    item.name,
+    localizedName(item),
+    item.description,
+    localizedDescription(item),
     item.categoryName
-   )
-   .toLocaleLowerCase("tr")
-   .includes(query)
-  );
+   ].join(" ");
+
+   return text
+    .toLocaleLowerCase("tr")
+    .includes(query);
+
+  });
 
  return `
  <section class="section">
@@ -2397,7 +2849,7 @@ function renderHome(){
 
 /* =========================================================
    CURRENCY POPUP
-   ========================================================= */
+========================================================= */
 
 function renderCurrencyPopup(){
 
@@ -2411,7 +2863,7 @@ function renderCurrencyPopup(){
    class="${currency==="TRY"?"active":""}"
    data-currency="TRY">
 
-   <span>🇹🇷 Türk Lirası</span>
+   <span>🇹🇷 ${t("try")}</span>
    <span>₺</span>
 
   </button>
@@ -2420,7 +2872,7 @@ function renderCurrencyPopup(){
    class="${currency==="USD"?"active":""}"
    data-currency="USD">
 
-   <span>🇺🇸 Dolar</span>
+   <span>🇺🇸 ${t("usd")}</span>
    <span>$</span>
 
   </button>
@@ -2429,7 +2881,7 @@ function renderCurrencyPopup(){
    class="${currency==="EUR"?"active":""}"
    data-currency="EUR">
 
-   <span>🇪🇺 Euro</span>
+   <span>🇪🇺 ${t("eur")}</span>
    <span>€</span>
 
   </button>
@@ -2441,7 +2893,7 @@ function renderCurrencyPopup(){
 
 /* =========================================================
    LANGUAGE POPUP
-   ========================================================= */
+========================================================= */
 
 function renderLanguagePopup(){
 
@@ -2449,7 +2901,7 @@ function renderLanguagePopup(){
   return "";
 
  return `
- <div class="quickPopup">
+ <div class="quickPopup" style="width:170px">
 
   <button
    class="${language==="tr"?"active":""}"
@@ -2485,7 +2937,7 @@ function renderLanguagePopup(){
 
 /* =========================================================
    DRAWER
-   ========================================================= */
+========================================================= */
 
 function renderDrawer(){
 
@@ -2538,7 +2990,7 @@ function renderDrawer(){
      `<a
       class="drawerLink"
       href="tel:${esc(DATA.phone)}">
-      Telefon
+      ${t("call")}
      </a>`
      :
      ""
@@ -2565,7 +3017,7 @@ function renderDrawer(){
 
 /* =========================================================
    PRODUCT MODAL
-   ========================================================= */
+========================================================= */
 
 function renderProductModal(){
 
@@ -2593,9 +3045,13 @@ function renderProductModal(){
       playsinline
       src="${esc(item.video)}"></video>`
      :
+     item.image
+     ?
      `<img
       src="${esc(item.image)}"
-      alt="${esc(item.name)}">`
+      alt="${esc(localizedName(item))}">`
+     :
+     ""
     }
 
     <button
@@ -2609,7 +3065,7 @@ function renderProductModal(){
    <div class="modalBody">
 
     <h2>
-     ${esc(item.name)}
+     ${esc(localizedName(item))}
     </h2>
 
     ${
@@ -2629,7 +3085,7 @@ function renderProductModal(){
     }
 
     <p>
-     ${esc(item.description)}
+     ${esc(localizedDescription(item))}
     </p>
 
     ${
@@ -2703,7 +3159,7 @@ function renderProductModal(){
 
 /* =========================================================
    EVENT MODAL
-   ========================================================= */
+========================================================= */
 
 function renderEventModal(){
 
@@ -2713,14 +3169,18 @@ function renderEventModal(){
  const event=selectedEvent;
 
  const whatsapp=
+  DATA.whatsapp
+  ?
   "https://wa.me/"+
-  DATA.whatsapp+
-  "?text="+
-  encodeURIComponent(
-   "Merhaba, "+
-   event.name+
-   " için rezervasyon yapmak istiyorum."
-  );
+   DATA.whatsapp+
+   "?text="+
+   encodeURIComponent(
+    "Merhaba, "+
+    event.name+
+    " için rezervasyon yapmak istiyorum."
+   )
+  :
+  "";
 
  return `
  <div
@@ -2742,7 +3202,8 @@ function renderEventModal(){
       src="${esc(event.video)}"></video>`
      :
      `<img
-      src="${esc(event.image)}">`
+      src="${esc(event.image)}"
+      alt="">`
     }
 
     <button
@@ -2770,7 +3231,7 @@ function renderEventModal(){
     </p>
 
     ${
-     DATA.whatsapp
+     whatsapp
      ?
      `<a
       class="adminButton gold"
@@ -2795,8 +3256,8 @@ function renderEventModal(){
 }
 
 /* =========================================================
-   ADMIN HELPERS
-   ========================================================= */
+   ADMIN INPUT HELPERS
+========================================================= */
 
 function input(key,label,value,type="text"){
 
@@ -2808,7 +3269,7 @@ function input(key,label,value,type="text"){
   <input
    type="${type}"
    data-admin="${esc(key)}"
-   value="${esc(value)}">
+   value="${esc(value??"")}">
 
  </div>
  `;
@@ -2823,7 +3284,7 @@ function textarea(key,label,value){
   <label>${label}</label>
 
   <textarea
-   data-admin="${esc(key)}">${esc(value)}</textarea>
+   data-admin="${esc(key)}">${esc(value??"")}</textarea>
 
  </div>
  `;
@@ -2838,6 +3299,11 @@ function fileField(
  accept
 ){
 
+ const isVideo=
+  type==="productVideo"||
+  type==="eventVideo"||
+  type==="backgroundVideo";
+
  return `
  <div class="field">
 
@@ -2847,7 +3313,7 @@ function fileField(
 
    <label class="fileBtn">
 
-    📁 Dosya Seç
+    📁 ${t("image")} ${isVideo?" / "+t("video"):""}
 
     <input
      hidden
@@ -2876,9 +3342,7 @@ function fileField(
   ${
    value
    ?
-   type.includes("Video")||
-   type==="productVideo"||
-   type==="eventVideo"
+   isVideo
    ?
    `<video
     class="preview"
@@ -2887,9 +3351,10 @@ function fileField(
    :
    `<img
     class="preview"
-    src="${esc(value)}">`
+    src="${esc(value)}"
+    alt="">`
    :
-   `<div class="small">
+   `<div class="help">
     Henüz dosya seçilmedi.
    </div>`
   }
@@ -2901,62 +3366,77 @@ function fileField(
 
 /* =========================================================
    ADMIN GENERAL
-   ========================================================= */
+========================================================= */
 
 function renderAdminGeneral(){
 
  return `
 
- <h3>İşletme Bilgileri</h3>
+ <div class="adminCard">
 
- ${input(
-  "businessName",
-  "İşletme adı",
-  DATA.name
- )}
+  <div class="adminCardTitle">
+   İşletme Bilgileri
+  </div>
 
- ${input(
-  "subtitle",
-  "Alt başlık",
-  DATA.subtitle
- )}
+  <div class="small">
+   Menüde görünen temel işletme bilgilerini buradan değiştir.
+  </div>
 
- ${input(
-  "phone",
-  "Telefon",
-  DATA.phone
- )}
+  <div style="margin-top:15px">
 
- ${input(
-  "whatsapp",
-  "WhatsApp numarası",
-  DATA.whatsapp
- )}
+   ${input(
+    "businessName",
+    "İşletme adı",
+    DATA.name
+   )}
 
- ${input(
-  "hours",
-  "Çalışma saatleri",
-  DATA.hours
- )}
+   ${input(
+    "subtitle",
+    "Alt başlık",
+    DATA.subtitle
+   )}
 
- ${fileField(
-  "logo",
-  "logo",
-  "Logo",
-  DATA.logo,
-  "image/*"
- )}
+   ${input(
+    "phone",
+    "Telefon",
+    DATA.phone
+   )}
+
+   ${input(
+    "whatsapp",
+    "WhatsApp numarası",
+    DATA.whatsapp
+   )}
+
+   ${input(
+    "hours",
+    "Çalışma saatleri",
+    DATA.hours
+   )}
+
+   ${fileField(
+    "logo",
+    "logo",
+    "Logo",
+    DATA.logo,
+    "image/*"
+   )}
+
+  </div>
+
+ </div>
 
  <div class="adminCard">
 
-  <b>💱 Para Birimi Kurları</b>
+  <div class="adminCardTitle">
+   💱 Para Birimi ve Kur
+  </div>
 
-  <p class="small">
-   Buradaki kurları kendin ayarlayabilirsin.
-   Örneğin 1 USD = 40 TL.
-  </p>
+  <div class="small">
+   Kur tamamen senin kontrolünde. Örneğin 1 USD = 40 TL.
+  </div>
 
-  <div class="row">
+  <div style="margin-top:14px">
 
    ${input(
     "rateUSD",
@@ -2978,14 +3458,26 @@ function renderAdminGeneral(){
 
  <div class="adminCard">
 
-  <b>📅 Etkinlikler</b>
+  <div class="adminCardTitle">
+   ✨ Etkinlikler
+  </div>
+
+  <div class="small">
+   Etkinlik ekleyebilir, fotoğraf/video değiştirebilir veya silebilirsin.
+  </div>
+
+  <div style="margin-top:14px">
 
   ${
-   (DATA.events||[]).map(event=>`
+   DATA.events.length
+   ?
+   DATA.events.map(event=>`
 
     <div
      class="adminCard"
-     style="margin-top:10px">
+     style="
+      margin:0 0 10px;
+      background:#101011">
 
      ${input(
       "eventName-"+event.id,
@@ -3034,17 +3526,24 @@ function renderAdminGeneral(){
      <button
       class="adminButton danger"
       data-delete-event="${esc(event.id)}">
-      Etkinliği Sil
+      ${t("delete")}
      </button>
 
     </div>
 
    `).join("")
+   :
+   `<div class="empty">
+    Henüz etkinlik yok.
+   </div>`
   }
+
+  </div>
 
   <button
    class="adminButton gold"
-   id="addEvent">
+   id="addEvent"
+   style="width:100%">
    + Etkinlik Ekle
   </button>
 
@@ -3056,29 +3555,39 @@ function renderAdminGeneral(){
 
 /* =========================================================
    ADMIN MENU
-   ========================================================= */
+========================================================= */
 
 function renderAdminCategories(){
 
  return `
 
- <h3>Menü</h3>
+ <div class="adminCard">
 
- <p class="small">
-  Kategoriye gir. Daha sonra ürünleri çok daha basit
-  şekilde ekleyebilir veya silebilirsin.
- </p>
+  <div class="adminCardTitle">
+   🍽️ Menü
+  </div>
 
- <button
-  class="adminButton gold"
-  id="addCategory">
-  + Kategori Ekle
- </button>
+  <div class="small">
+   Önce kategoriye gir. Sonra ürünleri tek tek ekleyebilirsin.
+  </div>
+
+  <button
+   class="adminButton gold"
+   id="addCategory"
+   style="
+    width:100%;
+    margin-top:13px">
+   ${t("addCategory")}
+  </button>
+
+ </div>
 
  <div class="adminCategoryList">
 
  ${
-  (DATA.categories||[]).map(category=>`
+  DATA.categories.length
+  ?
+  DATA.categories.map(category=>`
 
    <button
     class="adminCategoryItem"
@@ -3089,7 +3598,7 @@ function renderAdminCategories(){
      ${
       category.image
       ?
-      `<img src="${esc(category.image)}">`
+      `<img src="${esc(category.image)}" alt="">`
       :
       `<div style="
        width:100%;
@@ -3123,6 +3632,10 @@ function renderAdminCategories(){
    </button>
 
   `).join("")
+  :
+  `<div class="empty">
+   ${t("noCategories")}
+  </div>`
  }
 
  </div>
@@ -3133,7 +3646,7 @@ function renderAdminCategories(){
 
 /* =========================================================
    ADMIN CATEGORY
-   ========================================================= */
+========================================================= */
 
 function renderAdminCategory(){
 
@@ -3167,11 +3680,13 @@ function renderAdminCategory(){
 
  <div class="adminCard">
 
-  <b>Kategori</b>
+  <div class="adminCardTitle">
+   Kategori Ayarları
+  </div>
 
   ${input(
    "categoryName-"+category.id,
-   "Kategori adı",
+   t("categoryName"),
    category.name
   )}
 
@@ -3185,34 +3700,37 @@ function renderAdminCategory(){
 
   <button
    class="adminButton danger"
-   data-delete-category="${esc(category.id)}">
+   data-delete-category="${esc(category.id)}"
+   style="width:100%">
    Kategoriyi Sil
   </button>
 
  </div>
 
- <div
-  style="
+ <div class="adminCard">
+
+  <div style="
    display:flex;
    align-items:center;
    justify-content:space-between;
-   margin:18px 0 10px">
+   gap:10px">
 
-  <div>
-
-   <b>Ürünler</b>
-
-   <div class="small">
-    ${(category.items||[]).length} ürün
+   <div>
+    <div class="adminCardTitle">
+     Ürünler
+    </div>
+    <div class="small">
+     ${(category.items||[]).length} ürün
+    </div>
    </div>
 
-  </div>
+   <button
+    class="adminButton gold"
+    data-add-product="${esc(category.id)}">
+    ${t("addProduct")}
+   </button>
 
-  <button
-   class="adminButton gold"
-   data-add-product="${esc(category.id)}">
-   + Ürün Ekle
-  </button>
+  </div>
 
  </div>
 
@@ -3232,7 +3750,7 @@ function renderAdminCategory(){
      ${
       item.image
       ?
-      `<img src="${esc(item.image)}">`
+      `<img src="${esc(item.image)}" alt="">`
       :
       `<div style="
        width:100%;
@@ -3250,7 +3768,7 @@ function renderAdminCategory(){
     <div class="adminProductInfo">
 
      <strong>
-      ${esc(item.name)}
+      ${esc(localizedName(item))}
      </strong>
 
      <span>
@@ -3268,7 +3786,7 @@ function renderAdminCategory(){
   `).join("")
   :
   `<div class="empty">
-   Henüz ürün yok.
+   ${t("noProducts")}
   </div>`
  }
 
@@ -3279,8 +3797,8 @@ function renderAdminCategory(){
 }
 
 /* =========================================================
-   ADMIN PRODUCT - SIMPLE
-   ========================================================= */
+   ADMIN PRODUCT
+========================================================= */
 
 function renderAdminProduct(){
 
@@ -3319,60 +3837,76 @@ function renderAdminProduct(){
 
   <span>›</span>
 
-  <strong>Ürün</strong>
+  <strong>
+   ${item.name==="Yeni Ürün"?"Yeni Ürün":"Ürün"}
+  </strong>
+
+ </div>
+
+ <div class="simpleProductHero">
+
+  <strong>
+   ${item.name==="Yeni Ürün"
+    ?"Yeni Ürün Oluştur"
+    :"Ürün Düzenle"}
+  </strong>
+
+  <span>
+   Temel bilgileri doldurup kaydetmen yeterli.
+  </span>
 
  </div>
 
  <div class="adminCard">
 
-  <h3 style="margin-top:0">
-   ${item.name==="Yeni Ürün"
-    ?"Yeni Ürün"
-    :"Ürünü Düzenle"}
-  </h3>
+  <div class="adminCardTitle">
+   ${t("basic")}
+  </div>
 
-  <p class="small">
-   Sadece temel bilgileri girmen yeterli.
-   Diğer seçenekler "Ek Bilgiler" bölümünde.
-  </p>
+  <div style="margin-top:14px">
 
-  ${input(
-   "productName-"+item.id,
-   "Ürün adı",
-   item.name
-  )}
+   ${input(
+    "productName-"+item.id,
+    t("productName"),
+    item.name
+   )}
 
-  ${input(
-   "productPrice-"+item.id,
-   "Fiyat (TL)",
-   item.price,
-   "number"
-  )}
+   ${input(
+    "productPrice-"+item.id,
+    t("productPrice"),
+    item.price,
+    "number"
+   )}
 
-  ${textarea(
-   "productDescription-"+item.id,
-   "Açıklama",
-   item.description
-  )}
+   ${textarea(
+    "productDescription-"+item.id,
+    t("description"),
+    item.description
+   )}
 
-  ${fileField(
-   "productImage",
-   item.id,
-   "Ürün fotoğrafı",
-   item.image,
-   "image/*"
-  )}
+   ${fileField(
+    "productImage",
+    item.id,
+    t("photo"),
+    item.image,
+    "image/*"
+   )}
+
+  </div>
+
+ </div>
+
+ <div class="adminCard">
 
   <button
-   class="adminButton"
-   style="width:100%;margin-bottom:10px"
+   class="advancedButton"
    data-toggle-advanced="product">
 
    ⚙
    ${
     advancedProduct
-    ?"Ek Bilgileri Gizle"
-    :"Ek Bilgiler"
+    ? t("hideAdvanced")
+    : t("advanced")
    }
 
   </button>
@@ -3380,29 +3914,29 @@ function renderAdminProduct(){
   ${
    advancedProduct
    ?
-   `<div class="advancedBox">
+   `<div style="margin-top:15px">
 
     ${input(
      "productPortion-"+item.id,
-     "Gramaj / Porsiyon",
+     t("portion"),
      item.portion||""
     )}
 
     ${input(
      "productCalories-"+item.id,
-     "Kalori",
+     t("calories"),
      item.calories||""
     )}
 
     ${input(
      "productAllergens-"+item.id,
-     "Alerjenler (virgülle ayır)",
+     t("allergens")+" (virgülle ayır)",
      (item.allergens||[]).join(", ")
     )}
 
     ${input(
      "productSpicy-"+item.id,
-     "Acılık (0-5)",
+     t("spicy")+" (0-5)",
      item.spicy||0,
      "number"
     )}
@@ -3444,27 +3978,25 @@ function renderAdminProduct(){
    ""
   }
 
-  <div style="margin-top:15px">
+ </div>
 
-   <button
-    class="adminButton gold"
-    id="saveProductNow"
-    style="
-     width:100%;
-     padding:14px">
-    ✓ Ürünü Kaydet
-   </button>
+ <div class="adminCard">
 
-   <button
-    class="adminButton danger"
-    data-delete-product="${esc(category.id)}|${esc(item.id)}"
-    style="
-     width:100%;
-     margin-top:8px">
-    Ürünü Sil
-   </button>
+  <button
+   class="adminButton gold"
+   id="saveProductNow"
+   style="width:100%;padding:14px">
+   ✓ ${t("saveProduct")}
+  </button>
 
-  </div>
+  <button
+   class="adminButton danger"
+   data-delete-product="${esc(category.id)}|${esc(item.id)}"
+   style="
+    width:100%;
+    margin-top:8px">
+   ${t("delete")} • Ürünü Sil
+  </button>
 
  </div>
 
@@ -3474,7 +4006,7 @@ function renderAdminProduct(){
 
 /* =========================================================
    ADMIN DESIGN
-   ========================================================= */
+========================================================= */
 
 function renderAdminDesign(){
 
@@ -3489,91 +4021,80 @@ function renderAdminDesign(){
   ["Courier New","Courier New"]
  ];
 
+ const fontValue=
+  th.fontFamily||
+  "system";
+
+ const titleFontValue=
+  th.titleFont||
+  "Georgia";
+
  return `
-
- <h3>🎨 Tasarım</h3>
-
- <p class="small">
-  Sitenin renklerini, yazılarını, boyutlarını,
-  logosunu ve kart görünümünü kendin ayarla.
- </p>
 
  <div class="adminCard">
 
-  <b>Renkler</b>
+  <div class="adminCardTitle">
+   🎨 ${t("colors")}
+  </div>
 
-  <div class="designGrid" style="margin-top:10px">
+  <div class="small">
+   Sitenin bütün ana renklerini ayrı ayrı ayarlayabilirsin.
+  </div>
+
+  <div class="designGrid" style="margin-top:13px">
 
    <div class="designCard">
-
     <h4>Ana renk</h4>
-
     <input
      class="colorInput"
      type="color"
      data-color-setting="accent"
      value="${esc(th.accent)}">
-
    </div>
 
    <div class="designCard">
-
     <h4>Vurgu rengi</h4>
-
     <input
      class="colorInput"
      type="color"
      data-color-setting="accent2"
      value="${esc(th.accent2)}">
-
    </div>
 
    <div class="designCard">
-
     <h4>Genel yazı</h4>
-
     <input
      class="colorInput"
      type="color"
      data-color-setting="text"
      value="${esc(th.text||"#ffffff")}">
-
    </div>
 
    <div class="designCard">
-
     <h4>Ürün yazısı</h4>
-
     <input
      class="colorInput"
      type="color"
      data-color-setting="cardText"
      value="${esc(th.cardText||"#ffffff")}">
-
    </div>
 
    <div class="designCard">
-
-    <h4>Fiyat rengi</h4>
-
+    <h4>Fiyat</h4>
     <input
      class="colorInput"
      type="color"
      data-color-setting="price"
      value="${esc(th.price||th.accent2)}">
-
    </div>
 
    <div class="designCard">
-
-    <h4>Arka plan rengi</h4>
-
+    <h4>Arka plan</h4>
     <input
      class="colorInput"
      type="color"
      data-color-setting="background"
      value="${esc(DATA.background.value||"#0b0b0c")}">
-
    </div>
 
   </div>
@@ -3582,9 +4103,11 @@ function renderAdminDesign(){
 
  <div class="adminCard">
 
-  <b>Hazır Renkler</b>
+  <div class="adminCardTitle">
+   Hazır Renkler
+  </div>
 
-  <div class="presetRow" style="margin-top:10px">
+  <div class="presetRow" style="margin-top:12px">
 
    ${
     [
@@ -3595,7 +4118,9 @@ function renderAdminDesign(){
      "#43a047",
      "#9c6ade",
      "#00a99d",
-     "#f1f1f1"
+     "#f1f1f1",
+     "#e85d04",
+     "#ef476f"
     ].map(c=>`
 
      <button
@@ -3615,13 +4140,13 @@ function renderAdminDesign(){
 
  <div class="adminCard">
 
-  <b>🔤 Fontlar</b>
+  <div class="adminCardTitle">
+   🔤 ${t("font")}
+  </div>
 
-  <div class="field" style="margin-top:12px">
+  <div class="field" style="margin-top:13px">
 
-   <label>
-    Genel font
-   </label>
+   <label>Genel font</label>
 
    <select data-admin="fontFamily">
 
@@ -3631,7 +4156,7 @@ function renderAdminDesign(){
       <option
        value="${esc(f[0])}"
        ${
-        th.fontFamily===f[0]
+        fontValue===f[0]
         ?"selected"
         :""
        }>
@@ -3647,9 +4172,7 @@ function renderAdminDesign(){
 
   <div class="field">
 
-   <label>
-    Başlık fontu
-   </label>
+   <label>Başlık fontu</label>
 
    <select data-admin="titleFont">
 
@@ -3659,7 +4182,7 @@ function renderAdminDesign(){
       <option
        value="${esc(f[0])}"
        ${
-        th.titleFont===f[0]
+        titleFontValue===f[0]
         ?"selected"
         :""
        }>
@@ -3677,9 +4200,11 @@ function renderAdminDesign(){
 
  <div class="adminCard">
 
-  <b>📐 Boyutlar</b>
+  <div class="adminCardTitle">
+   📐 ${t("sizes")}
+  </div>
 
-  <div class="designGrid" style="margin-top:10px">
+  <div class="designGrid" style="margin-top:13px">
 
    <div class="designCard">
 
@@ -3783,17 +4308,13 @@ function renderAdminDesign(){
       type="range"
       min="55"
       max="100"
-      value="${Math.round(
-       (th.cardOpacity??.94)*100
-      )}"
+      value="${Math.round((th.cardOpacity??.94)*100)}"
       data-design="cardOpacity">
 
      <span
       class="rangeValue"
       id="cardOpacityValue">
-      ${Math.round(
-       (th.cardOpacity??.94)*100
-      )}%
+      ${Math.round((th.cardOpacity??.94)*100)}%
      </span>
 
     </div>
@@ -3810,17 +4331,13 @@ function renderAdminDesign(){
       type="range"
       min="0"
       max="90"
-      value="${Math.round(
-       (th.overlay??.55)*100
-      )}"
+      value="${Math.round((th.overlay??.55)*100)}"
       data-design="overlay">
 
      <span
       class="rangeValue"
       id="overlayValue">
-      ${Math.round(
-       (th.overlay??.55)*100
-      )}%
+      ${Math.round((th.overlay??.55)*100)}%
      </span>
 
     </div>
@@ -3833,20 +4350,19 @@ function renderAdminDesign(){
 
  <div class="adminCard">
 
-  <b>🖼️ Arka Plan</b>
+  <div class="adminCardTitle">
+   🖼️ ${t("background")}
+  </div>
 
-  <div
-   style="
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:7px;
-    margin-top:10px">
+  <div style="
+   display:grid;
+   grid-template-columns:repeat(3,1fr);
+   gap:7px;
+   margin-top:13px">
 
    <button
     class="adminButton ${
-     DATA.background.type==="color"
-     ?"gold"
-     :""
+     DATA.background.type==="color"?"gold":""
     }"
     data-background="color">
     Renk
@@ -3854,9 +4370,7 @@ function renderAdminDesign(){
 
    <button
     class="adminButton ${
-     DATA.background.type==="image"
-     ?"gold"
-     :""
+     DATA.background.type==="image"?"gold":""
     }"
     data-background="image">
     Fotoğraf
@@ -3864,9 +4378,7 @@ function renderAdminDesign(){
 
    <button
     class="adminButton ${
-     DATA.background.type==="video"
-     ?"gold"
-     :""
+     DATA.background.type==="video"?"gold":""
     }"
     data-background="video">
     Video
@@ -3906,7 +4418,9 @@ function renderAdminDesign(){
 
  <div class="adminCard">
 
-  <b>👁️ Görünürlük</b>
+  <div class="adminCardTitle">
+   👁️ ${t("visibility")}
+  </div>
 
   ${
    [
@@ -3944,7 +4458,7 @@ function renderAdminDesign(){
 
 /* =========================================================
    ADMIN
-   ========================================================= */
+========================================================= */
 
 function renderAdmin(){
 
@@ -3980,7 +4494,22 @@ function renderAdmin(){
 
     <div class="adminTop">
 
-     <b>${t("admin")}</b>
+     <div class="adminTitle">
+
+      <div class="adminTitleIcon">
+       N
+      </div>
+
+      <div>
+       <b>${t("admin")}</b>
+
+       <div class="small">
+        NearMenu Premium
+       </div>
+
+      </div>
+
+     </div>
 
      <button
       class="iconBtn"
@@ -4015,9 +4544,7 @@ function renderAdmin(){
    </div>
 
    <div class="adminBody">
-
     ${body}
-
    </div>
 
    <div class="saveBar">
@@ -4040,7 +4567,7 @@ function renderAdmin(){
 
 /* =========================================================
    LOGIN
-   ========================================================= */
+========================================================= */
 
 function renderAdminLogin(){
 
@@ -4059,7 +4586,7 @@ function renderAdminLogin(){
    </div>
 
    <h2>
-    Yönetim Paneli
+    ${t("admin")}
    </h2>
 
    <p>
@@ -4095,7 +4622,7 @@ function renderAdminLogin(){
 
 /* =========================================================
    COLLECT ADMIN
-   ========================================================= */
+========================================================= */
 
 function collectAdmin(){
 
@@ -4130,28 +4657,17 @@ function collectAdmin(){
     Number(value)||0;
 
   else if(key==="fontFamily")
-   DATA.theme.fontFamily=
-    value==="system"
-    ?
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif'
-    :
-    value;
+   DATA.theme.fontFamily=value;
 
   else if(key==="titleFont")
-   DATA.theme.titleFont=
-    value==="system"
-    ?
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif'
-    :
-    value;
+   DATA.theme.titleFont=value;
 
   else if(key.startsWith("categoryName-")){
 
    const id=
     key.replace("categoryName-","");
 
-   const category=
-    findCategory(id);
+   const category=findCategory(id);
 
    if(category)
     category.name=value;
@@ -4163,8 +4679,7 @@ function collectAdmin(){
    const id=
     key.replace("productName-","");
 
-   const item=
-    findProduct(id);
+   const item=findProduct(id);
 
    if(item)
     item.name=value;
@@ -4174,10 +4689,7 @@ function collectAdmin(){
   else if(key.startsWith("productDescription-")){
 
    const id=
-    key.replace(
-     "productDescription-",
-     ""
-    );
+    key.replace("productDescription-","");
 
    const item=findProduct(id);
 
@@ -4189,26 +4701,19 @@ function collectAdmin(){
   else if(key.startsWith("productPrice-")){
 
    const id=
-    key.replace(
-     "productPrice-",
-     ""
-    );
+    key.replace("productPrice-","");
 
    const item=findProduct(id);
 
    if(item)
-    item.price=
-     Number(value)||0;
+    item.price=Number(value)||0;
 
   }
 
   else if(key.startsWith("productPortion-")){
 
    const id=
-    key.replace(
-     "productPortion-",
-     ""
-    );
+    key.replace("productPortion-","");
 
    const item=findProduct(id);
 
@@ -4220,10 +4725,7 @@ function collectAdmin(){
   else if(key.startsWith("productCalories-")){
 
    const id=
-    key.replace(
-     "productCalories-",
-     ""
-    );
+    key.replace("productCalories-","");
 
    const item=findProduct(id);
 
@@ -4235,10 +4737,7 @@ function collectAdmin(){
   else if(key.startsWith("productAllergens-")){
 
    const id=
-    key.replace(
-     "productAllergens-",
-     ""
-    );
+    key.replace("productAllergens-","");
 
    const item=findProduct(id);
 
@@ -4257,10 +4756,7 @@ function collectAdmin(){
   else if(key.startsWith("productSpicy-")){
 
    const id=
-    key.replace(
-     "productSpicy-",
-     ""
-    );
+    key.replace("productSpicy-","");
 
    const item=findProduct(id);
 
@@ -4281,10 +4777,7 @@ function collectAdmin(){
   else if(key.startsWith("eventName-")){
 
    const id=
-    key.replace(
-     "eventName-",
-     ""
-    );
+    key.replace("eventName-","");
 
    const event=findEvent(id);
 
@@ -4296,10 +4789,7 @@ function collectAdmin(){
   else if(key.startsWith("eventDate-")){
 
    const id=
-    key.replace(
-     "eventDate-",
-     ""
-    );
+    key.replace("eventDate-","");
 
    const event=findEvent(id);
 
@@ -4311,10 +4801,7 @@ function collectAdmin(){
   else if(key.startsWith("eventTime-")){
 
    const id=
-    key.replace(
-     "eventTime-",
-     ""
-    );
+    key.replace("eventTime-","");
 
    const event=findEvent(id);
 
@@ -4326,10 +4813,7 @@ function collectAdmin(){
   else if(key.startsWith("eventDescription-")){
 
    const id=
-    key.replace(
-     "eventDescription-",
-     ""
-    );
+    key.replace("eventDescription-","");
 
    const event=findEvent(id);
 
@@ -4343,8 +4827,8 @@ function collectAdmin(){
 }
 
 /* =========================================================
-   FILE
-   ========================================================= */
+   FILE HANDLING
+========================================================= */
 
 function readFileAsDataURL(file,callback){
 
@@ -4354,6 +4838,10 @@ function readFileAsDataURL(file,callback){
   callback(reader.result);
  };
 
+ reader.onerror=()=>{
+  alert("Dosya okunamadı.");
+ };
+
  reader.readAsDataURL(file);
 
 }
@@ -4361,6 +4849,38 @@ function readFileAsDataURL(file,callback){
 function handleFile(type,id,file){
 
  if(!file)return;
+
+ const maxImage=8*1024*1024;
+ const maxVideo=20*1024*1024;
+
+ const isVideo=
+  file.type.startsWith("video/");
+
+ if(
+  isVideo &&
+  file.size>maxVideo
+ ){
+
+  alert(
+   "Video en fazla 20 MB olabilir."
+  );
+
+  return;
+
+ }
+
+ if(
+  !isVideo &&
+  file.size>maxImage
+ ){
+
+  alert(
+   "Fotoğraf en fazla 8 MB olabilir."
+  );
+
+  return;
+
+ }
 
  readFileAsDataURL(
   file,
@@ -4437,8 +4957,97 @@ function handleFile(type,id,file){
 }
 
 /* =========================================================
+   LIVE CSS
+========================================================= */
+
+function applyTheme(){
+
+ const th=DATA.theme;
+
+ const root=document.documentElement;
+
+ root.style.setProperty(
+  "--accent",
+  th.accent||"#d6a83d"
+ );
+
+ root.style.setProperty(
+  "--accent2",
+  th.accent2||"#f0c45a"
+ );
+
+ root.style.setProperty(
+  "--text",
+  th.text||"#fff"
+ );
+
+ root.style.setProperty(
+  "--cardText",
+  th.cardText||"#fff"
+ );
+
+ root.style.setProperty(
+  "--price",
+  th.price||th.accent2||"#f0c45a"
+ );
+
+ root.style.setProperty(
+  "--overlay",
+  th.overlay??.55
+ );
+
+ root.style.setProperty(
+  "--cardOpacity",
+  th.cardOpacity??.94
+ );
+
+ root.style.setProperty(
+  "--cardRadius",
+  (th.cardRadius||20)+"px"
+ );
+
+ root.style.setProperty(
+  "--titleSize",
+  (th.titleSize||34)+"px"
+ );
+
+ root.style.setProperty(
+  "--bodySize",
+  (th.bodySize||13)+"px"
+ );
+
+ root.style.setProperty(
+  "--logoSize",
+  (th.logoSize||112)+"px"
+ );
+
+ root.style.setProperty(
+  "--fontFamily",
+  resolveFont(th.fontFamily)
+ );
+
+ root.style.setProperty(
+  "--titleFont",
+  resolveFont(th.titleFont||"Georgia")
+ );
+
+}
+
+function resolveFont(font){
+
+ if(font==="system"||!font){
+
+  return '-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif';
+
+ }
+
+ return font;
+
+}
+
+/* =========================================================
    MAIN RENDER
-   ========================================================= */
+========================================================= */
 
 function render(){
 
@@ -4449,86 +5058,7 @@ function render(){
   :
   "ltr";
 
- const th=DATA.theme;
-
- document.documentElement.style
-  .setProperty(
-   "--accent",
-   th.accent||"#d6a83d"
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--accent2",
-   th.accent2||"#f0c45a"
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--text",
-   th.text||"#fff"
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--cardText",
-   th.cardText||"#fff"
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--price",
-   th.price||th.accent2||"#f0c45a"
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--overlay",
-   th.overlay??.55
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--cardOpacity",
-   th.cardOpacity??.94
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--cardRadius",
-   (th.cardRadius||20)+"px"
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--titleSize",
-   (th.titleSize||34)+"px"
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--bodySize",
-   (th.bodySize||13)+"px"
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--logoSize",
-   (th.logoSize||112)+"px"
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--fontFamily",
-   th.fontFamily||
-   '-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif'
-  );
-
- document.documentElement.style
-  .setProperty(
-   "--titleFont",
-   th.titleFont||"Georgia,serif"
-  );
+ applyTheme();
 
  let content="";
 
@@ -4553,7 +5083,8 @@ function render(){
 
      <button
       class="iconBtn"
-      id="openDrawer">
+      id="openDrawer"
+      aria-label="Menü">
       ☰
      </button>
 
@@ -4564,7 +5095,8 @@ function render(){
        ?
        `<button
         class="iconBtn"
-        id="searchButton">
+        id="searchButton"
+        aria-label="Ara">
         ⌕
        </button>`
        :
@@ -4589,9 +5121,10 @@ function render(){
       ${renderCurrencyPopup()}
 
       <button
-       class="iconBtn"
+       class="iconBtn languageBtn"
        id="languageButton"
-       title="Dil">
+       title="${t("language")}">
+
        ${
         language==="tr"
         ?"TR"
@@ -4600,6 +5133,7 @@ function render(){
         ?"EN"
         :"AR"
        }
+
       </button>
 
       ${renderLanguagePopup()}
@@ -4649,9 +5183,41 @@ function render(){
 
 /* =========================================================
    EVENTS
-   ========================================================= */
+========================================================= */
 
 function bindEvents(){
+
+ /* CLOSE POPUPS WHEN CLICKING OUTSIDE */
+
+ document.addEventListener(
+  "click",
+  closePopupsOutside,
+  {once:true}
+ );
+
+ function closePopupsOutside(e){
+
+  if(
+   !e.target.closest("#currencyButton") &&
+   !e.target.closest("[data-currency]") &&
+   !e.target.closest("#languageButton") &&
+   !e.target.closest("[data-language]")
+  ){
+
+   if(currencyMenu||languageMenu){
+
+    currencyMenu=false;
+    languageMenu=false;
+
+    render();
+
+    return;
+
+   }
+
+  }
+
+ }
 
  /* DRAWER */
 
@@ -4708,7 +5274,7 @@ function bindEvents(){
    currency=
     button.dataset.currency;
 
-   localStorage.setItem(
+   safeSet(
     "nearMenuCurrency",
     currency
    );
@@ -4748,7 +5314,7 @@ function bindEvents(){
    language=
     button.dataset.language;
 
-   localStorage.setItem(
+   safeSet(
     "nearMenuLanguage",
     language
    );
@@ -4767,7 +5333,10 @@ function bindEvents(){
   "click",
   ()=>{
 
-   searchOpen=true;
+   searchOpen=!searchOpen;
+
+   if(!searchOpen)
+    searchText="";
 
    render();
 
@@ -4933,7 +5502,7 @@ function bindEvents(){
   }
  );
 
- /* CATEGORY TABS */
+ /* CATEGORY PRODUCT SCROLL */
 
  document
  .querySelectorAll("[data-scroll-product]")
@@ -4947,16 +5516,20 @@ function bindEvents(){
      button.dataset.scrollProduct
     );
 
-   target?.scrollIntoView({
-    behavior:"smooth",
-    block:"start"
-   });
+   if(target){
+
+    target.scrollIntoView({
+     behavior:"smooth",
+     block:"start"
+    });
+
+   }
 
   };
 
  });
 
- /* ADMIN */
+ /* OPEN ADMIN */
 
  $("openAdmin")?.addEventListener(
   "click",
@@ -4968,6 +5541,7 @@ function bindEvents(){
    adminTab="general";
    adminCategoryView=null;
    adminProductView=null;
+   advancedProduct=false;
 
    render();
 
@@ -4978,6 +5552,8 @@ function bindEvents(){
 
   }
  );
+
+ /* LOGIN */
 
  $("adminLoginButton")?.addEventListener(
   "click",
@@ -5011,12 +5587,13 @@ function bindEvents(){
     error.style.display="block";
 
    input.value="";
-
    input.focus();
 
   }
 
  }
+
+ /* CLOSE ADMIN */
 
  $("closeAdmin")?.addEventListener(
   "click",
@@ -5052,7 +5629,6 @@ function bindEvents(){
 
    adminCategoryView=null;
    adminProductView=null;
-
    advancedProduct=false;
 
    render();
@@ -5163,6 +5739,8 @@ function bindEvents(){
     input.dataset.setting
    ]=input.checked;
 
+   saveData();
+
   };
 
  });
@@ -5183,6 +5761,8 @@ function bindEvents(){
    if(item)
     item.sold=input.checked;
 
+   saveData();
+
   };
 
  });
@@ -5201,6 +5781,8 @@ function bindEvents(){
    if(item)
     item.featured=input.checked;
 
+   saveData();
+
   };
 
  });
@@ -5218,6 +5800,8 @@ function bindEvents(){
 
    if(item)
     item.dish=input.checked;
+
+   saveData();
 
   };
 
@@ -5242,6 +5826,8 @@ function bindEvents(){
    DATA.theme.price=
     button.dataset.themeColor;
 
+   applyTheme();
+
    render();
 
   };
@@ -5263,13 +5849,25 @@ function bindEvents(){
     DATA.background.value=
      input.value;
 
+    const bg=
+     document.querySelector(".background");
+
+    if(bg)
+     bg.style.background=
+      input.value;
+
    }else{
 
     DATA.theme[key]=input.value;
 
+    applyTheme();
+
    }
 
-   render();
+   /*
+    Renk değişiminde artık komple
+    paneli yeniden çizmek yok.
+   */
 
   };
 
@@ -5315,43 +5913,7 @@ function bindEvents(){
 
    }
 
-   /* Immediate preview */
-
-   document.documentElement.style
-    .setProperty(
-     "--overlay",
-     DATA.theme.overlay
-    );
-
-   document.documentElement.style
-    .setProperty(
-     "--cardOpacity",
-     DATA.theme.cardOpacity
-    );
-
-   document.documentElement.style
-    .setProperty(
-     "--cardRadius",
-     DATA.theme.cardRadius+"px"
-    );
-
-   document.documentElement.style
-    .setProperty(
-     "--titleSize",
-     DATA.theme.titleSize+"px"
-    );
-
-   document.documentElement.style
-    .setProperty(
-     "--bodySize",
-     DATA.theme.bodySize+"px"
-    );
-
-   document.documentElement.style
-    .setProperty(
-     "--logoSize",
-     DATA.theme.logoSize+"px"
-    );
+   applyTheme();
 
   };
 
@@ -5567,8 +6129,7 @@ function bindEvents(){
 
    collectAdmin();
 
-   const id=
-    "category-"+Date.now();
+   const id=uid("category");
 
    DATA.categories.push({
 
@@ -5583,7 +6144,6 @@ function bindEvents(){
    });
 
    adminCategoryView=id;
-
    adminProductView=null;
 
    saveData();
@@ -5610,8 +6170,7 @@ function bindEvents(){
 
    if(!category)return;
 
-   const id=
-    "product-"+Date.now();
+   const id=uid("product");
 
    category.items.push({
 
@@ -5665,7 +6224,7 @@ function bindEvents(){
 
    DATA.events.push({
 
-    id:"event-"+Date.now(),
+    id:uid("event"),
 
     name:"Yeni Etkinlik",
 
@@ -5676,7 +6235,6 @@ function bindEvents(){
     description:"",
 
     image:"",
-
     video:""
 
    });
@@ -5701,7 +6259,6 @@ function bindEvents(){
    alert("Ürün kaydedildi.");
 
    adminProductView=null;
-
    advancedProduct=false;
 
    render();
@@ -5734,7 +6291,7 @@ function bindEvents(){
 
 /* =========================================================
    START
-   ========================================================= */
+========================================================= */
 
 render();
 
