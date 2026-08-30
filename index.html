@@ -24,18 +24,9 @@ body{
  font-size:13px;
 }
 
-button,input,textarea,select{
- font:inherit;
-}
-
-button{
- cursor:pointer;
-}
-
-a{
- text-decoration:none;
- color:inherit;
-}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
 
 :root{
  --accent:#d6a83d;
@@ -300,12 +291,12 @@ button:active{transform:scale(.97)}
 }
 
 /* =========================================================
-   HERO
+   HERO - PREMIUM
 ========================================================= */
 
 .hero{
  text-align:center;
- padding:48px 0 28px;
+ padding:52px 0 34px;
  animation:pageIn .45s ease;
 }
 
@@ -318,12 +309,19 @@ button:active{transform:scale(.97)}
  justify-content:center;
  border-radius:50%;
  border:1px solid var(--accent);
- background:rgba(15,15,16,.94);
+ background:
+  radial-gradient(
+   circle at 35% 25%,
+   rgba(255,255,255,.07),
+   transparent 42%
+  ),
+  rgba(15,15,16,.94);
  color:var(--accent);
  font:42px Georgia,serif;
  box-shadow:
  0 0 0 7px rgba(214,168,61,.035),
- 0 0 55px rgba(214,168,61,.15);
+ 0 0 55px rgba(214,168,61,.15),
+ inset 0 0 30px rgba(214,168,61,.035);
  overflow:hidden;
 }
 
@@ -334,7 +332,7 @@ button:active{transform:scale(.97)}
 }
 
 .welcome{
- margin-top:18px;
+ margin-top:20px;
  color:var(--accent2);
  font-size:9px;
  font-weight:950;
@@ -342,11 +340,11 @@ button:active{transform:scale(.97)}
 }
 
 .hero h1{
- margin:10px 0 7px;
+ margin:11px 0 8px;
  color:var(--text);
  font:700 var(--titleSize) var(--titleFont);
  line-height:1.05;
- letter-spacing:-.03em;
+ letter-spacing:-.035em;
 }
 
 .hero p{
@@ -354,26 +352,29 @@ button:active{transform:scale(.97)}
  margin:0 auto;
  color:var(--muted);
  font-size:var(--bodySize);
- line-height:1.6;
+ line-height:1.65;
 }
 
 /* =========================================================
    SECTION
 ========================================================= */
 
-.section{margin-top:31px}
+.section{
+ margin-top:34px;
+}
 
 .sectionHead{
  display:flex;
  align-items:center;
  justify-content:space-between;
  gap:10px;
- margin-bottom:14px;
+ margin-bottom:15px;
 }
 
 .sectionHead h2{
  margin:0;
  font-size:20px;
+ letter-spacing:-.02em;
 }
 
 .hint{
@@ -391,13 +392,13 @@ button:active{transform:scale(.97)}
  overflow-x:auto;
  scrollbar-width:none;
  scroll-snap-type:x mandatory;
- padding:3px 0 6px;
+ padding:3px 0 7px;
 }
 
 .horizontal::-webkit-scrollbar{display:none}
 
 /* =========================================================
-   FEATURE / EVENT
+   FEATURE / EVENT PREMIUM
 ========================================================= */
 
 .feature,
@@ -405,17 +406,19 @@ button:active{transform:scale(.97)}
  position:relative;
  flex:0 0 88%;
  padding:0;
- border:1px solid rgba(255,255,255,.08);
- border-radius:var(--cardRadius);
+ border:1px solid rgba(255,255,255,.09);
+ border-radius:24px;
  overflow:hidden;
  background:#171719;
  scroll-snap-align:start;
  color:#fff;
- box-shadow:0 18px 50px rgba(0,0,0,.3);
+ box-shadow:
+ 0 20px 60px rgba(0,0,0,.38),
+ inset 0 0 0 1px rgba(255,255,255,.02);
 }
 
-.feature{height:235px}
-.event{height:200px}
+.feature{height:245px}
+.event{height:210px}
 
 .feature img,
 .feature video,
@@ -424,66 +427,77 @@ button:active{transform:scale(.97)}
  width:100%;
  height:100%;
  object-fit:cover;
- transition:transform .5s ease;
+ transition:transform .6s cubic-bezier(.2,.8,.2,1);
 }
 
 .feature:hover img,
 .feature:hover video,
 .event:hover img,
 .event:hover video{
- transform:scale(1.035);
+ transform:scale(1.045);
 }
 
 .featureShade,
 .eventShade{
  position:absolute;
  inset:0;
- background:linear-gradient(
-  180deg,
-  transparent 20%,
-  rgba(0,0,0,.9) 100%
- );
+ background:
+  linear-gradient(
+   180deg,
+   rgba(0,0,0,.02) 15%,
+   rgba(0,0,0,.2) 40%,
+   rgba(0,0,0,.94) 100%
+  );
 }
 
 .featureText,
 .eventText{
  position:absolute;
- left:18px;
- right:18px;
- bottom:17px;
+ left:19px;
+ right:19px;
+ bottom:18px;
  text-align:left;
 }
 
-.featureText strong{font-size:20px}
+.featureText strong{
+ font-size:21px;
+ letter-spacing:-.02em;
+}
+
 .featureText span{
  display:block;
- margin-top:6px;
+ margin-top:7px;
  color:var(--price);
  font-weight:950;
+ font-size:15px;
 }
 
 .eventDate{
  position:absolute;
- top:12px;
- left:12px;
+ top:13px;
+ left:13px;
  padding:8px 11px;
+ border:1px solid rgba(255,255,255,.08);
  border-radius:20px;
- background:rgba(0,0,0,.72);
+ background:rgba(0,0,0,.66);
+ backdrop-filter:blur(10px);
  color:var(--accent2);
  font-size:10px;
 }
 
-.eventText strong{font-size:18px}
+.eventText strong{
+ font-size:19px;
+}
 
 .eventText span{
  display:block;
- margin-top:5px;
+ margin-top:6px;
  color:#ccc;
  font-size:11px;
 }
 
 /* =========================================================
-   CATEGORIES
+   CATEGORIES - PREMIUM
 ========================================================= */
 
 .categories{
@@ -494,141 +508,160 @@ button:active{transform:scale(.97)}
 
 .category{
  position:relative;
- height:170px;
+ height:180px;
  padding:0;
- border:1px solid rgba(255,255,255,.08);
- border-radius:var(--cardRadius);
+ border:1px solid rgba(255,255,255,.09);
+ border-radius:22px;
  overflow:hidden;
  background:#171719;
  color:#fff;
- box-shadow:0 14px 38px rgba(0,0,0,.2);
+ box-shadow:
+ 0 16px 45px rgba(0,0,0,.28),
+ inset 0 0 0 1px rgba(255,255,255,.02);
 }
 
 .category img{
  width:100%;
  height:100%;
  object-fit:cover;
- transition:transform .5s ease;
+ transition:transform .6s cubic-bezier(.2,.8,.2,1);
 }
 
-.category:hover img{transform:scale(1.045)}
+.category:hover img{
+ transform:scale(1.055);
+}
 
 .categoryShade{
  position:absolute;
  inset:0;
- background:linear-gradient(
-  180deg,
-  transparent 10%,
-  rgba(0,0,0,.94)
- );
+ background:
+  linear-gradient(
+   180deg,
+   rgba(0,0,0,.03) 5%,
+   rgba(0,0,0,.25) 35%,
+   rgba(0,0,0,.95) 100%
+  );
 }
 
 .categoryText{
  position:absolute;
- left:15px;
- right:15px;
- bottom:15px;
+ left:16px;
+ right:16px;
+ bottom:16px;
  text-align:left;
 }
 
 .categoryText strong{
  display:block;
  font-size:18px;
+ letter-spacing:-.025em;
 }
 
 .categoryText span{
  display:block;
- color:#aaa;
+ color:#b4b4b4;
  font-size:10px;
- margin-top:4px;
+ margin-top:5px;
 }
 
 /* =========================================================
-   PRODUCTS
+   CATEGORY PAGE - PREMIUM
+   YATAY ÜRÜN/KATEGORİ MENÜSÜ KALDIRILDI
 ========================================================= */
 
 .categoryTitle{
  display:flex;
  align-items:center;
- justify-content:space-between;
- gap:10px;
- margin-bottom:13px;
+ justify-content:flex-start;
+ gap:12px;
+ margin-bottom:20px;
+ padding-bottom:15px;
+ border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.categoryTitle h2{
+ flex:1;
+ margin:0;
+ font-size:22px!important;
+ letter-spacing:-.035em;
 }
 
 .backBtn{
- border:1px solid rgba(255,255,255,.07);
- background:#1b1b1e;
+ border:1px solid rgba(255,255,255,.08);
+ background:
+  linear-gradient(
+   145deg,
+   rgba(255,255,255,.07),
+   rgba(255,255,255,.025)
+  );
  color:#fff;
  padding:10px 13px;
- border-radius:11px;
+ border-radius:12px;
  font-size:11px;
  font-weight:850;
+ box-shadow:0 8px 25px rgba(0,0,0,.18);
 }
 
-.stickyCategories{
- position:sticky;
- top:68px;
- z-index:35;
- margin:0 -16px;
- padding:10px 16px;
- background:rgba(11,11,12,.94);
- backdrop-filter:blur(17px);
- border-bottom:1px solid #202023;
+.backBtn:hover{
+ border-color:rgba(214,168,61,.3);
+ color:var(--accent2);
 }
 
-.categoryTabs{
- display:flex;
- gap:8px;
- overflow-x:auto;
- scrollbar-width:none;
-}
-
-.categoryTabs::-webkit-scrollbar{display:none}
-
-.categoryTabs button{
- flex:0 0 auto;
- padding:10px 14px;
- border:0;
- border-radius:11px;
- background:#18181a;
- color:#aaa;
- font-size:11px;
- font-weight:850;
-}
-
-.categoryTabs button.active{
- background:var(--accent);
- color:#111;
-}
+/* =========================================================
+   PRODUCTS - PREMIUM
+========================================================= */
 
 .products{
  display:flex;
  flex-direction:column;
- gap:12px;
- margin-top:16px;
+ gap:13px;
+ margin-top:0;
 }
 
 .product{
  display:grid;
- grid-template-columns:120px 1fr;
- min-height:122px;
+ grid-template-columns:126px 1fr;
+ min-height:130px;
  overflow:hidden;
- border:1px solid rgba(255,255,255,.07);
- border-radius:var(--cardRadius);
- background:rgba(20,20,22,var(--cardOpacity));
+ border:1px solid rgba(255,255,255,.075);
+ border-radius:21px;
+ background:
+  linear-gradient(
+   145deg,
+   rgba(30,30,32,var(--cardOpacity)),
+   rgba(16,16,18,var(--cardOpacity))
+  );
  cursor:pointer;
- box-shadow:0 13px 35px rgba(0,0,0,.18);
+ box-shadow:
+ 0 14px 42px rgba(0,0,0,.24),
+ 0 1px 0 rgba(255,255,255,.025) inset;
 }
 
 .product:hover{
- border-color:rgba(255,255,255,.14);
- box-shadow:0 18px 45px rgba(0,0,0,.27);
+ border-color:rgba(214,168,61,.2);
+ box-shadow:
+ 0 20px 52px rgba(0,0,0,.34),
+ 0 1px 0 rgba(255,255,255,.04) inset;
+ transform:translateY(-1px);
 }
 
 .productImage{
- height:122px;
+ height:130px;
  background:#1c1c1e;
  overflow:hidden;
+ position:relative;
+}
+
+.productImage:after{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:linear-gradient(
+  90deg,
+  transparent 65%,
+  rgba(0,0,0,.08)
+ );
+ pointer-events:none;
 }
 
 .productImage img,
@@ -636,16 +669,24 @@ button:active{transform:scale(.97)}
  width:100%;
  height:100%;
  object-fit:cover;
+ transition:transform .55s cubic-bezier(.2,.8,.2,1);
+}
+
+.product:hover .productImage img,
+.product:hover .productImage video{
+ transform:scale(1.045);
 }
 
 .productInfo{
  min-width:0;
- padding:13px;
+ padding:15px 14px;
 }
 
 .productInfo h3{
  margin:0;
  font-size:15px;
+ font-weight:850;
+ letter-spacing:-.015em;
  white-space:nowrap;
  overflow:hidden;
  text-overflow:ellipsis;
@@ -655,7 +696,7 @@ button:active{transform:scale(.97)}
  margin:6px 0;
  color:#929292;
  font-size:11px;
- line-height:1.45;
+ line-height:1.48;
  display:-webkit-box;
  -webkit-line-clamp:2;
  -webkit-box-orient:vertical;
@@ -674,6 +715,7 @@ button:active{transform:scale(.97)}
  background:#222225;
  color:#aaa;
  font-size:9px;
+ border:1px solid rgba(255,255,255,.025);
 }
 
 .tag.sold{
@@ -686,6 +728,7 @@ button:active{transform:scale(.97)}
  color:var(--price);
  font-weight:950;
  font-size:14px;
+ letter-spacing:-.01em;
 }
 
 /* =========================================================
@@ -806,6 +849,7 @@ button:active{transform:scale(.97)}
 .modalBody h2{
  margin:0;
  font-size:27px;
+ letter-spacing:-.025em;
 }
 
 .modalBody p{
@@ -831,7 +875,7 @@ button:active{transform:scale(.97)}
 }
 
 /* =========================================================
-   PREMIUM ADMIN OVERLAY
+   ADMIN
 ========================================================= */
 
 .adminOverlay{
@@ -860,10 +904,6 @@ button:active{transform:scale(.97)}
   #0b0b0d;
  animation:adminIn .28s cubic-bezier(.2,.8,.2,1);
 }
-
-/* =========================================================
-   ADMIN HEADER
-========================================================= */
 
 .adminHeader{
  position:sticky;
@@ -923,10 +963,6 @@ button:active{transform:scale(.97)}
  letter-spacing:.12em;
 }
 
-/* =========================================================
-   ADMIN NAV
-========================================================= */
-
 .adminTabs{
  display:grid;
  grid-template-columns:repeat(3,1fr);
@@ -974,10 +1010,6 @@ button:active{transform:scale(.97)}
  border-radius:5px;
 }
 
-/* =========================================================
-   ADMIN BODY
-========================================================= */
-
 .adminBody{
  padding:20px;
  padding-bottom:95px;
@@ -999,10 +1031,6 @@ button:active{transform:scale(.97)}
  font-size:10px;
  line-height:1.5;
 }
-
-/* =========================================================
-   DASHBOARD STATS
-========================================================= */
 
 .statsGrid{
  display:grid;
@@ -1071,10 +1099,6 @@ button:active{transform:scale(.97)}
  font-size:9px;
 }
 
-/* =========================================================
-   ADMIN CARDS
-========================================================= */
-
 .adminCard{
  position:relative;
  padding:17px;
@@ -1103,9 +1127,7 @@ button:active{transform:scale(.97)}
  line-height:1.5;
 }
 
-.field{
- margin-top:13px;
-}
+.field{margin-top:13px}
 
 .field label{
  display:block;
@@ -1162,10 +1184,6 @@ button:active{transform:scale(.97)}
  margin-top:6px;
 }
 
-/* =========================================================
-   BUTTONS
-========================================================= */
-
 .adminButton{
  min-height:42px;
  border:1px solid rgba(255,255,255,.07);
@@ -1194,9 +1212,7 @@ button:active{transform:scale(.97)}
  box-shadow:0 8px 24px rgba(214,168,61,.12);
 }
 
-.adminButton.gold:hover{
- filter:brightness(1.07);
-}
+.adminButton.gold:hover{filter:brightness(1.07)}
 
 .adminButton.danger{
  background:#3a1719;
@@ -1204,17 +1220,9 @@ button:active{transform:scale(.97)}
  border-color:#572024;
 }
 
-.adminButton.danger:hover{
- background:#5a1d20;
-}
+.adminButton.danger:hover{background:#5a1d20}
 
-.full{
- width:100%;
-}
-
-/* =========================================================
-   QUICK ACTIONS
-========================================================= */
+.full{width:100%}
 
 .quickActions{
  display:grid;
@@ -1264,10 +1272,6 @@ button:active{transform:scale(.97)}
  font-size:9px;
 }
 
-/* =========================================================
-   BREADCRUMB
-========================================================= */
-
 .adminBreadcrumb{
  display:flex;
  align-items:center;
@@ -1284,10 +1288,6 @@ button:active{transform:scale(.97)}
  font-size:10px;
  padding:4px 0;
 }
-
-/* =========================================================
-   CATEGORY / PRODUCT LIST
-========================================================= */
 
 .adminCategoryList,
 .adminProductList{
@@ -1357,9 +1357,7 @@ button:active{transform:scale(.97)}
  font-size:9px;
 }
 
-.adminProductInfo span{
- color:var(--accent2);
-}
+.adminProductInfo span{color:var(--accent2)}
 
 .adminArrow{
  width:28px;
@@ -1372,10 +1370,6 @@ button:active{transform:scale(.97)}
  color:#777;
  font-size:17px;
 }
-
-/* =========================================================
-   FILES
-========================================================= */
 
 .fileBox{
  display:flex;
@@ -1399,9 +1393,7 @@ button:active{transform:scale(.97)}
  cursor:pointer;
 }
 
-.fileBtn:hover{
- background:#29292d;
-}
+.fileBtn:hover{background:#29292d}
 
 .preview{
  width:100%;
@@ -1411,10 +1403,6 @@ button:active{transform:scale(.97)}
  margin-top:9px;
  border:1px solid #303034;
 }
-
-/* =========================================================
-   DESIGN
-========================================================= */
 
 .designGrid{
  display:grid;
@@ -1468,9 +1456,7 @@ button:active{transform:scale(.97)}
  gap:10px;
 }
 
-.rangeRow input{
- flex:1;
-}
+.rangeRow input{flex:1}
 
 .rangeValue{
  width:48px;
@@ -1478,10 +1464,6 @@ button:active{transform:scale(.97)}
  color:var(--accent2);
  font-size:10px;
 }
-
-/* =========================================================
-   TOGGLE
-========================================================= */
 
 .toggle{
  display:flex;
@@ -1502,20 +1484,12 @@ button:active{transform:scale(.97)}
  accent-color:var(--accent);
 }
 
-/* =========================================================
-   PIN
-========================================================= */
-
 .pinBox{
  padding:14px;
  border:1px solid rgba(214,168,61,.17);
  border-radius:13px;
  background:rgba(214,168,61,.045);
 }
-
-/* =========================================================
-   SIMPLE PRODUCT
-========================================================= */
 
 .simpleProductHero{
  padding:16px;
@@ -1554,10 +1528,6 @@ button:active{transform:scale(.97)}
  font-weight:850;
 }
 
-/* =========================================================
-   SAVE BAR
-========================================================= */
-
 .saveBar{
  position:sticky;
  bottom:0;
@@ -1573,10 +1543,6 @@ button:active{transform:scale(.97)}
  width:100%;
  min-height:47px;
 }
-
-/* =========================================================
-   LOGIN
-========================================================= */
 
 .adminLoginOverlay{
  position:fixed;
@@ -1677,10 +1643,6 @@ button:active{transform:scale(.97)}
  font-size:10px;
 }
 
-/* =========================================================
-   EMPTY / FOOTER
-========================================================= */
-
 .empty{
  padding:30px 10px;
  text-align:center;
@@ -1696,15 +1658,9 @@ button:active{transform:scale(.97)}
 
 .hidden{display:none!important}
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
 @media(max-width:600px){
 
- .admin{
-  width:100%;
- }
+ .admin{width:100%}
 
  .adminBody{
   padding:16px;
@@ -1731,13 +1687,9 @@ button:active{transform:scale(.97)}
   height:118px;
  }
 
- .statsGrid{
-  gap:8px;
- }
+ .statsGrid{gap:8px}
 
- .statCard{
-  min-height:98px;
- }
+ .statCard{min-height:98px}
 
 }
 
@@ -2001,7 +1953,6 @@ const TEXT={
 
 /* =========================================================
    DEFAULT DATA
-   YALNIZCA nearMenuData YOKSA KULLANILIR
 ========================================================= */
 
 const DATA={
@@ -2216,7 +2167,6 @@ function safeSet(key,value){
 
 /* =========================================================
    MERGE
-   ESKİ VERİLER KORUNUR
 ========================================================= */
 
 function mergeData(saved){
@@ -2692,7 +2642,6 @@ function renderHero(){
  <section class="hero">
 
   <div class="logo">
-
    ${
     DATA.logo
     ?
@@ -2700,7 +2649,6 @@ function renderHero(){
     :
     "N"
    }
-
   </div>
 
   <div class="welcome">
@@ -3022,6 +2970,8 @@ function renderProductCard(item){
 
 /* =========================================================
    CATEGORY PAGE
+   ÖNEMLİ:
+   BURADAKİ YATAY CATEGORY TABS TAMAMEN KALDIRILDI.
 ========================================================= */
 
 function renderCategoryPage(){
@@ -3039,35 +2989,11 @@ function renderCategoryPage(){
     ← ${t("back")}
    </button>
 
-   <h2 style="margin:0;font-size:19px">
+   <h2>
     ${esc(localizedCategoryName(category))}
    </h2>
 
   </div>
-
-  ${
-   category.items?.length
-   ?
-   `<div class="stickyCategories">
-    <div class="categoryTabs">
-
-     ${
-      category.items.map((item,i)=>`
-
-       <button
-        class="${i===0?"active":""}"
-        data-scroll-product="${esc(item.id)}">
-        ${esc(localizedName(item))}
-       </button>
-
-      `).join("")
-     }
-
-    </div>
-   </div>`
-   :
-   ""
-  }
 
   <div class="products">
 
@@ -3548,7 +3474,7 @@ function fileField(type,id,label,value,accept){
 }
 
 /* =========================================================
-   PREMIUM ADMIN DASHBOARD
+   ADMIN DASHBOARD
 ========================================================= */
 
 function renderAdminGeneral(){
@@ -3557,11 +3483,8 @@ function renderAdminGeneral(){
  const categories=DATA.categories.length;
  const events=DATA.events.length;
 
- const sold=
-  products.filter(p=>p.sold).length;
-
- const featured=
-  products.filter(p=>p.featured).length;
+ const sold=products.filter(p=>p.sold).length;
+ const featured=products.filter(p=>p.featured).length;
 
  return `
 
@@ -3605,25 +3528,19 @@ function renderAdminGeneral(){
  <div class="quickActions">
 
   <button class="quickAction" data-admin-tab-direct="products">
-
    <div class="quickActionIcon">🍽</div>
-
    <div>
     <strong>Menüyü Yönet</strong>
     <span>Ürün ve kategoriler</span>
    </div>
-
   </button>
 
   <button class="quickAction" data-admin-tab-direct="settings">
-
    <div class="quickActionIcon">🎨</div>
-
    <div>
     <strong>Tasarımı Düzenle</strong>
     <span>Renk, font ve görünüm</span>
    </div>
-
   </button>
 
  </div>
@@ -3636,35 +3553,11 @@ function renderAdminGeneral(){
    Menüde ziyaretçilerin gördüğü temel bilgileri yönet.
   </div>
 
-  ${input(
-   "businessName",
-   "İşletme adı",
-   DATA.name
-  )}
-
-  ${input(
-   "subtitle",
-   "Alt başlık",
-   DATA.subtitle
-  )}
-
-  ${input(
-   "phone",
-   "Telefon",
-   DATA.phone
-  )}
-
-  ${input(
-   "whatsapp",
-   "WhatsApp numarası",
-   DATA.whatsapp
-  )}
-
-  ${input(
-   "hours",
-   "Çalışma saatleri",
-   DATA.hours
-  )}
+  ${input("businessName","İşletme adı",DATA.name)}
+  ${input("subtitle","Alt başlık",DATA.subtitle)}
+  ${input("phone","Telefon",DATA.phone)}
+  ${input("whatsapp","WhatsApp numarası",DATA.whatsapp)}
+  ${input("hours","Çalışma saatleri",DATA.hours)}
 
   ${fileField(
    "logo",
@@ -3684,19 +3577,8 @@ function renderAdminGeneral(){
    Yönetici paneli giriş PIN'ini değiştir.
   </div>
 
-  ${input(
-   "newPin",
-   "Yeni PIN",
-   "",
-   "password"
-  )}
-
-  ${input(
-   "confirmPin",
-   "Yeni PIN Tekrar",
-   "",
-   "password"
-  )}
+  ${input("newPin","Yeni PIN","","password")}
+  ${input("confirmPin","Yeni PIN Tekrar","","password")}
 
   <button
    class="adminButton gold full"
@@ -3714,19 +3596,8 @@ function renderAdminGeneral(){
    Menüde USD ve EUR gösterimi için kullanılacak kurlar.
   </div>
 
-  ${input(
-   "rateUSD",
-   "1 USD = TL",
-   DATA.rates.USD,
-   "number"
-  )}
-
-  ${input(
-   "rateEUR",
-   "1 EUR = TL",
-   DATA.rates.EUR,
-   "number"
-  )}
+  ${input("rateUSD","1 USD = TL",DATA.rates.USD,"number")}
+  ${input("rateEUR","1 EUR = TL",DATA.rates.EUR,"number")}
 
  </div>
 
@@ -3747,9 +3618,7 @@ function renderAdminGeneral(){
 
      <div
       class="adminCard"
-      style="
-       margin:0 0 10px;
-       background:#0f0f11">
+      style="margin:0 0 10px;background:#0f0f11">
 
       ${input(
        "eventName-"+event.id,
@@ -5253,9 +5122,7 @@ function render(options={}){
 
 function bindEvents(){
 
- /* =======================================================
-    DRAWER
- ======================================================= */
+ /* DRAWER */
 
  $("openDrawer")?.addEventListener("click",()=>{
 
@@ -5317,9 +5184,7 @@ function bindEvents(){
   );
  });
 
- /* =======================================================
-    CURRENCY
- ======================================================= */
+ /* CURRENCY */
 
  $("currencyButton")?.addEventListener("click",e=>{
 
@@ -5359,9 +5224,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    LANGUAGE
- ======================================================= */
+ /* LANGUAGE */
 
  $("languageButton")?.addEventListener("click",e=>{
 
@@ -5442,9 +5305,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    SEARCH
- ======================================================= */
+ /* SEARCH */
 
  $("searchButton")?.addEventListener("click",()=>{
 
@@ -5503,9 +5364,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    CATEGORY
- ======================================================= */
+ /* CATEGORY */
 
  document.querySelectorAll("[data-category]")
  .forEach(btn=>{
@@ -5535,9 +5394,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    PRODUCT
- ======================================================= */
+ /* PRODUCT */
 
  document.querySelectorAll("[data-product]")
  .forEach(el=>{
@@ -5589,9 +5446,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    EVENT
- ======================================================= */
+ /* EVENT */
 
  document.querySelectorAll("[data-event]")
  .forEach(btn=>{
@@ -5639,33 +5494,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    PRODUCT TABS
- ======================================================= */
-
- document.querySelectorAll("[data-scroll-product]")
- .forEach(btn=>{
-
-  btn.onclick=()=>{
-
-   const target=document.getElementById(
-    "product-"+btn.dataset.scrollProduct
-   );
-
-   if(target){
-
-    target.scrollIntoView({
-     behavior:"smooth",
-     block:"center"
-    });
-   }
-  };
-
- });
-
- /* =======================================================
-    ADMIN LOGIN
- ======================================================= */
+ /* ADMIN LOGIN */
 
  $("adminLoginButton")?.addEventListener(
   "click",
@@ -5704,9 +5533,7 @@ function bindEvents(){
   }
  }
 
- /* =======================================================
-    CLOSE ADMIN
- ======================================================= */
+ /* CLOSE ADMIN */
 
  $("closeAdmin")?.addEventListener("click",()=>{
 
@@ -5724,9 +5551,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    ADMIN TABS
- ======================================================= */
+ /* ADMIN TABS */
 
  document.querySelectorAll("[data-admin-tab]")
  .forEach(btn=>{
@@ -5770,9 +5595,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    CHANGE PIN
- ======================================================= */
+ /* CHANGE PIN */
 
  $("changePinButton")?.addEventListener("click",()=>{
 
@@ -5818,9 +5641,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    ADMIN CATEGORY
- ======================================================= */
+ /* ADMIN CATEGORY */
 
  document.querySelectorAll("[data-admin-category]")
  .forEach(btn=>{
@@ -5856,9 +5677,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    ADMIN PRODUCT
- ======================================================= */
+ /* ADMIN PRODUCT */
 
  document.querySelectorAll("[data-admin-product]")
  .forEach(btn=>{
@@ -5894,9 +5713,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    ADVANCED
- ======================================================= */
+ /* ADVANCED */
 
  document.querySelectorAll("[data-toggle-advanced]")
  .forEach(btn=>{
@@ -5915,9 +5732,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    SETTINGS
- ======================================================= */
+ /* SETTINGS */
 
  document.querySelectorAll("[data-setting]")
  .forEach(input=>{
@@ -5932,9 +5747,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    PRODUCT TOGGLES
- ======================================================= */
+ /* PRODUCT TOGGLES */
 
  document.querySelectorAll("[data-sold]")
  .forEach(input=>{
@@ -5984,9 +5797,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    COLORS
- ======================================================= */
+ /* COLORS */
 
  document.querySelectorAll("[data-theme-color]")
  .forEach(btn=>{
@@ -6044,9 +5855,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    RANGES
- ======================================================= */
+ /* RANGES */
 
  document.querySelectorAll("[data-design]")
  .forEach(input=>{
@@ -6084,9 +5893,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    BACKGROUND
- ======================================================= */
+ /* BACKGROUND */
 
  document.querySelectorAll("[data-background]")
  .forEach(btn=>{
@@ -6107,9 +5914,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    FILE INPUT
- ======================================================= */
+ /* FILE INPUT */
 
  document.querySelectorAll("[data-file-type]")
  .forEach(input=>{
@@ -6125,9 +5930,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    CLEAR FILE
- ======================================================= */
+ /* CLEAR FILE */
 
  document.querySelectorAll("[data-clear-file]")
  .forEach(btn=>{
@@ -6196,9 +5999,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    DELETE CATEGORY
- ======================================================= */
+ /* DELETE CATEGORY */
 
  document.querySelectorAll("[data-delete-category]")
  .forEach(btn=>{
@@ -6226,9 +6027,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    DELETE PRODUCT
- ======================================================= */
+ /* DELETE PRODUCT */
 
  document.querySelectorAll("[data-delete-product]")
  .forEach(btn=>{
@@ -6261,9 +6060,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    DELETE EVENT
- ======================================================= */
+ /* DELETE EVENT */
 
  document.querySelectorAll("[data-delete-event]")
  .forEach(btn=>{
@@ -6287,9 +6084,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    ADD CATEGORY
- ======================================================= */
+ /* ADD CATEGORY */
 
  $("addCategory")?.addEventListener("click",()=>{
 
@@ -6323,9 +6118,7 @@ function bindEvents(){
   });
  });
 
- /* =======================================================
-    ADD PRODUCT
- ======================================================= */
+ /* ADD PRODUCT */
 
  document.querySelectorAll("[data-add-product]")
  .forEach(btn=>{
@@ -6383,9 +6176,7 @@ function bindEvents(){
 
  });
 
- /* =======================================================
-    ADD EVENT
- ======================================================= */
+ /* ADD EVENT */
 
  $("addEvent")?.addEventListener("click",()=>{
 
@@ -6423,9 +6214,7 @@ function bindEvents(){
   });
  });
 
- /* =======================================================
-    SAVE PRODUCT
- ======================================================= */
+ /* SAVE PRODUCT */
 
  $("saveProductNow")?.addEventListener(
   "click",
@@ -6454,9 +6243,7 @@ function bindEvents(){
   }
  );
 
- /* =======================================================
-    SAVE ADMIN
- ======================================================= */
+ /* SAVE ADMIN */
 
  $("saveAdmin")?.addEventListener("click",()=>{
 
