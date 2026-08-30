@@ -176,7 +176,7 @@ button:active{transform:scale(.97)}
 }
 
 /* =========================================================
-   TOP BAR - BLACK BACKGROUND REMOVED
+   TOP BAR
 ========================================================= */
 
 .top{
@@ -1473,7 +1473,7 @@ button:active{transform:scale(.97)}
 }
 
 /* =========================================================
-   FOOTER - NO BLACK BACKGROUND
+   FOOTER
 ========================================================= */
 
 .footer{
@@ -1937,6 +1937,174 @@ const DATA={
 };
 
 /* =========================================================
+   YENİ ÜRÜNLER
+   EKRAN GÖRÜNTÜSÜNDEKİ ÜRÜNLER
+========================================================= */
+
+const SPECIAL_DRINK_PRODUCTS=[
+ {
+  id:"sorrel",
+  name:"SORREL",
+  description:"Taze kuzukulağı yapraklarının kendine has ekşi aromasıyla hazırlanan ferahlatıcı özel içecek.",
+  price:230
+ },
+ {
+  id:"nebula",
+  name:"NEBULA",
+  description:"Tatlı karamel zenginliği ve taze lime dokunuşuyla hazırlanan özel içecek.",
+  price:230
+ },
+ {
+  id:"bliss",
+  name:"BLISS",
+  description:"Zengin vanilya şurubu ve kadifemsi krema ile hazırlanan yumuşak ve tatlı özel içecek.",
+  price:230
+ },
+ {
+  id:"mandela",
+  name:"MANDELA",
+  description:"Klasik limonata ferahlığı ve tropikal passion fruit aromasıyla hazırlanan özel içecek.",
+  price:230
+ },
+ {
+  id:"aloha",
+  name:"ALOHA",
+  description:"Egzotik liçi ve tropikal Hindistan cevizi şuruplarıyla hazırlanan ferahlatıcı içecek.",
+  price:230
+ },
+ {
+  id:"babycus",
+  name:"BABYCUS",
+  description:"Demleme hibiskus çayı ve yoğun hibiskus bazının eşsiz birleşimi.",
+  price:250
+ },
+ {
+  id:"babylime",
+  name:"BABYLIME",
+  description:"Yeşil çayın bitkisel zindeliği, misket limonunun ferah aromasıyla buluşuyor.",
+  price:250
+ },
+ {
+  id:"lush",
+  name:"LUSH",
+  description:"Taze fesleğen yaprakları ve elma suyunun canlı aromalarıyla hazırlanan ferah içecek.",
+  price:230
+ },
+ {
+  id:"rosa",
+  name:"ROSA",
+  description:"Taronun hafif tatlı aroması, kadifemsi dokusu ve büyüleyici özel karışımı.",
+  price:230
+ },
+ {
+  id:"stalk",
+  name:"STALK",
+  description:"Taze kereviz sapı ve elma suyunun canlandırıcı aromalarıyla hazırlanan özel içecek.",
+  price:230
+ },
+ {
+  id:"vita",
+  name:"VITA",
+  description:"Taze salatalık ve elma püresinin canlandırıcı etkisiyle hazırlanan özel içecek.",
+  price:230
+ }
+];
+
+/* =========================================================
+   YENİ ÜRÜNLERİ MEVCUT VERİYE GÜVENLİ EKLE
+   MEVCUT VERİLER SİLİNMEZ
+========================================================= */
+
+function ensureSpecialDrinkProducts(){
+
+ const categoryId="ozel-icecekler";
+
+ let category=DATA.categories.find(
+  c=>c.id===categoryId
+ );
+
+ if(!category){
+
+  category={
+   id:categoryId,
+   name:"Özel İçecekler",
+   names:{
+    tr:"Özel İçecekler",
+    en:"Special Drinks",
+    ar:"المشروبات الخاصة"
+   },
+   image:IMAGES.drink,
+   items:[]
+  };
+
+  DATA.categories.push(category);
+ }
+
+ if(!Array.isArray(category.items))
+  category.items=[];
+
+ SPECIAL_DRINK_PRODUCTS.forEach(source=>{
+
+  const existing=category.items.find(
+   p=>p.id===source.id
+  );
+
+  if(existing){
+
+   /*
+    Mevcut ürün varsa kullanıcı tarafından değiştirilmiş
+    olabilecek bilgileri ezmiyoruz.
+   */
+
+   return;
+  }
+
+  category.items.push({
+
+   id:source.id,
+
+   name:source.name,
+
+   names:{
+    tr:source.name,
+    en:"",
+    ar:""
+   },
+
+   description:source.description,
+
+   descriptions:{
+    tr:source.description,
+    en:"",
+    ar:""
+   },
+
+   portion:"",
+
+   calories:"",
+
+   allergens:[],
+
+   spicy:0,
+
+   price:source.price,
+
+   image:IMAGES.drink,
+
+   video:"",
+
+   featured:false,
+
+   dish:false,
+
+   sold:false
+  });
+
+ });
+
+}
+
+/* =========================================================
    STATE
 ========================================================= */
 
@@ -2317,9 +2485,22 @@ try{
   mergeData(JSON.parse(old));
  }
 
+ /*
+  ÖNEMLİ:
+  Mevcut kayıtlar yüklendikten SONRA özel ürünleri ekliyoruz.
+  Böylece eski menü silinmiyor.
+ */
+ ensureSpecialDrinkProducts();
+
 }catch(e){
 
  console.error("Eski veriler okunamadı:",e);
+
+ /*
+  Veri bozuk olsa bile varsayılan özel ürünler
+  kullanılabilir durumda kalsın.
+ */
+ ensureSpecialDrinkProducts();
 }
 
 /* =========================================================
@@ -3470,8 +3651,7 @@ function renderEventModal(){
      :
      event.image
      ?
-     `<img data-media-ref="${esc(event.image)}"
-      alt="">`
+     `<img data-media-ref="${esc(event.image)}" alt="">`
      :
      ""
     }
@@ -5759,7 +5939,7 @@ function bindEvents(){
 
  /* =========================================================
     SAVE ADMIN
-    KAYDET -> KAYDET -> PANELİ KAPAT
+    KAYDET → KAYDET → PANELİ KAPAT
  ========================================================= */
 
  $("saveAdmin")?.addEventListener("click",()=>{
@@ -6399,7 +6579,7 @@ function bindEvents(){
 
  /* =========================================================
     SAVE PRODUCT
-    KAYDET -> ÇEVİR -> KAYDET -> PANELİ KAPAT
+    KAYDET → ÇEVİR → KAYDET → PANELİ KAPAT
  ========================================================= */
 
  $("saveProductNow")?.addEventListener(
@@ -6455,8 +6635,8 @@ function bindEvents(){
     return;
 
    /*
-      BURADA ARTIK ALERT YOK.
-      KAYIT BAŞARILIYSA PANEL DİREKT KAPANIYOR.
+      KAYIT BAŞARILIYSA PANEL DİREKT KAPANIR.
+      ALERT YOK.
    */
 
    closeAdminAfterSave();
