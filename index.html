@@ -17,6 +17,7 @@ html,body{
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
 body{min-height:100vh}
+body.modalOpen{overflow:hidden}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
 a{text-decoration:none;color:inherit}
@@ -55,9 +56,7 @@ body{
  padding:0 16px 80px;
 }
 
-/* =========================
-   BACKGROUND
-========================= */
+/* BACKGROUND */
 
 .background{
  position:fixed;
@@ -80,9 +79,7 @@ body{
  background:rgba(0,0,0,var(--overlay));
 }
 
-/* =========================
-   TOP BAR
-========================= */
+/* TOP */
 
 .top{
  position:sticky;
@@ -124,9 +121,7 @@ body{
  transition:.2s;
 }
 
-.iconBtn:active{
- transform:scale(.93);
-}
+.iconBtn:active{transform:scale(.93)}
 
 .currencyBtn{
  height:43px;
@@ -146,9 +141,7 @@ body{
  letter-spacing:.02em;
 }
 
-.searchBox{
- margin-top:9px;
-}
+.searchBox{margin-top:9px}
 
 .searchBox input{
  width:100%;
@@ -165,9 +158,7 @@ body{
  box-shadow:0 0 0 3px rgba(214,168,61,.10);
 }
 
-/* =========================
-   SMALL POPUPS
-========================= */
+/* POPUPS */
 
 .quickPopup{
  position:absolute;
@@ -214,19 +205,11 @@ body{
 }
 
 @keyframes popupIn{
- from{
-  opacity:0;
-  transform:translateY(-5px) scale(.98);
- }
- to{
-  opacity:1;
-  transform:none;
- }
+ from{opacity:0;transform:translateY(-5px) scale(.98)}
+ to{opacity:1;transform:none}
 }
 
-/* =========================
-   HERO
-========================= */
+/* HERO */
 
 .hero{
  text-align:center;
@@ -282,13 +265,9 @@ body{
  line-height:1.6;
 }
 
-/* =========================
-   SECTION
-========================= */
+/* SECTION */
 
-.section{
- margin-top:31px;
-}
+.section{margin-top:31px}
 
 .sectionHead{
  display:flex;
@@ -309,9 +288,7 @@ body{
  font-size:10px;
 }
 
-/* =========================
-   HORIZONTAL
-========================= */
+/* HORIZONTAL */
 
 .horizontal{
  display:flex;
@@ -322,13 +299,9 @@ body{
  padding-bottom:3px;
 }
 
-.horizontal::-webkit-scrollbar{
- display:none;
-}
+.horizontal::-webkit-scrollbar{display:none}
 
-/* =========================
-   FEATURE
-========================= */
+/* FEATURE */
 
 .feature{
  position:relative;
@@ -382,9 +355,7 @@ body{
  font-weight:950;
 }
 
-/* =========================
-   EVENTS
-========================= */
+/* EVENTS */
 
 .event{
  position:relative;
@@ -436,9 +407,7 @@ body{
  text-align:left;
 }
 
-.eventText strong{
- font-size:18px;
-}
+.eventText strong{font-size:18px}
 
 .eventText span{
  display:block;
@@ -447,9 +416,7 @@ body{
  font-size:11px;
 }
 
-/* =========================
-   CATEGORIES
-========================= */
+/* CATEGORIES */
 
 .categories{
  display:grid;
@@ -505,9 +472,7 @@ body{
  margin-top:4px;
 }
 
-/* =========================
-   CATEGORY PAGE
-========================= */
+/* CATEGORY PAGE */
 
 .categoryTitle{
  display:flex;
@@ -546,9 +511,7 @@ body{
  scrollbar-width:none;
 }
 
-.categoryTabs::-webkit-scrollbar{
- display:none;
-}
+.categoryTabs::-webkit-scrollbar{display:none}
 
 .categoryTabs button{
  flex:0 0 auto;
@@ -566,9 +529,7 @@ body{
  color:#111;
 }
 
-/* =========================
-   PRODUCTS
-========================= */
+/* PRODUCTS */
 
 .products{
  display:flex;
@@ -590,9 +551,7 @@ body{
  transition:.2s;
 }
 
-.product:active{
- transform:scale(.985);
-}
+.product:active{transform:scale(.985)}
 
 .productImage{
  height:122px;
@@ -657,9 +616,7 @@ body{
  font-size:14px;
 }
 
-/* =========================
-   DRAWER
-========================= */
+/* DRAWER */
 
 .overlay{
  position:fixed;
@@ -696,9 +653,7 @@ body{
  font:700 25px Georgia,serif;
 }
 
-.drawerSection{
- margin-top:25px;
-}
+.drawerSection{margin-top:25px}
 
 .drawerLabel{
  color:#666;
@@ -720,9 +675,7 @@ body{
  margin-top:7px;
 }
 
-/* =========================
-   MODAL
-========================= */
+/* MODAL */
 
 .modalOverlay{
  position:fixed;
@@ -777,9 +730,7 @@ body{
  font-size:23px;
 }
 
-.modalBody{
- padding:21px;
-}
+.modalBody{padding:21px}
 
 .modalBody h2{
  margin:0;
@@ -814,9 +765,7 @@ body{
  font-weight:950;
 }
 
-/* =========================
-   ADMIN
-========================= */
+/* ADMIN */
 
 .adminOverlay{
  position:fixed;
@@ -897,13 +846,9 @@ body{
  font-weight:950;
 }
 
-.adminBody{
- padding:16px;
-}
+.adminBody{padding:16px}
 
-.field{
- margin-bottom:13px;
-}
+.field{margin-bottom:13px}
 
 .field label{
  display:block;
@@ -970,6 +915,11 @@ body{
  color:#fff;
 }
 
+.adminButton.green{
+ background:#166534;
+ color:#fff;
+}
+
 .saveBar{
  position:sticky;
  bottom:0;
@@ -1003,9 +953,7 @@ body{
  margin-top:5px;
 }
 
-/* =========================
-   ADMIN LISTS
-========================= */
+/* ADMIN LISTS */
 
 .adminCategoryList,
 .adminProductList{
@@ -1069,18 +1017,35 @@ body{
  font-size:10px;
 }
 
-.adminProductInfo span{
- color:var(--accent2);
-}
+.adminProductInfo span{color:var(--accent2)}
 
 .adminArrow{
  color:#777;
  font-size:20px;
 }
 
-/* =========================
-   FILE
-========================= */
+/* BREADCRUMB */
+
+.adminBreadcrumb{
+ display:flex;
+ align-items:center;
+ gap:9px;
+ margin-bottom:13px;
+ color:#777;
+ font-size:12px;
+}
+
+.adminBreadcrumb button{
+ border:0;
+ background:none;
+ color:var(--accent2);
+ padding:4px 0;
+ font-weight:800;
+}
+
+.adminBreadcrumb strong{color:#fff}
+
+/* FILE */
 
 .fileBox{
  display:flex;
@@ -1112,9 +1077,7 @@ body{
  border:1px solid #303034;
 }
 
-/* =========================
-   DESIGN
-========================= */
+/* DESIGN */
 
 .designGrid{
  display:grid;
@@ -1168,9 +1131,7 @@ body{
  gap:10px;
 }
 
-.rangeRow input{
- flex:1;
-}
+.rangeRow input{flex:1}
 
 .rangeValue{
  width:48px;
@@ -1198,9 +1159,7 @@ body{
  accent-color:var(--accent);
 }
 
-/* =========================
-   SIMPLE PRODUCT FORM
-========================= */
+/* PRODUCT FORM */
 
 .simpleProductHero{
  padding:14px;
@@ -1238,9 +1197,39 @@ body{
  font-weight:850;
 }
 
-/* =========================
-   LOGIN
-========================= */
+/* LANGUAGE FORM */
+
+.langSection{
+ padding:13px;
+ margin-top:10px;
+ border:1px solid #29292d;
+ border-radius:13px;
+ background:#111113;
+}
+
+.langSectionTitle{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:8px;
+ margin-bottom:12px;
+}
+
+.langBadge{
+ padding:5px 8px;
+ border-radius:7px;
+ background:#222225;
+ color:#aaa;
+ font-size:9px;
+ font-weight:900;
+}
+
+.langBadge.active{
+ background:var(--accent);
+ color:#111;
+}
+
+/* LOGIN */
 
 .adminLoginOverlay{
  position:fixed;
@@ -1323,9 +1312,27 @@ body{
  font-size:10px;
 }
 
-/* =========================
-   FOOTER
-========================= */
+/* PIN */
+
+.pinBox{
+ padding:14px;
+ border-radius:14px;
+ background:#111113;
+ border:1px solid #29292d;
+}
+
+.pinInfo{
+ padding:10px;
+ margin-bottom:12px;
+ border-radius:10px;
+ background:rgba(214,168,61,.08);
+ border:1px solid rgba(214,168,61,.16);
+ color:#aaa;
+ font-size:10px;
+ line-height:1.5;
+}
+
+/* FOOTER */
 
 .footer{
  padding:35px 0;
@@ -1340,33 +1347,18 @@ body{
  color:#666;
 }
 
-.hidden{
- display:none!important;
-}
+.hidden{display:none!important}
 
 @media(max-width:430px){
- .categories{
-  grid-template-columns:1fr 1fr;
- }
- .product{
-  grid-template-columns:105px 1fr;
- }
- .productImage{
-  height:118px;
- }
+ .categories{grid-template-columns:1fr 1fr}
+ .product{grid-template-columns:105px 1fr}
+ .productImage{height:118px}
 }
 
 @media(max-width:390px){
- .categories{
-  grid-template-columns:1fr;
- }
- .designGrid{
-  grid-template-columns:1fr;
- }
- .row{
-  flex-direction:column;
-  gap:0;
- }
+ .categories{grid-template-columns:1fr}
+ .designGrid{grid-template-columns:1fr}
+ .row{flex-direction:column;gap:0}
 }
 </style>
 </head>
@@ -1378,11 +1370,17 @@ body{
 <script>
 
 /* =========================================================
-   NEARMENU PREMIUM V2
-   ========================================================= */
+   NEARMENU PREMIUM V3
+   - PIN değiştirme
+   - Tam çoklu dil
+   - Eski verileri koruyan veri migrasyonu
+   - Daha güvenli storage işlemleri
+   - RTL desteği
+========================================================= */
 
-const ADMIN_PASSWORD="1234";
+const DEFAULT_ADMIN_PIN="1234";
 const STORAGE_KEY="nearMenuData";
+const PIN_KEY="nearMenuAdminPin";
 
 const IMAGES={
  breakfast:"https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=900&q=80",
@@ -1446,7 +1444,32 @@ const TEXT={
   background:"Arka Plan",
   visibility:"Görünürlük",
   image:"Fotoğraf",
-  video:"Video"
+  video:"Video",
+  pin:"PIN",
+  changePin:"PIN Değiştir",
+  currentPin:"Mevcut PIN",
+  newPin:"Yeni PIN",
+  repeatPin:"Yeni PIN Tekrar",
+  pinChanged:"PIN başarıyla değiştirildi.",
+  pinWrong:"Mevcut PIN yanlış.",
+  pinMismatch:"Yeni PIN'ler aynı değil.",
+  pinLength:"PIN 4-12 haneli olmalıdır.",
+  pinOnlyNumbers:"PIN sadece rakamlardan oluşmalıdır.",
+  languages:"Diller",
+  turkish:"Türkçe",
+  english:"English",
+  arabic:"العربية",
+  categoryLanguages:"Kategori Dilleri",
+  productLanguages:"Ürün Dilleri",
+  eventLanguages:"Etkinlik Dilleri",
+  eventName:"Etkinlik adı",
+  eventDescription:"Etkinlik açıklaması",
+  eventDate:"Gün",
+  eventTime:"Saat",
+  saveChanges:"Değişiklikleri Kaydet",
+  saved:"Kaydedildi.",
+  clear:"Temizle",
+  current:"Mevcut"
  },
  en:{
   welcome:"WELCOME",
@@ -1498,7 +1521,32 @@ const TEXT={
   background:"Background",
   visibility:"Visibility",
   image:"Image",
-  video:"Video"
+  video:"Video",
+  pin:"PIN",
+  changePin:"Change PIN",
+  currentPin:"Current PIN",
+  newPin:"New PIN",
+  repeatPin:"Repeat New PIN",
+  pinChanged:"PIN changed successfully.",
+  pinWrong:"Current PIN is incorrect.",
+  pinMismatch:"New PINs do not match.",
+  pinLength:"PIN must be 4-12 digits.",
+  pinOnlyNumbers:"PIN must contain numbers only.",
+  languages:"Languages",
+  turkish:"Türkçe",
+  english:"English",
+  arabic:"العربية",
+  categoryLanguages:"Category Languages",
+  productLanguages:"Product Languages",
+  eventLanguages:"Event Languages",
+  eventName:"Event name",
+  eventDescription:"Event description",
+  eventDate:"Day",
+  eventTime:"Time",
+  saveChanges:"Save Changes",
+  saved:"Saved.",
+  clear:"Clear",
+  current:"Current"
  },
  ar:{
   welcome:"مرحباً بكم",
@@ -1550,7 +1598,32 @@ const TEXT={
   background:"الخلفية",
   visibility:"العرض",
   image:"صورة",
-  video:"فيديو"
+  video:"فيديو",
+  pin:"رمز PIN",
+  changePin:"تغيير PIN",
+  currentPin:"PIN الحالي",
+  newPin:"PIN الجديد",
+  repeatPin:"تأكيد PIN الجديد",
+  pinChanged:"تم تغيير PIN بنجاح.",
+  pinWrong:"PIN الحالي غير صحيح.",
+  pinMismatch:"رمزا PIN غير متطابقين.",
+  pinLength:"يجب أن يكون PIN من 4 إلى 12 رقماً.",
+  pinOnlyNumbers:"يجب أن يحتوي PIN على أرقام فقط.",
+  languages:"اللغات",
+  turkish:"Türkçe",
+  english:"English",
+  arabic:"العربية",
+  categoryLanguages:"لغات التصنيف",
+  productLanguages:"لغات المنتج",
+  eventLanguages:"لغات الفعالية",
+  eventName:"اسم الفعالية",
+  eventDescription:"وصف الفعالية",
+  eventDate:"اليوم",
+  eventTime:"الوقت",
+  saveChanges:"حفظ التغييرات",
+  saved:"تم الحفظ.",
+  clear:"مسح",
+  current:"الحالي"
  }
 };
 
@@ -1560,10 +1633,25 @@ const TEXT={
 
 const DATA={
  name:"NEARMENU DEMO",
+
+ nameTranslations:{
+  tr:"NEARMENU DEMO",
+  en:"NEARMENU DEMO",
+  ar:"NEARMENU DEMO"
+ },
+
  subtitle:"Lezzetin en güzel hali burada.",
+
+ subtitleTranslations:{
+  tr:"Lezzetin en güzel hali burada.",
+  en:"The best taste is here.",
+  ar:"ألذ النكهات هنا."
+ },
+
  phone:"+90 555 555 55 55",
  whatsapp:"905555555555",
  logo:"",
+
  rates:{
   USD:40,
   EUR:47
@@ -1611,6 +1699,11 @@ const DATA={
   {
    id:"kahvalti",
    name:"Kahvaltı",
+   names:{
+    tr:"Kahvaltı",
+    en:"Breakfast",
+    ar:"الفطور"
+   },
    image:IMAGES.breakfast,
    items:[
     {
@@ -1628,8 +1721,18 @@ const DATA={
       ar:"فطور غني بالجبن والزيتون والمربى والعسل والبيض والأطباق الساخنة."
      },
      portion:"2 kişilik",
+     portionTranslations:{
+      tr:"2 kişilik",
+      en:"For 2 people",
+      ar:"لشخصين"
+     },
      calories:"1250",
      allergens:["Süt","Gluten","Yumurta"],
+     allergensTranslations:{
+      tr:["Süt","Gluten","Yumurta"],
+      en:["Milk","Gluten","Egg"],
+      ar:["حليب","غلوتين","بيض"]
+     },
      spicy:0,
      price:650,
      image:IMAGES.breakfast,
@@ -1641,10 +1744,30 @@ const DATA={
     {
      id:"kahvalti-tabagi",
      name:"Kahvaltı Tabağı",
+     names:{
+      tr:"Kahvaltı Tabağı",
+      en:"Breakfast Plate",
+      ar:"طبق الفطور"
+     },
      description:"Peynir, zeytin, yumurta, domates ve salatalık.",
+     descriptions:{
+      tr:"Peynir, zeytin, yumurta, domates ve salatalık.",
+      en:"Cheese, olives, egg, tomatoes and cucumber.",
+      ar:"جبن وزيتون وبيض وطماطم وخيار."
+     },
      portion:"1 kişilik",
+     portionTranslations:{
+      tr:"1 kişilik",
+      en:"For 1 person",
+      ar:"لشخص واحد"
+     },
      calories:"720",
      allergens:["Süt","Yumurta"],
+     allergensTranslations:{
+      tr:["Süt","Yumurta"],
+      en:["Milk","Egg"],
+      ar:["حليب","بيض"]
+     },
      spicy:0,
      price:320,
      image:IMAGES.breakfast,
@@ -1656,10 +1779,30 @@ const DATA={
     {
      id:"menemen",
      name:"Sahanda Menemen",
+     names:{
+      tr:"Sahanda Menemen",
+      en:"Menemen",
+      ar:"منمن"
+     },
      description:"Domates, biber ve yumurta ile hazırlanan sıcak menemen.",
+     descriptions:{
+      tr:"Domates, biber ve yumurta ile hazırlanan sıcak menemen.",
+      en:"Hot Turkish scrambled eggs with tomatoes and peppers.",
+      ar:"بيض تركي ساخن مع الطماطم والفلفل."
+     },
      portion:"250 g",
+     portionTranslations:{
+      tr:"250 g",
+      en:"250 g",
+      ar:"250 غ"
+     },
      calories:"410",
      allergens:["Yumurta"],
+     allergensTranslations:{
+      tr:["Yumurta"],
+      en:["Egg"],
+      ar:["بيض"]
+     },
      spicy:1,
      price:220,
      image:IMAGES.breakfast,
@@ -1674,15 +1817,40 @@ const DATA={
   {
    id:"izgara",
    name:"Izgaralar",
+   names:{
+    tr:"Izgaralar",
+    en:"Grills",
+    ar:"المشاوي"
+   },
    image:IMAGES.grill,
    items:[
     {
      id:"izgara-et",
      name:"Izgara Et",
+     names:{
+      tr:"Izgara Et",
+      en:"Grilled Meat",
+      ar:"لحم مشوي"
+     },
      description:"Günlük seçilen et, közlenmiş sebzeler ve garnitür.",
+     descriptions:{
+      tr:"Günlük seçilen et, közlenmiş sebzeler ve garnitür.",
+      en:"Daily selected meat with grilled vegetables and garnish.",
+      ar:"لحم مختار يومياً مع الخضار المشوية والمقبلات."
+     },
      portion:"300 g",
+     portionTranslations:{
+      tr:"300 g",
+      en:"300 g",
+      ar:"300 غ"
+     },
      calories:"820",
      allergens:[],
+     allergensTranslations:{
+      tr:[],
+      en:[],
+      ar:[]
+     },
      spicy:0,
      price:790,
      image:IMAGES.grill,
@@ -1694,10 +1862,30 @@ const DATA={
     {
      id:"izgara-tavuk",
      name:"Izgara Tavuk",
+     names:{
+      tr:"Izgara Tavuk",
+      en:"Grilled Chicken",
+      ar:"دجاج مشوي"
+     },
      description:"Marine edilmiş tavuk ve günlük garnitür.",
+     descriptions:{
+      tr:"Marine edilmiş tavuk ve günlük garnitür.",
+      en:"Marinated chicken with daily garnish.",
+      ar:"دجاج متبل مع المقبلات اليومية."
+     },
      portion:"250 g",
+     portionTranslations:{
+      tr:"250 g",
+      en:"250 g",
+      ar:"250 غ"
+     },
      calories:"610",
      allergens:[],
+     allergensTranslations:{
+      tr:[],
+      en:[],
+      ar:[]
+     },
      spicy:0,
      price:420,
      image:IMAGES.grill,
@@ -1712,15 +1900,40 @@ const DATA={
   {
    id:"burger",
    name:"Burgerler",
+   names:{
+    tr:"Burgerler",
+    en:"Burgers",
+    ar:"البرغر"
+   },
    image:IMAGES.burger,
    items:[
     {
      id:"classic-burger",
      name:"Classic Burger",
+     names:{
+      tr:"Classic Burger",
+      en:"Classic Burger",
+      ar:"برغر كلاسيك"
+     },
      description:"Dana köfte, cheddar, marul, domates ve özel sos.",
+     descriptions:{
+      tr:"Dana köfte, cheddar, marul, domates ve özel sos.",
+      en:"Beef patty, cheddar, lettuce, tomato and special sauce.",
+      ar:"قطعة لحم بقري، شيدر، خس، طماطم وصلصة خاصة."
+     },
      portion:"180 g",
+     portionTranslations:{
+      tr:"180 g",
+      en:"180 g",
+      ar:"180 غ"
+     },
      calories:"840",
      allergens:["Gluten","Süt"],
+     allergensTranslations:{
+      tr:["Gluten","Süt"],
+      en:["Gluten","Milk"],
+      ar:["غلوتين","حليب"]
+     },
      spicy:0,
      price:295,
      image:IMAGES.burger,
@@ -1732,10 +1945,30 @@ const DATA={
     {
      id:"spicy-burger",
      name:"Spicy Burger",
+     names:{
+      tr:"Acılı Burger",
+      en:"Spicy Burger",
+      ar:"برغر حار"
+     },
      description:"Dana köfte, cheddar, jalapeño ve acılı özel sos.",
+     descriptions:{
+      tr:"Dana köfte, cheddar, jalapeño ve acılı özel sos.",
+      en:"Beef patty, cheddar, jalapeño and spicy special sauce.",
+      ar:"قطعة لحم بقري، شيدر، هالبينو وصلصة حارة خاصة."
+     },
      portion:"180 g",
+     portionTranslations:{
+      tr:"180 g",
+      en:"180 g",
+      ar:"180 غ"
+     },
      calories:"900",
      allergens:["Gluten","Süt"],
+     allergensTranslations:{
+      tr:["Gluten","Süt"],
+      en:["Gluten","Milk"],
+      ar:["غلوتين","حليب"]
+     },
      spicy:3,
      price:320,
      image:IMAGES.burger,
@@ -1750,15 +1983,40 @@ const DATA={
   {
    id:"pizza",
    name:"Pizzalar",
+   names:{
+    tr:"Pizzalar",
+    en:"Pizzas",
+    ar:"البيتزا"
+   },
    image:IMAGES.pizza,
    items:[
     {
      id:"margherita",
      name:"Margherita",
+     names:{
+      tr:"Margherita",
+      en:"Margherita",
+      ar:"مارغريتا"
+     },
      description:"Domates sosu, mozzarella ve fesleğen.",
+     descriptions:{
+      tr:"Domates sosu, mozzarella ve fesleğen.",
+      en:"Tomato sauce, mozzarella and basil.",
+      ar:"صلصة الطماطم والموزاريلا والريحان."
+     },
      portion:"30 cm",
+     portionTranslations:{
+      tr:"30 cm",
+      en:"30 cm",
+      ar:"30 سم"
+     },
      calories:"780",
      allergens:["Gluten","Süt"],
+     allergensTranslations:{
+      tr:["Gluten","Süt"],
+      en:["Gluten","Milk"],
+      ar:["غلوتين","حليب"]
+     },
      spicy:0,
      price:340,
      image:IMAGES.pizza,
@@ -1770,10 +2028,30 @@ const DATA={
     {
      id:"karisik-pizza",
      name:"Karışık Pizza",
+     names:{
+      tr:"Karışık Pizza",
+      en:"Mixed Pizza",
+      ar:"بيتزا مشكلة"
+     },
      description:"Sucuk, mantar, biber, mısır, zeytin ve mozzarella.",
+     descriptions:{
+      tr:"Sucuk, mantar, biber, mısır, zeytin ve mozzarella.",
+      en:"Turkish sausage, mushrooms, peppers, corn, olives and mozzarella.",
+      ar:"سجق تركي وفطر وفلفل وذرة وزيتون وموزاريلا."
+     },
      portion:"30 cm",
+     portionTranslations:{
+      tr:"30 cm",
+      en:"30 cm",
+      ar:"30 سم"
+     },
      calories:"980",
      allergens:["Gluten","Süt"],
+     allergensTranslations:{
+      tr:["Gluten","Süt"],
+      en:["Gluten","Milk"],
+      ar:["غلوتين","حليب"]
+     },
      spicy:1,
      price:420,
      image:IMAGES.pizza,
@@ -1788,15 +2066,40 @@ const DATA={
   {
    id:"salata",
    name:"Salatalar",
+   names:{
+    tr:"Salatalar",
+    en:"Salads",
+    ar:"السلطات"
+   },
    image:IMAGES.salad,
    items:[
     {
      id:"sezar",
      name:"Sezar Salata",
+     names:{
+      tr:"Sezar Salata",
+      en:"Caesar Salad",
+      ar:"سلطة سيزر"
+     },
      description:"Göbek marul, parmesan, kruton ve özel sos.",
+     descriptions:{
+      tr:"Göbek marul, parmesan, kruton ve özel sos.",
+      en:"Romaine lettuce, parmesan, croutons and special dressing.",
+      ar:"خس روماني وبارميزان وقطع خبز وصلصة خاصة."
+     },
      portion:"350 g",
+     portionTranslations:{
+      tr:"350 g",
+      en:"350 g",
+      ar:"350 غ"
+     },
      calories:"460",
      allergens:["Süt","Gluten"],
+     allergensTranslations:{
+      tr:["Süt","Gluten"],
+      en:["Milk","Gluten"],
+      ar:["حليب","غلوتين"]
+     },
      spicy:0,
      price:280,
      image:IMAGES.salad,
@@ -1811,15 +2114,40 @@ const DATA={
   {
    id:"tatli",
    name:"Tatlılar",
+   names:{
+    tr:"Tatlılar",
+    en:"Desserts",
+    ar:"الحلويات"
+   },
    image:IMAGES.dessert,
    items:[
     {
      id:"gunun-tatlisi",
      name:"Günün Tatlısı",
+     names:{
+      tr:"Günün Tatlısı",
+      en:"Dessert of the Day",
+      ar:"حلوى اليوم"
+     },
      description:"Şefin günlük hazırladığı özel tatlı.",
+     descriptions:{
+      tr:"Şefin günlük hazırladığı özel tatlı.",
+      en:"A special dessert prepared fresh by the chef every day.",
+      ar:"حلوى خاصة يحضرها الشيف يومياً."
+     },
      portion:"1 porsiyon",
+     portionTranslations:{
+      tr:"1 porsiyon",
+      en:"1 portion",
+      ar:"حصة واحدة"
+     },
      calories:"520",
      allergens:["Gluten","Süt","Yumurta"],
+     allergensTranslations:{
+      tr:["Gluten","Süt","Yumurta"],
+      en:["Gluten","Milk","Egg"],
+      ar:["غلوتين","حليب","بيض"]
+     },
      spicy:0,
      price:190,
      image:IMAGES.dessert,
@@ -1834,15 +2162,40 @@ const DATA={
   {
    id:"icecek",
    name:"İçecekler",
+   names:{
+    tr:"İçecekler",
+    en:"Drinks",
+    ar:"المشروبات"
+   },
    image:IMAGES.drink,
    items:[
     {
      id:"soguk-icecek",
      name:"Soğuk İçecek",
+     names:{
+      tr:"Soğuk İçecek",
+      en:"Cold Drink",
+      ar:"مشروب بارد"
+     },
      description:"Çeşitli soğuk içecek seçenekleri.",
+     descriptions:{
+      tr:"Çeşitli soğuk içecek seçenekleri.",
+      en:"Various cold drink options.",
+      ar:"مجموعة متنوعة من المشروبات الباردة."
+     },
      portion:"330 ml",
+     portionTranslations:{
+      tr:"330 ml",
+      en:"330 ml",
+      ar:"330 مل"
+     },
      calories:"140",
      allergens:[],
+     allergensTranslations:{
+      tr:[],
+      en:[],
+      ar:[]
+     },
      spicy:0,
      price:90,
      image:IMAGES.drink,
@@ -1859,9 +2212,24 @@ const DATA={
   {
    id:"canli-muzik",
    name:"Canlı Müzik Gecesi",
+   names:{
+    tr:"Canlı Müzik Gecesi",
+    en:"Live Music Night",
+    ar:"ليلة موسيقية مباشرة"
+   },
    date:"Cumartesi",
+   dateTranslations:{
+    tr:"Cumartesi",
+    en:"Saturday",
+    ar:"السبت"
+   },
    time:"20:30",
    description:"Canlı müzik eşliğinde keyifli bir akşam.",
+   descriptions:{
+    tr:"Canlı müzik eşliğinde keyifli bir akşam.",
+    en:"Enjoy a pleasant evening with live music.",
+    ar:"استمتعوا بأمسية جميلة مع الموسيقى الحية."
+   },
    image:IMAGES.music,
    video:""
   }
@@ -1896,11 +2264,10 @@ let languageMenu=false;
 let advancedProduct=false;
 
 /* =========================================================
-   SAFE STORAGE
+   STORAGE
 ========================================================= */
 
 function storageAvailable(){
-
  try{
   const x="__near_test__";
   localStorage.setItem(x,x);
@@ -1912,20 +2279,13 @@ function storageAvailable(){
 }
 
 function safeGet(key){
-
  if(!storageAvailable())return null;
-
- try{
-  return localStorage.getItem(key);
- }catch(e){
-  return null;
- }
+ try{return localStorage.getItem(key)}
+ catch(e){return null}
 }
 
 function safeSet(key,value){
-
  if(!storageAvailable())return false;
-
  try{
   localStorage.setItem(key,value);
   return true;
@@ -1933,26 +2293,126 @@ function safeSet(key,value){
   console.warn("Storage:",e);
   return false;
  }
+}
 
+function getAdminPin(){
+ return safeGet(PIN_KEY)||DEFAULT_ADMIN_PIN;
 }
 
 /* =========================================================
-   LOAD EXISTING DATA
+   DATA MIGRATION
 ========================================================= */
 
-try{
- const saved=safeGet(STORAGE_KEY);
+function ensureTranslations(obj,baseKey,translationsKey){
 
- if(saved){
-  mergeData(JSON.parse(saved));
+ if(!obj)return;
+
+ if(!obj[translationsKey]||
+    typeof obj[translationsKey]!=="object"){
+  obj[translationsKey]={
+   tr:obj[baseKey]||"",
+   en:obj[baseKey]||"",
+   ar:obj[baseKey]||""
+  };
  }
-}catch(e){
- console.log("Veri yükleme:",e);
+
+ ["tr","en","ar"].forEach(lang=>{
+  if(
+   obj[translationsKey][lang]===undefined||
+   obj[translationsKey][lang]===null||
+   obj[translationsKey][lang]===""
+  ){
+   obj[translationsKey][lang]=obj[baseKey]||"";
+  }
+ });
+
+}
+
+function ensureArrayTranslations(obj,baseKey,translationsKey){
+
+ if(!obj)return;
+
+ if(!obj[translationsKey]||
+    typeof obj[translationsKey]!=="object"){
+  obj[translationsKey]={
+   tr:Array.isArray(obj[baseKey])?obj[baseKey].slice():[],
+   en:Array.isArray(obj[baseKey])?obj[baseKey].slice():[],
+   ar:Array.isArray(obj[baseKey])?obj[baseKey].slice():[]
+  };
+ }
+
+ ["tr","en","ar"].forEach(lang=>{
+  if(!Array.isArray(obj[translationsKey][lang])){
+   obj[translationsKey][lang]=
+    Array.isArray(obj[baseKey])
+    ?obj[baseKey].slice()
+    :[];
+  }
+ });
+
+}
+
+function normalizeProduct(p){
+
+ if(!p.id)p.id=uid("product");
+
+ if(typeof p.name==="undefined")p.name="Yeni Ürün";
+ if(typeof p.description==="undefined")p.description="";
+ if(typeof p.portion==="undefined")p.portion="";
+ if(typeof p.calories==="undefined")p.calories="";
+ if(!Array.isArray(p.allergens))p.allergens=[];
+ if(typeof p.spicy==="undefined")p.spicy=0;
+ if(typeof p.price==="undefined")p.price=0;
+ if(typeof p.image==="undefined")p.image="";
+ if(typeof p.video==="undefined")p.video="";
+ if(typeof p.featured==="undefined")p.featured=false;
+ if(typeof p.dish==="undefined")p.dish=false;
+ if(typeof p.sold==="undefined")p.sold=false;
+
+ ensureTranslations(p,"name","names");
+ ensureTranslations(p,"description","descriptions");
+ ensureTranslations(p,"portion","portionTranslations");
+ ensureArrayTranslations(p,"allergens","allergensTranslations");
+
+ return p;
+}
+
+function normalizeCategory(c){
+
+ if(!c.id)c.id=uid("category");
+
+ if(typeof c.name==="undefined")c.name="Yeni Kategori";
+ if(typeof c.image==="undefined")c.image="";
+ if(!Array.isArray(c.items))c.items=[];
+
+ ensureTranslations(c,"name","names");
+
+ c.items=c.items.map(normalizeProduct);
+
+ return c;
+}
+
+function normalizeEvent(e){
+
+ if(!e.id)e.id=uid("event");
+
+ if(typeof e.name==="undefined")e.name="Yeni Etkinlik";
+ if(typeof e.date==="undefined")e.date="Cumartesi";
+ if(typeof e.time==="undefined")e.time="20:00";
+ if(typeof e.description==="undefined")e.description="";
+ if(typeof e.image==="undefined")e.image="";
+ if(typeof e.video==="undefined")e.video="";
+
+ ensureTranslations(e,"name","names");
+ ensureTranslations(e,"date","dateTranslations");
+ ensureTranslations(e,"description","descriptions");
+
+ return e;
 }
 
 function mergeData(saved){
 
- if(!saved)return;
+ if(!saved||typeof saved!=="object")return;
 
  Object.keys(saved).forEach(key=>{
 
@@ -1968,6 +2428,11 @@ function mergeData(saved){
     DATA[key]||{},
     saved[key]||{}
    );
+
+  }else if(key==="categories"||key==="events"){
+
+   if(Array.isArray(saved[key]))
+    DATA[key]=saved[key];
 
   }else{
 
@@ -2024,48 +2489,30 @@ function mergeData(saved){
  if(!Array.isArray(DATA.events))
   DATA.events=[];
 
- DATA.categories.forEach(c=>{
+ ensureTranslations(DATA,"name","nameTranslations");
+ ensureTranslations(DATA,"subtitle","subtitleTranslations");
 
-  if(!c.id)
-   c.id="category-"+Date.now()+"-"+Math.random().toString(36).slice(2,6);
+ DATA.categories=
+  DATA.categories.map(normalizeCategory);
 
-  if(!Array.isArray(c.items))
-   c.items=[];
+ DATA.events=
+  DATA.events.map(normalizeEvent);
+}
 
-  c.items.forEach(p=>{
+/* LOAD */
 
-   if(!p.id)
-    p.id="product-"+Date.now()+"-"+Math.random().toString(36).slice(2,6);
+try{
+ const saved=safeGet(STORAGE_KEY);
 
-   if(typeof p.video==="undefined")
-    p.video="";
+ if(saved){
+  mergeData(JSON.parse(saved));
+ }else{
+  DATA.categories=DATA.categories.map(normalizeCategory);
+  DATA.events=DATA.events.map(normalizeEvent);
+ }
 
-   if(typeof p.featured==="undefined")
-    p.featured=false;
-
-   if(typeof p.dish==="undefined")
-    p.dish=false;
-
-   if(typeof p.sold==="undefined")
-    p.sold=false;
-
-   if(!Array.isArray(p.allergens))
-    p.allergens=[];
-
-  });
-
- });
-
- DATA.events.forEach(e=>{
-
-  if(!e.id)
-   e.id="event-"+Date.now();
-
-  if(typeof e.video==="undefined")
-   e.video="";
-
- });
-
+}catch(e){
+ console.log("Veri yükleme:",e);
 }
 
 /* =========================================================
@@ -2080,11 +2527,9 @@ function saveData(){
  );
 
  if(!ok){
-
   alert(
    "Veriler tarayıcı hafızasına kaydedilemedi. Fotoğraf/video dosyası çok büyük olabilir."
   );
-
  }
 
  return ok;
@@ -2099,48 +2544,76 @@ function $(id){
 }
 
 function esc(value){
-
  return String(value??"")
   .replace(/&/g,"&amp;")
   .replace(/</g,"&lt;")
   .replace(/>/g,"&gt;")
   .replace(/"/g,"&quot;")
   .replace(/'/g,"&#039;");
-
 }
 
 function t(key){
-
  return TEXT[language]?.[key]||
         TEXT.tr[key]||
         key;
+}
 
+function localizedValue(obj,key,translationsKey){
+
+ if(
+  obj?.[translationsKey] &&
+  obj[translationsKey][language]!==undefined &&
+  obj[translationsKey][language]!==""
+ ){
+  return obj[translationsKey][language];
+ }
+
+ return obj?.[key]||"";
 }
 
 function localizedName(item){
-
- if(
-  item?.names &&
-  item.names[language]
- ){
-  return item.names[language];
- }
-
- return item?.name||"";
-
+ return localizedValue(item,"name","names");
 }
 
 function localizedDescription(item){
+ return localizedValue(item,"description","descriptions");
+}
 
- if(
-  item?.descriptions &&
-  item.descriptions[language]
- ){
-  return item.descriptions[language];
- }
+function localizedPortion(item){
+ return localizedValue(item,"portion","portionTranslations");
+}
 
- return item?.description||"";
+function localizedDate(event){
+ return localizedValue(event,"date","dateTranslations");
+}
 
+function localizedAllergens(item){
+
+ const values=
+  item?.allergensTranslations?.[language];
+
+ if(Array.isArray(values)&&values.length)
+  return values;
+
+ return Array.isArray(item?.allergens)
+  ?item.allergens
+  :[];
+}
+
+function localizedBusinessName(){
+ return localizedValue(
+  DATA,
+  "name",
+  "nameTranslations"
+ );
+}
+
+function localizedSubtitle(){
+ return localizedValue(
+  DATA,
+  "subtitle",
+  "subtitleTranslations"
+ );
 }
 
 function allProducts(){
@@ -2154,7 +2627,7 @@ function allProducts(){
    result.push(
     Object.assign({},item,{
      categoryId:category.id,
-     categoryName:category.name
+     categoryName:localizedName(category)
     })
    );
 
@@ -2163,7 +2636,6 @@ function allProducts(){
  });
 
  return result;
-
 }
 
 function findProduct(id){
@@ -2174,25 +2646,19 @@ function findProduct(id){
    .find(p=>p.id===id);
 
   if(product)return product;
-
  }
 
  return null;
-
 }
 
 function findCategory(id){
-
  return (DATA.categories||[])
   .find(c=>c.id===id)||null;
-
 }
 
 function findEvent(id){
-
  return (DATA.events||[])
   .find(e=>e.id===id)||null;
-
 }
 
 function money(price){
@@ -2200,30 +2666,20 @@ function money(price){
  const value=Number(price)||0;
 
  if(currency==="USD"){
-
   const rate=Number(DATA.rates.USD)||40;
-
-  return "$"+
-   (value/rate).toFixed(2);
-
+  return "$"+(value/rate).toFixed(2);
  }
 
  if(currency==="EUR"){
-
   const rate=Number(DATA.rates.EUR)||47;
-
-  return "€"+
-   (value/rate).toFixed(2);
-
+  return "€"+(value/rate).toFixed(2);
  }
 
  return Math.round(value)
   .toLocaleString("tr-TR")+" ₺";
-
 }
 
 function uid(prefix){
-
  return prefix+
   "-"+
   Date.now()+
@@ -2231,7 +2687,17 @@ function uid(prefix){
   Math.random()
    .toString(36)
    .slice(2,7);
+}
 
+function normalizePhone(value){
+ return String(value||"")
+  .replace(/[^\d+]/g,"")
+  .replace(/^00/,"");
+}
+
+function normalizeWhatsapp(value){
+ return String(value||"")
+  .replace(/\D/g,"");
 }
 
 /* =========================================================
@@ -2247,7 +2713,6 @@ function renderBackground(){
 
   return `
    <div class="background">
-
     <video
      autoplay
      muted
@@ -2255,12 +2720,9 @@ function renderBackground(){
      playsinline
      src="${esc(DATA.background.video)}">
     </video>
-
     <div class="backgroundOverlay"></div>
-
    </div>
   `;
-
  }
 
  if(
@@ -2270,14 +2732,10 @@ function renderBackground(){
 
   return `
    <div class="background">
-
-    <img src="${esc(DATA.background.image)}">
-
+    <img src="${esc(DATA.background.image)}" alt="">
     <div class="backgroundOverlay"></div>
-
    </div>
   `;
-
  }
 
  return `
@@ -2288,7 +2746,6 @@ function renderBackground(){
    )}">
   </div>
  `;
-
 }
 
 /* =========================================================
@@ -2301,7 +2758,6 @@ function renderHero(){
  <section class="hero">
 
   <div class="logo">
-
    ${
     DATA.logo
     ?
@@ -2309,7 +2765,6 @@ function renderHero(){
     :
     "N"
    }
-
   </div>
 
   <div class="welcome">
@@ -2317,11 +2772,11 @@ function renderHero(){
   </div>
 
   <h1>
-   ${esc(DATA.name)}
+   ${esc(localizedBusinessName())}
   </h1>
 
   <p>
-   ${esc(DATA.subtitle)}
+   ${esc(localizedSubtitle())}
   </p>
 
   ${
@@ -2338,7 +2793,6 @@ function renderHero(){
 
  </section>
  `;
-
 }
 
 /* =========================================================
@@ -2347,26 +2801,19 @@ function renderHero(){
 
 function renderFeatured(){
 
- if(!DATA.settings.featured)
-  return "";
+ if(!DATA.settings.featured)return "";
 
  const products=allProducts()
   .filter(p=>p.featured&&!p.sold);
 
- if(!products.length)
-  return "";
+ if(!products.length)return "";
 
  return `
  <section class="section">
 
   <div class="sectionHead">
-
    <h2>🔥 ${t("best")}</h2>
-
-   <span class="hint">
-    ${t("swipe")}
-   </span>
-
+   <span class="hint">${t("swipe")}</span>
   </div>
 
   <div class="horizontal">
@@ -2398,15 +2845,8 @@ function renderFeatured(){
       <div class="featureShade"></div>
 
       <div class="featureText">
-
-       <strong>
-        ${esc(localizedName(item))}
-       </strong>
-
-       <span>
-        ${money(item.price)}
-       </span>
-
+       <strong>${esc(localizedName(item))}</strong>
+       <span>${money(item.price)}</span>
       </div>
 
      </button>
@@ -2418,7 +2858,6 @@ function renderFeatured(){
 
  </section>
  `;
-
 }
 
 /* =========================================================
@@ -2436,13 +2875,8 @@ function renderEvents(){
  <section class="section">
 
   <div class="sectionHead">
-
    <h2>✨ ${t("events")}</h2>
-
-   <span class="hint">
-    ${t("swipe")}
-   </span>
-
+   <span class="hint">${t("swipe")}</span>
   </div>
 
   <div class="horizontal">
@@ -2470,21 +2904,14 @@ function renderEvents(){
       <div class="eventShade"></div>
 
       <div class="eventDate">
-       ${esc(event.date)}
+       ${esc(localizedDate(event))}
        •
        ${esc(event.time)}
       </div>
 
       <div class="eventText">
-
-       <strong>
-        ${esc(event.name)}
-       </strong>
-
-       <span>
-        ${t("reserve")}
-       </span>
-
+       <strong>${esc(localizedName(event))}</strong>
+       <span>${t("reserve")}</span>
       </div>
 
      </button>
@@ -2496,7 +2923,6 @@ function renderEvents(){
 
  </section>
  `;
-
 }
 
 /* =========================================================
@@ -2509,11 +2935,7 @@ function renderCategories(){
  <section class="section">
 
   <div class="sectionHead">
-
-   <h2>
-    ${t("categories")}
-   </h2>
-
+   <h2>${t("categories")}</h2>
   </div>
 
   ${
@@ -2545,7 +2967,7 @@ function renderCategories(){
        <div class="categoryText">
 
         <strong>
-         ${esc(category.name)}
+         ${esc(localizedName(category))}
         </strong>
 
         <span>
@@ -2561,14 +2983,11 @@ function renderCategories(){
 
    </div>`
    :
-   `<div class="empty">
-    ${t("noCategories")}
-   </div>`
+   `<div class="empty">${t("noCategories")}</div>`
   }
 
  </section>
  `;
-
 }
 
 /* =========================================================
@@ -2577,14 +2996,16 @@ function renderCategories(){
 
 function renderTags(item){
 
+ const allergens=localizedAllergens(item);
+
  return `
  <div class="tags">
 
   ${
-   DATA.settings.portion&&item.portion
+   DATA.settings.portion&&localizedPortion(item)
    ?
    `<span class="tag">
-    ${esc(item.portion)}
+    ${esc(localizedPortion(item))}
    </span>`
    :
    ""
@@ -2604,19 +3025,17 @@ function renderTags(item){
    DATA.settings.spicy&&Number(item.spicy)>0
    ?
    `<span class="tag">
-    ${"🌶️".repeat(
-     Math.min(5,Number(item.spicy)||0)
-    )}
+    ${"🌶️".repeat(Math.min(5,Number(item.spicy)||0))}
    </span>`
    :
    ""
   }
 
   ${
-   DATA.settings.allergens&&item.allergens?.length
+   DATA.settings.allergens&&allergens.length
    ?
    `<span class="tag">
-    ${esc(item.allergens.join(", "))}
+    ${esc(allergens.join(", "))}
    </span>`
    :
    ""
@@ -2634,7 +3053,6 @@ function renderTags(item){
 
  </div>
  `;
-
 }
 
 /* =========================================================
@@ -2683,13 +3101,9 @@ function renderProductCard(item){
 
   <div class="productInfo">
 
-   <h3>
-    ${esc(localizedName(item))}
-   </h3>
+   <h3>${esc(localizedName(item))}</h3>
 
-   <p>
-    ${esc(localizedDescription(item))}
-   </p>
+   <p>${esc(localizedDescription(item))}</p>
 
    ${renderTags(item)}
 
@@ -2709,7 +3123,6 @@ function renderProductCard(item){
 
  </article>
  `;
-
 }
 
 /* =========================================================
@@ -2720,8 +3133,7 @@ function renderCategoryPage(){
 
  const category=findCategory(selectedCategory);
 
- if(!category)
-  return renderHome();
+ if(!category)return renderHome();
 
  return `
  <section class="section">
@@ -2735,7 +3147,7 @@ function renderCategoryPage(){
    </button>
 
    <h2 style="margin:0;font-size:19px">
-    ${esc(category.name)}
+    ${esc(localizedName(category))}
    </h2>
 
   </div>
@@ -2775,16 +3187,13 @@ function renderCategoryPage(){
     ?
     category.items.map(renderProductCard).join("")
     :
-    `<div class="empty">
-     ${t("noProducts")}
-    </div>`
+    `<div class="empty">${t("noProducts")}</div>`
    }
 
   </div>
 
  </section>
  `;
-
 }
 
 /* =========================================================
@@ -2794,23 +3203,25 @@ function renderCategoryPage(){
 function renderSearch(){
 
  const query=searchText
-  .toLocaleLowerCase("tr");
+  .toLocaleLowerCase(language==="tr"?"tr":"en");
 
  const products=allProducts()
   .filter(item=>{
+
+   const allergens=localizedAllergens(item).join(" ");
 
    const text=[
     item.name,
     localizedName(item),
     item.description,
     localizedDescription(item),
-    item.categoryName
+    item.categoryName,
+    allergens
    ].join(" ");
 
    return text
-    .toLocaleLowerCase("tr")
+    .toLocaleLowerCase(language==="tr"?"tr":"en")
     .includes(query);
-
   });
 
  return `
@@ -2827,112 +3238,90 @@ function renderSearch(){
     ?
     products.map(renderProductCard).join("")
     :
-    `<div class="empty">
-     Ürün bulunamadı.
-    </div>`
+    `<div class="empty">Ürün bulunamadı.</div>`
    }
 
   </div>
 
  </section>
  `;
-
 }
 
 function renderHome(){
-
  return renderFeatured()+
         renderEvents()+
         renderCategories();
-
 }
 
 /* =========================================================
-   CURRENCY POPUP
+   POPUPS
 ========================================================= */
 
 function renderCurrencyPopup(){
 
- if(!currencyMenu)
-  return "";
+ if(!currencyMenu)return "";
 
  return `
- <div class="quickPopup">
+ <div class="quickPopup" id="currencyPopup">
 
   <button
    class="${currency==="TRY"?"active":""}"
    data-currency="TRY">
-
    <span>🇹🇷 ${t("try")}</span>
    <span>₺</span>
-
   </button>
 
   <button
    class="${currency==="USD"?"active":""}"
    data-currency="USD">
-
    <span>🇺🇸 ${t("usd")}</span>
    <span>$</span>
-
   </button>
 
   <button
    class="${currency==="EUR"?"active":""}"
    data-currency="EUR">
-
    <span>🇪🇺 ${t("eur")}</span>
    <span>€</span>
-
   </button>
 
  </div>
  `;
-
 }
-
-/* =========================================================
-   LANGUAGE POPUP
-========================================================= */
 
 function renderLanguagePopup(){
 
- if(!languageMenu)
-  return "";
+ if(!languageMenu)return "";
 
  return `
- <div class="quickPopup" style="width:170px">
+ <div
+  class="quickPopup"
+  id="languagePopup"
+  style="width:170px">
 
   <button
    class="${language==="tr"?"active":""}"
    data-language="tr">
-
    <span>🇹🇷 Türkçe</span>
    <span>TR</span>
-
   </button>
 
   <button
    class="${language==="en"?"active":""}"
    data-language="en">
-
    <span>🇬🇧 English</span>
    <span>EN</span>
-
   </button>
 
   <button
    class="${language==="ar"?"active":""}"
    data-language="ar">
-
    <span>🇸🇦 العربية</span>
    <span>AR</span>
-
   </button>
 
  </div>
  `;
-
 }
 
 /* =========================================================
@@ -2941,8 +3330,7 @@ function renderLanguagePopup(){
 
 function renderDrawer(){
 
- if(!drawerOpen)
-  return "";
+ if(!drawerOpen)return "";
 
  return `
  <div
@@ -2953,9 +3341,7 @@ function renderDrawer(){
 
    <div class="drawerHead">
 
-    <div class="drawerLogo">
-     NEARMENU
-    </div>
+    <div class="drawerLogo">NEARMENU</div>
 
     <button
      class="iconBtn"
@@ -2968,7 +3354,7 @@ function renderDrawer(){
    <div class="drawerSection">
 
     <div class="drawerLabel">
-     İLETİŞİM
+     ${language==="ar"?"اتصل بنا":"İLETİŞİM"}
     </div>
 
     ${
@@ -2977,7 +3363,8 @@ function renderDrawer(){
      `<a
       class="drawerLink"
       target="_blank"
-      href="https://wa.me/${esc(DATA.whatsapp)}">
+      rel="noopener"
+      href="https://wa.me/${esc(normalizeWhatsapp(DATA.whatsapp))}">
       WhatsApp
      </a>`
      :
@@ -2989,7 +3376,7 @@ function renderDrawer(){
      ?
      `<a
       class="drawerLink"
-      href="tel:${esc(DATA.phone)}">
+      href="tel:${esc(normalizePhone(DATA.phone))}">
       ${t("call")}
      </a>`
      :
@@ -3012,7 +3399,6 @@ function renderDrawer(){
 
  </div>
  `;
-
 }
 
 /* =========================================================
@@ -3021,10 +3407,10 @@ function renderDrawer(){
 
 function renderProductModal(){
 
- if(!selectedProduct)
-  return "";
+ if(!selectedProduct)return "";
 
  const item=selectedProduct;
+ const allergens=localizedAllergens(item);
 
  return `
  <div
@@ -3064,9 +3450,7 @@ function renderProductModal(){
 
    <div class="modalBody">
 
-    <h2>
-     ${esc(localizedName(item))}
-    </h2>
+    <h2>${esc(localizedName(item))}</h2>
 
     ${
      DATA.settings.dish&&item.dish
@@ -3074,9 +3458,7 @@ function renderProductModal(){
      `<div style="margin-top:10px">
       <span
        class="tag"
-       style="
-        background:var(--accent);
-        color:#111">
+       style="background:var(--accent);color:#111">
        ⭐ ${t("dish")}
       </span>
      </div>`
@@ -3084,16 +3466,14 @@ function renderProductModal(){
      ""
     }
 
-    <p>
-     ${esc(localizedDescription(item))}
-    </p>
+    <p>${esc(localizedDescription(item))}</p>
 
     ${
-     DATA.settings.portion&&item.portion
+     DATA.settings.portion&&localizedPortion(item)
      ?
      `<div class="infoRow">
       <span>${t("portion")}</span>
-      <span>${esc(item.portion)}</span>
+      <span>${esc(localizedPortion(item))}</span>
      </div>`
      :
      ""
@@ -3111,11 +3491,11 @@ function renderProductModal(){
     }
 
     ${
-     DATA.settings.allergens&&item.allergens?.length
+     DATA.settings.allergens&&allergens.length
      ?
      `<div class="infoRow">
       <span>${t("allergens")}</span>
-      <span>${esc(item.allergens.join(", "))}</span>
+      <span>${esc(allergens.join(", "))}</span>
      </div>`
      :
      ""
@@ -3127,9 +3507,7 @@ function renderProductModal(){
      `<div class="infoRow">
       <span>${t("spicy")}</span>
       <span>
-       ${"🌶️".repeat(
-        Math.min(5,Number(item.spicy)||0)
-       )}
+       ${"🌶️".repeat(Math.min(5,Number(item.spicy)||0))}
       </span>
      </div>`
      :
@@ -3154,7 +3532,6 @@ function renderProductModal(){
 
  </div>
  `;
-
 }
 
 /* =========================================================
@@ -3163,8 +3540,7 @@ function renderProductModal(){
 
 function renderEventModal(){
 
- if(!selectedEvent)
-  return "";
+ if(!selectedEvent)return "";
 
  const event=selectedEvent;
 
@@ -3172,12 +3548,18 @@ function renderEventModal(){
   DATA.whatsapp
   ?
   "https://wa.me/"+
-   DATA.whatsapp+
+   normalizeWhatsapp(DATA.whatsapp)+
    "?text="+
    encodeURIComponent(
-    "Merhaba, "+
-    event.name+
-    " için rezervasyon yapmak istiyorum."
+    language==="en"
+    ?
+    "Hello, I would like to make a reservation for "+localizedName(event)+"."
+    :
+    language==="ar"
+    ?
+    "مرحباً، أريد حجز "+localizedName(event)+"."
+    :
+    "Merhaba, "+localizedName(event)+" için rezervasyon yapmak istiyorum."
    )
   :
   "";
@@ -3216,30 +3598,25 @@ function renderEventModal(){
 
    <div class="modalBody">
 
-    <h2>
-     ${esc(event.name)}
-    </h2>
+    <h2>${esc(localizedName(event))}</h2>
 
     <p>
-     ${esc(event.date)}
+     ${esc(localizedDate(event))}
      •
      ${esc(event.time)}
     </p>
 
-    <p>
-     ${esc(event.description)}
-    </p>
+    <p>${esc(localizedDescription(event))}</p>
 
     ${
      whatsapp
      ?
      `<a
       class="adminButton gold"
-      style="
-       display:block;
-       text-align:center"
+      style="display:block;text-align:center"
       target="_blank"
-      href="${whatsapp}">
+      rel="noopener"
+      href="${esc(whatsapp)}">
       ${t("reserve")}
      </a>`
      :
@@ -3252,7 +3629,6 @@ function renderEventModal(){
 
  </div>
  `;
-
 }
 
 /* =========================================================
@@ -3264,7 +3640,7 @@ function input(key,label,value,type="text"){
  return `
  <div class="field">
 
-  <label>${label}</label>
+  <label>${esc(label)}</label>
 
   <input
    type="${type}"
@@ -3273,7 +3649,6 @@ function input(key,label,value,type="text"){
 
  </div>
  `;
-
 }
 
 function textarea(key,label,value){
@@ -3281,14 +3656,92 @@ function textarea(key,label,value){
  return `
  <div class="field">
 
-  <label>${label}</label>
+  <label>${esc(label)}</label>
 
   <textarea
    data-admin="${esc(key)}">${esc(value??"")}</textarea>
 
  </div>
  `;
+}
 
+function languageInput(
+ key,
+ label,
+ value,
+ lang,
+ type="text"
+){
+
+ return `
+ <div class="field">
+
+  <label>${esc(label)}</label>
+
+  ${
+   type==="textarea"
+   ?
+   `<textarea
+    data-admin-lang="${esc(key)}"
+    data-lang="${lang}">${esc(value??"")}</textarea>`
+   :
+   `<input
+    type="text"
+    data-admin-lang="${esc(key)}"
+    data-lang="${lang}"
+    value="${esc(value??"")}">`
+  }
+
+ </div>
+ `;
+}
+
+function languageBlock(
+ title,
+ translations,
+ keyPrefix,
+ textareaMode=false
+){
+
+ return `
+ <div class="langSection">
+
+  <div class="langSectionTitle">
+
+   <strong>${esc(title)}</strong>
+
+   <span class="langBadge">
+    TR / EN / AR
+   </span>
+
+  </div>
+
+  ${languageInput(
+   keyPrefix+"-tr",
+   "🇹🇷 Türkçe",
+   translations?.tr||"",
+   "tr",
+   textareaMode?"textarea":"text"
+  )}
+
+  ${languageInput(
+   keyPrefix+"-en",
+   "🇬🇧 English",
+   translations?.en||"",
+   "en",
+   textareaMode?"textarea":"text"
+  )}
+
+  ${languageInput(
+   keyPrefix+"-ar",
+   "🇸🇦 العربية",
+   translations?.ar||"",
+   "ar",
+   textareaMode?"textarea":"text"
+  )}
+
+ </div>
+ `;
 }
 
 function fileField(
@@ -3307,13 +3760,13 @@ function fileField(
  return `
  <div class="field">
 
-  <label>${label}</label>
+  <label>${esc(label)}</label>
 
   <div class="fileBox">
 
    <label class="fileBtn">
 
-    📁 ${t("image")} ${isVideo?" / "+t("video"):""}
+    📁 ${t("image")}${isVideo?" / "+t("video"):""}
 
     <input
      hidden
@@ -3330,8 +3783,8 @@ function fileField(
     `<button
      type="button"
      class="fileBtn"
-     data-clear-file="${type}|${esc(id)}">
-     Temizle
+     data-clear-file="${esc(type)}|${esc(id)}">
+     ${t("clear")}
     </button>`
     :
     ""
@@ -3355,13 +3808,12 @@ function fileField(
     alt="">`
    :
    `<div class="help">
-    Henüz dosya seçilmedi.
+    ${language==="ar"?"لم يتم اختيار ملف بعد.":"Henüz dosya seçilmedi."}
    </div>`
   }
 
  </div>
  `;
-
 }
 
 /* =========================================================
@@ -3379,22 +3831,23 @@ function renderAdminGeneral(){
   </div>
 
   <div class="small">
-   Menüde görünen temel işletme bilgilerini buradan değiştir.
+   İşletme bilgilerinin üç dilde görünmesini sağlayabilirsin.
   </div>
 
-  <div style="margin-top:15px">
+  ${languageBlock(
+   "İşletme Adı",
+   DATA.nameTranslations,
+   "businessName"
+  )}
 
-   ${input(
-    "businessName",
-    "İşletme adı",
-    DATA.name
-   )}
+  ${languageBlock(
+   "Alt Başlık",
+   DATA.subtitleTranslations,
+   "businessSubtitle",
+   true
+  )}
 
-   ${input(
-    "subtitle",
-    "Alt başlık",
-    DATA.subtitle
-   )}
+  <div style="margin-top:14px">
 
    ${input(
     "phone",
@@ -3459,11 +3912,70 @@ function renderAdminGeneral(){
  <div class="adminCard">
 
   <div class="adminCardTitle">
+   🔐 ${t("changePin")}
+  </div>
+
+  <div class="small">
+   Yönetim paneline girişte kullanılan PIN'i istediğin zaman değiştirebilirsin.
+  </div>
+
+  <div class="pinBox" style="margin-top:13px">
+
+   <div class="pinInfo">
+    Güvenlik için mevcut PIN'i ve yeni PIN'i girmen gerekir.
+   </div>
+
+   ${input(
+    "currentPin",
+    t("currentPin"),
+    "",
+    "password"
+   )}
+
+   ${input(
+    "newPin",
+    t("newPin"),
+    "",
+    "password"
+   )}
+
+   ${input(
+    "repeatPin",
+    t("repeatPin"),
+    "",
+    "password"
+   )}
+
+   <button
+    class="adminButton gold"
+    id="changePinButton"
+    style="width:100%">
+    🔐 ${t("changePin")}
+   </button>
+
+   <div
+    id="pinMessage"
+    style="
+     display:none;
+     margin-top:9px;
+     padding:9px;
+     border-radius:9px;
+     font-size:10px;
+     text-align:center">
+   </div>
+
+  </div>
+
+ </div>
+
+ <div class="adminCard">
+
+  <div class="adminCardTitle">
    ✨ Etkinlikler
   </div>
 
   <div class="small">
-   Etkinlik ekleyebilir, fotoğraf/video değiştirebilir veya silebilirsin.
+   Etkinlikleri üç dilde düzenleyebilirsin.
   </div>
 
   <div style="margin-top:14px">
@@ -3475,36 +3987,62 @@ function renderAdminGeneral(){
 
     <div
      class="adminCard"
-     style="
-      margin:0 0 10px;
-      background:#101011">
+     style="margin:0 0 10px;background:#101011">
 
-     ${input(
-      "eventName-"+event.id,
-      "Etkinlik adı",
-      event.name
+     ${languageBlock(
+      t("eventName"),
+      event.names,
+      "eventName-"+event.id
      )}
 
      <div class="row">
 
       ${input(
        "eventDate-"+event.id,
-       "Gün",
+       t("eventDate")+" (TR temel)",
        event.date
       )}
 
       ${input(
        "eventTime-"+event.id,
-       "Saat",
+       t("eventTime"),
        event.time
       )}
 
      </div>
 
-     ${textarea(
+     <div class="langSection">
+
+      <div class="langSectionTitle">
+       <strong>${t("eventDate")}</strong>
+       <span class="langBadge">TR / EN / AR</span>
+      </div>
+
+      ${input(
+       "eventDateTR-"+event.id,
+       "🇹🇷 Türkçe",
+       event.dateTranslations?.tr||event.date
+      )}
+
+      ${input(
+       "eventDateEN-"+event.id,
+       "🇬🇧 English",
+       event.dateTranslations?.en||event.date
+      )}
+
+      ${input(
+       "eventDateAR-"+event.id,
+       "🇸🇦 العربية",
+       event.dateTranslations?.ar||event.date
+      )}
+
+     </div>
+
+     ${languageBlock(
+      t("eventDescription"),
+      event.descriptions,
       "eventDescription-"+event.id,
-      "Açıklama",
-      event.description
+      true
      )}
 
      ${fileField(
@@ -3533,9 +4071,7 @@ function renderAdminGeneral(){
 
    `).join("")
    :
-   `<div class="empty">
-    Henüz etkinlik yok.
-   </div>`
+   `<div class="empty">Henüz etkinlik yok.</div>`
   }
 
   </div>
@@ -3550,7 +4086,6 @@ function renderAdminGeneral(){
  </div>
 
  `;
-
 }
 
 /* =========================================================
@@ -3568,15 +4103,13 @@ function renderAdminCategories(){
   </div>
 
   <div class="small">
-   Önce kategoriye gir. Sonra ürünleri tek tek ekleyebilirsin.
+   Kategoriye girip kategori adlarını üç dilde düzenleyebilir, ürünleri yönetebilirsin.
   </div>
 
   <button
    class="adminButton gold"
    id="addCategory"
-   style="
-    width:100%;
-    margin-top:13px">
+   style="width:100%;margin-top:13px">
    ${t("addCategory")}
   </button>
 
@@ -3616,7 +4149,7 @@ function renderAdminCategories(){
     <div class="adminCategoryInfo">
 
      <strong>
-      ${esc(category.name)}
+      ${esc(localizedName(category))}
      </strong>
 
      <span>
@@ -3625,23 +4158,18 @@ function renderAdminCategories(){
 
     </div>
 
-    <div class="adminArrow">
-     ›
-    </div>
+    <div class="adminArrow">›</div>
 
    </button>
 
   `).join("")
   :
-  `<div class="empty">
-   ${t("noCategories")}
-  </div>`
+  `<div class="empty">${t("noCategories")}</div>`
  }
 
  </div>
 
  `;
-
 }
 
 /* =========================================================
@@ -3650,16 +4178,11 @@ function renderAdminCategories(){
 
 function renderAdminCategory(){
 
- const category=findCategory(
-  adminCategoryView
- );
+ const category=findCategory(adminCategoryView);
 
  if(!category){
-
   adminCategoryView=null;
-
   return renderAdminCategories();
-
  }
 
  return `
@@ -3673,7 +4196,7 @@ function renderAdminCategory(){
   <span>›</span>
 
   <strong>
-   ${esc(category.name)}
+   ${esc(localizedName(category))}
   </strong>
 
  </div>
@@ -3684,10 +4207,10 @@ function renderAdminCategory(){
    Kategori Ayarları
   </div>
 
-  ${input(
-   "categoryName-"+category.id,
-   t("categoryName"),
-   category.name
+  ${languageBlock(
+   t("categoryLanguages"),
+   category.names,
+   "categoryName-"+category.id
   )}
 
   ${fileField(
@@ -3716,9 +4239,7 @@ function renderAdminCategory(){
    gap:10px">
 
    <div>
-    <div class="adminCardTitle">
-     Ürünler
-    </div>
+    <div class="adminCardTitle">Ürünler</div>
     <div class="small">
      ${(category.items||[]).length} ürün
     </div>
@@ -3777,23 +4298,18 @@ function renderAdminCategory(){
 
     </div>
 
-    <div class="adminArrow">
-     ›
-    </div>
+    <div class="adminArrow">›</div>
 
    </button>
 
   `).join("")
   :
-  `<div class="empty">
-   ${t("noProducts")}
-  </div>`
+  `<div class="empty">${t("noProducts")}</div>`
  }
 
  </div>
 
  `;
-
 }
 
 /* =========================================================
@@ -3802,29 +4318,19 @@ function renderAdminCategory(){
 
 function renderAdminProduct(){
 
- const item=findProduct(
-  adminProductView
- );
+ const item=findProduct(adminProductView);
 
  let category=null;
 
  if(item){
-
   category=DATA.categories.find(
-   c=>
-    (c.items||[]).some(
-     p=>p.id===item.id
-    )
+   c=>(c.items||[]).some(p=>p.id===item.id)
   );
-
  }
 
  if(!item||!category){
-
   adminProductView=null;
-
   return renderAdminCategory();
-
  }
 
  return `
@@ -3832,13 +4338,13 @@ function renderAdminProduct(){
  <div class="adminBreadcrumb">
 
   <button id="adminProductBack">
-   ‹ ${esc(category.name)}
+   ‹ ${esc(localizedName(category))}
   </button>
 
   <span>›</span>
 
   <strong>
-   ${item.name==="Yeni Ürün"?"Yeni Ürün":"Ürün"}
+   ${esc(localizedName(item))}
   </strong>
 
  </div>
@@ -3852,7 +4358,7 @@ function renderAdminProduct(){
   </strong>
 
   <span>
-   Temel bilgileri doldurup kaydetmen yeterli.
+   Ürünün üç dilde adını ve açıklamasını ayrı ayrı girebilirsin.
   </span>
 
  </div>
@@ -3863,25 +4369,26 @@ function renderAdminProduct(){
    ${t("basic")}
   </div>
 
-  <div style="margin-top:14px">
+  ${languageBlock(
+   t("productLanguages"),
+   item.names,
+   "productName-"+item.id
+  )}
 
-   ${input(
-    "productName-"+item.id,
-    t("productName"),
-    item.name
-   )}
+  ${languageBlock(
+   "Ürün Açıklaması",
+   item.descriptions,
+   "productDescription-"+item.id,
+   true
+  )}
+
+  <div style="margin-top:14px">
 
    ${input(
     "productPrice-"+item.id,
     t("productPrice"),
     item.price,
     "number"
-   )}
-
-   ${textarea(
-    "productDescription-"+item.id,
-    t("description"),
-    item.description
    )}
 
    ${fileField(
@@ -3916,11 +4423,32 @@ function renderAdminProduct(){
    ?
    `<div style="margin-top:15px">
 
-    ${input(
-     "productPortion-"+item.id,
-     t("portion"),
-     item.portion||""
-    )}
+    <div class="langSection">
+
+     <div class="langSectionTitle">
+      <strong>${t("portion")}</strong>
+      <span class="langBadge">TR / EN / AR</span>
+     </div>
+
+     ${input(
+      "productPortionTR-"+item.id,
+      "🇹🇷 Türkçe",
+      item.portionTranslations?.tr||item.portion||""
+     )}
+
+     ${input(
+      "productPortionEN-"+item.id,
+      "🇬🇧 English",
+      item.portionTranslations?.en||item.portion||""
+     )}
+
+     ${input(
+      "productPortionAR-"+item.id,
+      "🇸🇦 العربية",
+      item.portionTranslations?.ar||item.portion||""
+     )}
+
+    </div>
 
     ${input(
      "productCalories-"+item.id,
@@ -3928,11 +4456,32 @@ function renderAdminProduct(){
      item.calories||""
     )}
 
-    ${input(
-     "productAllergens-"+item.id,
-     t("allergens")+" (virgülle ayır)",
-     (item.allergens||[]).join(", ")
-    )}
+    <div class="langSection">
+
+     <div class="langSectionTitle">
+      <strong>${t("allergens")}</strong>
+      <span class="langBadge">TR / EN / AR</span>
+     </div>
+
+     ${input(
+      "productAllergensTR-"+item.id,
+      "🇹🇷 Türkçe (virgülle ayır)",
+      (item.allergensTranslations?.tr||item.allergens||[]).join(", ")
+     )}
+
+     ${input(
+      "productAllergensEN-"+item.id,
+      "🇬🇧 English (comma separated)",
+      (item.allergensTranslations?.en||item.allergens||[]).join(", ")
+     )}
+
+     ${input(
+      "productAllergensAR-"+item.id,
+      "🇸🇦 العربية (بفواصل)",
+      (item.allergensTranslations?.ar||item.allergens||[]).join(", ")
+     )}
+
+    </div>
 
     ${input(
      "productSpicy-"+item.id,
@@ -3992,16 +4541,13 @@ function renderAdminProduct(){
   <button
    class="adminButton danger"
    data-delete-product="${esc(category.id)}|${esc(item.id)}"
-   style="
-    width:100%;
-    margin-top:8px">
+   style="width:100%;margin-top:8px">
    ${t("delete")} • Ürünü Sil
   </button>
 
  </div>
 
  `;
-
 }
 
 /* =========================================================
@@ -4021,13 +4567,8 @@ function renderAdminDesign(){
   ["Courier New","Courier New"]
  ];
 
- const fontValue=
-  th.fontFamily||
-  "system";
-
- const titleFontValue=
-  th.titleFont||
-  "Georgia";
+ const fontValue=th.fontFamily||"system";
+ const titleFontValue=th.titleFont||"Georgia";
 
  return `
 
@@ -4103,9 +4644,7 @@ function renderAdminDesign(){
 
  <div class="adminCard">
 
-  <div class="adminCardTitle">
-   Hazır Renkler
-  </div>
+  <div class="adminCardTitle">Hazır Renkler</div>
 
   <div class="presetRow" style="margin-top:12px">
 
@@ -4124,9 +4663,7 @@ function renderAdminDesign(){
     ].map(c=>`
 
      <button
-      class="preset ${
-       th.accent===c?"active":""
-      }"
+      class="preset ${th.accent===c?"active":""}"
       style="background:${c}"
       data-theme-color="${c}">
      </button>
@@ -4155,11 +4692,7 @@ function renderAdminDesign(){
 
       <option
        value="${esc(f[0])}"
-       ${
-        fontValue===f[0]
-        ?"selected"
-        :""
-       }>
+       ${fontValue===f[0]?"selected":""}>
        ${esc(f[1])}
       </option>
 
@@ -4181,11 +4714,7 @@ function renderAdminDesign(){
 
       <option
        value="${esc(f[0])}"
-       ${
-        titleFontValue===f[0]
-        ?"selected"
-        :""
-       }>
+       ${titleFontValue===f[0]?"selected":""}>
        ${esc(f[1])}
       </option>
 
@@ -4207,141 +4736,93 @@ function renderAdminDesign(){
   <div class="designGrid" style="margin-top:13px">
 
    <div class="designCard">
-
     <h4>Logo büyüklüğü</h4>
-
     <div class="rangeRow">
-
      <input
       type="range"
       min="60"
       max="190"
       value="${th.logoSize||112}"
       data-design="logoSize">
-
-     <span
-      class="rangeValue"
-      id="logoSizeValue">
+     <span class="rangeValue" id="logoSizeValue">
       ${th.logoSize||112}px
      </span>
-
     </div>
-
    </div>
 
    <div class="designCard">
-
     <h4>Başlık büyüklüğü</h4>
-
     <div class="rangeRow">
-
      <input
       type="range"
       min="22"
       max="52"
       value="${th.titleSize||34}"
       data-design="titleSize">
-
-     <span
-      class="rangeValue"
-      id="titleSizeValue">
+     <span class="rangeValue" id="titleSizeValue">
       ${th.titleSize||34}px
      </span>
-
     </div>
-
    </div>
 
    <div class="designCard">
-
     <h4>Genel yazı</h4>
-
     <div class="rangeRow">
-
      <input
       type="range"
       min="11"
       max="20"
       value="${th.bodySize||13}"
       data-design="bodySize">
-
-     <span
-      class="rangeValue"
-      id="bodySizeValue">
+     <span class="rangeValue" id="bodySizeValue">
       ${th.bodySize||13}px
      </span>
-
     </div>
-
    </div>
 
    <div class="designCard">
-
     <h4>Kart köşesi</h4>
-
     <div class="rangeRow">
-
      <input
       type="range"
       min="8"
       max="34"
       value="${th.cardRadius||20}"
       data-design="cardRadius">
-
-     <span
-      class="rangeValue"
-      id="cardRadiusValue">
+     <span class="rangeValue" id="cardRadiusValue">
       ${th.cardRadius||20}px
      </span>
-
     </div>
-
    </div>
 
    <div class="designCard">
-
     <h4>Kart şeffaflığı</h4>
-
     <div class="rangeRow">
-
      <input
       type="range"
       min="55"
       max="100"
       value="${Math.round((th.cardOpacity??.94)*100)}"
       data-design="cardOpacity">
-
-     <span
-      class="rangeValue"
-      id="cardOpacityValue">
+     <span class="rangeValue" id="cardOpacityValue">
       ${Math.round((th.cardOpacity??.94)*100)}%
      </span>
-
     </div>
-
    </div>
 
    <div class="designCard">
-
     <h4>Arka plan karartma</h4>
-
     <div class="rangeRow">
-
      <input
       type="range"
       min="0"
       max="90"
       value="${Math.round((th.overlay??.55)*100)}"
       data-design="overlay">
-
-     <span
-      class="rangeValue"
-      id="overlayValue">
+     <span class="rangeValue" id="overlayValue">
       ${Math.round((th.overlay??.55)*100)}%
      </span>
-
     </div>
-
    </div>
 
   </div>
@@ -4361,25 +4842,19 @@ function renderAdminDesign(){
    margin-top:13px">
 
    <button
-    class="adminButton ${
-     DATA.background.type==="color"?"gold":""
-    }"
+    class="adminButton ${DATA.background.type==="color"?"gold":""}"
     data-background="color">
     Renk
    </button>
 
    <button
-    class="adminButton ${
-     DATA.background.type==="image"?"gold":""
-    }"
+    class="adminButton ${DATA.background.type==="image"?"gold":""}"
     data-background="image">
     Fotoğraf
    </button>
 
    <button
-    class="adminButton ${
-     DATA.background.type==="video"?"gold":""
-    }"
+    class="adminButton ${DATA.background.type==="video"?"gold":""}"
     data-background="video">
     Video
    </button>
@@ -4453,7 +4928,6 @@ function renderAdminDesign(){
  </div>
 
  `;
-
 }
 
 /* =========================================================
@@ -4462,8 +4936,7 @@ function renderAdminDesign(){
 
 function renderAdmin(){
 
- if(!adminOpen||!adminAuthenticated)
-  return "";
+ if(!adminOpen||!adminAuthenticated)return "";
 
  let body="";
 
@@ -4496,17 +4969,11 @@ function renderAdmin(){
 
      <div class="adminTitle">
 
-      <div class="adminTitleIcon">
-       N
-      </div>
+      <div class="adminTitleIcon">N</div>
 
       <div>
        <b>${t("admin")}</b>
-
-       <div class="small">
-        NearMenu Premium
-       </div>
-
+       <div class="small">NearMenu Premium</div>
       </div>
 
      </div>
@@ -4562,7 +5029,6 @@ function renderAdmin(){
 
  </div>
  `;
-
 }
 
 /* =========================================================
@@ -4571,8 +5037,7 @@ function renderAdmin(){
 
 function renderAdminLogin(){
 
- if(!adminOpen||adminAuthenticated)
-  return "";
+ if(!adminOpen||adminAuthenticated)return "";
 
  return `
  <div
@@ -4581,16 +5046,12 @@ function renderAdminLogin(){
 
   <div class="adminLogin">
 
-   <div class="adminLoginLogo">
-    N
-   </div>
+   <div class="adminLoginLogo">N</div>
 
-   <h2>
-    ${t("admin")}
-   </h2>
+   <h2>${t("admin")}</h2>
 
    <p>
-    Devam etmek için yönetici şifresini girin.
+    Devam etmek için yönetici PIN'ini girin.
    </p>
 
    <input
@@ -4599,7 +5060,8 @@ function renderAdminLogin(){
     type="password"
     inputmode="numeric"
     autocomplete="off"
-    placeholder="Şifre">
+    maxlength="12"
+    placeholder="PIN">
 
    <button
     class="adminLoginButton"
@@ -4610,14 +5072,13 @@ function renderAdminLogin(){
    <div
     class="loginError"
     id="loginError">
-    Şifre yanlış.
+    PIN yanlış.
    </div>
 
   </div>
 
  </div>
  `;
-
 }
 
 /* =========================================================
@@ -4633,28 +5094,34 @@ function collectAdmin(){
   const key=input.dataset.admin;
   const value=input.value;
 
-  if(key==="businessName")
+  if(key==="businessName"){
    DATA.name=value;
+   if(!DATA.nameTranslations)
+    DATA.nameTranslations={tr:"",en:"",ar:""};
+   DATA.nameTranslations.tr=value;
+  }
 
-  else if(key==="subtitle")
+  else if(key==="subtitle"){
    DATA.subtitle=value;
+   if(!DATA.subtitleTranslations)
+    DATA.subtitleTranslations={tr:"",en:"",ar:""};
+   DATA.subtitleTranslations.tr=value;
+  }
 
   else if(key==="phone")
    DATA.phone=value;
 
   else if(key==="whatsapp")
-   DATA.whatsapp=value;
+   DATA.whatsapp=normalizeWhatsapp(value);
 
   else if(key==="hours")
    DATA.hours=value;
 
   else if(key==="rateUSD")
-   DATA.rates.USD=
-    Number(value)||0;
+   DATA.rates.USD=Number(value)||0;
 
   else if(key==="rateEUR")
-   DATA.rates.EUR=
-    Number(value)||0;
+   DATA.rates.EUR=Number(value)||0;
 
   else if(key==="fontFamily")
    DATA.theme.fontFamily=value;
@@ -4664,166 +5131,358 @@ function collectAdmin(){
 
   else if(key.startsWith("categoryName-")){
 
-   const id=
-    key.replace("categoryName-","");
-
+   const id=key.replace("categoryName-","");
    const category=findCategory(id);
 
-   if(category)
-    category.name=value;
-
+   if(category){
+    category.name=
+     category.names?.tr||
+     category.name||
+     "";
+   }
   }
 
   else if(key.startsWith("productName-")){
 
-   const id=
-    key.replace("productName-","");
-
+   const id=key.replace("productName-","");
    const item=findProduct(id);
 
-   if(item)
-    item.name=value;
-
+   if(item){
+    item.name=
+     item.names?.tr||
+     item.name||
+     "";
+   }
   }
 
   else if(key.startsWith("productDescription-")){
 
-   const id=
-    key.replace("productDescription-","");
-
+   const id=key.replace("productDescription-","");
    const item=findProduct(id);
 
-   if(item)
-    item.description=value;
-
+   if(item){
+    item.description=
+     item.descriptions?.tr||
+     item.description||
+     "";
+   }
   }
 
   else if(key.startsWith("productPrice-")){
 
-   const id=
-    key.replace("productPrice-","");
-
+   const id=key.replace("productPrice-","");
    const item=findProduct(id);
 
    if(item)
     item.price=Number(value)||0;
-
-  }
-
-  else if(key.startsWith("productPortion-")){
-
-   const id=
-    key.replace("productPortion-","");
-
-   const item=findProduct(id);
-
-   if(item)
-    item.portion=value;
-
   }
 
   else if(key.startsWith("productCalories-")){
 
-   const id=
-    key.replace("productCalories-","");
-
+   const id=key.replace("productCalories-","");
    const item=findProduct(id);
 
    if(item)
     item.calories=value;
-
-  }
-
-  else if(key.startsWith("productAllergens-")){
-
-   const id=
-    key.replace("productAllergens-","");
-
-   const item=findProduct(id);
-
-   if(item){
-
-    item.allergens=
-     value
-     .split(",")
-     .map(x=>x.trim())
-     .filter(Boolean);
-
-   }
-
   }
 
   else if(key.startsWith("productSpicy-")){
 
-   const id=
-    key.replace("productSpicy-","");
-
+   const id=key.replace("productSpicy-","");
    const item=findProduct(id);
 
    if(item){
-
     item.spicy=Math.max(
      0,
-     Math.min(
-      5,
-      Number(value)||0
-     )
+     Math.min(5,Number(value)||0)
     );
-
    }
-
   }
 
   else if(key.startsWith("eventName-")){
 
-   const id=
-    key.replace("eventName-","");
-
+   const id=key.replace("eventName-","");
    const event=findEvent(id);
 
-   if(event)
-    event.name=value;
-
+   if(event){
+    event.name=
+     event.names?.tr||
+     event.name||
+     "";
+   }
   }
 
   else if(key.startsWith("eventDate-")){
 
-   const id=
-    key.replace("eventDate-","");
-
+   const id=key.replace("eventDate-","");
    const event=findEvent(id);
 
-   if(event)
-    event.date=value;
-
+   if(event){
+    event.date=
+     event.dateTranslations?.tr||
+     event.date||
+     "";
+   }
   }
 
   else if(key.startsWith("eventTime-")){
 
-   const id=
-    key.replace("eventTime-","");
-
+   const id=key.replace("eventTime-","");
    const event=findEvent(id);
 
    if(event)
     event.time=value;
-
   }
 
   else if(key.startsWith("eventDescription-")){
 
-   const id=
-    key.replace("eventDescription-","");
-
+   const id=key.replace("eventDescription-","");
    const event=findEvent(id);
 
-   if(event)
-    event.description=value;
-
+   if(event){
+    event.description=
+     event.descriptions?.tr||
+     event.description||
+     "";
+   }
   }
 
  });
 
+ /* MULTI LANGUAGE FIELDS */
+
+ document
+ .querySelectorAll("[data-admin-lang]")
+ .forEach(field=>{
+
+  const key=field.dataset.adminLang;
+  const lang=field.dataset.lang;
+  const value=field.value;
+
+  if(key.startsWith("businessName-")){
+
+   if(!DATA.nameTranslations)
+    DATA.nameTranslations={tr:"",en:"",ar:""};
+
+   DATA.nameTranslations[lang]=value;
+
+   if(lang==="tr")
+    DATA.name=value;
+  }
+
+  else if(key.startsWith("businessSubtitle-")){
+
+   if(!DATA.subtitleTranslations)
+    DATA.subtitleTranslations={tr:"",en:"",ar:""};
+
+   DATA.subtitleTranslations[lang]=value;
+
+   if(lang==="tr")
+    DATA.subtitle=value;
+  }
+
+  else if(key.startsWith("categoryName-")){
+
+   const id=key.replace("categoryName-","");
+   const category=findCategory(id);
+
+   if(category){
+    if(!category.names)
+     category.names={tr:"",en:"",ar:""};
+
+    category.names[lang]=value;
+
+    if(lang==="tr")
+     category.name=value;
+   }
+  }
+
+  else if(key.startsWith("productName-")){
+
+   const id=key.replace("productName-","");
+   const item=findProduct(id);
+
+   if(item){
+    if(!item.names)
+     item.names={tr:"",en:"",ar:""};
+
+    item.names[lang]=value;
+
+    if(lang==="tr")
+     item.name=value;
+   }
+  }
+
+  else if(key.startsWith("productDescription-")){
+
+   const id=key.replace("productDescription-","");
+   const item=findProduct(id);
+
+   if(item){
+    if(!item.descriptions)
+     item.descriptions={tr:"",en:"",ar:""};
+
+    item.descriptions[lang]=value;
+
+    if(lang==="tr")
+     item.description=value;
+   }
+  }
+
+  else if(key.startsWith("eventName-")){
+
+   const id=key.replace("eventName-","");
+   const event=findEvent(id);
+
+   if(event){
+    if(!event.names)
+     event.names={tr:"",en:"",ar:""};
+
+    event.names[lang]=value;
+
+    if(lang==="tr")
+     event.name=value;
+   }
+  }
+
+  else if(key.startsWith("eventDescription-")){
+
+   const id=key.replace("eventDescription-","");
+   const event=findEvent(id);
+
+   if(event){
+    if(!event.descriptions)
+     event.descriptions={tr:"",en:"",ar:""};
+
+    event.descriptions[lang]=value;
+
+    if(lang==="tr")
+     event.description=value;
+   }
+  }
+
+ });
+
+ /* PORTION */
+
+ document
+ .querySelectorAll('[data-admin^="productPortion"]')
+ .forEach(field=>{
+
+  const key=field.dataset.admin;
+
+  const match=
+   key.match(/^productPortion(TR|EN|AR)-(.+)$/);
+
+  if(!match)return;
+
+  const langMap={
+   TR:"tr",
+   EN:"en",
+   AR:"ar"
+  };
+
+  const lang=langMap[match[1]];
+  const id=match[2];
+
+  const item=findProduct(id);
+
+  if(item){
+   if(!item.portionTranslations)
+    item.portionTranslations={tr:"",en:"",ar:""};
+
+   item.portionTranslations[lang]=field.value;
+
+   if(lang==="tr")
+    item.portion=field.value;
+  }
+ });
+
+ /* ALLERGENS */
+
+ document
+ .querySelectorAll('[data-admin^="productAllergens"]')
+ .forEach(field=>{
+
+  const key=field.dataset.admin;
+
+  const match=
+   key.match(/^productAllergens(TR|EN|AR)-(.+)$/);
+
+  if(!match)return;
+
+  const langMap={
+   TR:"tr",
+   EN:"en",
+   AR:"ar"
+  };
+
+  const lang=langMap[match[1]];
+  const id=match[2];
+
+  const item=findProduct(id);
+
+  if(item){
+
+   const values=
+    field.value
+    .split(",")
+    .map(x=>x.trim())
+    .filter(Boolean);
+
+   if(!item.allergensTranslations)
+    item.allergensTranslations={
+     tr:[],
+     en:[],
+     ar:[]
+    };
+
+   item.allergensTranslations[lang]=values;
+
+   if(lang==="tr")
+    item.allergens=values;
+  }
+ });
+
+ /* EVENT DATES */
+
+ document
+ .querySelectorAll('[data-admin^="eventDate"]')
+ .forEach(field=>{
+
+  const key=field.dataset.admin;
+
+  const match=
+   key.match(/^eventDate(TR|EN|AR)-(.+)$/);
+
+  if(!match)return;
+
+  const langMap={
+   TR:"tr",
+   EN:"en",
+   AR:"ar"
+  };
+
+  const lang=langMap[match[1]];
+  const id=match[2];
+
+  const event=findEvent(id);
+
+  if(event){
+
+   if(!event.dateTranslations)
+    event.dateTranslations={
+     tr:"",
+     en:"",
+     ar:""
+    };
+
+   event.dateTranslations[lang]=field.value;
+
+   if(lang==="tr")
+    event.date=field.value;
+  }
+ });
 }
 
 /* =========================================================
@@ -4843,7 +5502,6 @@ function readFileAsDataURL(file,callback){
  };
 
  reader.readAsDataURL(file);
-
 }
 
 function handleFile(type,id,file){
@@ -4853,196 +5511,95 @@ function handleFile(type,id,file){
  const maxImage=8*1024*1024;
  const maxVideo=20*1024*1024;
 
- const isVideo=
-  file.type.startsWith("video/");
+ const isVideo=file.type.startsWith("video/");
 
- if(
-  isVideo &&
-  file.size>maxVideo
- ){
-
-  alert(
-   "Video en fazla 20 MB olabilir."
-  );
-
+ if(isVideo&&file.size>maxVideo){
+  alert("Video en fazla 20 MB olabilir.");
   return;
-
  }
 
- if(
-  !isVideo &&
-  file.size>maxImage
- ){
-
-  alert(
-   "Fotoğraf en fazla 8 MB olabilir."
-  );
-
+ if(!isVideo&&file.size>maxImage){
+  alert("Fotoğraf en fazla 8 MB olabilir.");
   return;
-
  }
 
- readFileAsDataURL(
-  file,
-  data=>{
+ readFileAsDataURL(file,data=>{
 
-   if(type==="logo")
-    DATA.logo=data;
+  if(type==="logo")
+   DATA.logo=data;
 
-   else if(type==="backgroundImage"){
-
-    DATA.background.image=data;
-    DATA.background.type="image";
-
-   }
-
-   else if(type==="backgroundVideo"){
-
-    DATA.background.video=data;
-    DATA.background.type="video";
-
-   }
-
-   else if(type==="categoryImage"){
-
-    const category=findCategory(id);
-
-    if(category)
-     category.image=data;
-
-   }
-
-   else if(type==="productImage"){
-
-    const item=findProduct(id);
-
-    if(item)
-     item.image=data;
-
-   }
-
-   else if(type==="productVideo"){
-
-    const item=findProduct(id);
-
-    if(item)
-     item.video=data;
-
-   }
-
-   else if(type==="eventImage"){
-
-    const event=findEvent(id);
-
-    if(event)
-     event.image=data;
-
-   }
-
-   else if(type==="eventVideo"){
-
-    const event=findEvent(id);
-
-    if(event)
-     event.video=data;
-
-   }
-
-   saveData();
-   render();
-
+  else if(type==="backgroundImage"){
+   DATA.background.image=data;
+   DATA.background.type="image";
   }
- );
 
+  else if(type==="backgroundVideo"){
+   DATA.background.video=data;
+   DATA.background.type="video";
+  }
+
+  else if(type==="categoryImage"){
+   const category=findCategory(id);
+   if(category)category.image=data;
+  }
+
+  else if(type==="productImage"){
+   const item=findProduct(id);
+   if(item)item.image=data;
+  }
+
+  else if(type==="productVideo"){
+   const item=findProduct(id);
+   if(item)item.video=data;
+  }
+
+  else if(type==="eventImage"){
+   const event=findEvent(id);
+   if(event)event.image=data;
+  }
+
+  else if(type==="eventVideo"){
+   const event=findEvent(id);
+   if(event)event.video=data;
+  }
+
+  saveData();
+  render();
+
+ });
 }
 
 /* =========================================================
-   LIVE CSS
+   THEME
 ========================================================= */
 
 function applyTheme(){
 
  const th=DATA.theme;
-
  const root=document.documentElement;
 
- root.style.setProperty(
-  "--accent",
-  th.accent||"#d6a83d"
- );
-
- root.style.setProperty(
-  "--accent2",
-  th.accent2||"#f0c45a"
- );
-
- root.style.setProperty(
-  "--text",
-  th.text||"#fff"
- );
-
- root.style.setProperty(
-  "--cardText",
-  th.cardText||"#fff"
- );
-
- root.style.setProperty(
-  "--price",
-  th.price||th.accent2||"#f0c45a"
- );
-
- root.style.setProperty(
-  "--overlay",
-  th.overlay??.55
- );
-
- root.style.setProperty(
-  "--cardOpacity",
-  th.cardOpacity??.94
- );
-
- root.style.setProperty(
-  "--cardRadius",
-  (th.cardRadius||20)+"px"
- );
-
- root.style.setProperty(
-  "--titleSize",
-  (th.titleSize||34)+"px"
- );
-
- root.style.setProperty(
-  "--bodySize",
-  (th.bodySize||13)+"px"
- );
-
- root.style.setProperty(
-  "--logoSize",
-  (th.logoSize||112)+"px"
- );
-
- root.style.setProperty(
-  "--fontFamily",
-  resolveFont(th.fontFamily)
- );
-
- root.style.setProperty(
-  "--titleFont",
-  resolveFont(th.titleFont||"Georgia")
- );
-
+ root.style.setProperty("--accent",th.accent||"#d6a83d");
+ root.style.setProperty("--accent2",th.accent2||"#f0c45a");
+ root.style.setProperty("--text",th.text||"#fff");
+ root.style.setProperty("--cardText",th.cardText||"#fff");
+ root.style.setProperty("--price",th.price||th.accent2||"#f0c45a");
+ root.style.setProperty("--overlay",th.overlay??.55);
+ root.style.setProperty("--cardOpacity",th.cardOpacity??.94);
+ root.style.setProperty("--cardRadius",(th.cardRadius||20)+"px");
+ root.style.setProperty("--titleSize",(th.titleSize||34)+"px");
+ root.style.setProperty("--bodySize",(th.bodySize||13)+"px");
+ root.style.setProperty("--logoSize",(th.logoSize||112)+"px");
+ root.style.setProperty("--fontFamily",resolveFont(th.fontFamily));
+ root.style.setProperty("--titleFont",resolveFont(th.titleFont||"Georgia"));
 }
 
 function resolveFont(font){
 
  if(font==="system"||!font){
-
   return '-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif';
-
  }
 
  return font;
-
 }
 
 /* =========================================================
@@ -5052,13 +5609,19 @@ function resolveFont(font){
 function render(){
 
  document.documentElement.dir=
-  language==="ar"
-  ?
-  "rtl"
-  :
-  "ltr";
+  language==="ar"?"rtl":"ltr";
 
  applyTheme();
+
+ document.body.classList.toggle(
+  "modalOpen",
+  !!(
+   selectedProduct||
+   selectedEvent||
+   adminOpen||
+   drawerOpen
+  )
+ );
 
  let content="";
 
@@ -5178,7 +5741,6 @@ function render(){
  `;
 
  bindEvents();
-
 }
 
 /* =========================================================
@@ -5186,38 +5748,6 @@ function render(){
 ========================================================= */
 
 function bindEvents(){
-
- /* CLOSE POPUPS WHEN CLICKING OUTSIDE */
-
- document.addEventListener(
-  "click",
-  closePopupsOutside,
-  {once:true}
- );
-
- function closePopupsOutside(e){
-
-  if(
-   !e.target.closest("#currencyButton") &&
-   !e.target.closest("[data-currency]") &&
-   !e.target.closest("#languageButton") &&
-   !e.target.closest("[data-language]")
-  ){
-
-   if(currencyMenu||languageMenu){
-
-    currencyMenu=false;
-    languageMenu=false;
-
-    render();
-
-    return;
-
-   }
-
-  }
-
- }
 
  /* DRAWER */
 
@@ -5271,8 +5801,7 @@ function bindEvents(){
 
    e.stopPropagation();
 
-   currency=
-    button.dataset.currency;
+   currency=button.dataset.currency;
 
    safeSet(
     "nearMenuCurrency",
@@ -5282,7 +5811,6 @@ function bindEvents(){
    currencyMenu=false;
 
    render();
-
   };
 
  });
@@ -5311,8 +5839,7 @@ function bindEvents(){
 
    e.stopPropagation();
 
-   language=
-    button.dataset.language;
+   language=button.dataset.language;
 
    safeSet(
     "nearMenuLanguage",
@@ -5354,6 +5881,8 @@ function bindEvents(){
 
    searchText=e.target.value;
 
+   const cursor=e.target.selectionStart;
+
    render();
 
    setTimeout(()=>{
@@ -5364,11 +5893,12 @@ function bindEvents(){
 
      input.focus();
 
-     input.setSelectionRange(
-      input.value.length,
+     const pos=Math.min(
+      cursor??input.value.length,
       input.value.length
      );
 
+     input.setSelectionRange(pos,pos);
     }
 
    },0);
@@ -5394,7 +5924,6 @@ function bindEvents(){
    render();
 
    window.scrollTo(0,0);
-
   };
 
  });
@@ -5408,7 +5937,6 @@ function bindEvents(){
    render();
 
    window.scrollTo(0,0);
-
   }
  );
 
@@ -5420,17 +5948,14 @@ function bindEvents(){
 
   element.onclick=()=>{
 
-   const product=
-    findProduct(
-     element.dataset.product
-    );
+   const product=findProduct(
+    element.dataset.product
+   );
 
    if(product){
-
     selectedProduct=product;
-
+    selectedEvent=null;
     render();
-
    }
 
   };
@@ -5450,11 +5975,8 @@ function bindEvents(){
   e=>{
 
    if(e.target.id==="productOverlay"){
-
     selectedProduct=null;
-
     render();
-
    }
 
   }
@@ -5468,13 +5990,13 @@ function bindEvents(){
 
   button.onclick=()=>{
 
-   selectedEvent=
-    findEvent(
-     button.dataset.event
-    );
+   selectedEvent=findEvent(
+    button.dataset.event
+   );
+
+   selectedProduct=null;
 
    render();
-
   };
 
  });
@@ -5492,17 +6014,14 @@ function bindEvents(){
   e=>{
 
    if(e.target.id==="eventOverlay"){
-
     selectedEvent=null;
-
     render();
-
    }
 
   }
  );
 
- /* CATEGORY PRODUCT SCROLL */
+ /* CATEGORY SCROLL */
 
  document
  .querySelectorAll("[data-scroll-product]")
@@ -5575,7 +6094,7 @@ function bindEvents(){
 
   if(!input)return;
 
-  if(input.value===ADMIN_PASSWORD){
+  if(input.value===getAdminPin()){
 
    adminAuthenticated=true;
 
@@ -5590,7 +6109,6 @@ function bindEvents(){
    input.focus();
 
   }
-
  }
 
  /* CLOSE ADMIN */
@@ -5610,7 +6128,6 @@ function bindEvents(){
    saveData();
 
    render();
-
   }
  );
 
@@ -5624,15 +6141,13 @@ function bindEvents(){
 
    collectAdmin();
 
-   adminTab=
-    button.dataset.adminTab;
+   adminTab=button.dataset.adminTab;
 
    adminCategoryView=null;
    adminProductView=null;
    advancedProduct=false;
 
    render();
-
   };
 
  });
@@ -5653,7 +6168,6 @@ function bindEvents(){
    adminProductView=null;
 
    render();
-
   };
 
  });
@@ -5668,7 +6182,6 @@ function bindEvents(){
    adminProductView=null;
 
    render();
-
   }
  );
 
@@ -5688,7 +6201,6 @@ function bindEvents(){
    advancedProduct=false;
 
    render();
-
   };
 
  });
@@ -5704,7 +6216,6 @@ function bindEvents(){
    advancedProduct=false;
 
    render();
-
   }
  );
 
@@ -5718,11 +6229,9 @@ function bindEvents(){
 
    collectAdmin();
 
-   advancedProduct=
-    !advancedProduct;
+   advancedProduct=!advancedProduct;
 
    render();
-
   };
 
  });
@@ -5740,7 +6249,6 @@ function bindEvents(){
    ]=input.checked;
 
    saveData();
-
   };
 
  });
@@ -5753,16 +6261,14 @@ function bindEvents(){
 
   input.onchange=()=>{
 
-   const item=
-    findProduct(
-     input.dataset.sold
-    );
+   const item=findProduct(
+    input.dataset.sold
+   );
 
    if(item)
     item.sold=input.checked;
 
    saveData();
-
   };
 
  });
@@ -5773,16 +6279,14 @@ function bindEvents(){
 
   input.onchange=()=>{
 
-   const item=
-    findProduct(
-     input.dataset.featured
-    );
+   const item=findProduct(
+    input.dataset.featured
+   );
 
    if(item)
     item.featured=input.checked;
 
    saveData();
-
   };
 
  });
@@ -5793,16 +6297,14 @@ function bindEvents(){
 
   input.onchange=()=>{
 
-   const item=
-    findProduct(
-     input.dataset.dish
-    );
+   const item=findProduct(
+    input.dataset.dish
+   );
 
    if(item)
     item.dish=input.checked;
 
    saveData();
-
   };
 
  });
@@ -5828,8 +6330,9 @@ function bindEvents(){
 
    applyTheme();
 
-   render();
+   saveData();
 
+   render();
   };
 
  });
@@ -5840,35 +6343,26 @@ function bindEvents(){
 
   input.oninput=()=>{
 
-   const key=
-    input.dataset.colorSetting;
+   const key=input.dataset.colorSetting;
 
    if(key==="background"){
 
     DATA.background.type="color";
-    DATA.background.value=
-     input.value;
+    DATA.background.value=input.value;
 
-    const bg=
-     document.querySelector(".background");
+    const bg=document.querySelector(".background");
 
     if(bg)
-     bg.style.background=
-      input.value;
+     bg.style.background=input.value;
 
    }else{
 
     DATA.theme[key]=input.value;
 
     applyTheme();
-
    }
 
-   /*
-    Renk değişiminde artık komple
-    paneli yeniden çizmek yok.
-   */
-
+   saveData();
   };
 
  });
@@ -5881,11 +6375,8 @@ function bindEvents(){
 
   input.oninput=()=>{
 
-   const key=
-    input.dataset.design;
-
-   const value=
-    Number(input.value);
+   const key=input.dataset.design;
+   const value=Number(input.value);
 
    if(key==="overlay")
     DATA.theme.overlay=value/100;
@@ -5896,8 +6387,7 @@ function bindEvents(){
    else
     DATA.theme[key]=value;
 
-   const label=
-    $(key+"Value");
+   const label=$(key+"Value");
 
    if(label){
 
@@ -5910,11 +6400,10 @@ function bindEvents(){
      value+"%"
      :
      value+"px";
-
    }
 
    applyTheme();
-
+   saveData();
   };
 
  });
@@ -5932,8 +6421,9 @@ function bindEvents(){
    DATA.background.type=
     button.dataset.background;
 
-   render();
+   saveData();
 
+   render();
   };
 
  });
@@ -5946,8 +6436,7 @@ function bindEvents(){
 
   input.onchange=e=>{
 
-   const file=
-    e.target.files?.[0];
+   const file=e.target.files?.[0];
 
    handleFile(
     input.dataset.fileType,
@@ -5987,7 +6476,6 @@ function bindEvents(){
     const c=findCategory(id);
 
     if(c)c.image="";
-
    }
 
    else if(type==="productImage"){
@@ -5995,7 +6483,6 @@ function bindEvents(){
     const p=findProduct(id);
 
     if(p)p.image="";
-
    }
 
    else if(type==="productVideo"){
@@ -6003,7 +6490,6 @@ function bindEvents(){
     const p=findProduct(id);
 
     if(p)p.video="";
-
    }
 
    else if(type==="eventImage"){
@@ -6011,7 +6497,6 @@ function bindEvents(){
     const e=findEvent(id);
 
     if(e)e.image="";
-
    }
 
    else if(type==="eventVideo"){
@@ -6019,13 +6504,10 @@ function bindEvents(){
     const e=findEvent(id);
 
     if(e)e.video="";
-
    }
 
    saveData();
-
    render();
-
   };
 
  });
@@ -6044,17 +6526,14 @@ function bindEvents(){
 
    DATA.categories=
     DATA.categories.filter(
-     c=>
-      c.id!==button.dataset.deleteCategory
+     c=>c.id!==button.dataset.deleteCategory
     );
 
    adminCategoryView=null;
    adminProductView=null;
 
    saveData();
-
    render();
-
   };
 
  });
@@ -6068,17 +6547,13 @@ function bindEvents(){
   button.onclick=()=>{
 
    const parts=
-    button.dataset.deleteProduct
-    .split("|");
+    button.dataset.deleteProduct.split("|");
 
-   const category=
-    findCategory(parts[0]);
+   const category=findCategory(parts[0]);
 
    if(!category)return;
 
-   if(!confirm(
-    "Bu ürün silinsin mi?"
-   ))return;
+   if(!confirm("Bu ürün silinsin mi?"))return;
 
    category.items=
     category.items.filter(
@@ -6088,9 +6563,7 @@ function bindEvents(){
    adminProductView=null;
 
    saveData();
-
    render();
-
   };
 
  });
@@ -6103,20 +6576,15 @@ function bindEvents(){
 
   button.onclick=()=>{
 
-   if(!confirm(
-    "Bu etkinlik silinsin mi?"
-   ))return;
+   if(!confirm("Bu etkinlik silinsin mi?"))return;
 
    DATA.events=
     DATA.events.filter(
-     e=>
-      e.id!==button.dataset.deleteEvent
+     e=>e.id!==button.dataset.deleteEvent
     );
 
    saveData();
-
    render();
-
   };
 
  });
@@ -6137,19 +6605,22 @@ function bindEvents(){
 
     name:"Yeni Kategori",
 
+    names:{
+     tr:"Yeni Kategori",
+     en:"New Category",
+     ar:"تصنيف جديد"
+    },
+
     image:"",
 
     items:[]
-
    });
 
    adminCategoryView=id;
    adminProductView=null;
 
    saveData();
-
    render();
-
   }
  );
 
@@ -6163,10 +6634,9 @@ function bindEvents(){
 
    collectAdmin();
 
-   const category=
-    findCategory(
-     button.dataset.addProduct
-    );
+   const category=findCategory(
+    button.dataset.addProduct
+   );
 
    if(!category)return;
 
@@ -6178,38 +6648,52 @@ function bindEvents(){
 
     name:"Yeni Ürün",
 
+    names:{
+     tr:"Yeni Ürün",
+     en:"New Product",
+     ar:"منتج جديد"
+    },
+
     description:"",
 
+    descriptions:{
+     tr:"",
+     en:"",
+     ar:""
+    },
+
     portion:"",
+
+    portionTranslations:{
+     tr:"",
+     en:"",
+     ar:""
+    },
 
     calories:"",
 
     allergens:[],
 
+    allergensTranslations:{
+     tr:[],
+     en:[],
+     ar:[]
+    },
+
     spicy:0,
-
     price:0,
-
     image:"",
-
     video:"",
-
     featured:false,
-
     dish:false,
-
     sold:false
-
    });
 
    adminProductView=id;
-
    advancedProduct=false;
 
    saveData();
-
    render();
-
   };
 
  });
@@ -6222,27 +6706,44 @@ function bindEvents(){
 
    collectAdmin();
 
+   const id=uid("event");
+
    DATA.events.push({
 
-    id:uid("event"),
+    id:id,
 
     name:"Yeni Etkinlik",
 
+    names:{
+     tr:"Yeni Etkinlik",
+     en:"New Event",
+     ar:"فعالية جديدة"
+    },
+
     date:"Cumartesi",
+
+    dateTranslations:{
+     tr:"Cumartesi",
+     en:"Saturday",
+     ar:"السبت"
+    },
 
     time:"20:00",
 
     description:"",
 
+    descriptions:{
+     tr:"",
+     en:"",
+     ar:""
+    },
+
     image:"",
     video:""
-
    });
 
    saveData();
-
    render();
-
   }
  );
 
@@ -6256,12 +6757,107 @@ function bindEvents(){
 
    saveData();
 
-   alert("Ürün kaydedildi.");
+   alert(t("saved"));
 
    adminProductView=null;
    advancedProduct=false;
 
    render();
+  }
+ );
+
+ /* CHANGE PIN */
+
+ $("changePinButton")?.addEventListener(
+  "click",
+  ()=>{
+
+   collectAdmin();
+
+   const current=$("[data-admin='currentPin']")?.value||"";
+   const newPin=$("[data-admin='newPin']")?.value||"";
+   const repeat=$("[data-admin='repeatPin']")?.value||"";
+
+   const message=$("pinMessage");
+
+   function showPinMessage(text,success){
+
+    if(!message)return;
+
+    message.style.display="block";
+    message.style.background=
+     success
+     ?"rgba(22,101,52,.25)"
+     :"rgba(127,29,29,.25)";
+    message.style.color=
+     success
+     ?" #86efac"
+     :"#fca5a5";
+    message.textContent=text;
+   }
+
+   if(current!==getAdminPin()){
+
+    showPinMessage(
+     t("pinWrong"),
+     false
+    );
+
+    return;
+   }
+
+   if(!/^\d+$/.test(newPin)){
+
+    showPinMessage(
+     t("pinOnlyNumbers"),
+     false
+    );
+
+    return;
+   }
+
+   if(newPin.length<4||newPin.length>12){
+
+    showPinMessage(
+     t("pinLength"),
+     false
+    );
+
+    return;
+   }
+
+   if(newPin!==repeat){
+
+    showPinMessage(
+     t("pinMismatch"),
+     false
+    );
+
+    return;
+   }
+
+   if(!safeSet(PIN_KEY,newPin)){
+
+    showPinMessage(
+     "PIN kaydedilemedi.",
+     false
+    );
+
+    return;
+   }
+
+   showPinMessage(
+    t("pinChanged"),
+    true
+   );
+
+   const currentInput=$("[data-admin='currentPin']");
+   const newInput=$("[data-admin='newPin']");
+   const repeatInput=$("[data-admin='repeatPin']");
+
+   if(currentInput)currentInput.value="";
+   if(newInput)newInput.value="";
+   if(repeatInput)repeatInput.value="";
 
   }
  );
@@ -6283,11 +6879,35 @@ function bindEvents(){
    adminProductView=null;
 
    render();
-
   }
  );
 
 }
+
+/* =========================================================
+   GLOBAL OUTSIDE POPUP CLICK
+========================================================= */
+
+document.addEventListener("click",e=>{
+
+ if(
+  !currencyMenu &&
+  !languageMenu
+ )return;
+
+ if(
+  e.target.closest("#currencyButton")||
+  e.target.closest("#currencyPopup")||
+  e.target.closest("#languageButton")||
+  e.target.closest("#languagePopup")
+ )return;
+
+ currencyMenu=false;
+ languageMenu=false;
+
+ render();
+
+});
 
 /* =========================================================
    START
