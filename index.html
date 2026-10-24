@@ -122,36 +122,49 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--fg);outline-offset:
 .lead{font-size:clamp(15px,1.25vw,18px);line-height:1.55;color:var(--muted);margin:0;max-width:520px;justify-self:end;text-wrap:pretty}
 @media (max-width:860px){.sec-head{grid-template-columns:1fr}.lead{justify-self:start}}
 
-/* projeler */
-.projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,1.6vw,22px)}
-.proj{position:relative;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--card);
- transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .3s;min-width:0}
-.proj:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--fg) 30%,transparent)}
-.proj.featured{grid-column:1/-1}
-.proj-vis{position:relative;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;background:color-mix(in srgb,var(--fg) 6%,var(--bg))}
-.proj.featured .proj-vis{aspect-ratio:21/8}
-.proj-vis img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
-.proj:hover .proj-vis img{transform:scale(1.03)}
-.proj-mono{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden}
-.proj-mono span{font-family:var(--accent);font-style:italic;font-size:min(calc(175cqw / var(--n,8)),24cqw);line-height:1;letter-spacing:-.03em;
- color:color-mix(in srgb,var(--fg) 82%,transparent);white-space:nowrap;padding:0 .2em}
-.proj-mono::after{content:"";position:absolute;inset:0;background:
- repeating-linear-gradient(115deg,transparent 0 22px,color-mix(in srgb,var(--fg) 5%,transparent) 22px 23px)}
-.proj-num{position:absolute;top:16px;left:18px;font-size:12px;letter-spacing:.12em;opacity:.6;z-index:1}
-.proj-status{position:absolute;top:14px;right:14px;z-index:1;display:inline-flex;align-items:center;gap:7px;font-size:11.5px;letter-spacing:.04em;
- padding:6px 11px;border-radius:999px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
- border:1px solid var(--line)}
-.proj-status::before{content:"";width:6px;height:6px;border-radius:50%;background:#3fb27f}
-.proj-status.dev::before{background:#d9a441}
-.proj-body{padding:clamp(18px,2vw,26px);display:flex;flex-direction:column;gap:10px;flex:1}
-.proj-meta{display:flex;gap:12px;align-items:center;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.proj-meta i{flex:1;height:1px;background:var(--line)}
-.proj h3{margin:0;font-weight:500;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.03em;line-height:1.05}
-.proj p{margin:0;color:var(--muted);font-size:15px;line-height:1.55;text-wrap:pretty}
-.proj .txt{margin-top:auto;align-self:flex-start;padding-top:10px}
-.proj-link-cover{position:absolute;inset:0;z-index:2;border-radius:inherit}
-.proj .txt{position:relative;z-index:3}
-@media (max-width:760px){.projects{grid-template-columns:1fr}.proj.featured .proj-vis{aspect-ratio:16/10}}
+/* projeler — dairesel karusel */
+.cc{position:relative;outline:none;--cw:260px;--ch:173px}
+.cc:focus-visible{outline:2px solid color-mix(in srgb,var(--fg) 35%,transparent);outline-offset:8px;border-radius:24px}
+.cc-stage{position:relative;height:420px;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none;
+ mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+.cc-card{position:absolute;left:50%;top:var(--ay,50%);width:var(--cw);height:var(--ch);margin:calc(var(--ch) / -2) 0 0 calc(var(--cw) / -2);padding:0;
+ border:1px solid color-mix(in srgb,#fff 14%,transparent);border-radius:20px;overflow:hidden;cursor:pointer;background:#1b1b1a;color:#fff;text-align:left;font:inherit;
+ transition:transform .65s cubic-bezier(.22,1,.36,1),opacity .65s cubic-bezier(.22,1,.36,1),box-shadow .3s;will-change:transform,opacity;
+ box-shadow:0 10px 28px -8px rgba(0,0,0,.35)}
+.cc-card.on{box-shadow:0 26px 70px -14px rgba(0,0,0,.55);cursor:default}
+.cc-card.on.has-link{cursor:pointer}
+.cc-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.cc-card.on:hover img{transform:scale(1.05)}
+.cc-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,.78) 100%)}
+.cc-card .cc-tag{position:absolute;top:12px;left:12px;z-index:1;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+ background:rgba(0,0,0,.38);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:rgba(255,255,255,.88);max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cc-card .cc-name{position:absolute;left:14px;right:14px;bottom:12px;z-index:1;font-weight:600;font-size:clamp(14px,1.5vw,18px);line-height:1.15;letter-spacing:-.01em;
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cc-card .cc-dot{position:absolute;top:14px;right:14px;z-index:1;width:8px;height:8px;border-radius:50%;background:#3fb27f;box-shadow:0 0 0 3px rgba(0,0,0,.3)}
+.cc-card .cc-dot.dev{background:#d9a441}
+.cc-count{position:absolute;left:50%;top:var(--ay,50%);transform:translate(-50%,-38%);text-align:center;pointer-events:none;line-height:1}
+.cc-count b{display:block;font-weight:600;font-size:clamp(40px,5vw,56px);letter-spacing:-.04em;opacity:.9;font-variant-numeric:tabular-nums}
+.cc-count span{display:block;margin-top:6px;font-size:12px;color:var(--muted);letter-spacing:.06em}
+.cc-info{max-width:640px;margin:clamp(20px,3vw,34px) auto 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.cc-info.swap{animation:ccIn .45s ease-out}
+@keyframes ccIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.cc-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 14px;align-items:center;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cc-meta .st{display:inline-flex;align-items:center;gap:6px}
+.cc-meta .st::before{content:"";width:6px;height:6px;border-radius:50%;background:#3fb27f}
+.cc-meta .st.dev::before{background:#d9a441}
+.cc-info h3{margin:0;font-weight:500;font-size:clamp(26px,3vw,40px);letter-spacing:-.03em;line-height:1.05}
+.cc-info p{margin:0;color:var(--muted);font-size:15px;line-height:1.6;text-wrap:pretty}
+.cc-info .txt{margin-top:4px}
+.cc-ctrl{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:clamp(6px,1.4vw,14px)}
+.cc-btn{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:50%;padding:0;cursor:pointer;color:inherit;background:var(--card);
+ border:1px solid var(--line);transition:background .2s,transform .2s,border-color .2s}
+.cc-btn:hover{border-color:color-mix(in srgb,var(--fg) 35%,transparent);transform:scale(1.06)}
+.cc-btn:active{transform:scale(.95)}
+.cc-dots{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;max-width:60vw}
+.cc-dots button{width:8px;height:8px;padding:0;border:0;border-radius:999px;cursor:pointer;background:color-mix(in srgb,var(--fg) 22%,transparent);transition:width .3s,background .3s;position:relative}
+.cc-dots button::before{content:"";position:absolute;inset:-10px -4px}
+.cc-dots button.on{width:26px;background:color-mix(in srgb,var(--fg) 80%,transparent)}
+@media (prefers-reduced-motion:reduce){.cc-card,.cc-card img{transition:none}.cc-info.swap{animation:none}}
 
 /* hizmetler */
 .services{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
@@ -413,18 +426,7 @@ function render(){
  $("projTitle").innerHTML=headlineHTML(C.projectsTitle,"");
  $("projIntro").textContent=C.projectsIntro||"";
  var list=(C.projects||[]).filter(function(p){return p&&!p.hidden&&p.name});
- $("projects").innerHTML=list.map(function(p,i){
-  var href=safeHref(p.link), st=p.status==="dev"?'<span class="proj-status dev">Geliştiriliyor</span>':p.status==="live"?'<span class="proj-status">Yayında</span>':"";
-  var vis=p.image?'<img src="'+esc(p.image)+'" alt="'+esc(p.name)+'" loading="lazy">'
-   :'<div class="proj-mono" aria-hidden="true"><span style="--n:'+Math.max(4,String(p.name).length)+'">'+esc(p.name)+'</span></div>';
-  return '<article class="proj rv'+(p.featured?" featured":"")+'">'
-   +(href?'<a class="proj-link-cover" href="'+esc(href)+'"'+linkAttrs(href)+' aria-label="'+esc(p.name)+'"></a>':"")
-   +'<div class="proj-vis"><span class="proj-num">'+String(i+1).padStart(2,"0")+'</span>'+st+vis+'</div>'
-   +'<div class="proj-body"><div class="proj-meta"><span>'+esc(p.tag)+'</span><i></i><span>'+esc(p.year)+'</span></div>'
-   +'<h3>'+esc(p.name)+'</h3><p>'+esc(p.desc)+'</p>'
-   +(href?'<a class="txt" href="'+esc(href)+'"'+linkAttrs(href)+'>'+esc(p.linkLabel||"İncele")+ARROW+'</a>':"")
-   +'</div></article>';
- }).join("");
+ renderProjects(list);
 
  $("svcTitle").innerHTML=headlineHTML(C.servicesTitle,"");
  $("services").innerHTML=(C.services||[]).filter(function(s){return s&&s.title}).map(function(s,i){
@@ -459,6 +461,129 @@ function render(){
  $("footText").textContent=(C.footer||"© "+C.brand)+" "+new Date().getFullYear();
  $("footPlace").textContent=ct.address||"";
  observeReveal();
+}
+
+/* ── projeler: dairesel karusel ── */
+var STOCK={
+ menu:"1414235077428-338989a2e8c0", restoran:"1517248135467-4c7edcad34c4", siparis:"1556910103-1c02745aae4d",
+ ofis:"1497366216548-37526070297c", mobilya:"1555041469-a586c61ea9bc", katalog:"1524758631624-e2822e304c36",
+ fiyat:"1586023492125-27b2c045efd7", ticaret:"1472851294608-062f824d29cc", firin:"1509440159596-0249088772ff",
+ yazilim:"1551288049-bebda4e38f71"
+};
+function stockFor(p){
+ var t=((p.tag||"")+" "+(p.name||"")+" "+(p.desc||"")).toLocaleLowerCase("tr");
+ var k=/ekmek|fırın|kafe/.test(t)?"firin":/qr|menü/.test(t)?"menu":/sipariş takip|restaurant|restoran/.test(t)?(/menü/.test(t)?"menu":"restoran")
+  :/e-ticaret|ticaret|mağaza/.test(t)?"ticaret":/ofis/.test(t)?"ofis":/fiyat/.test(t)?"fiyat":/sipariş|teklif/.test(t)?"siparis"
+  :/mobilya/.test(t)?"mobilya":/katalog|şablon/.test(t)?"katalog":"yazilim";
+ return "https://images.unsplash.com/photo-"+STOCK[k]+"?auto=format&fit=crop&w=800&q=72";
+}
+var CC={i:0,timer:null,list:[],hover:false,focus:false,bound:false,vis:false};
+var CHEV_L='<svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var CHEV_R='<svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function renderProjects(list){
+ var box=$("projects");
+ CC.list=list;
+ if(CC.i>=list.length)CC.i=0;
+ if(!list.length){box.innerHTML="";ccStop();return}
+ var fi=list.findIndex(function(p){return p.featured});
+ if(!CC.bound&&fi>0)CC.i=fi;
+ box.className="cc rv"+(box.classList.contains("in")?" in":"");
+ box.setAttribute("tabindex","0");box.setAttribute("role","region");
+ box.setAttribute("aria-roledescription","karusel");box.setAttribute("aria-label","Projeler");
+ box.innerHTML='<div class="cc-stage" id="ccStage">'
+  +list.map(function(p,i){
+   var href=safeHref(p.link);
+   return '<button type="button" class="cc-card'+(href?" has-link":"")+'" data-cc="'+i+'" aria-label="'+esc(p.name)+'">'
+    +'<img src="'+esc(p.image||stockFor(p))+'" alt="" loading="'+(i<5?"eager":"lazy")+'" decoding="async" draggable="false">'
+    +(p.tag?'<span class="cc-tag">'+esc(p.tag)+'</span>':"")
+    +(p.status==="live"||p.status==="dev"?'<span class="cc-dot'+(p.status==="dev"?" dev":"")+'" aria-hidden="true"></span>':"")
+    +'<span class="cc-name">'+esc(p.name)+'</span></button>';
+  }).join("")
+  +'<div class="cc-count" aria-hidden="true"><b id="ccNum"></b><span id="ccTot"></span></div></div>'
+  +'<div class="cc-ctrl"><button type="button" class="cc-btn" id="ccPrev" aria-label="Önceki proje">'+CHEV_L+'</button>'
+  +'<div class="cc-dots" id="ccDots">'+list.map(function(p,i){return '<button type="button" data-cc="'+i+'" aria-label="'+(i+1)+'. proje: '+esc(p.name)+'"></button>'}).join("")+'</div>'
+  +'<button type="button" class="cc-btn" id="ccNext" aria-label="Sonraki proje">'+CHEV_R+'</button></div>'
+  +'<div class="cc-info" id="ccInfo" aria-live="polite"></div>';
+ if(!CC.bound)ccBind();
+ ccLayout();ccInfo(false);ccStart();
+}
+function ccGo(n,user){
+ var t=CC.list.length;if(!t)return;
+ CC.i=((n%t)+t)%t;ccLayout();ccInfo(true);
+ if(user)ccStart();
+}
+function ccLayout(){
+ var st=$("ccStage");if(!st)return;
+ var W=st.clientWidth||innerWidth, mob=W<640;
+ var cw=Math.round(Math.min(300,Math.max(150,W*(mob?.5:.27)))), ch=Math.round(cw*2/3);
+ var RX=Math.min(W*.36,420), RY=Math.round(ch*.95), pad=mob?14:22, ay=pad+ch/2+RY;
+ var box=$("projects");box.style.setProperty("--cw",cw+"px");box.style.setProperty("--ch",ch+"px");box.style.setProperty("--ay",Math.round(ay)+"px");
+ st.style.height=Math.round(ay+Math.max(ch*.3,mob?52:66))+"px";
+ var t=CC.list.length, VIS=5, half=2;
+ st.querySelectorAll(".cc-card").forEach(function(el){
+  var i=+el.dataset.cc, off=i-CC.i;
+  if(off>t/2)off-=t; if(off<-t/2)off+=t;
+  var d=Math.abs(off), hidden=d>half;
+  var ang=(Math.max(-half-1,Math.min(half+1,off))/VIS)*Math.PI;
+  var x=Math.sin(ang)*RX, y=-Math.cos(ang)*RY;
+  var sc=hidden?.6:Math.max(0,1-(d/(half+1))*.32), op=hidden?0:Math.max(.35,1-(d/(half+1))*.7);
+  el.style.transform="translate("+x.toFixed(1)+"px,"+y.toFixed(1)+"px) scale("+sc.toFixed(3)+")";
+  el.style.opacity=op;el.style.zIndex=10-d;el.style.pointerEvents=hidden?"none":"";
+  el.tabIndex=hidden?-1:0;el.setAttribute("aria-hidden",hidden?"true":"false");
+  el.classList.toggle("on",off===0);
+ });
+ $("ccNum").textContent=String(CC.i+1).padStart(2,"0");
+ $("ccTot").textContent=String(t).padStart(2,"0")+" proje";
+ $("ccDots").querySelectorAll("button").forEach(function(b,i){b.classList.toggle("on",i===CC.i);b.setAttribute("aria-current",i===CC.i?"true":"false")});
+}
+function ccInfo(anim){
+ var p=CC.list[CC.i],el=$("ccInfo");if(!p||!el)return;
+ var href=safeHref(p.link);
+ var st=p.status==="dev"?'<span class="st dev">Geliştiriliyor</span>':p.status==="live"?'<span class="st">Yayında</span>':"";
+ el.innerHTML='<div class="cc-meta">'+(p.tag?'<span>'+esc(p.tag)+'</span>':"")+(p.year?'<span>'+esc(p.year)+'</span>':"")+st+'</div>'
+  +'<h3>'+esc(p.name)+'</h3>'+(p.desc?'<p>'+esc(p.desc)+'</p>':"")
+  +(href?'<a class="txt" href="'+esc(href)+'"'+linkAttrs(href)+'>'+esc(p.linkLabel||"İncele")+ARROW+'</a>':"");
+ if(anim){el.classList.remove("swap");void el.offsetWidth;el.classList.add("swap")}
+}
+function ccStop(){if(CC.timer){clearInterval(CC.timer);CC.timer=null}}
+function ccStart(){
+ ccStop();
+ if(CC.list.length<2||!CC.vis||CC.hover||CC.focus||document.hidden||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+ CC.timer=setInterval(function(){ccGo(CC.i+1)},4500);
+}
+function ccBind(){
+ CC.bound=true;
+ var box=$("projects");
+ box.addEventListener("click",function(e){
+  var b=e.target.closest("[data-cc]");
+  if(e.target.closest("#ccPrev")){ccGo(CC.i-1,true);return}
+  if(e.target.closest("#ccNext")){ccGo(CC.i+1,true);return}
+  if(!b||CC.dragged)return;
+  var i=+b.dataset.cc;
+  if(i!==CC.i){ccGo(i,true);return}
+  if(b.classList.contains("cc-card")){var h=safeHref((CC.list[i]||{}).link);if(h){if(isExternal(h))window.open(h,"_blank","noopener");else location.href=h}}
+ });
+ box.addEventListener("keydown",function(e){
+  if(e.key==="ArrowLeft"){e.preventDefault();ccGo(CC.i-1,true)}
+  else if(e.key==="ArrowRight"){e.preventDefault();ccGo(CC.i+1,true)}
+ });
+ box.addEventListener("mouseenter",function(){CC.hover=true;ccStop()});
+ box.addEventListener("mouseleave",function(){CC.hover=false;ccStart()});
+ box.addEventListener("focusin",function(){CC.focus=true;ccStop()});
+ box.addEventListener("focusout",function(e){if(!box.contains(e.relatedTarget)){CC.focus=false;ccStart()}});
+ /* kaydırma (dokunmatik + fare) */
+ var sx=null,sy=0;
+ box.addEventListener("pointerdown",function(e){if(!e.target.closest("#ccStage"))return;sx=e.clientX;sy=e.clientY;CC.dragged=false});
+ window.addEventListener("pointerup",function(e){
+  if(sx===null)return;var dx=e.clientX-sx,dy=e.clientY-sy;sx=null;
+  if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){CC.dragged=true;ccGo(CC.i+(dx<0?1:-1),true);setTimeout(function(){CC.dragged=false},60)}
+ });
+ window.addEventListener("pointercancel",function(){sx=null});
+ document.addEventListener("visibilitychange",function(){document.hidden?ccStop():ccStart()});
+ /* sadece bölüm ekrandayken otomatik dön */
+ if("IntersectionObserver" in window)new IntersectionObserver(function(es){CC.vis=es[0].isIntersecting;CC.vis?ccStart():ccStop()},{threshold:.35}).observe(box);
+ else CC.vis=true;
+ var rt;window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(ccLayout,120)});
 }
 
 /* ── kaydırınca giriş efekti ── */

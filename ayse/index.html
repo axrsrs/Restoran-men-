@@ -415,7 +415,7 @@ function projHTML(p,i){
    +'<div class="f"><label class="f">Durum</label><div class="seg" data-seg="'+base+'.status">'
    +[["live","Yayında"],["dev","Geliştiriliyor"],["","Yok"]].map(function(x){return '<button type="button" data-v="'+x[0]+'"'+((p.status||"")===x[0]?' class="on"':"")+'>'+x[1]+'</button>'}).join("")
    +'</div></div>'
-   +imgField("Kapak görseli",base+".image",{kind:"photo",wide:true,full:true,hint:"Boş bırakılırsa proje adı büyük yazı olarak gösterilir. Önerilen: yatay ekran görüntüsü."})
+   +imgField("Kapak görseli",base+".image",{kind:"photo",wide:true,full:true,hint:"Boş bırakılırsa projeye uygun hazır bir görsel kullanılır. Önerilen: yatay ekran görüntüsü (3:2)."})
    +'</div><div class="row-actions">'
    +'<label class="toggle"><input type="checkbox" data-p="'+base+'.featured" data-bool="1"'+(p.featured?" checked":"")+'>Öne çıkar</label>'
    +'<label class="toggle"><input type="checkbox" data-p="'+base+'.hidden" data-bool="1"'+(p.hidden?" checked":"")+'>Sitede gizle</label>'
