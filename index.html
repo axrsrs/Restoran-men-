@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0e0d0b">
-<title>NearDiji</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111110">
+<title>NearDiji — İşletmeler için dijital ürünler</title>
+<meta name="description" content="QR menüler, ürün katalogları, teklif ve sipariş sistemleri. İnegöl'den işletmelere hızlı, sade ve gerçekten kullanılan yazılımlar.">
+<meta property="og:title" content="NearDiji">
+<meta property="og:description" content="QR menüler, ürün katalogları, teklif ve sipariş sistemleri.">
+<meta property="og:type" content="website">
 <script>
 /* Eski linkler: neardiji.com/?r=xfirma → neardiji.com/xfirma */
 (function(){
@@ -12,11 +16,439 @@
   var r=new URLSearchParams(location.search).get("r");
   if(r&&/^[a-z0-9-]+$/i.test(r))location.replace("/"+r.toLowerCase()+location.hash);
  }catch(e){}
+ /* tema: kullanıcının seçimi > sitenin varsayılanı */
+ try{
+  var t=localStorage.getItem("nd-theme");
+  if(!t){var c=JSON.parse(localStorage.getItem("nd-site")||"null");t=c&&c.theme}
+  if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;
+ }catch(e){}
 })();
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
+<script src="/assets/site-data.js"></script>
+<script src="/assets/liquid-hero.js"></script>
 <style>
- html,body{margin:0;height:100%;background:#0e0d0b}
+:root{
+ --bg:#EBE9E5;--fg:#151514;--muted:color-mix(in srgb,var(--fg) 62%,transparent);
+ --line:color-mix(in srgb,var(--fg) 14%,transparent);--card:color-mix(in srgb,var(--fg) 4%,transparent);
+ --head:'Geist','Helvetica Neue',Arial,sans-serif;--accent:'Instrument Serif','Times New Roman',serif;
+ --gut:clamp(20px,3.4vw,48px);
+ color-scheme:light;
+}
+:root[data-theme="dark"]{--bg:#111110;--fg:#F1EFEA;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--head);-webkit-font-smoothing:antialiased;
+ transition:background-color .6s ease,color .6s ease;overflow-x:hidden}
+a{color:inherit}
+img{max-width:100%}
+::selection{background:var(--fg);color:var(--bg)}
+
+/* ── hero ── */
+.sh-root{position:relative;width:100%;height:100svh;min-height:560px;overflow:hidden;isolation:isolate;container-type:size;
+ background:var(--bg);color:var(--fg);touch-action:pan-y;display:flex;flex-direction:column}
+.sh-stage{position:absolute;inset:0;z-index:0;pointer-events:none}
+.sh-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .5s ease}
+.sh-fallback{position:absolute;display:block;max-width:none;user-select:none;-webkit-user-drag:none;transition:opacity .5s ease}
+.sh-root[data-gl="on"] .sh-canvas{opacity:1}
+.sh-root[data-gl="on"] .sh-fallback{opacity:0}
+.sh-root[data-swap="1"] .sh-canvas,.sh-root[data-swap="1"] .sh-fallback{opacity:0;transition-duration:.25s}
+.sh-backdrop{position:absolute;left:50%;z-index:0;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;user-select:none;
+ font-family:var(--head);font-weight:600;letter-spacing:-.06em;line-height:.8;color:color-mix(in srgb,var(--fg) 5%,transparent)}
+.sh-nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px var(--gut) 0}
+.sh-brand{display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:17px;letter-spacing:-.02em;color:inherit;text-decoration:none;min-width:0}
+.sh-brand img{height:30px;width:auto;max-width:150px;object-fit:contain;display:block}
+.sh-links{display:flex;align-items:center;gap:clamp(18px,2.4vw,36px);list-style:none;margin:0;padding:0}
+.sh-link{color:inherit;text-decoration:none;font-size:13.5px;letter-spacing:-.005em;opacity:.72;transition:opacity .2s}
+.sh-link:hover{opacity:1}
+.sh-theme{display:inline-grid;place-items:center;width:34px;height:34px;padding:0;border-radius:50%;cursor:pointer;color:inherit;background:transparent;
+ border:1px solid color-mix(in srgb,var(--fg) 22%,transparent);transition:background .25s,color .25s}
+.sh-theme:hover{background:var(--fg);color:var(--bg)}
+.sh-navcta{color:inherit;text-decoration:none;font-size:13.5px;padding:8px 14px;border:1px solid color-mix(in srgb,var(--fg) 22%,transparent);
+ border-radius:999px;transition:background .25s,color .25s;white-space:nowrap}
+.sh-navcta:hover{background:var(--fg);color:var(--bg)}
+.sh-hint{position:absolute;z-index:1;transform:translate(-50%,0);display:flex;align-items:center;gap:10px;white-space:nowrap;
+ font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.5;pointer-events:none;transition:opacity .8s ease}
+.sh-hint::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;animation:sh-pulse 2.4s ease-in-out infinite}
+.sh-root[data-touched="1"] .sh-hint{opacity:0}
+@keyframes sh-pulse{0%,100%{transform:scale(.6);opacity:.45}50%{transform:scale(1);opacity:1}}
+.sh-spacer{flex:1 1 auto;min-height:0}
+.sh-content{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);align-items:end;
+ gap:clamp(24px,4cqw,72px);padding:0 var(--gut) clamp(28px,3.4cqw,52px)}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.62;margin:0 0 clamp(14px,1.6vw,22px);display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:28px;height:1px;background:currentColor;opacity:.7}
+.sh-h1{font-weight:500;font-size:clamp(40px,min(6.6cqw,11.5cqh),124px);line-height:.92;letter-spacing:-.045em;margin:0;text-wrap:balance}
+.sh-h1 .sh-line{display:block}
+.acc{font-family:var(--accent);font-style:italic;font-weight:400;letter-spacing:-.02em}
+.sh-aside{max-width:400px;justify-self:end;padding-bottom:.6em}
+.sh-body{font-size:clamp(15px,1.1cqw,17px);line-height:1.5;letter-spacing:-.01em;margin:0 0 26px;opacity:.78;text-wrap:pretty}
+.ctas{display:flex;flex-wrap:wrap;align-items:center;gap:22px}
+.btn{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 22px;border-radius:999px;background:var(--fg);border:0;cursor:pointer;
+ color:var(--bg);text-decoration:none;font:500 14.5px/1 var(--head);letter-spacing:-.01em;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.btn:hover{transform:translateY(-1px)}
+.btn svg,.txt svg{transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.btn:hover svg,.txt:hover svg{transform:translateX(3px)}
+.txt{display:inline-flex;align-items:center;gap:8px;color:inherit;text-decoration:none;font-size:14.5px;font-weight:500;letter-spacing:-.01em;
+ padding:4px 0;border-bottom:1px solid color-mix(in srgb,var(--fg) 30%,transparent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--fg);outline-offset:4px}
+@container (max-width:1023px){
+ .sh-content{grid-template-columns:1fr;gap:28px}
+ .sh-aside{justify-self:start;max-width:520px;padding-bottom:0}
+ .sh-h1{font-size:clamp(40px,min(9.5cqw,9cqh),96px)}
+}
+@container (max-width:767px){.sh-links li:not(.keep){display:none}}
+@container (max-width:639px){
+ .sh-nav{padding-top:20px}
+ .sh-h1{font-size:clamp(36px,min(12.5cqw,7.2cqh),60px);line-height:.94}
+ .sh-body{font-size:15px;margin-bottom:20px}
+ .eyebrow{font-size:11px}
+ .ctas{gap:18px}
+ .btn{height:48px}
+ .sh-content{padding-bottom:40px}
+}
+
+/* ── bölümler ── */
+.sec{padding:clamp(72px,10vw,140px) var(--gut);border-top:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(20px,4vw,72px);align-items:end;margin-bottom:clamp(36px,5vw,64px)}
+.h2{font-weight:500;font-size:clamp(34px,5.2vw,76px);line-height:.95;letter-spacing:-.04em;margin:0;text-wrap:balance}
+.lead{font-size:clamp(15px,1.25vw,18px);line-height:1.55;color:var(--muted);margin:0;max-width:520px;justify-self:end;text-wrap:pretty}
+@media (max-width:860px){.sec-head{grid-template-columns:1fr}.lead{justify-self:start}}
+
+/* projeler */
+.projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,1.6vw,22px)}
+.proj{position:relative;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--card);
+ transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .3s;min-width:0}
+.proj:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--fg) 30%,transparent)}
+.proj.featured{grid-column:1/-1}
+.proj-vis{position:relative;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;background:color-mix(in srgb,var(--fg) 6%,var(--bg))}
+.proj.featured .proj-vis{aspect-ratio:21/8}
+.proj-vis img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.proj:hover .proj-vis img{transform:scale(1.03)}
+.proj-mono{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden}
+.proj-mono span{font-family:var(--accent);font-style:italic;font-size:min(calc(175cqw / var(--n,8)),24cqw);line-height:1;letter-spacing:-.03em;
+ color:color-mix(in srgb,var(--fg) 82%,transparent);white-space:nowrap;padding:0 .2em}
+.proj-mono::after{content:"";position:absolute;inset:0;background:
+ repeating-linear-gradient(115deg,transparent 0 22px,color-mix(in srgb,var(--fg) 5%,transparent) 22px 23px)}
+.proj-num{position:absolute;top:16px;left:18px;font-size:12px;letter-spacing:.12em;opacity:.6;z-index:1}
+.proj-status{position:absolute;top:14px;right:14px;z-index:1;display:inline-flex;align-items:center;gap:7px;font-size:11.5px;letter-spacing:.04em;
+ padding:6px 11px;border-radius:999px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+ border:1px solid var(--line)}
+.proj-status::before{content:"";width:6px;height:6px;border-radius:50%;background:#3fb27f}
+.proj-status.dev::before{background:#d9a441}
+.proj-body{padding:clamp(18px,2vw,26px);display:flex;flex-direction:column;gap:10px;flex:1}
+.proj-meta{display:flex;gap:12px;align-items:center;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.proj-meta i{flex:1;height:1px;background:var(--line)}
+.proj h3{margin:0;font-weight:500;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.03em;line-height:1.05}
+.proj p{margin:0;color:var(--muted);font-size:15px;line-height:1.55;text-wrap:pretty}
+.proj .txt{margin-top:auto;align-self:flex-start;padding-top:10px}
+.proj-link-cover{position:absolute;inset:0;z-index:2;border-radius:inherit}
+.proj .txt{position:relative;z-index:3}
+@media (max-width:760px){.projects{grid-template-columns:1fr}.proj.featured .proj-vis{aspect-ratio:16/10}}
+
+/* hizmetler */
+.services{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
+.svc{padding:28px clamp(0px,1.4vw,22px) 8px 0;border-right:1px solid var(--line);margin-right:clamp(0px,1.4vw,22px);min-width:0}
+.svc:last-child{border-right:0;margin-right:0}
+.svc b{display:block;font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:500;margin-bottom:34px}
+.svc h3{margin:0 0 10px;font-weight:500;font-size:22px;letter-spacing:-.02em;line-height:1.15}
+.svc p{margin:0;color:var(--muted);font-size:15px;line-height:1.55}
+@media (max-width:1000px){.services{grid-template-columns:repeat(2,minmax(0,1fr))}.svc:nth-child(2n){border-right:0;margin-right:0}.svc{border-bottom:1px solid var(--line);padding-bottom:28px}}
+@media (max-width:560px){.services{grid-template-columns:1fr}.svc{border-right:0;margin-right:0}.svc b{margin-bottom:16px}}
+
+/* süreç */
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.step{display:grid;grid-template-columns:90px minmax(0,1fr) minmax(0,1.3fr);gap:20px;align-items:baseline;padding:26px 0;border-top:1px solid var(--line)}
+.step:last-child{border-bottom:1px solid var(--line)}
+.step::before{counter-increment:s;content:counter(s,decimal-leading-zero);font-size:13px;letter-spacing:.1em;color:var(--muted)}
+.step h3{margin:0;font-weight:500;font-size:clamp(26px,3vw,40px);letter-spacing:-.03em}
+.step p{margin:0;color:var(--muted);font-size:16px;line-height:1.55}
+@media (max-width:760px){.step{grid-template-columns:44px minmax(0,1fr)}.step p{grid-column:2}}
+
+/* hakkında */
+.about{display:grid;align-items:start;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(20px,5vw,90px)}
+.about-text{font-size:clamp(22px,2.6vw,38px);line-height:1.22;letter-spacing:-.025em;margin:0;text-wrap:pretty}
+.about-langs{margin-top:28px;color:var(--muted);font-size:14px;letter-spacing:.04em}
+@media (max-width:860px){.about{grid-template-columns:1fr}}
+
+/* iletişim */
+.contact{text-align:center;padding-top:clamp(90px,12vw,170px);padding-bottom:clamp(90px,12vw,170px)}
+.contact .h2{font-size:clamp(40px,7vw,108px);max-width:14ch;margin:0 auto}
+.contact .lead{margin:24px auto 36px;justify-self:auto;text-align:center}
+.contact .ctas{justify-content:center}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:30px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid var(--line);text-decoration:none;font-size:14px;
+ transition:background .25s,color .25s;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+a.chip:hover{background:var(--fg);color:var(--bg)}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:26px var(--gut) calc(26px + env(safe-area-inset-bottom));
+ border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+footer a{text-decoration:none}
+
+/* görünür olunca yumuşak giriş */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.sh-hint::before{animation:none}}
 </style>
 </head>
-<body></body>
+<body>
+
+<section class="sh-root" id="hero" aria-label="Giriş">
+ <div class="sh-backdrop" id="backdrop" aria-hidden="true"></div>
+ <div class="sh-stage" id="stage" aria-hidden="true"><img class="sh-fallback" id="fallback" alt="" crossorigin="anonymous" draggable="false"></div>
+ <nav class="sh-nav" id="nav" aria-label="Ana menü">
+  <a class="sh-brand" href="/" id="brand"></a>
+  <ul class="sh-links">
+   <li><a class="sh-link" href="#projeler">Projeler</a></li>
+   <li><a class="sh-link" href="#hizmetler">Hizmetler</a></li>
+   <li><a class="sh-link" href="#surec">Süreç</a></li>
+   <li><a class="sh-link" href="#hakkinda">Hakkında</a></li>
+   <li class="keep"><button type="button" class="sh-theme" id="themeBtn" aria-label="Temayı değiştir"></button></li>
+   <li class="keep"><a class="sh-navcta" href="#iletisim">İletişim</a></li>
+  </ul>
+ </nav>
+ <div class="sh-hint" id="hint" aria-hidden="true"></div>
+ <div class="sh-spacer"></div>
+ <div class="sh-content" id="heroContent">
+  <div>
+   <p class="eyebrow" id="eyebrow"></p>
+   <h1 class="sh-h1" id="headline"></h1>
+  </div>
+  <div class="sh-aside">
+   <p class="sh-body" id="heroBody"></p>
+   <div class="ctas" id="heroCtas"></div>
+  </div>
+ </div>
+</section>
+
+<main>
+ <section class="sec" id="projeler">
+  <div class="sec-head rv"><h2 class="h2" id="projTitle"></h2><p class="lead" id="projIntro"></p></div>
+  <div class="projects" id="projects"></div>
+ </section>
+
+ <section class="sec" id="hizmetler">
+  <div class="sec-head rv"><h2 class="h2" id="svcTitle"></h2><p class="lead"></p></div>
+  <div class="services rv" id="services"></div>
+ </section>
+
+ <section class="sec" id="surec">
+  <div class="sec-head rv"><h2 class="h2" id="stepsTitle"></h2><p class="lead"></p></div>
+  <ol class="steps rv" id="steps"></ol>
+ </section>
+
+ <section class="sec" id="hakkinda">
+  <div class="about rv">
+   <p class="eyebrow" id="aboutTitle"></p>
+   <div><p class="about-text" id="aboutText"></p><div class="about-langs" id="langs"></div></div>
+  </div>
+ </section>
+
+ <section class="sec contact" id="iletisim">
+  <div class="rv">
+   <h2 class="h2" id="contactTitle"></h2>
+   <p class="lead" id="contactText"></p>
+   <div class="ctas" id="contactCtas"></div>
+   <div class="chips" id="chips"></div>
+  </div>
+ </section>
+</main>
+
+<footer><span id="footText"></span><span id="footPlace"></span></footer>
+
+<script>
+(function(){
+"use strict";
+var D=window.ND_DEFAULT, SB_URL=window.ND_SB_URL, SB_KEY=window.ND_SB_KEY;
+var $=function(id){return document.getElementById(id)};
+var esc=function(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")};
+function safeHref(h){
+ h=String(h||"").trim();
+ if(!h)return "";
+ if(/^(https?:|mailto:|tel:|#|\/)/i.test(h))return h;
+ if(/^[\w.-]+\.[a-z]{2,}(\/.*)?$/i.test(h))return "https://"+h;
+ return "";
+}
+function isExternal(h){return /^https?:/i.test(h)&&h.indexOf(location.origin)!==0}
+function merge(base,over){
+ if(!over||typeof over!=="object")return base;
+ if(Array.isArray(base))return Array.isArray(over)?over:base;
+ var out=Object.assign({},base);
+ for(var k in over){
+  if(over[k]&&typeof over[k]==="object"&&!Array.isArray(over[k])&&base[k]&&typeof base[k]==="object")out[k]=merge(base[k],over[k]);
+  else if(over[k]!==undefined&&over[k]!==null)out[k]=over[k];
+ }
+ return out;
+}
+var ARROW='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var SUN='<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="3.2" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M3.2 12.8l1.1-1.1M11.7 4.3l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+var MOON='<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.6 10.1A5.9 5.9 0 0 1 5.9 2.4a5.9 5.9 0 1 0 7.7 7.7Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>';
+
+var C=D, cached=null;
+try{cached=JSON.parse(localStorage.getItem("nd-site")||"null")}catch(e){}
+if(cached)C=merge(D,cached);
+
+/* ── tema ── */
+function theme(){return document.documentElement.dataset.theme==="light"?"light":"dark"}
+var BG={light:"#EBE9E5",dark:"#111110"};
+
+/* ── hero ── */
+var hero=null;
+function heroSrc(){
+ var h=C.hero||{}, mob=window.innerWidth<640, dark=theme()==="dark";
+ if(h.sculpture==="logo"){var l=(dark&&C.logoDark)||C.logo||C.logoDark;if(l)return l}
+ if(h.sculpture==="custom"){var s=(dark&&h.imageDark)||h.image||h.imageDark;if(s)return s}
+ return "/assets/sc-"+(mob?"m-":"")+(dark?"dark":"light")+".webp";
+}
+function initHero(){
+ if(!window.NDLiquid)return;
+ hero=new NDLiquid.LiquidHero({
+  root:$("hero"),stage:$("stage"),img:$("fallback"),hint:$("hint"),nav:$("nav"),content:$("heroContent"),backdrop:$("backdrop"),
+  options:{bg:NDLiquid.hexToRgb(BG[theme()],[.07,.07,.06]),strength:+C.hero.strength||1,liquid:+C.hero.liquid||1,density:+C.hero.density||1},
+  onMobileChange:function(){hero&&hero.setImage(heroSrc())}
+ });
+ $("hint").textContent=hero.isTouch?(C.hero.hintTouch||""):(C.hero.hint||"");
+ hero.setImage(heroSrc());
+}
+function setTheme(t,save){
+ document.documentElement.dataset.theme=t;
+ document.querySelector('meta[name="theme-color"]').content=BG[t];
+ $("themeBtn").innerHTML=t==="dark"?SUN:MOON;
+ $("themeBtn").setAttribute("aria-label",t==="dark"?"Açık temaya geç":"Koyu temaya geç");
+ if(save)try{localStorage.setItem("nd-theme",t)}catch(e){}
+ renderBrand();
+ if(hero){hero.setOptions({bg:NDLiquid.hexToRgb(BG[t],[.07,.07,.06])});hero.setImage(heroSrc())}
+}
+$("themeBtn").addEventListener("click",function(){
+ var next=theme()==="dark"?"light":"dark";
+ if(document.startViewTransition&&!matchMedia("(prefers-reduced-motion: reduce)").matches){
+  document.startViewTransition(function(){setTheme(next,true)});
+ }else setTheme(next,true);
+});
+
+/* ── içerik ── */
+function headlineHTML(text,accent){
+ return String(text||"").split("\n").map(function(line){
+  var a=(accent||"").trim(), i=a?line.indexOf(a):-1, html;
+  if(i>=0)html=esc(line.slice(0,i))+'<span class="acc">'+esc(a)+'</span>'+esc(line.slice(i+a.length));
+  else html=esc(line);
+  return '<span class="sh-line">'+html+'</span>';
+ }).join("");
+}
+function linkAttrs(h){return isExternal(h)?' target="_blank" rel="noopener"':""}
+function cta(c,cls){
+ if(!c||!c.label)return "";
+ var h=safeHref(c.href)||"#";
+ return '<a class="'+cls+'" href="'+esc(h)+'"'+linkAttrs(h)+'>'+esc(c.label)+ARROW+'</a>';
+}
+function renderBrand(){
+ var logo=(theme()==="dark"&&C.logoDark)||C.logo||C.logoDark;
+ $("brand").innerHTML=logo?'<img src="'+esc(logo)+'" alt="'+esc(C.brand)+'">':esc(C.brand||"NearDiji");
+}
+function waLink(n){var d=String(n||"").replace(/\D/g,"");if(!d)return "";if(d.indexOf("0")===0)d="90"+d.slice(1);return "https://wa.me/"+d}
+function igLink(v){v=String(v||"").trim();if(!v)return "";if(/^https?:/i.test(v))return v;return "https://instagram.com/"+v.replace(/^@/,"")}
+
+function render(){
+ var h=C.hero||{};
+ if(C.seo&&C.seo.title)document.title=C.seo.title;
+ if(C.seo&&C.seo.description){document.querySelector('meta[name="description"]').content=C.seo.description}
+ renderBrand();
+ $("backdrop").textContent=h.backdrop||"";
+ $("eyebrow").textContent=h.eyebrow||"";
+ $("eyebrow").hidden=!h.eyebrow;
+ $("headline").innerHTML=headlineHTML(h.headline,h.accent);
+ $("heroBody").textContent=h.body||"";
+ $("heroCtas").innerHTML=cta(h.primary,"btn")+cta(h.secondary,"txt");
+
+ $("projTitle").innerHTML=headlineHTML(C.projectsTitle,"");
+ $("projIntro").textContent=C.projectsIntro||"";
+ var list=(C.projects||[]).filter(function(p){return p&&!p.hidden&&p.name});
+ $("projects").innerHTML=list.map(function(p,i){
+  var href=safeHref(p.link), st=p.status==="dev"?'<span class="proj-status dev">Geliştiriliyor</span>':p.status==="live"?'<span class="proj-status">Yayında</span>':"";
+  var vis=p.image?'<img src="'+esc(p.image)+'" alt="'+esc(p.name)+'" loading="lazy">'
+   :'<div class="proj-mono" aria-hidden="true"><span style="--n:'+Math.max(4,String(p.name).length)+'">'+esc(p.name)+'</span></div>';
+  return '<article class="proj rv'+(p.featured?" featured":"")+'">'
+   +(href?'<a class="proj-link-cover" href="'+esc(href)+'"'+linkAttrs(href)+' aria-label="'+esc(p.name)+'"></a>':"")
+   +'<div class="proj-vis"><span class="proj-num">'+String(i+1).padStart(2,"0")+'</span>'+st+vis+'</div>'
+   +'<div class="proj-body"><div class="proj-meta"><span>'+esc(p.tag)+'</span><i></i><span>'+esc(p.year)+'</span></div>'
+   +'<h3>'+esc(p.name)+'</h3><p>'+esc(p.desc)+'</p>'
+   +(href?'<a class="txt" href="'+esc(href)+'"'+linkAttrs(href)+'>'+esc(p.linkLabel||"İncele")+ARROW+'</a>':"")
+   +'</div></article>';
+ }).join("");
+
+ $("svcTitle").innerHTML=headlineHTML(C.servicesTitle,"");
+ $("services").innerHTML=(C.services||[]).filter(function(s){return s&&s.title}).map(function(s,i){
+  return '<div class="svc"><b>'+String(i+1).padStart(2,"0")+'</b><h3>'+esc(s.title)+'</h3><p>'+esc(s.desc)+'</p></div>';
+ }).join("");
+
+ $("stepsTitle").innerHTML=headlineHTML(C.stepsTitle,"");
+ $("steps").innerHTML=(C.steps||[]).filter(function(s){return s&&s.title}).map(function(s){
+  return '<li class="step"><h3>'+esc(s.title)+'</h3><p>'+esc(s.desc)+'</p></li>';
+ }).join("");
+
+ $("aboutTitle").textContent=C.aboutTitle||"Hakkında";
+ $("aboutText").textContent=C.about||"";
+ $("langs").textContent=C.languages||"";
+ $("hakkinda").hidden=!C.about;
+
+ var ct=C.contact||{}, wa=waLink(ct.whatsapp);
+ $("contactTitle").innerHTML=headlineHTML(C.contactTitle,"");
+ $("contactText").textContent=C.contactText||"";
+ var main="";
+ if(wa)main+='<a class="btn" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp\'tan yaz'+ARROW+'</a>';
+ if(ct.email)main+='<a class="'+(wa?"txt":"btn")+'" href="mailto:'+esc(ct.email)+'">E-posta gönder'+ARROW+'</a>';
+ if(!main)main='<a class="btn" href="/menu">Demo menüyü incele'+ARROW+'</a>';
+ $("contactCtas").innerHTML=main;
+ var chips=[];
+ if(ct.phone)chips.push('<a class="chip" href="tel:'+esc(String(ct.phone).replace(/[^\d+]/g,""))+'">'+esc(ct.phone)+'</a>');
+ if(ct.email)chips.push('<a class="chip" href="mailto:'+esc(ct.email)+'">'+esc(ct.email)+'</a>');
+ if(ct.instagram)chips.push('<a class="chip" href="'+esc(igLink(ct.instagram))+'" target="_blank" rel="noopener">Instagram · '+esc(String(ct.instagram).replace(/^https?:\/\/(www\.)?instagram\.com\//,"@").replace(/^(?!@)/,"@"))+'</a>');
+ if(ct.address)chips.push('<span class="chip">'+esc(ct.address)+'</span>');
+ $("chips").innerHTML=chips.join("");
+
+ $("footText").textContent=(C.footer||"© "+C.brand)+" "+new Date().getFullYear();
+ $("footPlace").textContent=ct.address||"";
+ observeReveal();
+}
+
+/* ── kaydırınca giriş efekti ── */
+var revealIO=("IntersectionObserver" in window)?new IntersectionObserver(function(es){
+ es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");revealIO.unobserve(e.target)}});
+},{rootMargin:"0px 0px -8% 0px"}):null;
+function observeReveal(){
+ document.querySelectorAll(".rv:not(.in)").forEach(function(el){if(revealIO)revealIO.observe(el);else el.classList.add("in")});
+}
+
+/* ── sunucudan güncel içerik ── */
+function fetchContent(){
+ return fetch(SB_URL+"/rest/v1/site_content?key=eq.main&select=data,updated_at",{headers:{apikey:SB_KEY}})
+  .then(function(r){return r.ok?r.json():null})
+  .then(function(rows){
+   if(!rows||!rows[0]||!rows[0].data)return;
+   var data=rows[0].data, s=JSON.stringify(data);
+   if(cached&&JSON.stringify(cached)===s)return;
+   cached=data;
+   try{localStorage.setItem("nd-site",s)}catch(e){}
+   var prevSrc=heroSrc();
+   C=merge(D,data);
+   if(!userTheme&&(C.theme==="light"||C.theme==="dark")&&C.theme!==theme())setTheme(C.theme,false);
+   render();
+   if(hero){
+    hero.setOptions({strength:+C.hero.strength||1,liquid:+C.hero.liquid||1,density:+C.hero.density||1});
+    if(heroSrc()!==prevSrc)hero.setImage(heroSrc());
+    $("hint").textContent=hero.isTouch?(C.hero.hintTouch||""):(C.hero.hint||"");
+   }
+  }).catch(function(){});
+}
+
+/* ilk tema: kullanıcı seçmediyse sitenin varsayılanı */
+var userTheme=null;try{userTheme=localStorage.getItem("nd-theme")}catch(e){}
+setTheme(userTheme||C.theme||"dark",false);
+render();
+initHero();
+fetchContent();
+})();
+</script>
+</body>
 </html>

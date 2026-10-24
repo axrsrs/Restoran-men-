@@ -16,7 +16,7 @@
  try{a=decodeURIComponent(a);b=decodeURIComponent(b)}catch(e){}
  var slug=/^[a-z0-9]+(-[a-z0-9]+)*$/;
  if(a==="menu"&&slug.test(b)){location.replace("/menu/?r="+encodeURIComponent(b)+location.hash);return}
- if(slug.test(a)&&a!=="menu"&&a!=="ammar"){location.replace("/menu/?r="+encodeURIComponent(a)+location.hash);return}
+ if(slug.test(a)&&["menu","ammar","ayse","assets","site"].indexOf(a)<0){location.replace("/menu/?r="+encodeURIComponent(a)+location.hash);return}
  location.replace("/");
 })();
 </script>
