@@ -814,6 +814,40 @@ button:active{transform:scale(.97)}
 
 .heroHidden{display:none!important}
 
+.cloudState{
+ display:flex;flex-direction:column;align-items:center;gap:10px;
+ padding:90px 20px;text-align:center;color:#aaa
+}
+.cloudState h2{margin:0;color:#fff;font-size:20px}
+.cloudState p{margin:0;font-size:13px;max-width:300px;line-height:1.5}
+.cloudStateIcon{font-size:40px}
+.cloudSpinner{
+ width:34px;height:34px;border-radius:50%;
+ border:3px solid rgba(255,255,255,.12);border-top-color:var(--accent);
+ animation:cloudSpin .8s linear infinite
+}
+@keyframes cloudSpin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.cloudSpinner{animation-duration:2.4s}}
+
+.loginInput{margin-top:9px;letter-spacing:normal;text-align:left;font-size:15px}
+.adminLogin{position:relative}
+.loginClose{
+ position:absolute;top:10px;right:10px;width:34px;height:34px;
+ border:0;border-radius:50%;background:#1d1d20;color:#aaa;font-size:18px
+}
+.loginLink{
+ display:block;margin:12px auto 0;border:0;background:transparent;
+ color:var(--accent2);font-size:12px;text-decoration:underline
+}
+.syncStatus{
+ display:inline-block!important;margin-top:4px!important;
+ padding:2px 8px;border-radius:999px;
+ font-size:9px!important;letter-spacing:.04em!important;text-transform:none!important;
+ background:rgba(67,160,71,.15);color:#7bd88f!important
+}
+.syncStatus.saving{background:rgba(214,168,61,.15);color:var(--accent2)!important}
+.syncStatus.error{background:rgba(229,57,53,.15);color:#ff8d8d!important}
+
 img.imgBroken{opacity:0}
 
 #nearToast{
@@ -1924,7 +1958,7 @@ function mergeData(saved){
   c.items.forEach(p=>{
 
    if(!p.id)
-    p.id="product-"+Date.now()+Math.random();
+    p.id=newId()+Math.random();
 
    if(!p.names)p.names={};
    if(!p.descriptions)p.descriptions={};
@@ -1944,6 +1978,972 @@ function mergeData(saved){
   });
  });
 }
+
+/* =========================================================
+   BULUT (SUPABASE) BAĞLANTISI
+   Menü sunucudan okunur; panel değişiklikleri sunucuya yazılır.
+   Harici kütüphane yok: Supabase REST ve Auth API'leri fetch ile.
+========================================================= */
+
+const CLOUD=true;
+const SB_URL="https://rfwgjzkewtjpdcvrhepg.supabase.co";
+const SB_KEY="sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
+const MEDIA_BUCKET="menu-media";
+const SESSION_KEY="nearMenuSession";
+
+const RESTAURANT_SLUG=(()=>{
+ let s="";
+ try{s=new URLSearchParams(location.search).get("r")||""}catch(e){}
+ s=String(s).toLowerCase().replace(/[^a-z0-9-]/g,"");
+ return s||"nearmenu-demo";
+})();
+
+const cloud={
+ ready:false,        /* menü en az bir kez yüklendi mi */
+ state:"loading",    /* loading | ok | notfound | error */
+ session:null,       /* {access_token, refresh_token, expires_at, user} */
+ access:null,        /* {restaurant_id, role, super} */
+ synced:null,        /* sunucudaki son hâlin özeti */
+ lastJson:"",
+ saving:false,
+ pending:false,
+ status:"saved",     /* saved | saving | error */
+ timer:null,
+ retryTimer:null,
+ errorShown:false
+};
+
+function newId(){
+ try{
+  if(crypto&&crypto.randomUUID)return crypto.randomUUID();
+ }catch(e){}
+ const b=new Uint8Array(16);
+ try{crypto.getRandomValues(b)}catch(e){for(let i=0;i<16;i++)b[i]=Math.random()*256|0}
+ b[6]=(b[6]&15)|64;b[8]=(b[8]&63)|128;
+ const h=[...b].map(x=>x.toString(16).padStart(2,"0")).join("");
+ return h.slice(0,8)+"-"+h.slice(8,12)+"-"+h.slice(12,16)+"-"+h.slice(16,20)+"-"+h.slice(20);
+}
+
+function isUuid(v){
+ return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(v||""));
+}
+
+/* ---------- oturum ---------- */
+
+function loadSession(){
+ try{
+  const raw=safeGet(SESSION_KEY);
+  if(raw)cloud.session=JSON.parse(raw);
+ }catch(e){cloud.session=null}
+}
+
+function storeSession(s){
+ cloud.session=s;
+ if(s)safeSet(SESSION_KEY,JSON.stringify(s));
+ else{try{localStorage.removeItem(SESSION_KEY)}catch(e){}}
+ mediaPut("app:session",s||null).catch(()=>{});
+}
+
+async function loadSessionFromIdb(){
+ if(cloud.session)return;
+ try{
+  const s=await mediaGet("app:session");
+  if(s&&s.refresh_token)cloud.session=s;
+ }catch(e){}
+}
+
+function sessionFromAuth(j){
+ return {
+  access_token:j.access_token,
+  refresh_token:j.refresh_token,
+  expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),
+  user:j.user||cloud.session?.user||null
+ };
+}
+
+async function authRequest(path,body,method){
+ const r=await fetch(SB_URL+"/auth/v1/"+path,{
+  method:method||"POST",
+  headers:Object.assign(
+   {"apikey":SB_KEY,"Content-Type":"application/json"},
+   cloud.session&&method==="PUT"?{"Authorization":"Bearer "+cloud.session.access_token}:{}
+  ),
+  body:JSON.stringify(body||{})
+ });
+ let j={};
+ try{j=await r.json()}catch(e){}
+ if(!r.ok){
+  const err=new Error(j.error_description||j.msg||j.message||("HTTP "+r.status));
+  err.status=r.status;err.code=j.error_code||j.error||"";
+  throw err;
+ }
+ return j;
+}
+
+async function signIn(email,password){
+ const j=await authRequest("token?grant_type=password",{email,password});
+ storeSession(sessionFromAuth(j));
+ return cloud.session;
+}
+
+let refreshing=null;
+
+async function refreshSession(){
+ if(!cloud.session?.refresh_token)return null;
+ if(refreshing)return refreshing;
+ refreshing=(async()=>{
+  try{
+   const j=await authRequest("token?grant_type=refresh_token",{refresh_token:cloud.session.refresh_token});
+   storeSession(sessionFromAuth(j));
+   return cloud.session;
+  }catch(e){
+   if(e.status===400||e.status===401||e.status===403){
+    storeSession(null);
+    cloud.access=null;
+   }
+   throw e;
+  }finally{
+   refreshing=null;
+  }
+ })();
+ return refreshing;
+}
+
+async function validSession(){
+ if(!cloud.session)return null;
+ const left=(cloud.session.expires_at||0)-Math.floor(Date.now()/1000);
+ if(left<90){
+  try{await refreshSession()}catch(e){return null}
+ }
+ return cloud.session;
+}
+
+async function updatePassword(password){
+ await validSession();
+ const j=await authRequest("user",{password,data:{must_change_password:false}},"PUT");
+ if(cloud.session){
+  cloud.session.user=j;
+  storeSession(cloud.session);
+ }
+ return j;
+}
+
+async function signOut(){
+ try{
+  if(cloud.session)
+   await fetch(SB_URL+"/auth/v1/logout",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+cloud.session.access_token}});
+ }catch(e){}
+ storeSession(null);
+ cloud.access=null;
+}
+
+/* ---------- REST ---------- */
+
+async function sb(path,opts={}){
+
+ const doFetch=async()=>{
+  const headers=Object.assign({"apikey":SB_KEY},opts.headers||{});
+  if(opts.body!==undefined&&!(opts.body instanceof Blob))headers["Content-Type"]="application/json";
+  if(opts.auth!==false&&cloud.session)headers["Authorization"]="Bearer "+cloud.session.access_token;
+  return fetch(SB_URL+path,{
+   method:opts.method||"GET",
+   headers,
+   body:opts.body===undefined?undefined:(opts.body instanceof Blob?opts.body:JSON.stringify(opts.body))
+  });
+ };
+
+ if(opts.auth!==false&&cloud.session)await validSession();
+
+ let r=await doFetch();
+
+ if(r.status===401&&cloud.session&&opts.auth!==false){
+  try{await refreshSession();r=await doFetch()}catch(e){}
+ }
+
+ if(!r.ok){
+  let j={};
+  try{j=await r.json()}catch(e){}
+  const err=new Error(j.message||j.error||("HTTP "+r.status));
+  err.status=r.status;
+  throw err;
+ }
+
+ if(r.status===204)return null;
+ const text=await r.text();
+ return text?JSON.parse(text):null;
+}
+
+/* ---------- menüyü sunucudan oku ---------- */
+
+async function fetchServerMenu(){
+ return sb("/rest/v1/rpc/get_menu",{method:"POST",body:{p_slug:RESTAURANT_SLUG}});
+}
+
+function serverToData(m){
+
+ const r=m.restaurant||{};
+ const st=r.settings||{};
+
+ return {
+  restaurantId:r.id,
+  name:r.name||"",
+  subtitle:r.subtitle||"",
+  subtitles:r.subtitles||{},
+  phone:r.phone||"",
+  whatsapp:r.whatsapp||"",
+  hours:r.hours||"",
+  logo:r.logo||"",
+  theme:st.theme||{},
+  settings:st.visibility||{},
+  background:st.background||{},
+  rates:st.rates||{},
+  pdf:st.pdf||undefined,
+  lastBulk:st.lastBulk||null,
+  categories:(m.categories||[]).map(c=>({
+   id:c.id,
+   name:c.name||"",
+   names:c.names||{},
+   image:c.image||"",
+   items:(c.items||[]).map(p=>({
+    id:p.id,
+    name:p.name||"",
+    names:p.names||{},
+    description:p.description||"",
+    descriptions:p.descriptions||{},
+    price:Number(p.price)||0,
+    sold:!!p.sold,featured:!!p.featured,dish:!!p.dish,
+    portion:p.portion||"",calories:p.calories||"",
+    allergens:Array.isArray(p.allergens)?p.allergens:[],
+    spicy:Number(p.spicy)||0,
+    image:p.image||"",
+    video:""
+   }))
+  })),
+  events:(m.events||[]).map(e=>({
+   id:e.id,
+   name:e.name||"",
+   names:e.names||{},
+   description:e.description||"",
+   descriptions:e.descriptions||{},
+   date:e.event_date||"",
+   time:e.event_time||"",
+   image:e.image||""
+  }))
+ };
+}
+
+function applyServerMenu(m){
+
+ const d=serverToData(m);
+
+ if(d.pdf===undefined)delete d.pdf;
+
+ DATA.categories=[];
+ DATA.events=[];
+ mergeData(d);
+
+ cloud.synced=snapshotData();
+}
+
+async function cacheServerMenu(m){
+ try{await mediaPut("cloud:"+RESTAURANT_SLUG,{m,t:Date.now()})}catch(e){}
+}
+
+async function loadCachedMenu(){
+ try{
+  const rec=await mediaGet("cloud:"+RESTAURANT_SLUG);
+  return rec&&rec.m?rec.m:null;
+ }catch(e){return null}
+}
+
+/* Sunucudan menüyü getirir; değiştiyse uygular. Dönüş: değişti mi */
+async function refreshFromServer(force){
+
+ const m=await fetchServerMenu();
+
+ if(!m){
+  cloud.state="notfound";
+  cloud.ready=false;
+  return true;
+ }
+
+ const json=JSON.stringify(m);
+
+ if(!force&&json===cloud.lastJson&&cloud.ready)return false;
+
+ cloud.lastJson=json;
+ applyServerMenu(m);
+ cloud.ready=true;
+ cloud.state="ok";
+ cacheServerMenu(m);
+
+ return true;
+}
+
+async function startCloud(){
+
+ loadSession();
+ await loadSessionFromIdb();
+
+ const cached=await loadCachedMenu();
+
+ if(cached&&!cloud.ready){
+  cloud.lastJson=JSON.stringify(cached);
+  applyServerMenu(cached);
+  cloud.ready=true;
+  cloud.state="ok";
+  render({preserveWindowScroll:true});
+ }
+
+ try{
+  const changed=await refreshFromServer(false);
+  if(changed&&!adminOpen)render({preserveWindowScroll:true});
+  trackVisitOnce();
+ }catch(e){
+  console.error(e);
+  if(!cloud.ready){
+   cloud.state="error";
+   render();
+  }
+ }
+
+ setInterval(pollServer,60000);
+
+ document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible")pollServer();
+ });
+
+ window.addEventListener("online",()=>{
+  if(cloud.status==="error"||cloud.pending)syncNow();
+  pollServer();
+ });
+
+ window.addEventListener("beforeunload",e=>{
+  if(cloud.saving||cloud.pending||cloud.status==="error"||hasUnsyncedChanges()){
+   e.preventDefault();
+   e.returnValue="";
+  }
+ });
+}
+
+async function pollServer(){
+
+ if(document.visibilityState==="hidden")return;
+ if(adminOpen||selectedProduct||selectedEvent||searchOpen)return;
+
+ try{
+  const changed=await refreshFromServer(false);
+  if(changed&&!adminOpen&&!selectedProduct&&!selectedEvent)render({preserveWindowScroll:true});
+ }catch(e){}
+}
+
+function trackVisitOnce(){
+ try{
+  const key="nearMenuVisit:"+RESTAURANT_SLUG;
+  if(sessionStorage.getItem(key))return;
+  sessionStorage.setItem(key,"1");
+ }catch(e){}
+ sb("/rest/v1/rpc/track_visit",{method:"POST",body:{p_slug:RESTAURANT_SLUG},auth:false}).catch(()=>{});
+}
+
+function renderCloudState(){
+
+ if(cloud.state==="notfound"){
+  return `
+  <div class="cloudState">
+   <div class="cloudStateIcon">🍽</div>
+   <h2>Menü şu an yayında değil</h2>
+   <p>Bu adreste açık bir menü bulunamadı. Lütfen işletmeye danışın.</p>
+  </div>`;
+ }
+
+ if(cloud.state==="error"){
+  return `
+  <div class="cloudState">
+   <div class="cloudStateIcon">📶</div>
+   <h2>Menü yüklenemedi</h2>
+   <p>İnternet bağlantınızı kontrol edip tekrar deneyin.</p>
+   <button class="adminButton gold" id="cloudRetry">Tekrar Dene</button>
+  </div>`;
+ }
+
+ return `
+ <div class="cloudState">
+  <div class="cloudSpinner"></div>
+  <p>Menü yükleniyor...</p>
+ </div>`;
+}
+
+/* ---------- değişiklikleri sunucuya yaz ---------- */
+
+function categoryRow(c,i,rid){
+ return {
+  id:c.id,restaurant_id:rid,
+  name:c.name||"",
+  names:Object.assign({},c.names||{},{tr:c.name||""}),
+  image:cleanMediaRef(c.image),
+  sort:i
+ };
+}
+
+function productRow(p,i,cid,rid){
+ return {
+  id:p.id,restaurant_id:rid,category_id:cid,
+  name:p.name||"",
+  names:Object.assign({},p.names||{},{tr:p.name||""}),
+  description:p.description||"",
+  descriptions:Object.assign({},p.descriptions||{},{tr:p.description||""}),
+  price:Math.max(0,Number(p.price)||0),
+  sold:!!p.sold,featured:!!p.featured,dish:!!p.dish,
+  portion:String(p.portion||""),calories:String(p.calories||""),
+  allergens:Array.isArray(p.allergens)?p.allergens.map(String):[],
+  spicy:Math.max(0,Math.min(5,Number(p.spicy)||0)),
+  image:cleanMediaRef(p.image),
+  sort:i
+ };
+}
+
+function eventRow(e,i,rid){
+ return {
+  id:e.id,restaurant_id:rid,
+  name:e.name||"",
+  names:Object.assign({},e.names||{},{tr:e.name||""}),
+  description:e.description||"",
+  descriptions:Object.assign({},e.descriptions||{},{tr:e.description||""}),
+  event_date:/^\d{4}-\d{2}-\d{2}$/.test(e.date||"")?e.date:null,
+  event_time:e.time||"",
+  image:cleanMediaRef(e.image),
+  sort:i
+ };
+}
+
+/* Bu cihaza özel (IndexedDB) referanslar sunucuya yazılmaz */
+function cleanMediaRef(v){
+ v=String(v||"");
+ return v.startsWith("indexeddb:")?"":v;
+}
+
+function restaurantRow(){
+ return {
+  name:DATA.name||"",
+  subtitle:DATA.subtitle||"",
+  subtitles:DATA.subtitles||{},
+  phone:DATA.phone||"",
+  whatsapp:DATA.whatsapp||"",
+  hours:DATA.hours||"",
+  logo:cleanMediaRef(DATA.logo),
+  settings:{
+   theme:DATA.theme,
+   visibility:DATA.settings,
+   background:Object.assign({},DATA.background,{
+    image:cleanMediaRef(DATA.background?.image),
+    video:cleanMediaRef(DATA.background?.video)
+   }),
+   rates:{USD:DATA.rates.USD,EUR:DATA.rates.EUR,auto:!!DATA.rates.auto,updated:DATA.rates.updated||0},
+   pdf:DATA.pdf||null,
+   lastBulk:DATA.lastBulk||null
+  }
+ };
+}
+
+/* Yeni öğelere sunucunun kabul edeceği kimlik ver */
+function ensureIds(){
+
+ const fix=(obj,kind)=>{
+  if(isUuid(obj.id))return;
+  const old=obj.id;
+  obj.id=newId();
+  if(kind==="c"&&adminCategoryView===old)adminCategoryView=obj.id;
+  if(kind==="p"&&adminProductView===old)adminProductView=obj.id;
+  if(kind==="e"&&adminEventView===old)adminEventView=obj.id;
+ };
+
+ DATA.categories.forEach(c=>{
+  fix(c,"c");
+  (c.items||[]).forEach(p=>fix(p,"p"));
+ });
+
+ DATA.events.forEach(e=>fix(e,"e"));
+}
+
+function snapshotData(){
+
+ ensureIds();
+
+ const rid=DATA.restaurantId;
+ const snap={restaurant:JSON.stringify(restaurantRow()),categories:{},products:{},events:{}};
+
+ DATA.categories.forEach((c,i)=>{
+  snap.categories[c.id]=JSON.stringify(categoryRow(c,i,rid));
+  (c.items||[]).forEach((p,j)=>{
+   snap.products[p.id]=JSON.stringify(productRow(p,j,c.id,rid));
+  });
+ });
+
+ DATA.events.forEach((e,i)=>{
+  snap.events[e.id]=JSON.stringify(eventRow(e,i,rid));
+ });
+
+ return snap;
+}
+
+function diffSnap(prev,cur){
+
+ const d={restaurant:null,upsert:{categories:[],products:[],events:[]},remove:{categories:[],products:[],events:[]}};
+
+ if(!prev||prev.restaurant!==cur.restaurant)d.restaurant=JSON.parse(cur.restaurant);
+
+ ["categories","products","events"].forEach(t=>{
+  Object.keys(cur[t]).forEach(id=>{
+   if(!prev||prev[t][id]!==cur[t][id])d.upsert[t].push(JSON.parse(cur[t][id]));
+  });
+  if(prev){
+   Object.keys(prev[t]).forEach(id=>{
+    if(!(id in cur[t]))d.remove[t].push(id);
+   });
+  }
+ });
+
+ return d;
+}
+
+function hasUnsyncedChanges(){
+ if(!canWrite()||!cloud.synced)return false;
+ const d=diffSnap(cloud.synced,snapshotData());
+ return !!(d.restaurant||Object.values(d.upsert).some(a=>a.length)||Object.values(d.remove).some(a=>a.length));
+}
+
+function canWrite(){
+ return !!(cloud.session&&cloud.access&&cloud.access.role&&DATA.restaurantId&&cloud.access.restaurant_id===DATA.restaurantId);
+}
+
+function scheduleSync(delay){
+ clearTimeout(cloud.timer);
+ cloud.timer=setTimeout(syncNow,delay??500);
+}
+
+function setSyncStatus(s){
+ cloud.status=s;
+ const el=$("syncStatus");
+ if(el){
+  el.className="syncStatus "+s;
+  el.textContent=s==="saving"?"Kaydediliyor...":s==="error"?"Kaydedilemedi • tekrar denenecek":"✓ Kaydedildi";
+ }
+}
+
+async function syncNow(){
+
+ if(!canWrite())return;
+
+ if(cloud.saving){
+  cloud.pending=true;
+  return;
+ }
+
+ clearTimeout(cloud.timer);
+ clearTimeout(cloud.retryTimer);
+
+ const cur=snapshotData();
+ const d=diffSnap(cloud.synced,cur);
+ const rid=DATA.restaurantId;
+
+ const nothing=!d.restaurant&&!Object.values(d.upsert).some(a=>a.length)&&!Object.values(d.remove).some(a=>a.length);
+
+ if(nothing){
+  setSyncStatus("saved");
+  return;
+ }
+
+ cloud.saving=true;
+ cloud.pending=false;
+ setSyncStatus("saving");
+
+ const upsert=(table,rows)=>rows.length?sb("/rest/v1/"+table+"?on_conflict=id",{
+  method:"POST",
+  headers:{"Prefer":"resolution=merge-duplicates,return=minimal"},
+  body:rows
+ }):null;
+
+ const remove=(table,ids)=>ids.length?sb("/rest/v1/"+table+"?id=in.("+ids.join(",")+")",{
+  method:"DELETE",
+  headers:{"Prefer":"return=minimal"}
+ }):null;
+
+ try{
+
+  if(d.restaurant){
+   await sb("/rest/v1/restaurants?id=eq."+rid,{
+    method:"PATCH",
+    headers:{"Prefer":"return=minimal"},
+    body:d.restaurant
+   });
+  }
+
+  await upsert("categories",d.upsert.categories);
+  await upsert("products",d.upsert.products);
+  await upsert("events",d.upsert.events);
+
+  await remove("products",d.remove.products);
+  await remove("events",d.remove.events);
+  await remove("categories",d.remove.categories);
+
+  cloud.synced=cur;
+  cloud.errorShown=false;
+  setSyncStatus("saved");
+
+ }catch(e){
+
+  console.error("Senkron hatası:",e);
+  setSyncStatus("error");
+
+  if(!cloud.errorShown){
+   cloud.errorShown=true;
+   showToast(
+    e.status===401||e.status===403
+    ?"⚠️ Oturum süresi doldu veya yetki yok. Lütfen tekrar giriş yapın."
+    :"⚠️ Değişiklikler sunucuya kaydedilemedi. İnternet gelince tekrar denenecek."
+   );
+  }
+
+  cloud.retryTimer=setTimeout(syncNow,8000);
+
+ }finally{
+
+  cloud.saving=false;
+
+  if(cloud.pending){
+   cloud.pending=false;
+   scheduleSync(200);
+  }
+ }
+}
+
+/* ---------- fotoğraf yükleme ---------- */
+
+function mediaPublicUrl(path){
+ return SB_URL+"/storage/v1/object/public/"+MEDIA_BUCKET+"/"+path.split("/").map(encodeURIComponent).join("/");
+}
+
+async function uploadMedia(type,id,blob){
+
+ const rid=DATA.restaurantId;
+ const mime=blob.type||"image/jpeg";
+ const ext=mime.includes("png")?"png":mime.includes("webp")?"webp":mime.includes("gif")?"gif":
+           mime.includes("mp4")?"mp4":mime.includes("webm")?"webm":mime.includes("quicktime")?"mov":"jpg";
+ const path=rid+"/"+type+"/"+String(id).replace(/[^a-zA-Z0-9-]/g,"")+"-"+Date.now()+"."+ext;
+
+ await sb("/storage/v1/object/"+MEDIA_BUCKET+"/"+path,{
+  method:"POST",
+  headers:{"Content-Type":mime,"x-upsert":"true"},
+  body:blob
+ });
+
+ return mediaPublicUrl(path);
+}
+
+async function deleteServerMedia(url){
+ const prefix=SB_URL+"/storage/v1/object/public/"+MEDIA_BUCKET+"/";
+ if(!url||!String(url).startsWith(prefix)||!canWrite())return;
+ const path=String(url).slice(prefix.length).split("/").map(decodeURIComponent).map(encodeURIComponent).join("/");
+ try{
+  await sb("/storage/v1/object/"+MEDIA_BUCKET+"/"+path,{method:"DELETE"});
+ }catch(e){}
+}
+
+/* ---------- yetki ---------- */
+
+async function loadAccess(){
+ const a=await sb("/rest/v1/rpc/get_my_access",{method:"POST",body:{p_slug:RESTAURANT_SLUG}});
+ cloud.access=a&&a.role?a:null;
+ return cloud.access;
+}
+
+/* Logoya 3 sn basınca: oturum geçerliyse doğrudan panel, değilse giriş ekranı */
+async function openAdminFlow(){
+
+ adminOpen=true;
+ adminAuthenticated=false;
+ adminTab="general";
+ adminCategoryView=null;
+ adminProductView=null;
+ adminEventView=null;
+ advancedProduct=false;
+ savedAdminScroll=0;
+ loginStep="checking";
+
+ pushLayer();
+ render();
+
+ if(await validSession()){
+  try{
+   if(await loadAccess()){
+    await enterAdmin();
+    return;
+   }
+  }catch(e){}
+ }
+
+ loginStep="login";
+ render();
+ setTimeout(()=>$("loginEmail")?.focus(),60);
+}
+
+async function enterAdmin(){
+
+ if(cloud.session?.user?.user_metadata?.must_change_password){
+  loginStep="newPassword";
+  render();
+  setTimeout(()=>$("newPassword1")?.focus(),60);
+  return;
+ }
+
+ /* Düzenlemeden önce en güncel menüyü al */
+ try{await refreshFromServer(true)}catch(e){}
+
+ adminAuthenticated=true;
+ loginStep="login";
+ render();
+ setSyncStatus("saved");
+}
+
+let loginStep="login";
+
+function renderCloudLogin(){
+
+ if(!adminOpen||adminAuthenticated)return "";
+
+ const lastEmail=safeGet("nearMenuLastEmail")||"";
+
+ let body="";
+
+ if(loginStep==="checking"){
+
+  body=`
+   <div class="cloudSpinner" style="margin:24px auto"></div>
+   <p>Oturum kontrol ediliyor...</p>`;
+
+ }else if(loginStep==="newPassword"){
+
+  body=`
+   <h2>Yeni Şifre Belirle</h2>
+   <p>İlk girişiniz. Size verilen geçici şifre yerine kendi şifrenizi belirleyin (en az 8 karakter).</p>
+   <input id="newPassword1" class="adminPassword loginInput" type="password" autocomplete="new-password" placeholder="Yeni şifre">
+   <input id="newPassword2" class="adminPassword loginInput" type="password" autocomplete="new-password" placeholder="Yeni şifre (tekrar)">
+   <button class="adminLoginButton" id="setPasswordButton">Şifreyi Kaydet ve Devam Et</button>
+   <div class="loginError" id="loginError"></div>`;
+
+ }else{
+
+  body=`
+   <h2>Yönetim Paneli</h2>
+   <p>${esc(DATA.name||"Restoran")} menüsünü düzenlemek için giriş yapın.</p>
+   <input id="loginEmail" class="adminPassword loginInput" type="email" inputmode="email" autocomplete="username" placeholder="E-posta" value="${esc(lastEmail)}">
+   <input id="loginPassword" class="adminPassword loginInput" type="password" autocomplete="current-password" placeholder="Şifre">
+   <button class="adminLoginButton" id="cloudLoginButton">Giriş Yap</button>
+   <button class="loginLink" id="forgotPassword" type="button">Şifremi unuttum</button>
+   <div class="loginError" id="loginError"></div>`;
+ }
+
+ return `
+ <div class="adminLoginOverlay">
+  <div class="adminLogin">
+   <button class="loginClose" id="loginClose" aria-label="Kapat">×</button>
+   <div class="adminLoginLogo">N</div>
+   ${body}
+  </div>
+ </div>`;
+}
+
+function showLoginError(msg){
+ const el=$("loginError");
+ if(el){el.textContent=msg;el.style.display="block"}
+}
+
+function bindCloudLogin(){
+
+ $("loginClose")?.addEventListener("click",()=>{
+  adminOpen=false;
+  render({preserveWindowScroll:true});
+ });
+
+ const doLogin=async()=>{
+
+  const email=($("loginEmail")?.value||"").trim().toLowerCase();
+  const password=$("loginPassword")?.value||"";
+  const btn=$("cloudLoginButton");
+
+  if(!email||!password){showLoginError("E-posta ve şifreyi girin.");return}
+
+  btn.disabled=true;btn.textContent="Giriş yapılıyor...";
+
+  try{
+
+   await signIn(email,password);
+   safeSet("nearMenuLastEmail",email);
+
+   if(!await loadAccess()){
+    await signOut();
+    btn.disabled=false;btn.textContent="Giriş Yap";
+    showLoginError("Bu hesap bu restoranın yöneticisi değil.");
+    return;
+   }
+
+   await enterAdmin();
+
+  }catch(e){
+
+   btn.disabled=false;btn.textContent="Giriş Yap";
+
+   showLoginError(
+    e.status===400||e.code==="invalid_credentials"
+    ?"E-posta veya şifre yanlış."
+    :e.status===429
+    ?"Çok fazla deneme yapıldı. Biraz bekleyip tekrar deneyin."
+    :"Giriş yapılamadı. İnternet bağlantısını kontrol edin."
+   );
+  }
+ };
+
+ $("cloudLoginButton")?.addEventListener("click",doLogin);
+ $("loginPassword")?.addEventListener("keydown",e=>{if(e.key==="Enter")doLogin()});
+ $("loginEmail")?.addEventListener("keydown",e=>{if(e.key==="Enter")$("loginPassword")?.focus()});
+
+ $("forgotPassword")?.addEventListener("click",async()=>{
+
+  const email=($("loginEmail")?.value||"").trim().toLowerCase();
+
+  if(!email){showLoginError("Önce e-posta adresinizi yazın.");return}
+
+  try{
+   await authRequest("recover",{email});
+   showLoginError("Şifre sıfırlama bağlantısı gönderildi (geldiyse). Gelmezse yöneticinizle iletişime geçin.");
+  }catch(e){
+   showLoginError("Şifre sıfırlama e-postası gönderilemedi. Yöneticinizle iletişime geçin.");
+  }
+ });
+
+ const setPw=async()=>{
+
+  const a=$("newPassword1")?.value||"";
+  const b=$("newPassword2")?.value||"";
+  const btn=$("setPasswordButton");
+
+  if(a.length<8){showLoginError("Şifre en az 8 karakter olmalı.");return}
+  if(a!==b){showLoginError("Şifreler aynı değil.");return}
+
+  btn.disabled=true;btn.textContent="Kaydediliyor...";
+
+  try{
+   await updatePassword(a);
+   showToast("✓ Şifreniz kaydedildi");
+   await enterAdmin();
+  }catch(e){
+   btn.disabled=false;btn.textContent="Şifreyi Kaydet ve Devam Et";
+   showLoginError(
+    String(e.message||"").toLowerCase().includes("different")
+    ?"Yeni şifre eskisinden farklı olmalı."
+    :"Şifre kaydedilemedi: "+(e.message||"bilinmeyen hata")
+   );
+  }
+ };
+
+ $("setPasswordButton")?.addEventListener("click",setPw);
+ $("newPassword2")?.addEventListener("keydown",e=>{if(e.key==="Enter")setPw()});
+
+ $("cloudRetry")?.addEventListener("click",async()=>{
+  cloud.state="loading";
+  render();
+  try{
+   await refreshFromServer(true);
+  }catch(e){
+   cloud.state="error";
+  }
+  render();
+ });
+}
+
+function renderAccountCard(){
+
+ const email=cloud.session?.user?.email||"";
+ const role=cloud.access?.super?"Süper yönetici":cloud.access?.role==="staff"?"Personel":"Restoran sahibi";
+
+ return `
+ <div class="adminCard">
+
+  <div class="adminCardTitle">🔐 Hesap</div>
+
+  <div class="adminCardDescription">
+   ${esc(email)} • ${role}<br>
+   Menü adresi: <b>?r=${esc(RESTAURANT_SLUG)}</b>
+  </div>
+
+  <div class="field">
+   <label>Yeni şifre (en az 8 karakter)</label>
+   <input id="accountPw1" type="password" autocomplete="new-password">
+  </div>
+
+  <div class="field">
+   <label>Yeni şifre tekrar</label>
+   <input id="accountPw2" type="password" autocomplete="new-password">
+  </div>
+
+  <button class="adminButton gold full" id="accountChangePw">🔐 Şifreyi Değiştir</button>
+
+  <button class="adminButton full" id="accountLogout" style="margin-top:8px">Çıkış Yap</button>
+
+ </div>`;
+}
+
+function bindAccountCard(){
+
+ $("accountChangePw")?.addEventListener("click",async()=>{
+
+  const a=$("accountPw1")?.value||"";
+  const b=$("accountPw2")?.value||"";
+
+  if(a.length<8){alert("Şifre en az 8 karakter olmalı.");return}
+  if(a!==b){alert("Şifreler aynı değil.");return}
+
+  try{
+   await updatePassword(a);
+   $("accountPw1").value="";$("accountPw2").value="";
+   showToast("✓ Şifre değiştirildi");
+  }catch(e){
+   alert("Şifre değiştirilemedi: "+(e.message||""));
+  }
+ });
+
+ $("accountLogout")?.addEventListener("click",async()=>{
+
+  collectAdmin();
+  await syncNow();
+
+  await signOut();
+
+  adminOpen=false;
+  adminAuthenticated=false;
+  adminCategoryView=null;
+  adminProductView=null;
+  adminEventView=null;
+
+  render({preserveWindowScroll:true});
+  showToast("Çıkış yapıldı");
+ });
+}
+
+if(CLOUD){
+
+ /* Menü sunucudan gelecek; o gelene kadar boş başla */
+ DATA.categories=[];
+ DATA.events=[];
+ DATA.name="";
+ DATA.subtitle="";
+ DATA.subtitles={};
+ DATA.phone="";
+ DATA.whatsapp="";
+ DATA.hours="";
+
+}else{
 
 try{
 
@@ -1971,6 +2971,9 @@ try{
   ensureFullMenu();
 }
 
+
+}
+
 /* Kayıt: asıl kayıt IndexedDB'de (geniş alan), localStorage ek kopya.
    Not: axrsrs.github.io altındaki tüm siteler aynı localStorage alanını
    (yaklaşık 5 MB) paylaşır; dolarsa kayıt yine IndexedDB'ye yapılır. */
@@ -1982,6 +2985,11 @@ let pinCache=null;
 let saveWarned=false;
 
 function saveData(){
+
+ if(CLOUD){
+  if(canWrite())scheduleSync();
+  return true;
+ }
 
  let json;
 
@@ -2679,7 +3687,7 @@ function renderBackground(){
 
 function renderHero(){
 
- const compact=!!(searchText||selectedCategory);
+ const compact=!!(searchText||selectedCategory||(CLOUD&&!cloud.ready));
 
  return `
  <section class="hero${compact?" heroHidden":""}" id="heroWrap">
@@ -3498,7 +4506,7 @@ function renderAdminGeneral(){
  </div>
 
  ${
-  getAdminPin()===DEFAULT_ADMIN_PIN
+  !CLOUD&&getAdminPin()===DEFAULT_ADMIN_PIN
   ?
   `<div class="adminWarning">
    ⚠️ Varsayılan PIN (1234) kullanılıyor. Aşağıdaki "Güvenlik" bölümünden değiştirmen önerilir.
@@ -3605,7 +4613,7 @@ function renderAdminGeneral(){
 
  </div>
 
- <div class="adminCard">
+ ${CLOUD?renderAccountCard():` <div class="adminCard">
 
   <div class="adminCardTitle">🔐 Güvenlik</div>
 
@@ -3625,6 +4633,8 @@ function renderAdminGeneral(){
   </button>
 
  </div>
+
+`}
 
  <div class="adminCard">
 
@@ -4643,7 +5653,7 @@ function renderAdmin(){
 
       <div class="adminTitleText">
        <b>NearMenu</b>
-       <span>Premium Control Center</span>
+       ${CLOUD?`<span class="syncStatus ${cloud.status}" id="syncStatus">${cloud.status==="saving"?"Kaydediliyor...":cloud.status==="error"?"Kaydedilemedi • tekrar denenecek":"✓ Kaydedildi"}</span>`:`<span>Premium Control Center</span>`}
       </div>
 
      </div>
@@ -4705,6 +5715,8 @@ function renderAdmin(){
 ========================================================= */
 
 function renderAdminLogin(){
+
+ if(CLOUD)return renderCloudLogin();
 
  if(!adminOpen||adminAuthenticated)
   return "";
@@ -4980,11 +5992,11 @@ async function handleFile(type,id,file){
  collectAdmin();
 
  const maxImage=30*1024*1024;
- const maxVideo=100*1024*1024;
+ const maxVideo=(CLOUD?50:100)*1024*1024;
  const isVideo=file.type.startsWith("video/");
 
  if(isVideo&&file.size>maxVideo){
-  alert("Video en fazla 100 MB olabilir.");
+  alert("Video en fazla "+(CLOUD?50:100)+" MB olabilir.");
   return;
  }
 
@@ -5005,8 +6017,17 @@ async function handleFile(type,id,file){
 
   forgetMediaUrl("indexeddb:"+mediaKey(type,id));
 
+  if(CLOUD&&!canWrite()){
+   alert("Fotoğraf yüklemek için giriş yapmalısınız.");
+   return;
+  }
+
+  if(CLOUD)showToast("Fotoğraf yükleniyor...");
+
   const reference=
-   await saveMedia(type,id,file);
+   CLOUD
+   ?await uploadMedia(type,id,file)
+   :await saveMedia(type,id,file);
 
   if(type==="logo")
    DATA.logo=reference;
@@ -5054,6 +6075,11 @@ async function handleFile(type,id,file){
 }
 
 async function removeMedia(value){
+
+ if(CLOUD&&value&&String(value).startsWith(SB_URL)){
+  deleteServerMedia(value);
+  return;
+ }
 
  if(!value||!String(value).startsWith("indexeddb:"))return;
 
@@ -5207,7 +6233,10 @@ function render(options={}){
 
  let content="";
 
- if(searchText)
+ if(CLOUD&&!cloud.ready)
+  content=renderCloudState();
+
+ else if(searchText)
   content=renderSearch();
 
  else if(selectedCategory)
@@ -5362,6 +6391,11 @@ function bindEvents(){
     cancelHold();
 
     try{navigator.vibrate&&navigator.vibrate(40)}catch(_){}
+
+    if(CLOUD){
+     openAdminFlow();
+     return;
+    }
 
     adminOpen=true;
     adminAuthenticated=false;
@@ -6056,7 +7090,7 @@ function bindEvents(){
   rememberAdminScroll();
 
   const id=
-   "category-"+Date.now();
+   newId();
 
   DATA.categories.push({
 
@@ -6099,7 +7133,7 @@ function bindEvents(){
    if(!category)return;
 
    const id=
-    "product-"+Date.now();
+    newId();
 
    category.items.push({
 
@@ -6318,6 +7352,11 @@ async function runTranslate(btn,job){
 
 function bindAdminExtras(){
 
+ if(CLOUD){
+  bindCloudLogin();
+  bindAccountCard();
+ }
+
  bindAdminPdf();
 
  document.querySelectorAll("[data-open-pdf]").forEach(btn=>{
@@ -6420,7 +7459,7 @@ function bindAdminExtras(){
 
   collectAdmin();
 
-  const id="event-"+Date.now();
+  const id=newId();
 
   DATA.events.push({
    id,
@@ -7647,7 +8686,7 @@ function bindAdminButtonsInBody(){
   add.dataset.bound="1";
   add.onclick=()=>{
    collectAdmin();
-   const id="category-"+Date.now();
+   const id=newId();
    DATA.categories.push({id,name:"Yeni Kategori",names:{tr:"Yeni Kategori"},image:"",items:[]});
    adminCategoryView=id;
    adminProductView=null;
@@ -7939,9 +8978,13 @@ render({
  resetScroll:true
 });
 
-loadSavedFromIndexedDB().then(changed=>{
- if(changed&&!adminOpen)render({preserveWindowScroll:true});
-});
+if(CLOUD){
+ startCloud();
+}else{
+ loadSavedFromIndexedDB().then(changed=>{
+  if(changed&&!adminOpen)render({preserveWindowScroll:true});
+ });
+}
 
 if(DATA.rates.auto&&Date.now()-(DATA.rates.updated||0)>12*60*60*1000){
 
