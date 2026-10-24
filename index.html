@@ -111,7 +111,7 @@ button:active{transform:scale(.97)}
 
 .topRow{
  display:flex;align-items:center;
- justify-content:space-between;gap:10px
+ justify-content:flex-end;gap:10px
 }
 .topRight{
  display:flex;align-items:center;
@@ -191,7 +191,22 @@ button:active{transform:scale(.97)}
  inset 0 0 30px rgba(214,168,61,.035);
  overflow:hidden
 }
-.logo img{width:100%;height:100%;object-fit:cover}
+.logo img{width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+#heroLogo{
+ -webkit-user-select:none;user-select:none;
+ -webkit-touch-callout:none;touch-action:manipulation;
+ -webkit-tap-highlight-color:transparent;
+ transition:transform 3s linear
+}
+#heroLogo.holding{transform:scale(.92)}
+.heroContact{display:flex;justify-content:center;gap:8px;margin-top:14px}
+.heroContactBtn{
+ padding:8px 16px;border-radius:999px;
+ border:1px solid rgba(214,168,61,.35);
+ color:var(--accent);text-decoration:none;
+ font-size:12px;font-weight:700;
+ background:rgba(255,255,255,.03)
+}
 .welcome{
  margin-top:20px;color:var(--accent2);
  font-size:9px;font-weight:950;
@@ -1605,7 +1620,6 @@ let selectedCategory=null;
 let selectedProduct=null;
 let selectedEvent=null;
 
-let drawerOpen=false;
 let adminOpen=false;
 let adminAuthenticated=false;
 
@@ -1818,7 +1832,7 @@ function renderHero(){
  return `
  <section class="hero">
 
-  <div class="logo">
+  <div class="logo" id="heroLogo">
    ${
     DATA.logo
     ?
@@ -1833,6 +1847,16 @@ function renderHero(){
   <h1>${esc(DATA.name)}</h1>
 
   <p>${esc(DATA.subtitle)}</p>
+
+  ${
+   DATA.whatsapp||DATA.phone
+   ?
+   `<div class="heroContact">
+    ${DATA.whatsapp?`<a class="heroContactBtn" target="_blank" rel="noopener" href="https://wa.me/${esc(DATA.whatsapp)}">WhatsApp</a>`:""}
+    ${DATA.phone?`<a class="heroContactBtn" href="tel:${esc(DATA.phone)}">${t("call")}</a>`:""}
+   </div>`
+   :""
+  }
 
   ${
    DATA.settings.hours
@@ -2286,65 +2310,6 @@ function renderLanguagePopup(){
 /* =========================================================
    DRAWER
 ========================================================= */
-
-function renderDrawer(){
-
- if(!drawerOpen)return "";
-
- return `
- <div class="overlay" id="drawerOverlay">
-
-  <aside class="drawer">
-
-   <div class="drawerHead">
-
-    <div class="drawerLogo">NEARMENU</div>
-
-    <button class="iconBtn" id="closeDrawer">×</button>
-
-   </div>
-
-   <div class="drawerSection">
-
-    <div class="drawerLabel">İLETİŞİM</div>
-
-    ${
-     DATA.whatsapp
-     ?
-     `<a class="drawerLink"
-      target="_blank"
-      rel="noopener"
-      href="https://wa.me/${esc(DATA.whatsapp)}">
-      WhatsApp
-     </a>`
-     :""
-    }
-
-    ${
-     DATA.phone
-     ?
-     `<a class="drawerLink"
-      href="tel:${esc(DATA.phone)}">
-      ${t("call")}
-     </a>`
-     :""
-    }
-
-   </div>
-
-   <div class="drawerSection">
-
-    <button class="drawerLink" id="openAdmin">
-     ⚙ ${t("admin")}
-    </button>
-
-   </div>
-
-  </aside>
-
- </div>
- `;
-}
 
 /* =========================================================
    PRODUCT MODAL
@@ -3805,8 +3770,6 @@ function render(options={}){
 
     <div class="topRow">
 
-     <button class="iconBtn" id="openDrawer">☰</button>
-
      <div class="topRight">
 
       ${
@@ -3880,7 +3843,6 @@ function render(options={}){
 
   </div>
 
-  ${renderDrawer()}
   ${renderProductModal()}
   ${renderAdmin()}
   ${renderAdminLogin()}
@@ -3913,57 +3875,58 @@ function render(options={}){
 
 function bindEvents(){
 
- $("openDrawer")?.addEventListener("click",()=>{
+ (()=>{
 
-  rememberWindowScroll();
-  drawerOpen=true;
+  const logo=$("heroLogo");
+  if(!logo)return;
 
-  render({
-   preserveWindowScroll:true
+  let holdTimer=null;
+
+  const cancelHold=()=>{
+   clearTimeout(holdTimer);
+   holdTimer=null;
+   logo.classList.remove("holding");
+  };
+
+  logo.addEventListener("contextmenu",e=>e.preventDefault());
+  logo.addEventListener("dragstart",e=>e.preventDefault());
+
+  logo.addEventListener("pointerdown",e=>{
+
+   if(e.button!==undefined&&e.button!==0)return;
+
+   cancelHold();
+   logo.classList.add("holding");
+
+   holdTimer=setTimeout(()=>{
+
+    cancelHold();
+
+    try{navigator.vibrate&&navigator.vibrate(40)}catch(_){}
+
+    adminOpen=true;
+    adminAuthenticated=false;
+    adminTab="general";
+    adminCategoryView=null;
+    adminProductView=null;
+    advancedProduct=false;
+    savedAdminScroll=0;
+
+    render();
+
+    setTimeout(
+     ()=>$("adminPassword")?.focus(),
+     50
+    );
+
+   },3000);
   });
- });
 
- $("closeDrawer")?.addEventListener("click",()=>{
-
-  rememberWindowScroll();
-  drawerOpen=false;
-
-  render({
-   preserveWindowScroll:true
-  });
- });
-
- $("drawerOverlay")?.addEventListener("click",e=>{
-
-  if(e.target.id==="drawerOverlay"){
-
-   rememberWindowScroll();
-   drawerOpen=false;
-
-   render({
-    preserveWindowScroll:true
-   });
-  }
- });
-
- $("openAdmin")?.addEventListener("click",()=>{
-
-  drawerOpen=false;
-  adminOpen=true;
-  adminAuthenticated=false;
-  adminTab="general";
-  adminCategoryView=null;
-  adminProductView=null;
-  advancedProduct=false;
-  savedAdminScroll=0;
-
-  render();
-
-  setTimeout(
-   ()=>$("adminPassword")?.focus(),
-   50
+  ["pointerup","pointerleave","pointercancel"].forEach(ev=>
+   logo.addEventListener(ev,cancelHold)
   );
- });
+
+ })();
 
  $("currencyButton")?.addEventListener("click",e=>{
 
