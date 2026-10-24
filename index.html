@@ -1971,38 +1971,77 @@ try{
   ensureFullMenu();
 }
 
+/* Kayıt: asıl kayıt IndexedDB'de (geniş alan), localStorage ek kopya.
+   Not: axrsrs.github.io altındaki tüm siteler aynı localStorage alanını
+   (yaklaşık 5 MB) paylaşır; dolarsa kayıt yine IndexedDB'ye yapılır. */
+
+const APP_DATA_KEY="app:nearMenuData";
+const APP_PIN_KEY="app:nearMenuPin";
+
+let pinCache=null;
+let saveWarned=false;
+
 function saveData(){
 
+ let json;
+
  try{
-
-  const json=JSON.stringify(DATA);
-
-  if(!safeSet(STORAGE_KEY,json)){
-   alert("⚠️ Veriler kaydedilemedi.");
-   return false;
-  }
-
-  if(safeGet(STORAGE_KEY)!==json){
-   alert("⚠️ Kayıt doğrulanamadı.");
-   return false;
-  }
-
-  return true;
-
+  DATA.savedAt=Date.now();
+  json=JSON.stringify(DATA);
  }catch(e){
-
   console.error(e);
-  alert("⚠️ Kayıt sırasında hata oluştu.");
+  showToast("⚠️ Kayıt hazırlanamadı.");
   return false;
  }
+
+ const localOk=safeSet(STORAGE_KEY,json);
+
+ mediaPut(APP_DATA_KEY,{json,t:DATA.savedAt})
+  .then(()=>{saveWarned=false})
+  .catch(err=>{
+   console.error(err);
+   if(!localOk&&!saveWarned){
+    saveWarned=true;
+    showToast("⚠️ Bu cihazda kayıt yapılamadı. Tarayıcı depolaması dolu ya da gizli sekme kullanılıyor olabilir.");
+   }
+  });
+
+ return true;
 }
 
 function getAdminPin(){
- return safeGet(PIN_KEY)||DEFAULT_ADMIN_PIN;
+ return pinCache||safeGet(PIN_KEY)||DEFAULT_ADMIN_PIN;
 }
 
 function setAdminPin(pin){
- return safeSet(PIN_KEY,String(pin));
+ pinCache=String(pin);
+ const localOk=safeSet(PIN_KEY,pinCache);
+ mediaPut(APP_PIN_KEY,pinCache).catch(()=>{});
+ return localOk||("indexedDB" in window);
+}
+
+/* Açılışta IndexedDB'deki kayıt localStorage'dakinden yeniyse onu kullan */
+async function loadSavedFromIndexedDB(){
+
+ try{
+
+  const pin=await mediaGet(APP_PIN_KEY);
+  if(pin)pinCache=String(pin);
+
+  const rec=await mediaGet(APP_DATA_KEY);
+  if(!rec||!rec.json)return false;
+
+  const localTime=Number(DATA.savedAt)||0;
+  if(rec.t&&rec.t<=localTime)return false;
+
+  mergeData(JSON.parse(rec.json));
+  applyDemoTranslations();
+  return true;
+
+ }catch(e){
+  console.error(e);
+  return false;
+ }
 }
 
 /* =========================================================
@@ -7895,9 +7934,13 @@ document.addEventListener("error",e=>{
    BAŞLAT
 ========================================================= */
 
-saveData();
+/* Açılışta kayıt yapılmaz (hiçbir şey değişmedi); sadece daha yeni kayıt varsa yüklenir */
 render({
  resetScroll:true
+});
+
+loadSavedFromIndexedDB().then(changed=>{
+ if(changed&&!adminOpen)render({preserveWindowScroll:true});
 });
 
 if(DATA.rates.auto&&Date.now()-(DATA.rates.updated||0)>12*60*60*1000){
