@@ -3450,7 +3450,7 @@ const MEDIA_BUCKET="menu-media";
 const SESSION_KEY="nearMenuSession";
 
 /* Kendi alan adımızda (neardiji.com) kısa adres kullanılır: neardiji.com/kebapci-ali */
-/* Adresler: neardiji.com/menu = demo menü, neardiji.com/menu/xfirma = restoran menüsü */
+/* Adresler: neardiji.com/menu = demo menü, neardiji.com/xfirma = müşterinin menüsü */
 const PRETTY_URLS=!/github\.io$/i.test(location.hostname)&&!/^(localhost|127\.)/.test(location.hostname);
 
 const RESTAURANT_SLUG=(()=>{
@@ -3458,24 +3458,24 @@ const RESTAURANT_SLUG=(()=>{
  try{s=new URLSearchParams(location.search).get("r")||""}catch(e){}
  if(!s){
   const parts=location.pathname.split("/").filter(Boolean);
-  const i=parts.indexOf("menu");
-  const seg=i>=0?(parts[i+1]||""):"";
-  if(seg&&!/\.html?$/i.test(seg))s=seg;
+  if(parts[0]==="menu")s=parts[1]||"";
+  else if(parts[0]&&!/\.html?$/i.test(parts[0]))s=parts[0];
+  if(/\.html?$/i.test(s))s="";
  }
  try{s=decodeURIComponent(s)}catch(e){}
  s=String(s).toLowerCase().replace(/[^a-z0-9-]/g,"");
  return s||"nearmenu-demo";
 })();
 
-/* ?r=xfirma ile gelindiyse adres çubuğunu kısa adrese çevir: /menu/xfirma */
+/* ?r=xfirma ile gelindiyse adres çubuğunu kısa adrese çevir: neardiji.com/xfirma */
 try{
  if(PRETTY_URLS&&new URLSearchParams(location.search).get("r"))
-  history.replaceState(history.state,"","/menu/"+RESTAURANT_SLUG+location.hash);
+  history.replaceState(history.state,"","/"+RESTAURANT_SLUG+location.hash);
 }catch(e){}
 
 function publicMenuUrl(slug){
  return PRETTY_URLS
-  ?location.origin+"/menu/"+slug
+  ?location.origin+"/"+slug
   :new URL("./",location.href).href.split("?")[0]+"?r="+slug;
 }
 
@@ -4381,7 +4381,7 @@ function renderAccountCard(){
 
   <button class="adminButton full" id="accountLogout" style="margin-top:8px">Çıkış Yap</button>
 
-  ${cloud.access?.super?`<a class="adminButton gold full" href="/admin.html" target="_blank" rel="noopener" style="margin-top:8px">🛠 Süper Yönetici Paneli (tüm restoranlar)</a>`:""}
+  ${cloud.access?.super?`<a class="adminButton gold full" href="/ammar/" target="_blank" rel="noopener" style="margin-top:8px">🛠 Süper Yönetici Paneli (tüm restoranlar)</a>`:""}
 
  </div>`;
 }

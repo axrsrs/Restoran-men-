@@ -1586,6 +1586,7 @@ const SB_URL="https://rfwgjzkewtjpdcvrhepg.supabase.co";
 const SB_KEY="sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
 const SESSION_KEY="nearMenuSession";
 const MAIN_DEMO="nearmenu-demo";
+const RESERVED=["menu","ammar","admin","yonetim","api","www","assets","static","index","404"];
 const MENU_BASE=new URL("./",location.href).href;
 
 /* =========================================================
@@ -1618,8 +1619,8 @@ const PRETTY_URLS=!/github\.io$/i.test(location.hostname)&&!/^(localhost|127\.)/
 
 function menuUrl(slug){
  return PRETTY_URLS
-  ?location.origin+"/menu/"+encodeURIComponent(slug)
-  :MENU_BASE+"menu/?r="+encodeURIComponent(slug);
+  ?location.origin+"/"+encodeURIComponent(slug)
+  :new URL("../menu/",location.href).href+"?r="+encodeURIComponent(slug);
 }
 
 function fmtDate(d){
@@ -2280,6 +2281,7 @@ function bindModal(){
 
   if(!f.name.trim()){showErr("İşletme adını yazın.");return}
   if(slugV.length<3){showErr("Menü adresi en az 3 karakter olmalı.");return}
+  if(RESERVED.includes(slugV)){showErr("\""+slugV+"\" adresi sistem tarafından kullanılıyor, başka bir adres seçin.");return}
 
   let email=(f.email||"").trim().toLowerCase();
   if(f.account&&!email){
