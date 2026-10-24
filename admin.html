@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f0f11">
+<meta name="robots" content="noindex,nofollow">
+<title>NearMenu Süper Yönetici</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d6a83d'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23111'%3EN%3C/text%3E%3C/svg%3E">
+<style>
+/* Tek koyu görünüm: menü panelinin altın vurgulu tasarım dili */
+:root{
+ color-scheme:dark;
+ --bg:#0f0f11;
+ --surface:#16161a;
+ --surface2:#1d1d22;
+ --line:rgba(255,255,255,.08);
+ --ink:#f2f2f4;
+ --muted:#8b8b95;
+ --accent:#d6a83d;
+ --accent2:#f0c45a;
+ --ok:#6fcf8f;
+ --warn:#f0b35a;
+ --bad:#ff8d8d;
+ --info:#8fb8ff;
+ --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 var(--font)}
+body{
+ padding-left:max(16px,env(safe-area-inset-left,0px));
+ padding-right:max(16px,env(safe-area-inset-right,0px));
+ padding-top:env(safe-area-inset-top,0px);
+ padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));
+}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent2)}
+.wrap{max-width:1100px;margin:0 auto}
+[hidden]{display:none!important}
+
+.btn{
+ display:inline-flex;align-items:center;justify-content:center;gap:6px;
+ min-height:42px;padding:9px 14px;border-radius:11px;
+ border:1px solid var(--line);background:var(--surface2);color:var(--ink);
+ font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap
+}
+.btn.gold{border-color:transparent;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111}
+.btn.danger{background:#3a1719;border-color:#572024;color:var(--bad)}
+.btn.small{min-height:34px;padding:6px 11px;font-size:12px;border-radius:9px}
+.btn:disabled{opacity:.55;cursor:default}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.field label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.field input,.field select{
+ width:100%;min-height:44px;padding:10px 12px;border-radius:11px;
+ border:1px solid #303036;background:#121215;outline:none
+}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.hint{font-size:11px;color:var(--muted)}
+.hint code{font-family:var(--mono);color:var(--accent2);word-break:break-all}
+.error{
+ margin-top:12px;padding:10px 12px;border-radius:10px;
+ background:#3a1717;color:var(--bad);font-size:12.5px
+}
+
+/* Giriş */
+.login{max-width:380px;margin:12vh auto 0;padding:26px;border-radius:20px;background:var(--surface);border:1px solid var(--line)}
+.logo{
+ width:56px;height:56px;border-radius:16px;margin-bottom:16px;
+ display:flex;align-items:center;justify-content:center;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;
+ font:700 26px Georgia,serif
+}
+.login h1{margin:0;font-size:22px}
+.login p{margin:6px 0 4px;color:var(--muted);font-size:13px}
+.login .btn{width:100%;margin-top:16px}
+
+/* Üst bar */
+.top{
+ position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ padding:14px 0;background:var(--bg);border-bottom:1px solid var(--line)
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand .logo{width:40px;height:40px;border-radius:12px;margin:0;font-size:19px;flex:0 0 40px}
+.brand b{display:block;font-size:15px}
+.brand span{display:block;color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* İstatistik */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:18px}
+.stat{padding:13px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.stat small{display:block;color:var(--muted);font-size:11px}
+.stat b{display:block;margin-top:4px;font-size:24px;font-variant-numeric:tabular-nums}
+.stat.warn b{color:var(--warn)}
+
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.actions .btn{flex:1 1 180px}
+
+.toolbar{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center}
+.search{
+ flex:1 1 240px;display:flex;align-items:center;gap:8px;padding:0 12px;
+ min-height:44px;border-radius:12px;border:1px solid #303036;background:#121215
+}
+.search input{flex:1;min-width:0;border:0;background:transparent;outline:none;min-height:42px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+ min-height:34px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);
+ background:var(--surface);color:var(--muted);font-size:12px;font-weight:700
+}
+.chip.on{border-color:var(--accent);color:var(--accent2);background:rgba(214,168,61,.1)}
+
+/* Restoran listesi */
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-top:16px}
+.card{
+ display:flex;flex-direction:column;gap:10px;padding:15px;border-radius:16px;
+ background:var(--surface);border:1px solid var(--line);min-width:0
+}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.card-head h3{margin:0;font-size:16px;line-height:1.3;word-break:break-word}
+.card-head a{font-family:var(--mono);font-size:11.5px;word-break:break-all;text-decoration:none}
+.pill{
+ flex:0 0 auto;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:800;
+ border:1px solid currentColor
+}
+.pill.active{color:var(--ok)}
+.pill.trial{color:var(--info)}
+.pill.expired{color:var(--warn)}
+.pill.passive{color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--muted);font-size:12px}
+.meta b{color:var(--ink);font-variant-numeric:tabular-nums}
+.trialline{font-size:12.5px;padding:8px 10px;border-radius:10px;background:var(--surface2)}
+.trialline.warn{color:var(--warn)}
+.members{display:flex;flex-direction:column;gap:4px;font-size:12px}
+.member{display:flex;align-items:center;gap:6px;min-width:0}
+.member span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{flex:0 0 auto;padding:1px 6px;border-radius:6px;background:rgba(240,179,90,.13);color:var(--warn);font-size:10px;font-weight:700}
+.card-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.card-actions .btn{flex:1 1 auto}
+.empty{margin-top:30px;padding:30px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
+
+/* Modal */
+.overlay{
+ position:fixed;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center;
+ background:rgba(0,0,0,.7);padding:0
+}
+.modal{
+ width:100%;max-width:560px;max-height:92vh;overflow:auto;
+ padding:20px max(18px,env(safe-area-inset-left,0px)) calc(22px + env(safe-area-inset-bottom,0px));
+ border-radius:22px 22px 0 0;background:var(--surface);border:1px solid var(--line)
+}
+@media (min-width:700px){
+ .overlay{align-items:center;padding:20px}
+ .modal{border-radius:22px}
+}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.modal-head h2{margin:0;font-size:19px}
+.x{width:36px;height:36px;border-radius:50%;border:0;background:var(--surface2);font-size:18px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:14px}
+.seg button{min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);font-weight:700;color:var(--muted)}
+.seg button.on{border-color:var(--accent);color:var(--accent2);background:rgba(214,168,61,.1)}
+.seg button small{display:block;font-weight:500;font-size:10.5px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.check{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:13px}
+.check input{width:20px;height:20px;accent-color:var(--accent)}
+.modal-foot{display:flex;gap:8px;margin-top:20px}
+.modal-foot .btn{flex:1}
+.result{
+ margin-top:14px;padding:14px;border-radius:14px;background:#121215;border:1px solid var(--line);
+ font-family:var(--mono);font-size:12.5px;white-space:pre-wrap;word-break:break-word;line-height:1.6
+}
+.success{display:flex;align-items:center;gap:10px;margin-top:6px;color:var(--ok);font-weight:700}
+.section-title{margin:20px 0 4px;font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.ext{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.memberrow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.memberrow span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+
+#toast{
+ position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));z-index:300;
+ transform:translate(-50%,-20px);opacity:0;pointer-events:none;
+ max-width:calc(100% - 32px);padding:11px 16px;border-radius:12px;
+ background:#1d1d22;border:1px solid rgba(214,168,61,.45);font-weight:700;font-size:13px;
+ transition:opacity .2s,transform .2s
+}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+.loading{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:40px;color:var(--muted)}
+.spin{width:22px;height:22px;border-radius:50%;border:3px solid rgba(255,255,255,.1);border-top-color:var(--accent);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:2.4s}#toast{transition:none}}
+
+@media (max-width:760px){
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .stats .stat:first-child{grid-column:1/-1}
+ .list{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div id="toast"></div>
+
+<script>
+/* =========================================================
+   AYARLAR
+========================================================= */
+const SB_URL="https://rfwgjzkewtjpdcvrhepg.supabase.co";
+const SB_KEY="sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
+const SESSION_KEY="nearMenuSession";
+const MAIN_DEMO="nearmenu-demo";
+const MENU_BASE=new URL("./",location.href).href;
+
+/* =========================================================
+   YARDIMCILAR
+========================================================= */
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+
+function toast(msg){
+ const t=$("toast");
+ t.textContent=msg;
+ t.classList.add("show");
+ clearTimeout(t._t);
+ t._t=setTimeout(()=>t.classList.remove("show"),2400);
+}
+
+function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function safeSet(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}
+function safeDel(k){try{localStorage.removeItem(k)}catch(e){}}
+
+function slugify(text){
+ const map={"ç":"c","ğ":"g","ı":"i","İ":"i","ö":"o","ş":"s","ü":"u","â":"a","î":"i","û":"u"};
+ return String(text||"").toLocaleLowerCase("tr-TR")
+  .replace(/[çğıİöşüâîû]/g,ch=>map[ch]||ch)
+  .normalize("NFD").replace(/[̀-ͯ]/g,"")
+  .replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60);
+}
+
+function menuUrl(slug){
+ return MENU_BASE+"?r="+encodeURIComponent(slug);
+}
+
+function fmtDate(d){
+ if(!d)return "";
+ const [y,m,day]=String(d).slice(0,10).split("-").map(Number);
+ return new Date(y,m-1,day).toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"});
+}
+
+function daysLeft(d){
+ if(!d)return null;
+ const [y,m,day]=String(d).slice(0,10).split("-").map(Number);
+ const end=new Date(y,m-1,day);
+ const today=new Date();today.setHours(0,0,0,0);
+ return Math.round((end-today)/86400000);
+}
+
+function isoPlus(days){
+ const d=new Date();d.setDate(d.getDate()+days);
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+async function copyText(text){
+ try{
+  await navigator.clipboard.writeText(text);
+  toast("✓ Kopyalandı");
+ }catch(e){
+  const ta=document.createElement("textarea");
+  ta.value=text;document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy");toast("✓ Kopyalandı")}catch(_){toast("Kopyalanamadı, elle seçip kopyalayın")}
+  ta.remove();
+ }
+}
+
+/* =========================================================
+   SUPABASE (fetch ile)
+========================================================= */
+let session=null;
+try{session=JSON.parse(safeGet(SESSION_KEY)||"null")}catch(e){}
+
+function storeSession(s){
+ session=s;
+ if(s)safeSet(SESSION_KEY,JSON.stringify(s));else safeDel(SESSION_KEY);
+}
+
+async function authReq(path,body,method,withToken){
+ const r=await fetch(SB_URL+"/auth/v1/"+path,{
+  method:method||"POST",
+  headers:Object.assign({"apikey":SB_KEY,"Content-Type":"application/json"},
+   withToken&&session?{"Authorization":"Bearer "+session.access_token}:{}),
+  body:JSON.stringify(body||{})
+ });
+ let j={};try{j=await r.json()}catch(e){}
+ if(!r.ok){const e=new Error(j.error_description||j.msg||j.message||("HTTP "+r.status));e.status=r.status;e.code=j.error_code||"";throw e}
+ return j;
+}
+
+function toSession(j){
+ return {access_token:j.access_token,refresh_token:j.refresh_token,
+  expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),user:j.user||session?.user||null};
+}
+
+async function ensureFresh(){
+ if(!session)return;
+ if((session.expires_at||0)-Math.floor(Date.now()/1000)>90)return;
+ try{
+  storeSession(toSession(await authReq("token?grant_type=refresh_token",{refresh_token:session.refresh_token})));
+ }catch(e){
+  if(e.status>=400&&e.status<500)storeSession(null);
+ }
+}
+
+async function sb(path,opts={}){
+ await ensureFresh();
+ const headers=Object.assign({"apikey":SB_KEY},opts.headers||{});
+ if(opts.body!==undefined)headers["Content-Type"]="application/json";
+ if(session)headers["Authorization"]="Bearer "+session.access_token;
+ const r=await fetch(SB_URL+path,{method:opts.method||"GET",headers,body:opts.body===undefined?undefined:JSON.stringify(opts.body)});
+ if(!r.ok){
+  let j={};try{j=await r.json()}catch(e){}
+  const e=new Error(j.message||("HTTP "+r.status));e.status=r.status;e.code=j.code||"";throw e;
+ }
+ if(r.status===204)return null;
+ const t=await r.text();return t?JSON.parse(t):null;
+}
+
+const rpc=(name,args)=>sb("/rest/v1/rpc/"+name,{method:"POST",body:args||{}});
+
+/* =========================================================
+   DURUM
+========================================================= */
+let view="checking";       /* checking | login | newPassword | app */
+let restaurants=[];
+let loading=false;
+let filter="all";
+let query="";
+let modal=null;            /* {type:'create'|'result'|'edit'|'share', ...} */
+
+function statusOf(r){
+ if(r.status==="passive")return "passive";
+ if(r.status==="trial"){
+  const d=daysLeft(r.trial_ends);
+  return d!==null&&d<0?"expired":"trial";
+ }
+ return "active";
+}
+
+const STATUS_LABEL={active:"Aktif",trial:"Deneme",expired:"Süresi doldu",passive:"Pasif"};
+
+/* =========================================================
+   GÖRÜNÜM
+========================================================= */
+function render(){
+
+ const app=$("app");
+
+ if(view==="checking"){
+  app.innerHTML=`<div class="loading"><div class="spin"></div>Kontrol ediliyor...</div>`;
+  return;
+ }
+
+ if(view==="login"||view==="newPassword"){
+  app.innerHTML=renderLogin();
+  bindLogin();
+  return;
+ }
+
+ app.innerHTML=renderApp()+(modal?renderModal():"");
+ bindApp();
+ if(modal)bindModal();
+}
+
+function renderLogin(){
+
+ if(view==="newPassword"){
+  return `
+  <div class="login">
+   <div class="logo">N</div>
+   <h1>Yeni şifre belirle</h1>
+   <p>İlk girişiniz. Geçici şifre yerine kendi şifrenizi belirleyin (en az 8 karakter).</p>
+   <div class="field"><label for="np1">Yeni şifre</label><input id="np1" type="password" autocomplete="new-password"></div>
+   <div class="field"><label for="np2">Yeni şifre (tekrar)</label><input id="np2" type="password" autocomplete="new-password"></div>
+   <button class="btn gold" id="npSave">Kaydet ve devam et</button>
+   <div class="error" id="err" hidden></div>
+  </div>`;
+ }
+
+ return `
+ <div class="login">
+  <div class="logo">N</div>
+  <h1>Süper Yönetici</h1>
+  <p>Tüm restoranları yönetmek için giriş yapın.</p>
+  <div class="field"><label for="em">E-posta</label><input id="em" type="email" autocomplete="username" value="${esc(safeGet("nearMenuLastEmail")||"")}"></div>
+  <div class="field"><label for="pw">Şifre</label><input id="pw" type="password" autocomplete="current-password"></div>
+  <button class="btn gold" id="loginBtn">Giriş yap</button>
+  <div class="error" id="err" hidden></div>
+ </div>`;
+}
+
+function showErr(msg){
+ const e=$("err");
+ if(e){e.textContent=msg;e.hidden=false}
+}
+
+function renderApp(){
+
+ const all=restaurants;
+ const counts={
+  all:all.length,
+  active:all.filter(r=>statusOf(r)==="active").length,
+  trial:all.filter(r=>statusOf(r)==="trial").length,
+  ending:all.filter(r=>{const d=daysLeft(r.trial_ends);return statusOf(r)==="trial"&&d!==null&&d<=3}).length,
+  expired:all.filter(r=>statusOf(r)==="expired").length,
+  passive:all.filter(r=>statusOf(r)==="passive").length
+ };
+ const visitsToday=all.reduce((a,r)=>a+(Number(r.visits_today)||0),0);
+
+ const q=query.trim().toLocaleLowerCase("tr-TR");
+
+ const list=all.filter(r=>{
+  const s=statusOf(r);
+  if(filter==="active"&&s!=="active")return false;
+  if(filter==="trial"&&s!=="trial")return false;
+  if(filter==="ending"&&!(s==="trial"&&daysLeft(r.trial_ends)<=3))return false;
+  if(filter==="expired"&&s!=="expired")return false;
+  if(filter==="passive"&&s!=="passive")return false;
+  if(q){
+   const hay=(r.name+" "+r.slug+" "+(r.members||[]).map(m=>m.email).join(" ")).toLocaleLowerCase("tr-TR");
+   if(!hay.includes(q))return false;
+  }
+  return true;
+ });
+
+ const chip=(id,label,n)=>`<button class="chip ${filter===id?"on":""}" data-filter="${id}">${label} (${n})</button>`;
+
+ return `
+ <div class="top">
+  <div class="brand">
+   <div class="logo">N</div>
+   <div><b>NearMenu Süper Yönetici</b><span>${esc(session?.user?.email||"")}</span></div>
+  </div>
+  <button class="btn small" id="logout">Çıkış</button>
+ </div>
+
+ <div class="stats">
+  <div class="stat"><small>Toplam restoran</small><b>${counts.all}</b></div>
+  <div class="stat"><small>Aktif (ödeyen)</small><b>${counts.active}</b></div>
+  <div class="stat"><small>Denemede</small><b>${counts.trial}</b></div>
+  <div class="stat ${counts.ending+counts.expired?"warn":""}"><small>Bitiyor / bitti</small><b>${counts.ending} / ${counts.expired}</b></div>
+  <div class="stat"><small>Bugün menü açılışı</small><b>${visitsToday}</b></div>
+ </div>
+
+ <div class="actions">
+  <button class="btn gold" id="newDemo">🎁 Demo Oluştur</button>
+  <button class="btn" id="newCustomer">+ Gerçek Müşteri Ekle</button>
+ </div>
+
+ <div class="toolbar">
+  <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="text" placeholder="Restoran, adres veya e-posta ara" value="${esc(query)}" aria-label="Ara"></label>
+  <button class="btn small" id="reload" aria-label="Yenile">↻ Yenile</button>
+ </div>
+
+ <div class="toolbar chips">
+  ${chip("all","Tümü",counts.all)}
+  ${chip("active","Aktif",counts.active)}
+  ${chip("trial","Deneme",counts.trial)}
+  ${chip("ending","3 gün içinde bitiyor",counts.ending)}
+  ${chip("expired","Süresi doldu",counts.expired)}
+  ${chip("passive","Pasif",counts.passive)}
+ </div>
+
+ ${
+  loading&&!all.length
+  ?`<div class="loading"><div class="spin"></div>Restoranlar yükleniyor...</div>`
+  :list.length
+  ?`<div class="list">${list.map(renderCard).join("")}</div>`
+  :`<div class="empty">${all.length?"Bu filtreye uyan restoran yok.":"Henüz restoran yok. \"Demo Oluştur\" ile başlayın."}</div>`
+ }`;
+}
+
+function renderCard(r){
+
+ const s=statusOf(r);
+ const d=daysLeft(r.trial_ends);
+ let trial="";
+
+ if(r.status==="trial"&&r.trial_ends){
+  trial=d<0
+   ?`<div class="trialline warn">Deneme ${fmtDate(r.trial_ends)} tarihinde bitti. Menü müşterilere kapalı.</div>`
+   :`<div class="trialline ${d<=3?"warn":""}">Deneme ${fmtDate(r.trial_ends)} tarihine kadar · <b>${d===0?"bugün son gün":d+" gün kaldı"}</b></div>`;
+ }
+
+ const members=(r.members||[]).map(m=>`
+  <div class="member"><span>👤 ${esc(m.email)}</span>${m.must_change?`<span class="tag">ilk giriş bekleniyor</span>`:""}</div>`).join("");
+
+ return `
+ <div class="card">
+  <div class="card-head">
+   <div style="min-width:0">
+    <h3>${esc(r.name)}</h3>
+    <a href="${esc(menuUrl(r.slug))}" target="_blank" rel="noopener">?r=${esc(r.slug)}</a>
+   </div>
+   <span class="pill ${s}">${STATUS_LABEL[s]}</span>
+  </div>
+  <div class="meta">
+   <span><b>${r.products}</b> ürün</span>
+   <span><b>${r.categories}</b> kategori</span>
+   <span><b>${r.visits_30d}</b> açılış / 30 gün</span>
+   <span>${r.plan==="premium"?"Premium":"Temel"} paket</span>
+  </div>
+  ${trial}
+  ${members?`<div class="members">${members}</div>`:`<div class="hint">Henüz panel hesabı yok.</div>`}
+  <div class="card-actions">
+   <a class="btn small" href="${esc(menuUrl(r.slug))}" target="_blank" rel="noopener">Menüyü aç</a>
+   <button class="btn small" data-share="${esc(r.id)}">Paylaş</button>
+   <button class="btn small gold" data-edit="${esc(r.id)}">Yönet</button>
+  </div>
+ </div>`;
+}
+
+/* ---------- modallar ---------- */
+
+function renderModal(){
+
+ if(modal.type==="create"){
+
+  const demo=modal.mode==="demo";
+  const f=modal.form;
+
+  return `
+  <div class="overlay" id="overlay">
+   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="modal-head"><h2 id="mTitle">${demo?"🎁 Demo oluştur":"Gerçek müşteri ekle"}</h2><button class="x" id="mClose" aria-label="Kapat">×</button></div>
+
+    <div class="seg">
+     <button class="${demo?"on":""}" data-mode="demo">Demo<small>süreli deneme</small></button>
+     <button class="${demo?"":"on"}" data-mode="customer">Gerçek müşteri<small>aktif, süresiz</small></button>
+    </div>
+
+    <div class="field"><label for="fName">İşletme adı</label><input id="fName" value="${esc(f.name)}" placeholder="örn. Kebapçı Ali"></div>
+    <div class="field">
+     <label for="fSlug">Menü adresi</label>
+     <input id="fSlug" value="${esc(f.slug)}" placeholder="kebapci-ali" autocapitalize="off" autocorrect="off" spellcheck="false">
+     <span class="hint">Menü linki: <code id="slugPreview">${esc(menuUrl(f.slug||"..."))}</code></span>
+    </div>
+
+    ${demo?`
+    <div class="field">
+     <label for="fDays">Deneme süresi</label>
+     <select id="fDays">
+      ${[7,14,30].map(n=>`<option value="${n}" ${Number(f.days)===n?"selected":""}>${n} gün</option>`).join("")}
+     </select>
+     <span class="hint">Süre bitince menü kendiliğinden kapanır, veriler silinmez.</span>
+    </div>`:`
+    <div class="field">
+     <label for="fPlan">Paket</label>
+     <select id="fPlan">
+      <option value="basic" ${f.plan==="basic"?"selected":""}>Temel</option>
+      <option value="premium" ${f.plan==="premium"?"selected":""}>Premium</option>
+     </select>
+    </div>`}
+
+    <label class="check"><input type="checkbox" id="fCopy" ${f.copy?"checked":""}> Demo menüyü kopyala (75 ürün, çevirileriyle)</label>
+
+    <div class="section-title">Panel hesabı</div>
+    <label class="check"><input type="checkbox" id="fAccount" ${f.account?"checked":""}> Menüyü düzenleyebilsin diye giriş hesabı oluştur</label>
+    <div class="field" ${f.account?"":"hidden"} id="emailWrap">
+     <label for="fEmail">E-posta</label>
+     <input id="fEmail" type="email" value="${esc(f.email)}" placeholder="${demo?"otomatik: adres@demo.nearmenu.app":"isletme@ornek.com"}" autocapitalize="off">
+     <span class="hint">${demo
+      ?"Boş bırakırsanız sahte bir demo e-postası oluşturulur; gerçek e-posta gerekmez."
+      :"İşletme sahibinin e-postası. İlk girişte kendi şifresini belirleyecek."}</span>
+    </div>
+
+    <div class="error" id="err" hidden></div>
+
+    <div class="modal-foot">
+     <button class="btn" id="mCancel">Vazgeç</button>
+     <button class="btn gold" id="mCreate">${demo?"Demoyu oluştur":"Müşteriyi ekle"}</button>
+    </div>
+   </div>
+  </div>`;
+ }
+
+ if(modal.type==="result"||modal.type==="share"){
+
+  const r=modal.restaurant;
+  const text=shareText(r,modal.owner);
+
+  return `
+  <div class="overlay" id="overlay">
+   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="modal-head"><h2 id="mTitle">${modal.type==="result"?"Hazır":"Paylaş"}: ${esc(r.name)}</h2><button class="x" id="mClose" aria-label="Kapat">×</button></div>
+    ${modal.type==="result"?`<div class="success">✓ ${r.status==="trial"?"Demo oluşturuldu":"Müşteri eklendi"}${modal.products?` · ${modal.products} ürün kopyalandı`:""}</div>`:""}
+    ${modal.owner&&modal.owner.temp_password===null?`<p class="hint">${esc(modal.owner.email)} zaten kayıtlıydı; mevcut şifresiyle giriş yapar.</p>`:""}
+    ${!modal.owner&&modal.type==="share"?`<p class="hint">Giriş bilgisi eklemek için "Yönet" ekranından şifre sıfırlayıp oradan paylaşın.</p>`:""}
+    <div class="result" id="shareText">${esc(text)}</div>
+    <div class="ext">
+     <a class="btn gold" href="https://wa.me/?text=${encodeURIComponent(text)}" target="_blank" rel="noopener">WhatsApp'ta gönder</a>
+     <button class="btn" id="copyShare">Metni kopyala</button>
+     <button class="btn" id="copyLink">Sadece linki kopyala</button>
+     <a class="btn" href="${esc(menuUrl(r.slug))}" target="_blank" rel="noopener">Menüyü aç</a>
+    </div>
+    ${modal.owner&&modal.owner.temp_password?`<p class="hint" style="margin-top:12px">Geçici şifre sadece şimdi gösteriliyor. Kaybolursa "Yönet" ekranından yeni şifre oluşturabilirsiniz.</p>`:""}
+   </div>
+  </div>`;
+ }
+
+ if(modal.type==="edit"){
+
+  const r=restaurants.find(x=>x.id===modal.id);
+  if(!r){modal=null;return ""}
+  const isMain=r.slug===MAIN_DEMO;
+
+  return `
+  <div class="overlay" id="overlay">
+   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="modal-head"><h2 id="mTitle">${esc(r.name)}</h2><button class="x" id="mClose" aria-label="Kapat">×</button></div>
+    <p class="hint"><code>${esc(menuUrl(r.slug))}</code></p>
+
+    <div class="field"><label for="eName">İşletme adı</label><input id="eName" value="${esc(r.name)}"></div>
+
+    <div class="row2">
+     <div class="field">
+      <label for="eStatus">Durum</label>
+      <select id="eStatus">
+       <option value="active" ${r.status==="active"?"selected":""}>Aktif (süresiz)</option>
+       <option value="trial" ${r.status==="trial"?"selected":""}>Deneme</option>
+       <option value="passive" ${r.status==="passive"?"selected":""}>Pasif (menü kapalı)</option>
+      </select>
+     </div>
+     <div class="field">
+      <label for="ePlan">Paket</label>
+      <select id="ePlan">
+       <option value="basic" ${r.plan==="basic"?"selected":""}>Temel</option>
+       <option value="premium" ${r.plan==="premium"?"selected":""}>Premium</option>
+      </select>
+     </div>
+    </div>
+
+    <div class="field">
+     <label for="eTrial">Deneme bitiş tarihi</label>
+     <input id="eTrial" type="date" value="${esc(r.trial_ends||"")}">
+     <div class="ext">
+      <button class="btn small" data-extend="7">+7 gün</button>
+      <button class="btn small" data-extend="14">+14 gün</button>
+      <button class="btn small" data-extend="30">+30 gün</button>
+     </div>
+    </div>
+
+    <div class="modal-foot"><button class="btn gold" id="eSave">Kaydet</button></div>
+
+    <div class="section-title">Panel hesapları</div>
+    ${(r.members||[]).length?(r.members||[]).map(m=>`
+     <div class="memberrow"><span>👤 ${esc(m.email)}${m.must_change?" · ilk giriş bekleniyor":""}</span>
+      <button class="btn small" data-reset="${esc(m.email)}">Yeni şifre</button></div>`).join(""):`<p class="hint">Henüz hesap yok.</p>`}
+    <div class="row2" style="align-items:end">
+     <div class="field"><label for="eOwner">Hesap ekle (e-posta)</label><input id="eOwner" type="email" placeholder="isletme@ornek.com" autocapitalize="off"></div>
+     <div class="field"><button class="btn" id="eAddOwner">Ekle</button></div>
+    </div>
+
+    ${isMain?`<p class="hint" style="margin-top:20px">Bu ana demo menüdür; diğer demolar buradan kopyalanır, silinemez.</p>`:`
+    <div class="section-title">Tehlikeli bölge</div>
+    <div class="field">
+     <label for="eDel">Silmek için adresi yazın: <code>${esc(r.slug)}</code></label>
+     <input id="eDel" autocapitalize="off" autocorrect="off" spellcheck="false">
+    </div>
+    <button class="btn danger" id="eDelete" style="margin-top:10px;width:100%">Restoranı ve menüsünü kalıcı olarak sil</button>`}
+
+    <div class="error" id="err" hidden></div>
+   </div>
+  </div>`;
+ }
+
+ return "";
+}
+
+function shareText(r,owner){
+
+ const lines=[];
+ const url=menuUrl(r.slug);
+
+ if(r.status==="trial"){
+  lines.push("Merhaba! "+r.name+" için hazırladığım dijital menü demosu:");
+ }else{
+  lines.push("Merhaba! "+r.name+" dijital menünüz hazır:");
+ }
+ lines.push(url);
+
+ if(owner&&owner.temp_password){
+  lines.push("");
+  lines.push("Menüyü kendiniz düzenlemek için menüde logoya 3 saniye basılı tutun ve giriş yapın:");
+  lines.push("E-posta: "+owner.email);
+  lines.push("Şifre: "+owner.temp_password);
+ }
+
+ if(r.status==="trial"&&r.trial_ends){
+  lines.push("");
+  lines.push("Demo "+fmtDate(r.trial_ends)+" tarihine kadar açık.");
+ }
+
+ return lines.join("\n");
+}
+
+/* =========================================================
+   OLAYLAR
+========================================================= */
+function bindLogin(){
+
+ const doLogin=async()=>{
+  const email=($("em").value||"").trim().toLowerCase();
+  const pw=$("pw").value||"";
+  const btn=$("loginBtn");
+  if(!email||!pw){showErr("E-posta ve şifreyi girin.");return}
+  btn.disabled=true;btn.textContent="Giriş yapılıyor...";
+  try{
+   storeSession(toSession(await authReq("token?grant_type=password",{email,password:pw})));
+   safeSet("nearMenuLastEmail",email);
+   await afterLogin();
+  }catch(e){
+   btn.disabled=false;btn.textContent="Giriş yap";
+   showErr(e.status===400?"E-posta veya şifre yanlış.":e.status===429?"Çok fazla deneme. Biraz bekleyin.":"Giriş yapılamadı: "+e.message);
+  }
+ };
+
+ $("loginBtn")?.addEventListener("click",doLogin);
+ $("pw")?.addEventListener("keydown",e=>{if(e.key==="Enter")doLogin()});
+
+ $("npSave")?.addEventListener("click",async()=>{
+  const a=$("np1").value,b=$("np2").value,btn=$("npSave");
+  if(a.length<8){showErr("Şifre en az 8 karakter olmalı.");return}
+  if(a!==b){showErr("Şifreler aynı değil.");return}
+  btn.disabled=true;
+  try{
+   await ensureFresh();
+   const u=await authReq("user",{password:a,data:{must_change_password:false}},"PUT",true);
+   session.user=u;storeSession(session);
+   toast("✓ Şifre kaydedildi");
+   await afterLogin();
+  }catch(e){
+   btn.disabled=false;
+   showErr(String(e.message).toLowerCase().includes("different")?"Yeni şifre eskisinden farklı olmalı.":"Şifre kaydedilemedi: "+e.message);
+  }
+ });
+}
+
+async function afterLogin(){
+
+ if(session?.user?.user_metadata?.must_change_password){
+  view="newPassword";
+  render();
+  return;
+ }
+
+ try{
+  await loadRestaurants();
+  view="app";
+  render();
+ }catch(e){
+  if(e.status===403||e.code==="42501"||/süper yönetici/i.test(e.message)){
+   storeSession(null);
+   view="login";
+   render();
+   showErr("Bu hesap süper yönetici değil.");
+  }else if(e.status===401){
+   storeSession(null);
+   view="login";
+   render();
+  }else{
+   view="login";
+   render();
+   showErr("Bağlantı hatası: "+e.message);
+  }
+ }
+}
+
+async function loadRestaurants(){
+ loading=true;
+ const list=await rpc("admin_list_restaurants");
+ restaurants=Array.isArray(list)?list:[];
+ loading=false;
+}
+
+async function reload(){
+ try{
+  await loadRestaurants();
+  render();
+ }catch(e){
+  toast("Liste yenilenemedi: "+e.message);
+ }
+}
+
+function bindApp(){
+
+ $("logout")?.addEventListener("click",async()=>{
+  try{await fetch(SB_URL+"/auth/v1/logout",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+session.access_token}})}catch(e){}
+  storeSession(null);
+  view="login";
+  render();
+ });
+
+ $("reload")?.addEventListener("click",reload);
+
+ const q=$("q");
+ if(q){
+  q.oninput=()=>{
+   query=q.value;
+   const pos=q.selectionStart;
+   render();
+   const n=$("q");n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}
+  };
+ }
+
+ document.querySelectorAll("[data-filter]").forEach(b=>b.onclick=()=>{filter=b.dataset.filter;render()});
+
+ $("newDemo")?.addEventListener("click",()=>openCreate("demo"));
+ $("newCustomer")?.addEventListener("click",()=>openCreate("customer"));
+
+ document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{modal={type:"edit",id:b.dataset.edit};render()});
+ document.querySelectorAll("[data-share]").forEach(b=>b.onclick=()=>{
+  const r=restaurants.find(x=>x.id===b.dataset.share);
+  modal={type:"share",restaurant:r,owner:null};
+  render();
+ });
+}
+
+function openCreate(mode){
+ modal={type:"create",mode,form:{name:"",slug:"",slugTouched:false,days:14,plan:"basic",copy:true,account:true,email:""}};
+ render();
+ setTimeout(()=>$("fName")?.focus(),40);
+}
+
+function readForm(){
+ const f=modal.form;
+ f.name=$("fName")?.value??f.name;
+ f.slug=$("fSlug")?.value??f.slug;
+ if($("fDays"))f.days=Number($("fDays").value);
+ if($("fPlan"))f.plan=$("fPlan").value;
+ f.copy=!!$("fCopy")?.checked;
+ f.account=!!$("fAccount")?.checked;
+ f.email=$("fEmail")?.value??f.email;
+}
+
+function closeModal(){
+ const wasResult=modal&&modal.type==="result";
+ modal=null;
+ render();
+ if(wasResult)reload();
+}
+
+function bindModal(){
+
+ $("mClose")?.addEventListener("click",closeModal);
+ $("mCancel")?.addEventListener("click",closeModal);
+ $("overlay")?.addEventListener("click",e=>{if(e.target.id==="overlay")closeModal()});
+
+ /* create */
+ document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{
+  readForm();
+  modal.mode=b.dataset.mode;
+  if(modal.mode==="customer")modal.form.copy=false;
+  else modal.form.copy=true;
+  render();
+ });
+
+ const name=$("fName"),slug=$("fSlug");
+
+ if(name&&slug){
+  name.oninput=()=>{
+   if(!modal.form.slugTouched){
+    slug.value=slugify(name.value);
+    $("slugPreview").textContent=menuUrl(slug.value||"...");
+   }
+  };
+  slug.oninput=()=>{
+   modal.form.slugTouched=true;
+   const clean=slugify(slug.value);
+   if(clean!==slug.value&&!slug.value.endsWith("-"))slug.value=clean;
+   $("slugPreview").textContent=menuUrl(slugify(slug.value)||"...");
+  };
+ }
+
+ $("fAccount")?.addEventListener("change",e=>{$("emailWrap").hidden=!e.target.checked});
+
+ $("mCreate")?.addEventListener("click",async()=>{
+
+  readForm();
+  const f=modal.form;
+  const demo=modal.mode==="demo";
+  const slugV=slugify(f.slug);
+
+  if(!f.name.trim()){showErr("İşletme adını yazın.");return}
+  if(slugV.length<3){showErr("Menü adresi en az 3 karakter olmalı.");return}
+
+  let email=(f.email||"").trim().toLowerCase();
+  if(f.account&&!email){
+   if(demo)email=slugV+"@demo.nearmenu.app";
+   else{showErr("Gerçek müşteri için işletme sahibinin e-postasını yazın.");return}
+  }
+
+  const btn=$("mCreate");
+  btn.disabled=true;btn.textContent="Oluşturuluyor...";
+
+  try{
+   const res=await rpc("admin_create_restaurant",{
+    p_name:f.name.trim(),
+    p_slug:slugV,
+    p_status:demo?"trial":"active",
+    p_plan:demo?"basic":f.plan,
+    p_trial_days:demo?f.days:14,
+    p_copy_from:f.copy?MAIN_DEMO:null,
+    p_owner_email:f.account?email:null,
+    p_force_change:!demo
+   });
+
+   const r={id:res.id,slug:res.slug,name:f.name.trim(),status:demo?"trial":"active",trial_ends:demo?isoPlus(f.days):null};
+   modal={type:"result",restaurant:r,owner:res.owner,products:res.products};
+   render();
+
+  }catch(e){
+   btn.disabled=false;btn.textContent=demo?"Demoyu oluştur":"Müşteriyi ekle";
+   showErr(e.message||"Oluşturulamadı.");
+  }
+ });
+
+ /* result / share */
+ $("copyShare")?.addEventListener("click",()=>copyText($("shareText").textContent));
+ $("copyLink")?.addEventListener("click",()=>copyText(menuUrl(modal.restaurant.slug)));
+
+ /* edit */
+ const r=modal.type==="edit"?restaurants.find(x=>x.id===modal.id):null;
+
+ document.querySelectorAll("[data-extend]").forEach(b=>b.onclick=()=>{
+  const cur=$("eTrial").value;
+  const base=cur&&daysLeft(cur)>=0?cur:isoPlus(0);
+  const [y,m,d]=base.split("-").map(Number);
+  const dt=new Date(y,m-1,d+Number(b.dataset.extend));
+  $("eTrial").value=dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");
+  $("eStatus").value="trial";
+ });
+
+ $("eSave")?.addEventListener("click",async()=>{
+  const status=$("eStatus").value;
+  const body={
+   name:$("eName").value.trim()||r.name,
+   status,
+   plan:$("ePlan").value,
+   trial_ends:status==="trial"?($("eTrial").value||isoPlus(14)):null
+  };
+  try{
+   await sb("/rest/v1/restaurants?id=eq."+r.id,{method:"PATCH",headers:{"Prefer":"return=minimal"},body});
+   Object.assign(r,body);
+   toast("✓ Kaydedildi");
+   modal=null;
+   render();
+   reload();
+  }catch(e){showErr("Kaydedilemedi: "+e.message)}
+ });
+
+ document.querySelectorAll("[data-reset]").forEach(b=>b.onclick=async()=>{
+  if(!confirm(b.dataset.reset+" için yeni geçici şifre oluşturulsun mu? Eski şifre çalışmaz."))return;
+  try{
+   const res=await rpc("admin_reset_password",{p_email:b.dataset.reset});
+   modal={type:"share",restaurant:r,owner:{email:res.email,temp_password:res.temp_password}};
+   render();
+  }catch(e){showErr(e.message)}
+ });
+
+ $("eAddOwner")?.addEventListener("click",async()=>{
+  const email=($("eOwner").value||"").trim().toLowerCase();
+  if(!email){showErr("E-posta yazın.");return}
+  try{
+   const res=await rpc("admin_add_owner",{p_restaurant:r.id,p_email:email,p_force_change:r.status!=="trial"});
+   await loadRestaurants();
+   modal={type:"share",restaurant:restaurants.find(x=>x.id===r.id)||r,owner:res};
+   render();
+  }catch(e){showErr(e.message)}
+ });
+
+ $("eDelete")?.addEventListener("click",async()=>{
+  if(($("eDel").value||"").trim()!==r.slug){showErr("Onay için adresi tam olarak yazın: "+r.slug);return}
+  if(!confirm(r.name+" ve tüm menüsü kalıcı olarak silinecek. Emin misiniz?"))return;
+  try{
+   await sb("/rest/v1/restaurants?id=eq."+r.id,{method:"DELETE",headers:{"Prefer":"return=minimal"}});
+   restaurants=restaurants.filter(x=>x.id!==r.id);
+   modal=null;
+   render();
+   toast("Silindi");
+  }catch(e){showErr("Silinemedi: "+e.message)}
+ });
+}
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"&&modal)closeModal();
+});
+
+/* =========================================================
+   BAŞLAT
+========================================================= */
+(async()=>{
+ render();
+ if(session){
+  await ensureFresh();
+ }
+ if(session){
+  await afterLogin();
+ }else{
+  view="login";
+  render();
+ }
+})();
+</script>
+</body>
+</html>
