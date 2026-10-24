@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Yönlendiriliyor...</title>
+<style>
+ html,body{margin:0;height:100%;background:#171719;color:#929296;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+ body{display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}
+ a{color:#f0c45a}
+</style>
+<script>
+/* Kısa adresler: neardiji.com/kebapci-ali → menü, neardiji.com/admin → süper yönetici paneli.
+   GitHub Pages bilinmeyen yolları bu sayfaya gönderir; buradan doğru sayfaya yönlendiriyoruz. */
+(function(){
+ var base=/github\.io$/i.test(location.hostname)?"/"+(location.pathname.split("/")[1]||"")+"/":"/";
+ var rest=location.pathname.indexOf(base)===0?location.pathname.slice(base.length):location.pathname.replace(/^\/+/,"");
+ var seg=(rest.split("/")[0]||"").toLowerCase();
+ try{seg=decodeURIComponent(seg)}catch(e){}
+ if(seg==="admin"||seg==="yonetim"||seg==="yönetim"){
+  location.replace(base+"admin.html");
+ }else if(/^[a-z0-9]+(-[a-z0-9]+)*$/.test(seg)){
+  location.replace(base+"?r="+encodeURIComponent(seg)+location.hash);
+ }else{
+  location.replace(base);
+ }
+})();
+</script>
+</head>
+<body>
+<p>Yönlendiriliyor... <a href="/">Ana sayfaya git</a></p>
+</body>
+</html>

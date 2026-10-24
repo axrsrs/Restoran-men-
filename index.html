@@ -3449,12 +3449,29 @@ const SB_KEY="sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
 const MEDIA_BUCKET="menu-media";
 const SESSION_KEY="nearMenuSession";
 
+/* Kendi alan adımızda (neardiji.com) kısa adres kullanılır: neardiji.com/kebapci-ali */
+const PRETTY_URLS=!/github\.io$/i.test(location.hostname)&&!/^(localhost|127\.)/.test(location.hostname);
+
 const RESTAURANT_SLUG=(()=>{
  let s="";
  try{s=new URLSearchParams(location.search).get("r")||""}catch(e){}
+ if(!s&&PRETTY_URLS){
+  const seg=(location.pathname.replace(/^\/+/,"").split("/")[0]||"");
+  if(seg&&!/\.html?$/i.test(seg))s=seg;
+ }
  s=String(s).toLowerCase().replace(/[^a-z0-9-]/g,"");
  return s||"nearmenu-demo";
 })();
+
+/* ?r=kebapci-ali ile gelindiyse adres çubuğunu kısa adrese çevir */
+try{
+ if(PRETTY_URLS&&new URLSearchParams(location.search).get("r"))
+  history.replaceState(history.state,"","/"+RESTAURANT_SLUG+location.hash);
+}catch(e){}
+
+function publicMenuUrl(slug){
+ return PRETTY_URLS?location.origin+"/"+slug:new URL("./",location.href).href.split("?")[0]+"?r="+slug;
+}
 
 const cloud={
  ready:false,        /* menü en az bir kez yüklendi mi */
@@ -4341,7 +4358,7 @@ function renderAccountCard(){
 
   <div class="adminCardDescription">
    ${esc(email)} • ${role}<br>
-   Menü adresi: <b>?r=${esc(RESTAURANT_SLUG)}</b>
+   Menü adresi: <b>${esc(publicMenuUrl(RESTAURANT_SLUG).replace(/^https?:\/\//,""))}</b>
   </div>
 
   <div class="field">

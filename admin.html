@@ -1614,8 +1614,12 @@ function slugify(text){
   .replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60);
 }
 
+const PRETTY_URLS=!/github\.io$/i.test(location.hostname)&&!/^(localhost|127\.)/.test(location.hostname);
+
 function menuUrl(slug){
- return MENU_BASE+"?r="+encodeURIComponent(slug);
+ return PRETTY_URLS
+  ?location.origin+"/"+encodeURIComponent(slug)
+  :MENU_BASE+"?r="+encodeURIComponent(slug);
 }
 
 function fmtDate(d){
@@ -1883,7 +1887,7 @@ function renderCard(r){
   <div class="card-head">
    <div style="min-width:0">
     <h3>${esc(r.name)}</h3>
-    <a href="${esc(menuUrl(r.slug))}" target="_blank" rel="noopener">?r=${esc(r.slug)}</a>
+    <a href="${esc(menuUrl(r.slug))}" target="_blank" rel="noopener">${esc(menuUrl(r.slug).replace(/^https?:\/\//,""))}</a>
    </div>
    <span class="pill ${s}">${STATUS_LABEL[s]}</span>
   </div>
