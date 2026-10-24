@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#171719">
+<meta name="description" content="Dijital QR menü — ürünler, fiyatlar ve etkinlikler.">
+<meta property="og:title" content="Dijital Menü">
+<meta property="og:description" content="Menümüzü inceleyin: ürünler, fiyatlar ve etkinlikler.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23171719' stroke='%23d6a83d' stroke-width='3'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23d6a83d'%3EN%3C/text%3E%3C/svg%3E">
 <title>NearMenu Premium</title>
 
 <style>
@@ -516,11 +521,11 @@ button:active{transform:scale(.97)}
  letter-spacing:.12em
 }
 .adminTabs{
- display:grid;grid-template-columns:repeat(3,1fr);
- gap:7px;margin-top:15px
+ display:grid;grid-template-columns:repeat(4,1fr);
+ gap:6px;margin-top:15px
 }
 .adminTabs button{
- padding:12px 8px;
+ padding:12px 4px;
  border:1px solid rgba(255,255,255,.06);
  border-radius:12px;background:#151518;
  color:#777;font-size:11px;font-weight:850
@@ -807,6 +812,49 @@ button:active{transform:scale(.97)}
 .help{margin-top:8px;color:#666;font-size:9px}
 .hidden{display:none!important}
 
+.heroHidden{display:none!important}
+
+img.imgBroken{opacity:0}
+
+#nearToast{
+ position:fixed;left:50%;bottom:90px;z-index:1000;
+ transform:translate(-50%,20px);opacity:0;pointer-events:none;
+ max-width:calc(100% - 32px);
+ padding:12px 18px;border-radius:14px;
+ background:rgba(20,20,22,.96);color:#fff;
+ border:1px solid rgba(214,168,61,.4);
+ font-size:12px;font-weight:700;text-align:center;
+ box-shadow:0 10px 30px rgba(0,0,0,.45);
+ transition:opacity .25s,transform .25s
+}
+#nearToast.show{opacity:1;transform:translate(-50%,0)}
+
+.adminRow{display:flex;gap:6px;align-items:stretch}
+.adminRow>.adminCategoryItem,
+.adminRow>.adminProductItem{flex:1;min-width:0}
+.moveBtns{display:flex;flex-direction:column;gap:4px}
+.moveBtns button{
+ flex:1;width:36px;
+ border:1px solid rgba(255,255,255,.07);border-radius:9px;
+ background:#1b1b1e;color:#bbb;font-size:10px
+}
+.moveBtns button:disabled{opacity:.25}
+
+.adminWarning{
+ margin-bottom:14px;padding:12px 14px;border-radius:12px;
+ background:rgba(214,168,61,.1);
+ border:1px solid rgba(214,168,61,.3);
+ color:#f0c45a;font-size:11px;line-height:1.5
+}
+
+.eventActions{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+a.adminButton{
+ display:flex;align-items:center;justify-content:center;
+ text-decoration:none
+}
+.adminButton:disabled{opacity:.6}
+.event{cursor:pointer}
+
 @media(max-width:600px){
  .admin{width:100%}
  .adminBody{padding:16px;padding-bottom:100px}
@@ -960,7 +1008,13 @@ const TEXT={
   categoryName:"Kategori adı",noProducts:"Henüz ürün yok.",
   noCategories:"Henüz kategori yok.",
   usd:"Dolar",eur:"Euro",try:"Türk Lirası",
-  translationInfo:"Türkçe metinleri yazman yeterli."
+  translationInfo:"Türkçe metinleri yazman yeterli.",
+  image:"Fotoğraf Seç",video:"Video Seç",
+  results:"ürün bulundu",noResults:"Ürün bulunamadı.",
+  reserveWhatsApp:"WhatsApp ile Rezervasyon",
+  reserveCall:"Arayarak Rezervasyon",
+  reserveMsg:"Merhaba, {event} ({date}) için rezervasyon yapmak istiyorum.",
+  date:"Tarih",time:"Saat",products_count:"ürün"
  },
  en:{
   welcome:"WELCOME",best:"Best Sellers",events:"Events",
@@ -983,7 +1037,13 @@ const TEXT={
   noProducts:"No products yet.",
   noCategories:"No categories yet.",
   usd:"US Dollar",eur:"Euro",try:"Turkish Lira",
-  translationInfo:"Write Turkish text and translations will be generated."
+  translationInfo:"Write Turkish text and translations will be generated.",
+  image:"Choose Photo",video:"Choose Video",
+  results:"products found",noResults:"No products found.",
+  reserveWhatsApp:"Reserve via WhatsApp",
+  reserveCall:"Call to Reserve",
+  reserveMsg:"Hello, I would like to make a reservation for {event} ({date}).",
+  date:"Date",time:"Time",products_count:"products"
  },
  ar:{
   welcome:"مرحباً بكم",best:"الأكثر مبيعاً",
@@ -1008,17 +1068,28 @@ const TEXT={
   noProducts:"لا توجد منتجات.",
   noCategories:"لا توجد تصنيفات.",
   usd:"الدولار",eur:"اليورو",try:"الليرة التركية",
-  translationInfo:"اكتب النص التركي وسيتم إنشاء الترجمات."
+  translationInfo:"اكتب النص التركي وسيتم إنشاء الترجمات.",
+  image:"اختر صورة",video:"اختر فيديو",
+  results:"منتج",noResults:"لم يتم العثور على منتجات.",
+  reserveWhatsApp:"احجز عبر واتساب",
+  reserveCall:"احجز بالاتصال",
+  reserveMsg:"مرحباً، أود الحجز لفعالية {event} ({date}).",
+  date:"التاريخ",time:"الوقت",products_count:"منتج"
  }
 };
 
 const DATA={
  name:"NEARMENU DEMO",
  subtitle:"Lezzetin en güzel hali burada.",
+ subtitles:{
+  tr:"Lezzetin en güzel hali burada.",
+  en:"The finest flavours, all in one place.",
+  ar:"ألذّ النكهات في مكان واحد."
+ },
  phone:"+90 555 555 55 55",
  whatsapp:"905555555555",
  logo:"",
- rates:{USD:40,EUR:47},
+ rates:{USD:40,EUR:47,auto:true,updated:0},
  theme:{
   accent:"#d6a83d",accent2:"#f0c45a",
   text:"#ffffff",cardText:"#ffffff",
@@ -1222,6 +1293,264 @@ const MENU_DATA=[
 ];
 
 /* =========================================================
+   DEMO MENÜ ÇEVİRİLERİ (EN / AR)
+========================================================= */
+
+const DEMO_CATEGORY_TR={
+ "Kahvaltı":["Breakfast","الفطور"],
+ "Pizza":["Pizza","البيتزا"],
+ "Hamburger":["Burgers","البرغر"],
+ "Et Ürünleri":["Meat Dishes","أطباق اللحوم"],
+ "Beyaz Et Ürünleri":["Chicken Dishes","أطباق الدجاج"],
+ "Makarnalar":["Pasta","المعكرونة"],
+ "Gözlemeler":["Gözleme","الغوزلمة"],
+ "Tostlar":["Toasties","التوست"],
+ "Soğuk İçecekler":["Cold Drinks","المشروبات الباردة"],
+ "Soğuk Kahveler":["Iced Coffees","القهوة المثلجة"],
+ "Red Bull":["Red Bull","ريد بول"],
+ "Çaylar":["Teas","الشاي"]
+};
+
+const DEMO_PRODUCT_TR={
+ "Serpme Kahvaltı":[
+  "Turkish Breakfast Spread","Assorted cheeses, olives, honey, jam, eggs, tomatoes, cucumbers and hot breakfast items.",
+  "فطور تركي مشكّل","تشكيلة أجبان وزيتون وعسل ومربى وبيض وطماطم وخيار ومقبلات فطور ساخنة."],
+ "Kahvaltı Tabağı":[
+  "Breakfast Plate","White cheese, kashar cheese, olives, egg, tomatoes, cucumbers and honey.",
+  "طبق الفطور","جبنة بيضاء وجبنة قشقوان وزيتون وبيض وطماطم وخيار وعسل."],
+ "Menemen":[
+  "Menemen","Traditional Turkish scrambled eggs with tomatoes and peppers.",
+  "منمن","بيض تركي تقليدي مطهو مع الطماطم والفلفل."],
+ "Sucuklu Yumurta":[
+  "Eggs with Sucuk","Pan-fried spicy Turkish sausage with eggs.",
+  "بيض بالسجق","سجق تركي متبّل مع البيض في المقلاة."],
+ "Kaşarlı Omlet":[
+  "Cheese Omelette","Three-egg omelette with plenty of kashar cheese.",
+  "أومليت بالجبن","أومليت من ثلاث بيضات مع الكثير من جبنة القشقوان."],
+ "Sahanda Yumurta":[
+  "Fried Eggs","Two eggs fried in butter.",
+  "بيض مقلي","بيضتان مقليتان بالزبدة."],
+
+ "Margherita Pizza":[
+  "Margherita Pizza","Tomato sauce, mozzarella and basil.",
+  "بيتزا مارغريتا","صلصة طماطم وموزاريلا وريحان."],
+ "Karışık Pizza":[
+  "Mixed Pizza","Sucuk, salami, sausage, mushrooms, peppers, corn and mozzarella.",
+  "بيتزا مشكّلة","سجق وسلامي ونقانق وفطر وفلفل وذرة وموزاريلا."],
+ "Sucuklu Pizza":[
+  "Sucuk Pizza","Loaded with Turkish sausage, mozzarella and our special pizza sauce.",
+  "بيتزا بالسجق","كمية وفيرة من السجق التركي مع الموزاريلا وصلصة البيتزا الخاصة."],
+ "Tavuklu Pizza":[
+  "Chicken Pizza","Chicken pieces, mushrooms, peppers, corn and mozzarella.",
+  "بيتزا بالدجاج","قطع دجاج وفطر وفلفل وذرة وموزاريلا."],
+ "Dört Peynirli Pizza":[
+  "Four Cheese Pizza","Mozzarella, cheddar, parmesan and white cheese.",
+  "بيتزا الأجبان الأربعة","موزاريلا وشيدر وبارميزان وجبنة بيضاء."],
+ "Ton Balıklı Pizza":[
+  "Tuna Pizza","Tuna, corn, onion, olives and mozzarella.",
+  "بيتزا التونة","تونة وذرة وبصل وزيتون وموزاريلا."],
+
+ "Classic Burger":[
+  "Classic Burger","180 g beef patty, cheddar, lettuce, tomato and special sauce.",
+  "برغر كلاسيك","قطعة لحم بقري 180 غ مع شيدر وخس وطماطم وصلصة خاصة."],
+ "Cheeseburger":[
+  "Cheeseburger","180 g beef patty, cheddar cheese, pickles, onion and special sauce.",
+  "تشيز برغر","قطعة لحم بقري 180 غ مع جبنة شيدر ومخلل وبصل وصلصة خاصة."],
+ "Double Burger":[
+  "Double Burger","Two beef patties, cheddar and special burger sauce.",
+  "دبل برغر","قطعتا لحم بقري مع شيدر وصلصة البرغر الخاصة."],
+ "BBQ Burger":[
+  "BBQ Burger","Beef patty, cheddar, caramelised onions, crispy onions and BBQ sauce.",
+  "برغر باربكيو","لحم بقري وشيدر وبصل مكرمل وبصل مقرمش وصلصة باربكيو."],
+ "Mushroom Burger":[
+  "Mushroom Burger","Beef patty, cheddar, sautéed mushrooms and special sauce.",
+  "برغر بالفطر","لحم بقري وشيدر وفطر سوتيه وصلصة خاصة."],
+ "Tavuk Burger":[
+  "Chicken Burger","Crispy chicken, lettuce, pickles and special burger sauce.",
+  "برغر دجاج","دجاج مقرمش وخس ومخلل وصلصة البرغر الخاصة."],
+
+ "Izgara Köfte":[
+  "Grilled Meatballs","Beef meatballs with special spices, served with garnish and rice.",
+  "كفتة مشوية","كفتة لحم بقري بتوابل خاصة تقدَّم مع المقبلات والأرز."],
+ "Antrikot":[
+  "Grilled Entrecôte","Grilled entrecôte with roasted vegetables and potatoes.",
+  "أنتريكوت مشوي","أنتريكوت مشوي مع خضار مشوية وبطاطا."],
+ "Lokum Et":[
+  "Tender Beef Tenderloin","Tender beef tenderloin pieces with butter and garnish.",
+  "لحم لوكوم","قطع فيليه لحم بقري طرية بالزبدة مع المقبلات."],
+ "Et Şiş":[
+  "Beef Shish","Marinated beef with roasted peppers and tomatoes.",
+  "شيش لحم","لحم بقري متبّل مع فلفل وطماطم مشوية."],
+ "Karışık Izgara":[
+  "Mixed Grill","Meatballs, lamb shish, chicken and beef on one plate.",
+  "مشاوي مشكّلة","كفتة وشيش لحم ضأن ودجاج ولحم بقري في طبق واحد."],
+ "Et Sote":[
+  "Beef Sauté","Beef with colourful peppers, tomatoes and special sauce.",
+  "لحم سوتيه","لحم بقري مع فلفل ملوّن وطماطم وصلصة خاصة."],
+
+ "Izgara Tavuk":[
+  "Grilled Chicken","Marinated chicken breast with rice and seasonal salad.",
+  "دجاج مشوي","صدر دجاج متبّل مع الأرز وسلطة الموسم."],
+ "Tavuk Şiş":[
+  "Chicken Shish","Specially marinated chicken pieces with roasted vegetables and rice.",
+  "شيش طاووق","قطع دجاج متبّلة بخلطة خاصة مع خضار مشوية وأرز."],
+ "Tavuk Sote":[
+  "Chicken Sauté","Chicken, colourful peppers, mushrooms and a special cream sauce.",
+  "دجاج سوتيه","دجاج وفلفل ملوّن وفطر مع صلصة كريمة خاصة."],
+ "Çıtır Tavuk":[
+  "Crispy Chicken","Crispy coated chicken pieces with a special dip.",
+  "دجاج مقرمش","قطع دجاج مقرمشة مع صلصة تغميس خاصة."],
+ "Kremalı Tavuk":[
+  "Creamy Chicken","Chicken pieces, mushrooms and cream sauce.",
+  "دجاج بالكريمة","قطع دجاج وفطر مع صلصة الكريمة."],
+ "Tavuk Fajita":[
+  "Chicken Fajita","Chicken with colourful peppers and onions, served fajita style.",
+  "فاهيتا دجاج","دجاج مع فلفل ملوّن وبصل يقدَّم على طريقة الفاهيتا."],
+
+ "Penne Arrabbiata":[
+  "Penne Arrabbiata","Penne with tomato sauce, garlic and chilli.",
+  "بيني أرابياتا","معكرونة بيني بصلصة الطماطم والثوم والفلفل الحار."],
+ "Fettuccine Alfredo":[
+  "Fettuccine Alfredo","Fettuccine with chicken, mushrooms and cream sauce.",
+  "فيتوتشيني ألفريدو","فيتوتشيني مع الدجاج والفطر وصلصة الكريمة."],
+ "Spaghetti Bolognese":[
+  "Spaghetti Bolognese","Spaghetti with minced beef bolognese sauce and parmesan.",
+  "سباغيتي بولونيز","سباغيتي بصلصة بولونيز باللحم المفروم مع البارميزان."],
+ "Kremalı Mantarlı Makarna":[
+  "Creamy Mushroom Pasta","Pasta with mushrooms, parmesan and cream sauce.",
+  "معكرونة بالفطر والكريمة","معكرونة مع الفطر والبارميزان وصلصة الكريمة."],
+ "Pesto Soslu Makarna":[
+  "Pesto Pasta","Basil pesto, parmesan and cherry tomatoes.",
+  "معكرونة بالبيستو","بيستو الريحان مع البارميزان وطماطم كرزية."],
+ "Tavuklu Penne":[
+  "Chicken Penne","Penne with chicken pieces, vegetables and cream sauce.",
+  "بيني بالدجاج","بيني مع قطع الدجاج والخضار وصلصة الكريمة."],
+
+ "Kaşarlı Gözleme":[
+  "Cheese Gözleme","Griddle-cooked gözleme filled with plenty of kashar cheese.",
+  "غوزلمة بالجبن","غوزلمة على الصاج محشوة بالكثير من جبنة القشقوان."],
+ "Patatesli Gözleme":[
+  "Potato Gözleme","Traditional gözleme with a spiced potato filling.",
+  "غوزلمة بالبطاطا","غوزلمة تقليدية بحشوة البطاطا المتبّلة."],
+ "Ispanaklı Gözleme":[
+  "Spinach Gözleme","Spinach, white cheese and spices.",
+  "غوزلمة بالسبانخ","سبانخ وجبنة بيضاء وتوابل."],
+ "Sucuklu Kaşarlı Gözleme":[
+  "Sucuk & Cheese Gözleme","Gözleme with Turkish sausage and kashar cheese.",
+  "غوزلمة بالسجق والجبن","غوزلمة بالسجق التركي وجبنة القشقوان."],
+ "Kıymalı Gözleme":[
+  "Minced Meat Gözleme","Spiced minced beef and onion filling.",
+  "غوزلمة باللحم المفروم","حشوة لحم بقري مفروم متبّل مع البصل."],
+
+ "Kaşarlı Tost":[
+  "Cheese Toastie","Classic toastie with plenty of kashar cheese.",
+  "توست بالجبن","توست كلاسيكي مع الكثير من جبنة القشقوان."],
+ "Karışık Tost":[
+  "Mixed Toastie","Kashar cheese, sucuk, salami and tomato.",
+  "توست مشكّل","جبنة قشقوان وسجق وسلامي وطماطم."],
+ "Sucuklu Tost":[
+  "Sucuk Toastie","Turkish sausage and plenty of kashar cheese.",
+  "توست بالسجق","سجق تركي مع الكثير من جبنة القشقوان."],
+ "Ayvalık Tostu":[
+  "Ayvalık Toastie","Sucuk, salami, sausage, kashar, pickles and special sauce.",
+  "توست أيفاليك","سجق وسلامي ونقانق وقشقوان ومخلل وصلصة خاصة."],
+ "Kavurmalı Tost":[
+  "Kavurma Toastie","Slow-cooked beef kavurma and kashar cheese.",
+  "توست بالقاورما","قاورما لحم بقري مع جبنة القشقوان."],
+ "Beyaz Peynirli Tost":[
+  "White Cheese Toastie","White cheese, tomato and olives.",
+  "توست بالجبنة البيضاء","جبنة بيضاء وطماطم وزيتون."],
+
+ "Coca Cola":[
+  "Coca-Cola","Chilled 330 ml Coca-Cola.",
+  "كوكا كولا","كوكا كولا باردة 330 مل."],
+ "Coca Cola Zero":[
+  "Coca-Cola Zero","330 ml Coca-Cola Zero.",
+  "كوكا كولا زيرو","كوكا كولا زيرو 330 مل."],
+ "Fanta":[
+  "Fanta","Chilled 330 ml Fanta.",
+  "فانتا","فانتا باردة 330 مل."],
+ "Sprite":[
+  "Sprite","Chilled 330 ml Sprite.",
+  "سبرايت","سبرايت بارد 330 مل."],
+ "Ice Tea Şeftali":[
+  "Peach Iced Tea","Chilled peach iced tea.",
+  "شاي مثلج بالخوخ","شاي مثلج بارد بنكهة الخوخ."],
+ "Ev Yapımı Limonata":[
+  "Homemade Lemonade","Homemade lemonade made with fresh lemons.",
+  "ليموناضة منزلية","ليموناضة منزلية محضّرة من الليمون الطازج."],
+ "Taze Portakal Suyu":[
+  "Fresh Orange Juice","Freshly squeezed orange juice.",
+  "عصير برتقال طازج","عصير برتقال معصور طازجاً."],
+ "Ayran":[
+  "Ayran","Traditional frothy yoghurt drink.",
+  "عيران","مشروب لبن تقليدي برغوة."],
+ "Su":[
+  "Water","500 ml natural spring water.",
+  "ماء","مياه ينابيع طبيعية 500 مل."],
+
+ "Iced Americano":[
+  "Iced Americano","Refreshing coffee made with espresso and cold water.",
+  "آيس أمريكانو","قهوة منعشة من الإسبريسو والماء البارد."],
+ "Iced Latte":[
+  "Iced Latte","Espresso, cold milk and ice.",
+  "آيس لاتيه","إسبريسو وحليب بارد وثلج."],
+ "Iced Mocha":[
+  "Iced Mocha","Espresso, milk, chocolate and ice.",
+  "آيس موكا","إسبريسو وحليب وشوكولاتة وثلج."],
+ "Caramel Iced Latte":[
+  "Caramel Iced Latte","Caramel syrup, espresso, milk and ice.",
+  "آيس لاتيه بالكراميل","شراب الكراميل مع الإسبريسو والحليب والثلج."],
+ "Vanilla Iced Latte":[
+  "Vanilla Iced Latte","Vanilla syrup, espresso, milk and ice.",
+  "آيس لاتيه بالفانيلا","شراب الفانيلا مع الإسبريسو والحليب والثلج."],
+ "Cold Brew":[
+  "Cold Brew","Coffee slowly steeped in cold water for hours.",
+  "كولد برو","قهوة منقوعة ببطء في الماء البارد لساعات."],
+ "Iced Spanish Latte":[
+  "Iced Spanish Latte","Espresso, milk and condensed milk.",
+  "آيس سبانيش لاتيه","إسبريسو وحليب وحليب مكثّف."],
+
+ "Red Bull Energy Drink 250 ml":[
+  "Red Bull Energy Drink 250 ml","The classic Red Bull Energy Drink.",
+  "ريد بول مشروب طاقة 250 مل","مشروب ريد بول للطاقة الكلاسيكي."],
+ "Red Bull Sugarfree 250 ml":[
+  "Red Bull Sugarfree 250 ml","Sugar-free Red Bull Energy Drink.",
+  "ريد بول خالٍ من السكر 250 مل","مشروب ريد بول للطاقة خالٍ من السكر."],
+ "Red Bull Zero 250 ml":[
+  "Red Bull Zero 250 ml","Sugar-free, zero-calorie energy drink.",
+  "ريد بول زيرو 250 مل","مشروب طاقة خالٍ من السكر والسعرات."],
+ "Red Bull Tropical":[
+  "Red Bull Tropical","Tropical-flavoured Red Bull.",
+  "ريد بول استوائي","ريد بول بنكهة الفواكه الاستوائية."],
+ "Red Bull Watermelon":[
+  "Red Bull Watermelon","Watermelon-flavoured Red Bull.",
+  "ريد بول بطيخ","ريد بول بنكهة البطيخ."],
+
+ "Çay":[
+  "Turkish Tea","Traditional Turkish tea.",
+  "شاي تركي","شاي تركي تقليدي."],
+ "Fincan Çay":[
+  "Tea in a Cup","Special blend tea served in a cup.",
+  "شاي بالفنجان","شاي بخلطة خاصة يقدَّم في فنجان."],
+ "Demlik Çay":[
+  "Teapot (for Two)","Freshly brewed tea for two.",
+  "إبريق شاي","شاي مخمّر طازج لشخصين."],
+ "Ada Çayı":[
+  "Sage Tea","Aromatic sage tea.",
+  "شاي الميرمية","شاي الميرمية العطري."],
+ "Ihlamur":[
+  "Linden Tea","Hot linden blossom tea.",
+  "شاي الزيزفون","شاي زهر الزيزفون الساخن."],
+ "Yeşil Çay":[
+  "Green Tea","Light and refreshing green tea.",
+  "شاي أخضر","شاي أخضر خفيف ومنعش."],
+ "Kış Çayı":[
+  "Winter Tea","Apple, cinnamon, clove and a special herbal blend.",
+  "شاي الشتاء","تفاح وقرفة وقرنفل مع خلطة أعشاب خاصة."]
+};
+
+/* =========================================================
    MENÜYÜ GÜVENLİ EKLE
    MEVCUT VERİLER ASLA EZİLMEZ
 ========================================================= */
@@ -1239,14 +1568,14 @@ function createProduct(data,index){
   name:data[0],
   names:{
    tr:data[0],
-   en:"",
-   ar:""
+   en:(DEMO_PRODUCT_TR[data[0]]||[])[0]||"",
+   ar:(DEMO_PRODUCT_TR[data[0]]||[])[2]||""
   },
   description:data[1],
   descriptions:{
    tr:data[1],
-   en:"",
-   ar:""
+   en:(DEMO_PRODUCT_TR[data[0]]||[])[1]||"",
+   ar:(DEMO_PRODUCT_TR[data[0]]||[])[3]||""
   },
   portion:"",
   calories:"",
@@ -1276,8 +1605,8 @@ function ensureFullMenu(){
     name:source.name,
     names:{
      tr:source.name,
-     en:"",
-     ar:""
+     en:(DEMO_CATEGORY_TR[source.name]||[])[0]||"",
+     ar:(DEMO_CATEGORY_TR[source.name]||[])[1]||""
     },
     image:source.image,
     items:[]
@@ -1318,6 +1647,87 @@ function ensureFullMenu(){
 
  });
 
+}
+
+/* Kayıtlı veride boş kalan demo çevirilerini doldur */
+function applyDemoTranslations(){
+
+ const demoDesc={};
+
+ MENU_DATA.forEach(c=>c.products.forEach(p=>{demoDesc[p[0]]=p[1]}));
+
+ DATA.categories.forEach(c=>{
+
+  const ct=DEMO_CATEGORY_TR[c.name];
+
+  if(ct&&c.names&&c.names.tr===c.name){
+   if(!c.names.en)c.names.en=ct[0];
+   if(!c.names.ar)c.names.ar=ct[1];
+  }
+
+  (c.items||[]).forEach(p=>{
+
+   const pt=DEMO_PRODUCT_TR[p.name];
+
+   if(!pt)return;
+
+   if(!p.names.en)p.names.en=pt[0];
+   if(!p.names.ar)p.names.ar=pt[2];
+
+   if(p.description===demoDesc[p.name]){
+    if(!p.descriptions.en)p.descriptions.en=pt[1];
+    if(!p.descriptions.ar)p.descriptions.ar=pt[3];
+   }
+  });
+ });
+}
+
+function isoDate(offsetDays){
+
+ const d=new Date();
+ d.setDate(d.getDate()+offsetDays);
+
+ return d.getFullYear()+"-"+
+  String(d.getMonth()+1).padStart(2,"0")+"-"+
+  String(d.getDate()).padStart(2,"0");
+}
+
+function seedDemoEvents(){
+
+ if(DATA.eventsSeeded)return;
+
+ DATA.eventsSeeded=true;
+
+ if(DATA.events.length)return;
+
+ DATA.events=[
+  {
+   id:"event-demo-1",
+   name:"Canlı Müzik Gecesi",
+   names:{tr:"Canlı Müzik Gecesi",en:"Live Music Night",ar:"أمسية موسيقى حية"},
+   description:"Akustik canlı performans eşliğinde akşam yemeği. Masanızı önceden ayırtın.",
+   descriptions:{
+    tr:"Akustik canlı performans eşliğinde akşam yemeği. Masanızı önceden ayırtın.",
+    en:"Dinner with an acoustic live performance. Book your table in advance.",
+    ar:"عشاء على أنغام عرض موسيقي حي. احجز طاولتك مسبقاً."
+   },
+   date:isoDate(3),time:"21:00",
+   image:IMAGES.meat[1]
+  },
+  {
+   id:"event-demo-2",
+   name:"Pazar Brunch",
+   names:{tr:"Pazar Brunch",en:"Sunday Brunch",ar:"برانش يوم الأحد"},
+   description:"Sınırsız çay eşliğinde zengin serpme kahvaltı ve brunch menüsü.",
+   descriptions:{
+    tr:"Sınırsız çay eşliğinde zengin serpme kahvaltı ve brunch menüsü.",
+    en:"A rich breakfast spread and brunch menu with unlimited tea.",
+    ar:"فطور مشكّل غني وقائمة برانش مع شاي غير محدود."
+   },
+   date:isoDate(7),time:"10:00",
+   image:IMAGES.breakfast[0]
+  }
+ ];
 }
 
 /* =========================================================
@@ -1397,14 +1807,25 @@ function mergeData(saved){
  },DATA.background||{});
 
  DATA.rates=Object.assign({
-  USD:40,EUR:47
+  USD:40,EUR:47,auto:true,updated:0
  },DATA.rates||{});
+
+ if(!DATA.subtitles||typeof DATA.subtitles!=="object")
+  DATA.subtitles={tr:DATA.subtitle||""};
 
  if(!Array.isArray(DATA.categories))
   DATA.categories=[];
 
  if(!Array.isArray(DATA.events))
   DATA.events=[];
+
+ DATA.events.forEach(ev=>{
+  if(!ev.id)ev.id="event-"+Date.now()+Math.random();
+  if(!ev.names)ev.names={};
+  if(!ev.descriptions)ev.descriptions={};
+  if(!ev.names.tr)ev.names.tr=ev.name||"";
+  if(!ev.descriptions.tr)ev.descriptions.tr=ev.description||"";
+ });
 
  DATA.categories.forEach(c=>{
 
@@ -1445,15 +1866,25 @@ try{
  const saved=safeGet(STORAGE_KEY);
 
  if(saved){
+
+  /* Kayıtlı veri varsa demo menü tekrar eklenmez:
+     silinen ürün/kategori geri gelmez. */
   mergeData(JSON.parse(saved));
+  applyDemoTranslations();
+
+ }else{
+
+  ensureFullMenu();
  }
 
- ensureFullMenu();
+ seedDemoEvents();
 
 }catch(e){
 
  console.error("Veri yükleme hatası:",e);
- ensureFullMenu();
+
+ if(!DATA.categories.length)
+  ensureFullMenu();
 }
 
 function saveData(){
@@ -1590,6 +2021,31 @@ async function saveMedia(type,id,file){
  return "indexeddb:"+key;
 }
 
+const mediaUrlCache=new Map();
+
+function cachedMediaUrl(value){
+
+ if(!value)return "";
+
+ if(!String(value).startsWith("indexeddb:"))
+  return value;
+
+ return mediaUrlCache.get(String(value).replace("indexeddb:",""))||"";
+}
+
+function forgetMediaUrl(value){
+
+ if(!value||!String(value).startsWith("indexeddb:"))return;
+
+ const key=String(value).replace("indexeddb:","");
+ const url=mediaUrlCache.get(key);
+
+ if(url){
+  URL.revokeObjectURL(url);
+  mediaUrlCache.delete(key);
+ }
+}
+
 async function loadMediaReference(value){
 
  if(!value)return "";
@@ -1599,22 +2055,253 @@ async function loadMediaReference(value){
 
  const key=String(value).replace("indexeddb:","");
 
+ if(mediaUrlCache.has(key))
+  return mediaUrlCache.get(key);
+
  const blob=await mediaGet(key);
 
  if(!blob)return "";
 
- return URL.createObjectURL(blob);
+ const url=URL.createObjectURL(blob);
+ mediaUrlCache.set(key,url);
+
+ return url;
 }
 
 /* =========================================================
+   FOTOĞRAF KÜÇÜLTME
+========================================================= */
+
+function compressImage(file,maxSize,keepAlpha){
+
+ return new Promise(resolve=>{
+
+  if(!file||!file.type.startsWith("image/")||file.type==="image/gif"||file.type==="image/svg+xml"){
+   resolve(file);
+   return;
+  }
+
+  const url=URL.createObjectURL(file);
+  const img=new Image();
+
+  img.onload=()=>{
+
+   URL.revokeObjectURL(url);
+
+   const scale=Math.min(1,maxSize/Math.max(img.naturalWidth,img.naturalHeight));
+   const w=Math.max(1,Math.round(img.naturalWidth*scale));
+   const h=Math.max(1,Math.round(img.naturalHeight*scale));
+
+   const canvas=document.createElement("canvas");
+   canvas.width=w;canvas.height=h;
+
+   const ctx=canvas.getContext("2d");
+   const png=keepAlpha&&file.type==="image/png";
+
+   if(!png){
+    ctx.fillStyle="#111";
+    ctx.fillRect(0,0,w,h);
+   }
+
+   ctx.drawImage(img,0,0,w,h);
+
+   canvas.toBlob(blob=>{
+    resolve(blob&&blob.size<file.size?blob:file);
+   },png?"image/png":"image/jpeg",.82);
+  };
+
+  img.onerror=()=>{
+   URL.revokeObjectURL(url);
+   resolve(file);
+  };
+
+  img.src=url;
+ });
+}
+
+/* =========================================================
+   OTOMATİK ÇEVİRİ
+========================================================= */
+
+async function translateText(text,target){
+
+ text=String(text||"").trim();
+
+ if(!text)return "";
+
+ try{
+
+  const r=await fetch(
+   "https://translate.googleapis.com/translate_a/single?client=gtx&sl=tr&tl="+
+   target+"&dt=t&q="+encodeURIComponent(text)
+  );
+
+  if(r.ok){
+   const j=await r.json();
+   const out=(j[0]||[]).map(x=>x[0]).join("");
+   if(out)return out;
+  }
+
+ }catch(e){}
+
+ try{
+
+  const r=await fetch(
+   "https://api.mymemory.translated.net/get?langpair=tr|"+
+   target+"&q="+encodeURIComponent(text)
+  );
+
+  if(r.ok){
+   const j=await r.json();
+   const out=j?.responseData?.translatedText;
+   if(out&&j.responseStatus===200)return out;
+  }
+
+ }catch(e){}
+
+ return "";
+}
+
+/* Bir öğenin boş EN/AR alanlarını doldurur.
+   Dönüş: doldurulan alan sayısı, -1 = bağlantı hatası */
+async function fillTranslations(item,hasDescription){
+
+ if(!item)return 0;
+
+ if(!item.names)item.names={};
+ if(hasDescription&&!item.descriptions)item.descriptions={};
+
+ item.names.tr=item.name||"";
+ if(hasDescription)item.descriptions.tr=item.description||"";
+
+ let filled=0,failed=false;
+
+ for(const lang of ["en","ar"]){
+
+  if(item.name&&!item.names[lang]){
+   const out=await translateText(item.name,lang);
+   if(out){item.names[lang]=out;filled++}else failed=true;
+  }
+
+  if(hasDescription&&item.description&&!item.descriptions[lang]){
+   const out=await translateText(item.description,lang);
+   if(out){item.descriptions[lang]=out;filled++}else failed=true;
+  }
+ }
+
+ return failed&&!filled?-1:filled;
+}
+
+async function fillSubtitleTranslations(){
+
+ if(!DATA.subtitles||DATA.subtitles.tr!==DATA.subtitle)
+  DATA.subtitles={tr:DATA.subtitle||""};
+
+ let filled=0,failed=false;
+
+ for(const lang of ["en","ar"]){
+  if(DATA.subtitle&&!DATA.subtitles[lang]){
+   const out=await translateText(DATA.subtitle,lang);
+   if(out){DATA.subtitles[lang]=out;filled++}else failed=true;
+  }
+ }
+
+ return failed&&!filled?-1:filled;
+}
+
+/* =========================================================
+   GÜNCEL KUR
+========================================================= */
+
+async function fetchRates(){
+
+ try{
+
+  const r=await fetch("https://open.er-api.com/v6/latest/USD");
+
+  if(r.ok){
+
+   const j=await r.json();
+   const tryRate=Number(j?.rates?.TRY);
+   const eurRate=Number(j?.rates?.EUR);
+
+   if(tryRate>0&&eurRate>0)
+    return {USD:+tryRate.toFixed(2),EUR:+(tryRate/eurRate).toFixed(2)};
+  }
+
+ }catch(e){}
+
+ try{
+
+  const r=await fetch("https://api.frankfurter.app/latest?from=USD&to=TRY,EUR");
+
+  if(r.ok){
+
+   const j=await r.json();
+   const tryRate=Number(j?.rates?.TRY);
+   const eurRate=Number(j?.rates?.EUR);
+
+   if(tryRate>0&&eurRate>0)
+    return {USD:+tryRate.toFixed(2),EUR:+(tryRate/eurRate).toFixed(2)};
+  }
+
+ }catch(e){}
+
+ return null;
+}
+
+async function updateRates(manual){
+
+ const rates=await fetchRates();
+
+ if(!rates){
+  if(manual)alert("Kur alınamadı. İnternet bağlantısını kontrol edip tekrar deneyin.");
+  return false;
+ }
+
+ DATA.rates.USD=rates.USD;
+ DATA.rates.EUR=rates.EUR;
+ DATA.rates.updated=Date.now();
+
+ saveData();
+
+ return true;
+}
+
+/* =========================================================
+   BİLDİRİM (TOAST)
+========================================================= */
+
+function showToast(message){
+
+ let el=document.getElementById("nearToast");
+
+ if(!el){
+  el=document.createElement("div");
+  el.id="nearToast";
+  document.body.appendChild(el);
+ }
+
+ el.textContent=message;
+ el.classList.add("show");
+
+ clearTimeout(el._timer);
+ el._timer=setTimeout(()=>el.classList.remove("show"),2200);
+}
+
+/* =========================================================
+   STATE/* =========================================================
    STATE
 ========================================================= */
 
 let language=
- localStorage.getItem("nearMenuLanguage")||"tr";
+ safeGet("nearMenuLanguage")||"tr";
 
 let currency=
- localStorage.getItem("nearMenuCurrency")||"TRY";
+ safeGet("nearMenuCurrency")||"TRY";
+
+if(!["tr","en","ar"].includes(language))language="tr";
+if(!["TRY","USD","EUR"].includes(currency))currency="TRY";
 
 let selectedCategory=null;
 let selectedProduct=null;
@@ -1626,6 +2313,7 @@ let adminAuthenticated=false;
 let adminTab="general";
 let adminCategoryView=null;
 let adminProductView=null;
+let adminEventView=null;
 
 let searchOpen=false;
 let searchText="";
@@ -1675,6 +2363,43 @@ function localizedEventName(item){
 
 function localizedEventDescription(item){
  return item?.descriptions?.[language]||item?.description||"";
+}
+
+function localizedSubtitle(){
+
+ if(language!=="tr"&&
+    DATA.subtitles&&
+    DATA.subtitles.tr===DATA.subtitle&&
+    DATA.subtitles[language])
+  return DATA.subtitles[language];
+
+ return DATA.subtitle||"";
+}
+
+function formatEventDate(value){
+
+ if(!value)return "";
+
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(value))return value;
+
+ const [y,m,d]=value.split("-").map(Number);
+ const date=new Date(y,m-1,d);
+
+ try{
+  return date.toLocaleDateString(
+   language==="ar"?"ar":language==="en"?"en-GB":"tr-TR",
+   {day:"numeric",month:"long",weekday:"long"}
+  );
+ }catch(e){return value}
+}
+
+function visibleEvents(){
+
+ const today=isoDate(0);
+
+ return DATA.events.filter(ev=>
+  !/^\d{4}-\d{2}-\d{2}$/.test(ev.date||"")||ev.date>=today
+ );
 }
 
 function findCategory(id){
@@ -1809,7 +2534,7 @@ function renderBackground(){
 
   return `
    <div class="background" id="siteBackground">
-    <img data-media-ref="${esc(bg.image)}" alt="">
+    <img loading="lazy" decoding="async" data-media-ref="${esc(bg.image)}" alt="">
     <div class="backgroundOverlay"></div>
    </div>
   `;
@@ -1829,14 +2554,16 @@ function renderBackground(){
 
 function renderHero(){
 
+ const compact=!!(searchText||selectedCategory);
+
  return `
- <section class="hero">
+ <section class="hero${compact?" heroHidden":""}" id="heroWrap">
 
   <div class="logo" id="heroLogo">
    ${
     DATA.logo
     ?
-    `<img data-media-ref="${esc(DATA.logo)}" alt="Logo">`
+    `<img loading="lazy" decoding="async" data-media-ref="${esc(DATA.logo)}" alt="Logo">`
     :
     "N"
    }
@@ -1846,14 +2573,14 @@ function renderHero(){
 
   <h1>${esc(DATA.name)}</h1>
 
-  <p>${esc(DATA.subtitle)}</p>
+  <p>${esc(localizedSubtitle())}</p>
 
   ${
    DATA.whatsapp||DATA.phone
    ?
    `<div class="heroContact">
-    ${DATA.whatsapp?`<a class="heroContactBtn" target="_blank" rel="noopener" href="https://wa.me/${esc(DATA.whatsapp)}">WhatsApp</a>`:""}
-    ${DATA.phone?`<a class="heroContactBtn" href="tel:${esc(DATA.phone)}">${t("call")}</a>`:""}
+    ${DATA.whatsapp?`<a class="heroContactBtn" target="_blank" rel="noopener" href="https://wa.me/${esc(String(DATA.whatsapp).replace(/\D/g,""))}">WhatsApp</a>`:""}
+    ${DATA.phone?`<a class="heroContactBtn" href="tel:${esc(String(DATA.phone).replace(/\s/g,""))}">${t("call")}</a>`:""}
    </div>`
    :""
   }
@@ -1875,9 +2602,10 @@ function renderHero(){
    MEDIA
 ========================================================= */
 
-async function resolveMediaElements(){
+async function resolveMediaElements(root){
 
- const elements=document.querySelectorAll("[data-media-ref]");
+ const elements=[...(root||document).querySelectorAll("[data-media-ref]")];
+ const pending=[];
 
  for(const el of elements){
 
@@ -1885,7 +2613,18 @@ async function resolveMediaElements(){
 
   if(!ref)continue;
 
-  const url=await loadMediaReference(ref);
+  const url=cachedMediaUrl(ref);
+
+  if(url){
+   if(el.getAttribute("src")!==url)el.src=url;
+  }else{
+   pending.push(el);
+  }
+ }
+
+ for(const el of pending){
+
+  const url=await loadMediaReference(el.dataset.mediaRef);
 
   if(url)el.src=url;
  }
@@ -1923,7 +2662,7 @@ function renderFeatured(){
       ${
        item.image
        ?
-       `<img data-media-ref="${esc(item.image)}" alt="">`
+       `<img loading="lazy" decoding="async" data-media-ref="${esc(item.image)}" alt="">`
        :""
       }
 
@@ -1950,7 +2689,9 @@ function renderFeatured(){
 
 function renderEvents(){
 
- if(!DATA.settings.events||!DATA.events.length)
+ const events=visibleEvents();
+
+ if(!DATA.settings.events||!events.length)
   return "";
 
  return `
@@ -1964,7 +2705,7 @@ function renderEvents(){
   <div class="horizontal">
 
    ${
-    DATA.events.map(event=>`
+    events.map(event=>`
 
      <button class="event"
       data-event="${esc(event.id)}">
@@ -1972,14 +2713,14 @@ function renderEvents(){
       ${
        event.image
        ?
-       `<img data-media-ref="${esc(event.image)}" alt="">`
+       `<img loading="lazy" decoding="async" data-media-ref="${esc(event.image)}" alt="">`
        :""
       }
 
       <div class="eventShade"></div>
 
       <div class="eventDate">
-       ${esc(event.date||"")} • ${esc(event.time||"")}
+       ${esc(formatEventDate(event.date))}${event.time?" • "+esc(event.time):""}
       </div>
 
       <div class="eventText">
@@ -2024,7 +2765,7 @@ function renderCategories(){
        ${
         c.image
         ?
-        `<img data-media-ref="${esc(c.image)}" alt="">`
+        `<img loading="lazy" decoding="async" data-media-ref="${esc(c.image)}" alt="">`
         :
         `<div style="width:100%;height:100%;background:#222"></div>`
        }
@@ -2036,14 +2777,7 @@ function renderCategories(){
 
         <span>
          ${(c.items||[]).length}
-         ${
-          language==="ar"
-          ?"منتج"
-          :
-          language==="en"
-          ?"products"
-          :"ürün"
-         }
+         ${t("products_count")}
         </span>
        </div>
 
@@ -2124,7 +2858,7 @@ function renderProductCard(item){
    ${
     item.image
     ?
-    `<img data-media-ref="${esc(item.image)}"
+    `<img loading="lazy" decoding="async" data-media-ref="${esc(item.image)}"
      alt="${esc(localizedName(item))}">`
     :
     `<div style="
@@ -2226,7 +2960,7 @@ function renderSearch(){
  <section class="section pageContent">
 
   <div class="sectionHead">
-   <h2>${products.length} ürün</h2>
+   <h2>${products.length} ${t("results")}</h2>
   </div>
 
   <div class="products">
@@ -2236,7 +2970,7 @@ function renderSearch(){
     ?
     products.map(renderProductCard).join("")
     :
-    `<div class="empty">Ürün bulunamadı.</div>`
+    `<div class="empty">${t("noResults")}</div>`
    }
 
   </div>
@@ -2331,7 +3065,7 @@ function renderProductModal(){
     ${
      item.image
      ?
-     `<img data-media-ref="${esc(item.image)}"
+     `<img loading="lazy" decoding="async" data-media-ref="${esc(item.image)}"
       alt="${esc(localizedName(item))}">`
      :""
     }
@@ -2403,6 +3137,101 @@ function renderProductModal(){
 }
 
 /* =========================================================
+   EVENT MODAL
+========================================================= */
+
+function renderEventModal(){
+
+ if(!selectedEvent)return "";
+
+ const ev=findEvent(selectedEvent);
+
+ if(!ev)return "";
+
+ const dateText=formatEventDate(ev.date)+(ev.time?" • "+ev.time:"");
+
+ const msg=t("reserveMsg")
+  .replace("{event}",localizedEventName(ev))
+  .replace("{date}",dateText);
+
+ const wa=String(DATA.whatsapp||"").replace(/\D/g,"");
+
+ return `
+ <div class="modalOverlay" id="eventOverlay">
+
+  <div class="modal">
+
+   <div class="modalImage">
+
+    ${
+     ev.image
+     ?
+     `<img loading="lazy" decoding="async" data-media-ref="${esc(ev.image)}" alt="">`
+     :""
+    }
+
+    <button class="closeBtn" id="closeEvent">×</button>
+
+   </div>
+
+   <div class="modalBody">
+
+    <h2>${esc(localizedEventName(ev))}</h2>
+
+    <p>${esc(localizedEventDescription(ev))}</p>
+
+    ${
+     ev.date
+     ?
+     `<div class="infoRow">
+      <span>${t("date")}</span>
+      <span>${esc(formatEventDate(ev.date))}</span>
+     </div>`
+     :""
+    }
+
+    ${
+     ev.time
+     ?
+     `<div class="infoRow">
+      <span>${t("time")}</span>
+      <span>${esc(ev.time)}</span>
+     </div>`
+     :""
+    }
+
+    <div class="eventActions">
+
+     ${
+      wa
+      ?
+      `<a class="adminButton gold full eventReserve"
+       target="_blank" rel="noopener"
+       href="https://wa.me/${esc(wa)}?text=${encodeURIComponent(msg)}">
+       ${t("reserveWhatsApp")}
+      </a>`
+      :""
+     }
+
+     ${
+      DATA.phone
+      ?
+      `<a class="adminButton full eventReserve"
+       href="tel:${esc(String(DATA.phone).replace(/\s/g,""))}">
+       ${t("reserveCall")}
+      </a>`
+      :""
+     }
+
+    </div>
+
+   </div>
+  </div>
+ </div>
+ `;
+}
+
+/* =========================================================
    ADMIN INPUT
 ========================================================= */
 
@@ -2430,6 +3259,51 @@ function textarea(key,label,value){
   <label>${label}</label>
 
   <textarea data-admin="${esc(key)}">${esc(value??"")}</textarea>
+
+ </div>
+ `;
+}
+
+function trInput(key,label,value,multiline){
+
+ return `
+ <div class="field">
+
+  <label>${label}</label>
+
+  ${
+   multiline
+   ?
+   `<textarea data-admin-tr="${esc(key)}" data-orig="${esc(value??"")}">${esc(value??"")}</textarea>`
+   :
+   `<input type="text" data-admin-tr="${esc(key)}" data-orig="${esc(value??"")}" value="${esc(value??"")}">`
+  }
+
+ </div>
+ `;
+}
+
+function translationCard(prefix,item,hasDescription,buttonId){
+
+ return `
+ <div class="adminCard">
+
+  <div class="adminCardTitle">🌐 Çeviriler</div>
+
+  <div class="adminCardDescription">
+   Boş bırakılan alanlar müşteriye Türkçe görünür.
+   "Otomatik Çevir" boş alanları internetten doldurur, sonra istersen düzeltebilirsin.
+   Türkçe metni değiştirirsen eski çeviriler silinir.
+  </div>
+
+  ${trInput(prefix+"|en|name","🇬🇧 İngilizce ad",item.names?.en||"")}
+  ${hasDescription?trInput(prefix+"|en|desc","🇬🇧 İngilizce açıklama",item.descriptions?.en||"",true):""}
+  ${trInput(prefix+"|ar|name","🇸🇦 Arapça ad",item.names?.ar||"")}
+  ${hasDescription?trInput(prefix+"|ar|desc","🇸🇦 Arapça açıklama",item.descriptions?.ar||"",true):""}
+
+  <button class="adminButton full" id="${buttonId}" style="margin-top:12px">
+   🌐 Boş Alanları Otomatik Çevir
+  </button>
 
  </div>
  `;
@@ -2497,6 +3371,15 @@ function renderAdminGeneral(){
   <h2>Kontrol Merkezi</h2>
   <p>NearMenu işletme panelini buradan yönetebilirsin.</p>
  </div>
+
+ ${
+  getAdminPin()===DEFAULT_ADMIN_PIN
+  ?
+  `<div class="adminWarning">
+   ⚠️ Varsayılan PIN (1234) kullanılıyor. Aşağıdaki "Güvenlik" bölümünden değiştirmen önerilir.
+  </div>`
+  :""
+ }
 
  <div class="statsGrid">
 
@@ -2572,6 +3455,13 @@ function renderAdminGeneral(){
   ${input("whatsapp","WhatsApp numarası",DATA.whatsapp)}
   ${input("hours","Çalışma saatleri",DATA.hours)}
 
+  ${trInput("subtitle|en","🇬🇧 Alt başlık (İngilizce)",DATA.subtitles?.tr===DATA.subtitle?(DATA.subtitles?.en||""):"")}
+  ${trInput("subtitle|ar","🇸🇦 Alt başlık (Arapça)",DATA.subtitles?.tr===DATA.subtitle?(DATA.subtitles?.ar||""):"")}
+
+  <button class="adminButton full" id="translateSubtitle" style="margin-top:10px">
+   🌐 Alt Başlığı Otomatik Çevir
+  </button>
+
   ${fileField(
    "logo","logo","Logo",
    DATA.logo,"image/*"
@@ -2583,8 +3473,15 @@ function renderAdminGeneral(){
 
   <div class="adminCardTitle">🔐 Güvenlik</div>
 
-  ${input("newPin","Yeni PIN","","password")}
-  ${input("confirmPin","Yeni PIN Tekrar","","password")}
+  <div class="field">
+   <label>Yeni PIN (4-12 rakam)</label>
+   <input id="newPin" type="password" inputmode="numeric" autocomplete="new-password">
+  </div>
+
+  <div class="field">
+   <label>Yeni PIN Tekrar</label>
+   <input id="confirmPin" type="password" inputmode="numeric" autocomplete="new-password">
+  </div>
 
   <button class="adminButton gold full"
    id="changePinButton">
@@ -2597,10 +3494,27 @@ function renderAdminGeneral(){
 
   <div class="adminCardTitle">💱 Para Birimi</div>
 
+  <div class="adminCardDescription">
+   ${
+    DATA.rates.updated
+    ?
+    "Son güncelleme: "+new Date(DATA.rates.updated).toLocaleString("tr-TR",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})
+    :
+    "Kur henüz internetten alınmadı."
+   }
+  </div>
+
   ${input("rateUSD","1 USD = TL",DATA.rates.USD,"number")}
   ${input("rateEUR","1 EUR = TL",DATA.rates.EUR,"number")}
 
- </div>
+  <button class="adminButton gold full" id="fetchRates" style="margin-top:12px">
+   🔄 Güncel Kuru Getir
+  </button>
+
+  <label class="toggle">
+   Kuru her gün otomatik güncelle
+   <input type="checkbox" id="autoRates" ${DATA.rates.auto?"checked":""}>
+  </label>
 
  </div>
  `;
@@ -2623,10 +3537,20 @@ function renderAdminCategories(){
 
   <div class="adminCardTitle">Kategori Yönetimi</div>
 
+  <div class="adminCardDescription">
+   Sırayı değiştirmek için ▲ ▼ oklarını kullan.
+  </div>
+
   <button class="adminButton gold full"
    id="addCategory"
    style="margin-top:14px">
    ${t("addCategory")}
+  </button>
+
+  <button class="adminButton full"
+   id="translateAll"
+   style="margin-top:8px">
+   🌐 Tüm Menünün Eksik Çevirilerini Tamamla
   </button>
 
  </div>
@@ -2634,7 +3558,9 @@ function renderAdminCategories(){
  <div class="adminCategoryList">
 
  ${
-  DATA.categories.map(category=>`
+  DATA.categories.map((category,index)=>`
+
+   <div class="adminRow">
 
    <button class="adminCategoryItem"
     data-admin-category="${esc(category.id)}">
@@ -2644,7 +3570,7 @@ function renderAdminCategories(){
      ${
       category.image
       ?
-      `<img data-media-ref="${esc(category.image)}" alt="">`
+      `<img loading="lazy" decoding="async" data-media-ref="${esc(category.image)}" alt="">`
       :
       `<div style="
        width:100%;height:100%;
@@ -2671,6 +3597,13 @@ function renderAdminCategories(){
     <div class="adminArrow">›</div>
 
    </button>
+
+   <div class="moveBtns">
+    <button data-move="category|${esc(category.id)}|-1" ${index===0?"disabled":""} aria-label="Yukarı">▲</button>
+    <button data-move="category|${esc(category.id)}|1" ${index===DATA.categories.length-1?"disabled":""} aria-label="Aşağı">▼</button>
+   </div>
+
+   </div>
 
   `).join("")
  }
@@ -2741,6 +3674,8 @@ function renderAdminCategory(){
 
  </div>
 
+ ${translationCard("category|"+category.id,category,false,"translateCategory")}
+
  <div class="adminCard">
 
   <div style="
@@ -2769,7 +3704,9 @@ function renderAdminCategory(){
  <div class="adminProductList">
 
  ${
-  category.items.map(item=>`
+  category.items.map((item,index)=>`
+
+   <div class="adminRow">
 
    <button class="adminProductItem"
     data-admin-product="${esc(item.id)}">
@@ -2779,7 +3716,7 @@ function renderAdminCategory(){
      ${
       item.image
       ?
-      `<img data-media-ref="${esc(item.image)}" alt="">`
+      `<img loading="lazy" decoding="async" data-media-ref="${esc(item.image)}" alt="">`
       :
       `<div style="
        width:100%;height:100%;
@@ -2795,13 +3732,20 @@ function renderAdminCategory(){
 
      <strong>${esc(item.name)}</strong>
 
-     <span>${money(item.price)}</span>
+     <span>${money(item.price)}${item.sold?" • Tükendi":""}</span>
 
     </div>
 
     <div class="adminArrow">›</div>
 
    </button>
+
+   <div class="moveBtns">
+    <button data-move="product|${esc(category.id)}:${esc(item.id)}|-1" ${index===0?"disabled":""} aria-label="Yukarı">▲</button>
+    <button data-move="product|${esc(category.id)}:${esc(item.id)}|1" ${index===category.items.length-1?"disabled":""} aria-label="Aşağı">▼</button>
+   </div>
+
+   </div>
 
   `).join("")
  }
@@ -2877,6 +3821,19 @@ function renderAdminProduct(){
    item.price,
    "number"
   )}
+
+  <div class="field">
+   <label>Kategori</label>
+   <select data-admin="productCategory-${esc(item.id)}">
+    ${
+     DATA.categories.map(c=>`
+      <option value="${esc(c.id)}" ${c.id===category.id?"selected":""}>
+       ${esc(c.name)}
+      </option>
+     `).join("")
+    }
+   </select>
+  </div>
 
   ${textarea(
    "productDescription-"+item.id,
@@ -2963,6 +3920,8 @@ function renderAdminProduct(){
   }
 
  </div>
+
+ ${translationCard("product|"+item.id,item,true,"translateProduct")}
 
  <div class="adminCard">
 
@@ -3264,6 +4223,7 @@ function designRange(key,label,min,max,value,suffix){
     min="${min}"
     max="${max}"
     value="${value}"
+    data-suffix="${suffix}"
     data-design="${key}">
 
    <span
@@ -3273,6 +4233,123 @@ function designRange(key,label,min,max,value,suffix){
    </span>
 
   </div>
+
+ </div>
+ `;
+}
+
+/* =========================================================
+   ADMIN EVENTS
+========================================================= */
+
+function renderAdminEvents(){
+
+ return `
+
+ <div class="adminSectionHeader">
+  <h2>Etkinlikler</h2>
+  <p>Canlı müzik, özel menü, brunch gibi etkinlikleri ana sayfada göster. Tarihi geçen etkinlikler müşteriye otomatik gizlenir.</p>
+ </div>
+
+ ${
+  !DATA.settings.events
+  ?
+  `<div class="adminWarning">
+   Etkinlikler şu an müşteriye gizli. Tasarım › Görünürlük bölümünden açabilirsin.
+  </div>`
+  :""
+ }
+
+ <div class="adminCard">
+  <button class="adminButton gold full" id="addEvent">+ Etkinlik Ekle</button>
+ </div>
+
+ <div class="adminProductList">
+
+ ${
+  DATA.events.length
+  ?
+  DATA.events.map(ev=>`
+
+   <button class="adminProductItem"
+    data-admin-event="${esc(ev.id)}">
+
+    <div class="adminProductThumb">
+     ${
+      ev.image
+      ?
+      `<img loading="lazy" decoding="async" data-media-ref="${esc(ev.image)}" alt="">`
+      :
+      `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#555">✨</div>`
+     }
+    </div>
+
+    <div class="adminProductInfo">
+     <strong>${esc(ev.name)}</strong>
+     <span>${esc(formatEventDate(ev.date))}${ev.time?" • "+esc(ev.time):""}${
+      /^\d{4}-\d{2}-\d{2}$/.test(ev.date||"")&&ev.date<isoDate(0)?" • Geçmiş":""
+     }</span>
+    </div>
+
+    <div class="adminArrow">›</div>
+
+   </button>
+
+  `).join("")
+  :
+  `<div class="empty">Henüz etkinlik yok.</div>`
+ }
+
+ </div>
+ `;
+}
+
+function renderAdminEvent(){
+
+ const ev=findEvent(adminEventView);
+
+ if(!ev){
+  adminEventView=null;
+  return renderAdminEvents();
+ }
+
+ return `
+
+ <div class="adminBreadcrumb">
+  <button id="adminEventBack">‹ Etkinlikler</button>
+  <span>›</span>
+  <strong>${esc(ev.name)}</strong>
+ </div>
+
+ <div class="adminCard">
+
+  <div class="adminCardTitle">Etkinlik Bilgileri</div>
+
+  ${input("eventName-"+ev.id,"Etkinlik adı",ev.name)}
+  ${input("eventDate-"+ev.id,"Tarih",ev.date||"","date")}
+  ${input("eventTime-"+ev.id,"Saat",ev.time||"","time")}
+  ${textarea("eventDescription-"+ev.id,"Açıklama",ev.description||"")}
+
+  ${fileField("eventImage",ev.id,"Etkinlik fotoğrafı",ev.image,"image/*")}
+
+  <div class="help">
+   Müşteri etkinliğe dokununca WhatsApp veya telefonla rezervasyon yapabilir
+   (Genel › İşletme Bilgileri'ndeki numaralar kullanılır).
+  </div>
+
+ </div>
+
+ ${translationCard("event|"+ev.id,ev,true,"translateEvent")}
+
+ <div class="adminCard">
+
+  <button class="adminButton gold full" id="saveEventNow">✓ Etkinliği Kaydet</button>
+
+  <button class="adminButton danger full"
+   data-delete-event="${esc(ev.id)}"
+   style="margin-top:8px">
+   Etkinliği Sil
+  </button>
 
  </div>
  `;
@@ -3306,6 +4383,9 @@ function renderAdmin(){
 
  if(adminTab==="settings")
   body=renderAdminDesign();
+
+ if(adminTab==="events")
+  body=adminEventView?renderAdminEvent():renderAdminEvents();
 
  return `
  <div class="adminOverlay">
@@ -3346,6 +4426,12 @@ function renderAdmin(){
      </button>
 
      <button
+      class="${adminTab==="events"?"active":""}"
+      data-admin-tab="events">
+      ✨ Etkinlik
+     </button>
+
+     <button
       class="${adminTab==="settings"?"active":""}"
       data-admin-tab="settings">
       ✦ Tasarım
@@ -3362,7 +4448,7 @@ function renderAdmin(){
     <button
      class="adminButton gold"
      id="saveAdmin">
-     ✓ ${t("save")}
+     ✓ Kaydet ve Kapat
     </button>
 
    </div>
@@ -3434,8 +4520,12 @@ function collectAdmin(){
   if(key==="businessName")
    DATA.name=value;
 
-  else if(key==="subtitle")
-   DATA.subtitle=value;
+  else if(key==="subtitle"){
+   if(DATA.subtitle!==value){
+    DATA.subtitle=value;
+    DATA.subtitles={tr:value};
+   }
+  }
 
   else if(key==="phone")
    DATA.phone=value;
@@ -3499,7 +4589,7 @@ function collectAdmin(){
    const id=key.replace("productPrice-","");
    const p=findProduct(id);
 
-   if(p)p.price=Number(value)||0;
+   if(p)p.price=Math.max(0,Number(value)||0);
   }
 
   else if(key.startsWith("productPortion-")){
@@ -3532,6 +4622,56 @@ function collectAdmin(){
    }
   }
 
+  else if(key.startsWith("productCategory-")){
+
+   const id=key.replace("productCategory-","");
+   const from=DATA.categories.find(c=>(c.items||[]).some(p=>p.id===id));
+   const to=findCategory(value);
+
+   if(from&&to&&from!==to){
+
+    const p=from.items.find(x=>x.id===id);
+
+    from.items=from.items.filter(x=>x.id!==id);
+    to.items.push(p);
+
+    if(adminCategoryView===from.id)
+     adminCategoryView=to.id;
+   }
+  }
+
+  else if(key.startsWith("eventName-")){
+
+   const ev=findEvent(key.replace("eventName-",""));
+
+   if(ev&&ev.name!==value){
+    ev.name=value;
+    ev.names={tr:value};
+   }
+  }
+
+  else if(key.startsWith("eventDescription-")){
+
+   const ev=findEvent(key.replace("eventDescription-",""));
+
+   if(ev&&ev.description!==value){
+    ev.description=value;
+    ev.descriptions={tr:value};
+   }
+  }
+
+  else if(key.startsWith("eventDate-")){
+
+   const ev=findEvent(key.replace("eventDate-",""));
+   if(ev)ev.date=value;
+  }
+
+  else if(key.startsWith("eventTime-")){
+
+   const ev=findEvent(key.replace("eventTime-",""));
+   if(ev)ev.time=value;
+  }
+
   else if(key.startsWith("productSpicy-")){
 
    const id=key.replace("productSpicy-","");
@@ -3547,6 +4687,44 @@ function collectAdmin(){
   }
 
  });
+
+ /* Elle girilen çeviriler (sadece değiştirilenler) */
+ document.querySelectorAll("[data-admin-tr]")
+ .forEach(el=>{
+
+  if(el.value===el.dataset.orig)return;
+
+  const parts=el.dataset.adminTr.split("|");
+  const value=el.value.trim();
+
+  if(parts[0]==="subtitle"){
+
+   if(!DATA.subtitles||DATA.subtitles.tr!==DATA.subtitle)
+    DATA.subtitles={tr:DATA.subtitle||""};
+
+   DATA.subtitles[parts[1]]=value;
+   return;
+  }
+
+  const [type,id,lang,field]=parts;
+
+  const item=
+   type==="category"?findCategory(id):
+   type==="product"?findProduct(id):
+   type==="event"?findEvent(id):null;
+
+  if(!item)return;
+
+  if(field==="name"){
+   if(!item.names)item.names={};
+   item.names.tr=item.name||"";
+   item.names[lang]=value;
+  }else{
+   if(!item.descriptions)item.descriptions={};
+   item.descriptions.tr=item.description||"";
+   item.descriptions[lang]=value;
+  }
+ });
 }
 
 /* =========================================================
@@ -3557,7 +4735,10 @@ async function handleFile(type,id,file){
 
  if(!file)return;
 
- const maxImage=8*1024*1024;
+ /* Fotoğraf seçilmeden önce yazılanlar kaybolmasın */
+ collectAdmin();
+
+ const maxImage=30*1024*1024;
  const maxVideo=100*1024*1024;
  const isVideo=file.type.startsWith("video/");
 
@@ -3567,11 +4748,21 @@ async function handleFile(type,id,file){
  }
 
  if(!isVideo&&file.size>maxImage){
-  alert("Fotoğraf en fazla 8 MB olabilir.");
+  alert("Fotoğraf en fazla 30 MB olabilir.");
   return;
  }
 
  try{
+
+  if(!isVideo){
+   file=await compressImage(
+    file,
+    type==="logo"?700:1600,
+    type==="logo"
+   );
+  }
+
+  forgetMediaUrl("indexeddb:"+mediaKey(type,id));
 
   const reference=
    await saveMedia(type,id,file);
@@ -3599,6 +4790,11 @@ async function handleFile(type,id,file){
    const p=findProduct(id);
    if(p)p.image=reference;
 
+  }else if(type==="eventImage"){
+
+   const ev=findEvent(id);
+   if(ev)ev.image=reference;
+
   }
 
   saveData();
@@ -3616,28 +4812,40 @@ async function handleFile(type,id,file){
  }
 }
 
+async function removeMedia(value){
+
+ if(!value||!String(value).startsWith("indexeddb:"))return;
+
+ forgetMediaUrl(value);
+
+ await mediaDelete(String(value).replace("indexeddb:",""));
+}
+
 async function clearFile(type,id){
+
+ collectAdmin();
 
  if(type==="logo"){
 
-  if(String(DATA.logo).startsWith("indexeddb:"))
-   await mediaDelete(
-    String(DATA.logo).replace("indexeddb:","")
-   );
-
+  await removeMedia(DATA.logo);
   DATA.logo="";
+
+ }else if(type==="backgroundImage"){
+
+  await removeMedia(DATA.background.image);
+  DATA.background.image="";
+
+ }else if(type==="backgroundVideo"){
+
+  await removeMedia(DATA.background.video);
+  DATA.background.video="";
 
  }else if(type==="categoryImage"){
 
   const c=findCategory(id);
 
   if(c){
-
-   if(String(c.image).startsWith("indexeddb:"))
-    await mediaDelete(
-     String(c.image).replace("indexeddb:","")
-    );
-
+   await removeMedia(c.image);
    c.image="";
   }
 
@@ -3646,15 +4854,18 @@ async function clearFile(type,id){
   const p=findProduct(id);
 
   if(p){
-
-   if(String(p.image).startsWith("indexeddb:"))
-    await mediaDelete(
-     String(p.image).replace("indexeddb:","")
-    );
-
+   await removeMedia(p.image);
    p.image="";
   }
 
+ }else if(type==="eventImage"){
+
+  const ev=findEvent(id);
+
+  if(ev){
+   await removeMedia(ev.image);
+   ev.image="";
+  }
  }
 
  saveData();
@@ -3746,6 +4957,10 @@ function render(options={}){
 
  document.documentElement.dir=
   language==="ar"?"rtl":"ltr";
+
+ document.documentElement.lang=language;
+
+ document.title=(DATA.name||"Menü")+" • Dijital Menü";
 
  applyTheme();
 
@@ -3844,6 +5059,7 @@ function render(options={}){
   </div>
 
   ${renderProductModal()}
+  ${renderEventModal()}
   ${renderAdmin()}
   ${renderAdminLogin()}
  `;
@@ -3874,6 +5090,8 @@ function render(options={}){
 ========================================================= */
 
 function bindEvents(){
+
+ bindAdminExtras();
 
  (()=>{
 
@@ -3909,9 +5127,11 @@ function bindEvents(){
     adminTab="general";
     adminCategoryView=null;
     adminProductView=null;
+    adminEventView=null;
     advancedProduct=false;
     savedAdminScroll=0;
 
+    pushLayer();
     render();
 
     setTimeout(
@@ -4008,6 +5228,8 @@ function bindEvents(){
 
   if(!searchOpen)
    searchText="";
+  else
+   pushLayer();
 
   render({
    preserveWindowScroll:true
@@ -4020,72 +5242,34 @@ function bindEvents(){
 
   searchText=e.target.value;
 
+  /* Sadece içerik güncellenir: klavye kapanmaz, sonuçlar üstte görünür */
+  updateContent();
+
+  window.scrollTo(0,0);
+ });
+
+ bindContentEvents();
+
+ /* --- içerik olayları bindContentEvents içinde --- */
+ $("closeEvent")?.addEventListener("click",()=>{
+
+  selectedEvent=null;
+
   render({
    preserveWindowScroll:true
   });
-
-  setTimeout(()=>{
-
-   const input=$("searchInput");
-
-   if(input){
-
-    input.focus();
-
-    input.setSelectionRange(
-     input.value.length,
-     input.value.length
-    );
-   }
-
-  },0);
  });
 
- document.querySelectorAll("[data-category]")
- .forEach(btn=>{
+ $("eventOverlay")?.addEventListener("click",e=>{
 
-  btn.onclick=()=>{
+  if(e.target.id==="eventOverlay"){
 
-   selectedCategory=btn.dataset.category;
-   selectedProduct=null;
    selectedEvent=null;
-   searchText="";
 
    render({
-    resetScroll:true
+    preserveWindowScroll:true
    });
-  };
- });
-
- $("backHome")?.addEventListener("click",()=>{
-
-  selectedCategory=null;
-
-  render({
-   resetScroll:true
-  });
- });
-
- document.querySelectorAll("[data-product]")
- .forEach(el=>{
-
-  el.onclick=()=>{
-
-   const product=findProduct(
-    el.dataset.product
-   );
-
-   if(product){
-
-    rememberWindowScroll();
-
-    selectedProduct=product;
-
-    render({
-     preserveWindowScroll:true
-    });
-   }
-  };
+  }
  });
 
  $("closeProduct")?.addEventListener("click",()=>{
@@ -4128,7 +5312,25 @@ function bindEvents(){
 
   if(!input)return;
 
+  let lock={};
+  try{lock=JSON.parse(safeGet("nearMenuPinLock")||"{}")||{}}catch(e){}
+
+  if(lock.until&&lock.until>Date.now()){
+
+   const sec=Math.ceil((lock.until-Date.now())/1000);
+
+   if(error){
+    error.textContent="Çok fazla yanlış deneme. "+sec+" saniye bekleyin.";
+    error.style.display="block";
+   }
+
+   input.value="";
+   return;
+  }
+
   if(input.value===getAdminPin()){
+
+   safeSet("nearMenuPinLock","{}");
 
    adminAuthenticated=true;
    savedAdminScroll=0;
@@ -4137,8 +5339,21 @@ function bindEvents(){
 
   }else{
 
-   if(error)
+   const count=(lock.count||0)+1;
+   const next={count};
+
+   if(count%5===0)
+    next.until=Date.now()+30000*(count/5);
+
+   safeSet("nearMenuPinLock",JSON.stringify(next));
+
+   if(error){
+    error.textContent=
+     next.until
+     ?"Çok fazla yanlış deneme. "+(30*(count/5))+" saniye bekleyin."
+     :"PIN yanlış. Kalan deneme: "+(5-count%5);
     error.style.display="block";
+   }
 
    input.value="";
    input.focus();
@@ -4189,6 +5404,7 @@ function bindEvents(){
    adminTab=btn.dataset.adminTab;
    adminCategoryView=null;
    adminProductView=null;
+   adminEventView=null;
    advancedProduct=false;
 
    saveData();
@@ -4209,6 +5425,7 @@ function bindEvents(){
    adminTab=btn.dataset.adminTabDirect;
    adminCategoryView=null;
    adminProductView=null;
+   adminEventView=null;
 
    render({
     preserveAdminScroll:true
@@ -4244,9 +5461,12 @@ function bindEvents(){
    return;
   }
 
-  if(setAdminPin(newPin))
-   alert("PIN başarıyla değiştirildi.");
-  else
+  if(setAdminPin(newPin)){
+   saveData();
+   rememberAdminScroll();
+   render({preserveAdminScroll:true});
+   showToast("✓ PIN değiştirildi");
+  }else
    alert("PIN kaydedilemedi.");
  });
 
@@ -4260,9 +5480,8 @@ function bindEvents(){
 
    adminCategoryView=
     btn.dataset.adminCategory;
-
    adminProductView=null;
-
+   pushLayer();
    render({
     preserveAdminScroll:true
    });
@@ -4286,9 +5505,22 @@ function bindEvents(){
 
   collectAdmin();
 
+  const c=findCategory(adminCategoryView);
+
+  if(c&&!c.name.trim()){
+   alert("Kategori adı boş bırakılamaz.");
+   return;
+  }
+
   if(!saveData())return;
 
-  closeAdminAfterSave();
+  adminCategoryView=null;
+  adminProductView=null;
+
+  render();
+  showToast("✓ Kategori kaydedildi");
+
+  translateInBackground(c,false);
  });
 
  document.querySelectorAll("[data-admin-product]")
@@ -4301,9 +5533,8 @@ function bindEvents(){
 
    adminProductView=
     btn.dataset.adminProduct;
-
    advancedProduct=false;
-
+   pushLayer();
    render({
     preserveAdminScroll:true
    });
@@ -4459,7 +5690,7 @@ function bindEvents(){
    const label=$(key+"Value");
 
    if(label)
-    label.textContent=value+"px";
+    label.textContent=value+(input.dataset.suffix||"px");
 
    applyTheme();
    saveData();
@@ -4522,6 +5753,13 @@ function bindEvents(){
     "Bu kategori ve içindeki tüm ürünler silinsin mi?"
    ))return;
 
+   const removedCat=findCategory(btn.dataset.deleteCategory);
+
+   if(removedCat){
+    removeMedia(removedCat.image);
+    (removedCat.items||[]).forEach(p=>removeMedia(p.image));
+   }
+
    DATA.categories=
     DATA.categories.filter(
      c=>c.id!==btn.dataset.deleteCategory
@@ -4552,6 +5790,9 @@ function bindEvents(){
 
    if(!confirm("Bu ürün silinsin mi?"))
     return;
+
+   const removed=category.items.find(p=>p.id===parts[1]);
+   if(removed)removeMedia(removed.image);
 
    category.items=
     category.items.filter(
@@ -4594,6 +5835,7 @@ function bindEvents(){
   adminCategoryView=id;
   adminProductView=null;
 
+  pushLayer();
   saveData();
 
   render({
@@ -4649,6 +5891,7 @@ function bindEvents(){
    adminProductView=id;
    advancedProduct=false;
 
+   pushLayer();
    saveData();
 
    render({
@@ -4682,25 +5925,511 @@ function bindEvents(){
    if(!saveData())
     return;
 
-   /*
-    ÖNEMLİ:
-    Ürün kaydedildiği anda yönetim paneli kapanıyor.
-   */
+   /* Panel açık kalır, kategorinin ürün listesine dönülür */
+   const cat=DATA.categories.find(c=>(c.items||[]).some(p=>p.id===item.id));
 
-   closeAdminAfterSave();
+   adminProductView=null;
+   adminCategoryView=cat?cat.id:null;
+   advancedProduct=false;
+
+   render();
+   showToast("✓ Ürün kaydedildi");
+
+   translateInBackground(item,true);
   }
  );
 }
+
+/* =========================================================
+   İÇERİK OLAYLARI (kategori, ürün, etkinlik kartları)
+========================================================= */
+
+function bindContentEvents(){
+
+ document.querySelectorAll("[data-category]")
+ .forEach(btn=>{
+
+  btn.onclick=()=>{
+
+   selectedCategory=btn.dataset.category;
+   selectedProduct=null;
+   selectedEvent=null;
+   searchText="";
+   searchOpen=false;
+
+   pushLayer();
+
+   render();
+   window.scrollTo(0,0);
+  };
+ });
+
+ const back=$("backHome");
+
+ if(back){
+  back.onclick=()=>{
+   selectedCategory=null;
+   render();
+   window.scrollTo(0,0);
+  };
+ }
+
+ document.querySelectorAll("[data-product]")
+ .forEach(el=>{
+
+  el.onclick=()=>{
+
+   const product=findProduct(el.dataset.product);
+
+   if(product){
+
+    rememberWindowScroll();
+    selectedProduct=product;
+
+    pushLayer();
+
+    render({
+     preserveWindowScroll:true
+    });
+   }
+  };
+ });
+
+ document.querySelectorAll("[data-event]")
+ .forEach(el=>{
+
+  el.onclick=()=>{
+
+   rememberWindowScroll();
+   selectedEvent=el.dataset.event;
+
+   pushLayer();
+
+   render({
+    preserveWindowScroll:true
+   });
+  };
+ });
+}
+
+function updateContent(){
+
+ const main=document.querySelector("main.pageContent");
+
+ if(!main){
+  render();
+  return;
+ }
+
+ main.innerHTML=
+  searchText?renderSearch():
+  selectedCategory?renderCategoryPage():
+  renderHome();
+
+ const hero=$("heroWrap");
+
+ if(hero)
+  hero.classList.toggle("heroHidden",!!(searchText||selectedCategory));
+
+ bindContentEvents();
+ resolveMediaElements(main);
+}
+
+/* =========================================================
+   PANEL EK OLAYLARI
+========================================================= */
+
+function translateInBackground(item,hasDescription){
+
+ if(!item)return;
+
+ fillTranslations(item,hasDescription)
+  .then(n=>{if(n>0)saveData()})
+  .catch(()=>{});
+}
+
+async function runTranslate(btn,job){
+
+ collectAdmin();
+
+ const original=btn.textContent;
+
+ btn.disabled=true;
+ btn.textContent="🌐 Çevriliyor...";
+
+ let n=0;
+
+ try{n=await job()}catch(e){n=-1}
+
+ saveData();
+
+ rememberAdminScroll();
+ render({preserveAdminScroll:true});
+
+ showToast(
+  n<0?"Çeviri yapılamadı. İnternet bağlantısını kontrol et.":
+  n>0?"✓ "+n+" alan çevrildi":
+  "Çevrilecek boş alan yok"
+ );
+
+ btn.textContent=original;
+}
+
+function bindAdminExtras(){
+
+ $("translateProduct")?.addEventListener("click",e=>
+  runTranslate(e.currentTarget,()=>fillTranslations(findProduct(adminProductView),true))
+ );
+
+ $("translateCategory")?.addEventListener("click",e=>
+  runTranslate(e.currentTarget,()=>fillTranslations(findCategory(adminCategoryView),false))
+ );
+
+ $("translateEvent")?.addEventListener("click",e=>
+  runTranslate(e.currentTarget,()=>fillTranslations(findEvent(adminEventView),true))
+ );
+
+ $("translateSubtitle")?.addEventListener("click",e=>
+  runTranslate(e.currentTarget,()=>fillSubtitleTranslations())
+ );
+
+ $("translateAll")?.addEventListener("click",e=>{
+
+  const btn=e.currentTarget;
+
+  runTranslate(btn,async()=>{
+
+   const jobs=[];
+
+   DATA.categories.forEach(c=>{
+    jobs.push([c,false]);
+    (c.items||[]).forEach(p=>jobs.push([p,true]));
+   });
+
+   DATA.events.forEach(ev=>jobs.push([ev,true]));
+
+   const todo=jobs.filter(([it,d])=>
+    (it.name&&(!it.names?.en||!it.names?.ar))||
+    (d&&it.description&&(!it.descriptions?.en||!it.descriptions?.ar))
+   );
+
+   let total=0,errors=0,done=0;
+
+   for(const [it,d] of todo){
+
+    done++;
+    btn.textContent="🌐 Çevriliyor... "+done+"/"+todo.length;
+
+    const n=await fillTranslations(it,d);
+
+    if(n<0)errors++;else total+=n;
+
+    if(errors>=3&&!total)return -1;
+   }
+
+   const s=await fillSubtitleTranslations();
+
+   if(s>0)total+=s;
+
+   return total;
+  });
+ });
+
+ $("fetchRates")?.addEventListener("click",async e=>{
+
+  const btn=e.currentTarget;
+
+  collectAdmin();
+
+  btn.disabled=true;
+  btn.textContent="🔄 Kur alınıyor...";
+
+  const ok=await updateRates(true);
+
+  rememberAdminScroll();
+  render({preserveAdminScroll:true});
+
+  if(ok)showToast("✓ Kur güncellendi: 1 USD = "+DATA.rates.USD+" TL");
+ });
+
+ $("autoRates")?.addEventListener("change",e=>{
+  DATA.rates.auto=e.target.checked;
+  saveData();
+ });
+
+ document.querySelectorAll("[data-move]")
+ .forEach(btn=>{
+
+  btn.onclick=e=>{
+
+   e.stopPropagation();
+
+   collectAdmin();
+
+   const [type,ref,dirText]=btn.dataset.move.split("|");
+   const dir=Number(dirText);
+
+   let list;
+   let id=ref;
+
+   if(type==="category"){
+    list=DATA.categories;
+   }else{
+    const [catId,itemId]=ref.split(":");
+    const c=findCategory(catId);
+    if(!c)return;
+    list=c.items;
+    id=itemId;
+   }
+
+   const i=list.findIndex(x=>x.id===id);
+   const j=i+dir;
+
+   if(i<0||j<0||j>=list.length)return;
+
+   [list[i],list[j]]=[list[j],list[i]];
+
+   saveData();
+
+   rememberAdminScroll();
+   render({preserveAdminScroll:true});
+  };
+ });
+
+ /* Etkinlik yönetimi */
+
+ $("addEvent")?.addEventListener("click",()=>{
+
+  collectAdmin();
+
+  const id="event-"+Date.now();
+
+  DATA.events.push({
+   id,
+   name:"Yeni Etkinlik",
+   names:{tr:"Yeni Etkinlik"},
+   description:"",
+   descriptions:{tr:""},
+   date:isoDate(7),
+   time:"20:00",
+   image:""
+  });
+
+  adminEventView=id;
+
+  pushLayer();
+  saveData();
+  render();
+ });
+
+ document.querySelectorAll("[data-admin-event]")
+ .forEach(btn=>{
+
+  btn.onclick=()=>{
+
+   collectAdmin();
+   rememberAdminScroll();
+
+   adminEventView=btn.dataset.adminEvent;
+
+   pushLayer();
+   render();
+  };
+ });
+
+ $("adminEventBack")?.addEventListener("click",()=>{
+
+  collectAdmin();
+
+  adminEventView=null;
+
+  render({preserveAdminScroll:true});
+ });
+
+ $("saveEventNow")?.addEventListener("click",()=>{
+
+  collectAdmin();
+
+  const ev=findEvent(adminEventView);
+
+  if(ev&&!ev.name.trim()){
+   alert("Etkinlik adı boş bırakılamaz.");
+   return;
+  }
+
+  if(!saveData())return;
+
+  adminEventView=null;
+
+  render();
+  showToast("✓ Etkinlik kaydedildi");
+
+  translateInBackground(ev,true);
+ });
+
+ document.querySelectorAll("[data-delete-event]")
+ .forEach(btn=>{
+
+  btn.onclick=()=>{
+
+   if(!confirm("Bu etkinlik silinsin mi?"))return;
+
+   const ev=findEvent(btn.dataset.deleteEvent);
+
+   if(ev)removeMedia(ev.image);
+
+   DATA.events=DATA.events.filter(x=>x.id!==btn.dataset.deleteEvent);
+
+   adminEventView=null;
+
+   saveData();
+   render();
+   showToast("Etkinlik silindi");
+  };
+ });
+}
+
+/* =========================================================
+   GERİ TUŞU, ESC, DIŞARI DOKUNMA
+========================================================= */
+
+function pushLayer(){
+ try{history.pushState({near:Date.now()},"")}catch(e){}
+}
+
+function hasOpenLayer(){
+ return adminOpen||selectedEvent||selectedProduct||searchOpen||selectedCategory;
+}
+
+/* En üstteki katmanı kapatır. Bir şey kapandıysa true döner. */
+function closeTopLayer(){
+
+ if(currencyMenu||languageMenu){
+  currencyMenu=false;
+  languageMenu=false;
+  render({preserveWindowScroll:true});
+  return true;
+ }
+
+ if(adminOpen){
+
+  if(!adminAuthenticated){
+   adminOpen=false;
+   render({preserveWindowScroll:true});
+   return true;
+  }
+
+  collectAdmin();
+
+  if(adminProductView){
+   adminProductView=null;
+   advancedProduct=false;
+   render();
+   return true;
+  }
+
+  if(adminEventView){
+   adminEventView=null;
+   render();
+   return true;
+  }
+
+  if(adminCategoryView){
+   adminCategoryView=null;
+   render();
+   return true;
+  }
+
+  saveData();
+  adminOpen=false;
+  adminAuthenticated=false;
+  render({preserveWindowScroll:true});
+  return true;
+ }
+
+ if(selectedEvent){
+  selectedEvent=null;
+  render({preserveWindowScroll:true});
+  return true;
+ }
+
+ if(selectedProduct){
+  selectedProduct=null;
+  render({preserveWindowScroll:true});
+  return true;
+ }
+
+ if(searchOpen){
+  searchOpen=false;
+  searchText="";
+  render();
+  return true;
+ }
+
+ if(selectedCategory){
+  selectedCategory=null;
+  render();
+  window.scrollTo(0,0);
+  return true;
+ }
+
+ return false;
+}
+
+window.addEventListener("popstate",()=>{
+
+ /* Açık bir şey yoksa bu eski bir kayıttır: bir adım daha geri git */
+ if(!closeTopLayer())
+  history.back();
+});
+
+document.addEventListener("keydown",e=>{
+
+ if(e.key!=="Escape")return;
+
+ if(currencyMenu||languageMenu){
+  closeTopLayer();
+  return;
+ }
+
+ if(hasOpenLayer())
+  history.back();
+});
+
+document.addEventListener("click",e=>{
+
+ if(!(currencyMenu||languageMenu))return;
+
+ if(e.target.closest(".quickPopup,#currencyButton,#languageButton"))return;
+
+ currencyMenu=false;
+ languageMenu=false;
+
+ render({preserveWindowScroll:true});
+});
+
+/* Yüklenemeyen fotoğraflar kırık simge göstermesin */
+document.addEventListener("error",e=>{
+ if(e.target&&e.target.tagName==="IMG")
+  e.target.classList.add("imgBroken");
+},true);
 
 /* =========================================================
    BAŞLAT
 ========================================================= */
 
 saveData();
-
 render({
  resetScroll:true
 });
+
+if(DATA.rates.auto&&Date.now()-(DATA.rates.updated||0)>12*60*60*1000){
+
+ updateRates(false).then(ok=>{
+  if(ok&&currency!=="TRY"&&!adminOpen)
+   render({preserveWindowScroll:true});
+ });
+}
 </script>
 
 </body>
