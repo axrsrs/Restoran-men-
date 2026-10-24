@@ -817,8 +817,8 @@ button:active{transform:scale(.97)}
 img.imgBroken{opacity:0}
 
 #nearToast{
- position:fixed;left:50%;bottom:90px;z-index:1000;
- transform:translate(-50%,20px);opacity:0;pointer-events:none;
+ position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));z-index:1000;
+ transform:translate(-50%,-20px);opacity:0;pointer-events:none;
  max-width:calc(100% - 32px);
  padding:12px 18px;border-radius:14px;
  background:rgba(20,20,22,.96);color:#fff;
@@ -832,13 +832,60 @@ img.imgBroken{opacity:0}
 .adminRow{display:flex;gap:6px;align-items:stretch}
 .adminRow>.adminCategoryItem,
 .adminRow>.adminProductItem{flex:1;min-width:0}
-.moveBtns{display:flex;flex-direction:column;gap:4px}
-.moveBtns button{
- flex:1;width:36px;
- border:1px solid rgba(255,255,255,.07);border-radius:9px;
- background:#1b1b1e;color:#bbb;font-size:10px
+.dragHandle{
+ flex:0 0 30px;display:flex;align-items:center;justify-content:center;
+ border-radius:10px;background:#1b1b1e;color:#777;
+ font-size:14px;letter-spacing:-2px;cursor:grab;
+ touch-action:none;user-select:none;-webkit-user-select:none
 }
-.moveBtns button:disabled{opacity:.25}
+.adminRow.dragging{
+ position:relative;z-index:50;opacity:.95;
+ box-shadow:0 12px 30px rgba(0,0,0,.6);
+ transition:none
+}
+.adminRow.dragging .adminProductItem,
+.adminRow.dragging .adminCategoryItem{border-color:var(--accent)}
+.adminRow.dragging .dragHandle{background:var(--accent);color:#111;cursor:grabbing}
+body.isDragging{user-select:none;-webkit-user-select:none}
+
+.quickPrice{
+ flex:0 0 86px;display:flex;align-items:center;gap:4px;
+ padding:0 8px;border:1px solid rgba(255,255,255,.07);
+ border-radius:12px;background:#141416
+}
+.quickPrice input{
+ width:100%;min-width:0;border:0;background:transparent;
+ color:var(--accent2);font-size:14px;font-weight:800;
+ text-align:right;outline:none;padding:0
+}
+.quickPrice span{color:#777;font-size:12px}
+.quickPrice:focus-within{border-color:var(--accent)}
+.quickPrice.saved{border-color:#43a047}
+
+.adminSearch{
+ display:flex;align-items:center;gap:8px;
+ margin-bottom:14px;padding:0 12px;
+ border:1px solid rgba(255,255,255,.1);border-radius:14px;
+ background:#141416
+}
+.adminSearch:focus-within{border-color:var(--accent)}
+.adminSearch span{color:#777;font-size:16px}
+.adminSearch input{
+ flex:1;min-width:0;height:46px;border:0;background:transparent;
+ color:#fff;font-size:14px;outline:none
+}
+.adminSearch button{
+ border:0;background:#222;color:#aaa;
+ width:26px;height:26px;border-radius:50%;font-size:15px
+}
+
+.bulkGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bulkPreview{
+ margin-top:12px;padding:11px 12px;border-radius:11px;
+ background:#141416;border:1px dashed rgba(255,255,255,.12);
+ color:#aaa;font-size:11px;line-height:1.6
+}
+.bulkPreview b{color:var(--accent2)}
 
 .adminWarning{
  margin-bottom:14px;padding:12px 14px;border-radius:12px;
@@ -2314,6 +2361,8 @@ let adminTab="general";
 let adminCategoryView=null;
 let adminProductView=null;
 let adminEventView=null;
+let adminSearch="";
+let bulkOpen=false;
 
 let searchOpen=false;
 let searchText="";
@@ -3524,6 +3573,145 @@ function renderAdminGeneral(){
    ADMIN CATEGORY LIST
 ========================================================= */
 
+function adminProductRow(item,category,draggable){
+
+ return `
+ <div class="adminRow" data-row-id="${esc(item.id)}">
+
+  ${draggable?`<div class="dragHandle" aria-label="Sürükle">⋮⋮</div>`:""}
+
+  <button class="adminProductItem"
+   data-admin-product="${esc(item.id)}">
+
+   <div class="adminProductThumb">
+    ${
+     item.image
+     ?
+     `<img loading="lazy" decoding="async" data-media-ref="${esc(item.image)}" alt="">`
+     :
+     `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#555">N</div>`
+    }
+   </div>
+
+   <div class="adminProductInfo">
+    <strong>${esc(item.name)}</strong>
+    <span>${draggable?"":esc(category.name)+" • "}${item.sold?"Tükendi":"Düzenle ›"}</span>
+   </div>
+
+  </button>
+
+  <label class="quickPrice">
+   <input type="number" inputmode="decimal" min="0" step="any"
+    data-quick-price="${esc(item.id)}"
+    value="${esc(item.price)}">
+   <span>₺</span>
+  </label>
+
+ </div>
+ `;
+}
+
+function adminSearchResults(){
+
+ const q=adminSearch.trim().toLocaleLowerCase("tr-TR");
+
+ const list=[];
+
+ DATA.categories.forEach(c=>(c.items||[]).forEach(p=>{
+  if((p.name+" "+(p.description||"")).toLocaleLowerCase("tr-TR").includes(q))
+   list.push([p,c]);
+ }));
+
+ return `
+ <div class="adminCardDescription" style="margin:0 0 10px">
+  ${list.length} ürün bulundu. Fiyatı kutudan direkt değiştirebilirsin, kendiliğinden kaydedilir.
+ </div>
+
+ <div class="adminProductList">
+  ${
+   list.length
+   ?
+   list.map(([p,c])=>adminProductRow(p,c,false)).join("")
+   :
+   `<div class="empty">Ürün bulunamadı.</div>`
+  }
+ </div>
+ `;
+}
+
+function renderBulkPrice(){
+
+ return `
+ <div class="adminCard">
+
+  <button class="advancedButton" id="toggleBulk">
+   💸 Toplu Fiyat Güncelle (zam / indirim) ${bulkOpen?"▴":"▾"}
+  </button>
+
+  ${
+   bulkOpen
+   ?
+   `<div style="margin-top:12px">
+
+    <div class="field">
+     <label>Hangi ürünler?</label>
+     <select id="bulkTarget">
+      <option value="all">Tüm menü (${allProducts().length} ürün)</option>
+      ${adminSearch.trim()?`<option value="search">Arama sonuçları ("${esc(adminSearch.trim())}")</option>`:""}
+      ${DATA.categories.map(c=>`<option value="${esc(c.id)}">${esc(c.name)} (${(c.items||[]).length} ürün)</option>`).join("")}
+     </select>
+    </div>
+
+    <div class="bulkGrid">
+
+     <div class="field">
+      <label>Değişim türü</label>
+      <select id="bulkType">
+       <option value="percent">Yüzde (%)</option>
+       <option value="amount">Tutar (₺)</option>
+      </select>
+     </div>
+
+     <div class="field">
+      <label>Miktar (indirim için eksi yaz)</label>
+      <input id="bulkValue" type="number" inputmode="decimal" step="any" placeholder="örn. 10">
+     </div>
+
+    </div>
+
+    <div class="field">
+     <label>Yuvarlama</label>
+     <select id="bulkRound">
+      <option value="1">En yakın 1 ₺</option>
+      <option value="5" selected>En yakın 5 ₺</option>
+      <option value="10">En yakın 10 ₺</option>
+      <option value="0">Yuvarlama yok (kuruşlu)</option>
+     </select>
+    </div>
+
+    <div class="bulkPreview" id="bulkPreview">Miktar gir, önizleme burada görünür.</div>
+
+    <button class="adminButton gold full" id="bulkApply" style="margin-top:10px">
+     ✓ Fiyatları Güncelle
+    </button>
+
+    ${
+     DATA.lastBulk&&Object.keys(DATA.lastBulk.prices||{}).length
+     ?
+     `<button class="adminButton full" id="bulkUndo" style="margin-top:8px">
+      ↶ Son toplu değişikliği geri al (${Object.keys(DATA.lastBulk.prices).length} ürün)
+     </button>`
+     :""
+    }
+
+   </div>`
+   :""
+  }
+
+ </div>
+ `;
+}
+
 function renderAdminCategories(){
 
  return `
@@ -3533,12 +3721,33 @@ function renderAdminCategories(){
   <p>Tüm kategori ve ürünlerini yönet.</p>
  </div>
 
+ <div class="adminSearch">
+  <span>⌕</span>
+  <input id="adminSearchInput" type="text" enterkeyhint="search"
+   placeholder="Ürün ara (ad veya açıklama)..."
+   value="${esc(adminSearch)}"
+   autocomplete="off">
+  ${adminSearch?`<button id="adminSearchClear" aria-label="Temizle">×</button>`:""}
+ </div>
+
+ ${renderBulkPrice()}
+
+ <div id="adminMenuBody">
+  ${adminSearch.trim()?adminSearchResults():renderAdminCategoryList()}
+ </div>
+ `;
+}
+
+function renderAdminCategoryList(){
+
+ return `
+
  <div class="adminCard">
 
   <div class="adminCardTitle">Kategori Yönetimi</div>
 
   <div class="adminCardDescription">
-   Sırayı değiştirmek için ▲ ▼ oklarını kullan.
+   Sırayı değiştirmek için soldaki ⋮⋮ tutamacından tutup sürükle.
   </div>
 
   <button class="adminButton gold full"
@@ -3555,53 +3764,36 @@ function renderAdminCategories(){
 
  </div>
 
- <div class="adminCategoryList">
+ <div class="adminCategoryList" data-sortable="categories">
 
  ${
-  DATA.categories.map((category,index)=>`
+  DATA.categories.map(category=>`
 
-   <div class="adminRow">
+   <div class="adminRow" data-row-id="${esc(category.id)}">
 
-   <button class="adminCategoryItem"
-    data-admin-category="${esc(category.id)}">
+    <div class="dragHandle" aria-label="Sürükle">⋮⋮</div>
 
-    <div class="adminCategoryThumb">
+    <button class="adminCategoryItem"
+     data-admin-category="${esc(category.id)}">
 
-     ${
-      category.image
-      ?
-      `<img loading="lazy" decoding="async" data-media-ref="${esc(category.image)}" alt="">`
-      :
-      `<div style="
-       width:100%;height:100%;
-       display:flex;align-items:center;
-       justify-content:center;color:#555">
-       N
-      </div>`
-     }
+     <div class="adminCategoryThumb">
+      ${
+       category.image
+       ?
+       `<img loading="lazy" decoding="async" data-media-ref="${esc(category.image)}" alt="">`
+       :
+       `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#555">N</div>`
+      }
+     </div>
 
-    </div>
+     <div class="adminCategoryInfo">
+      <strong>${esc(localizedCategoryName(category))}</strong>
+      <span>${(category.items||[]).length} ürün</span>
+     </div>
 
-    <div class="adminCategoryInfo">
+     <div class="adminArrow">›</div>
 
-     <strong>
-      ${esc(localizedCategoryName(category))}
-     </strong>
-
-     <span>
-      ${(category.items||[]).length} ürün
-     </span>
-
-    </div>
-
-    <div class="adminArrow">›</div>
-
-   </button>
-
-   <div class="moveBtns">
-    <button data-move="category|${esc(category.id)}|-1" ${index===0?"disabled":""} aria-label="Yukarı">▲</button>
-    <button data-move="category|${esc(category.id)}|1" ${index===DATA.categories.length-1?"disabled":""} aria-label="Aşağı">▼</button>
-   </div>
+    </button>
 
    </div>
 
@@ -3687,7 +3879,7 @@ function renderAdminCategory(){
    <div>
     <div class="adminCardTitle">Ürünler</div>
     <div class="adminCardDescription">
-     ${(category.items||[]).length} ürün
+     ${(category.items||[]).length} ürün • ⋮⋮ ile sürükleyerek sırala, fiyatı kutudan değiştir
     </div>
    </div>
 
@@ -3701,55 +3893,8 @@ function renderAdminCategory(){
 
  </div>
 
- <div class="adminProductList">
-
- ${
-  category.items.map((item,index)=>`
-
-   <div class="adminRow">
-
-   <button class="adminProductItem"
-    data-admin-product="${esc(item.id)}">
-
-    <div class="adminProductThumb">
-
-     ${
-      item.image
-      ?
-      `<img loading="lazy" decoding="async" data-media-ref="${esc(item.image)}" alt="">`
-      :
-      `<div style="
-       width:100%;height:100%;
-       display:flex;align-items:center;
-       justify-content:center;color:#555">
-       N
-      </div>`
-     }
-
-    </div>
-
-    <div class="adminProductInfo">
-
-     <strong>${esc(item.name)}</strong>
-
-     <span>${money(item.price)}${item.sold?" • Tükendi":""}</span>
-
-    </div>
-
-    <div class="adminArrow">›</div>
-
-   </button>
-
-   <div class="moveBtns">
-    <button data-move="product|${esc(category.id)}:${esc(item.id)}|-1" ${index===0?"disabled":""} aria-label="Yukarı">▲</button>
-    <button data-move="product|${esc(category.id)}:${esc(item.id)}|1" ${index===category.items.length-1?"disabled":""} aria-label="Aşağı">▼</button>
-   </div>
-
-   </div>
-
-  `).join("")
- }
-
+ <div class="adminProductList" data-sortable="${esc(category.id)}">
+  ${category.items.map(item=>adminProductRow(item,category,true)).join("")}
  </div>
  `;
 }
@@ -6157,44 +6302,7 @@ function bindAdminExtras(){
   saveData();
  });
 
- document.querySelectorAll("[data-move]")
- .forEach(btn=>{
-
-  btn.onclick=e=>{
-
-   e.stopPropagation();
-
-   collectAdmin();
-
-   const [type,ref,dirText]=btn.dataset.move.split("|");
-   const dir=Number(dirText);
-
-   let list;
-   let id=ref;
-
-   if(type==="category"){
-    list=DATA.categories;
-   }else{
-    const [catId,itemId]=ref.split(":");
-    const c=findCategory(catId);
-    if(!c)return;
-    list=c.items;
-    id=itemId;
-   }
-
-   const i=list.findIndex(x=>x.id===id);
-   const j=i+dir;
-
-   if(i<0||j<0||j>=list.length)return;
-
-   [list[i],list[j]]=[list[j],list[i]];
-
-   saveData();
-
-   rememberAdminScroll();
-   render({preserveAdminScroll:true});
-  };
- });
+ bindMenuTools();
 
  /* Etkinlik yönetimi */
 
@@ -6286,6 +6394,456 @@ function bindAdminExtras(){
    render();
    showToast("Etkinlik silindi");
   };
+ });
+}
+
+/* =========================================================
+   MENÜ ARAÇLARI: ARAMA, HIZLI FİYAT, TOPLU FİYAT, SÜRÜKLE
+========================================================= */
+
+function roundPrice(v,step){
+
+ if(!step)return Math.round(v*100)/100;
+
+ return Math.max(0,Math.round(v/step)*step);
+}
+
+function bulkTargets(){
+
+ const target=$("bulkTarget")?.value||"all";
+
+ if(target==="all")
+  return DATA.categories.flatMap(c=>c.items||[]);
+
+ if(target==="search"){
+  const q=adminSearch.trim().toLocaleLowerCase("tr-TR");
+  return DATA.categories.flatMap(c=>c.items||[])
+   .filter(p=>(p.name+" "+(p.description||"")).toLocaleLowerCase("tr-TR").includes(q));
+ }
+
+ return findCategory(target)?.items||[];
+}
+
+function bulkNewPrice(price){
+
+ const type=$("bulkType")?.value;
+ const value=Number($("bulkValue")?.value);
+ const step=Number($("bulkRound")?.value);
+ const base=Number(price)||0;
+
+ const raw=type==="amount"?base+value:base*(1+value/100);
+
+ return roundPrice(Math.max(0,raw),step);
+}
+
+function updateBulkPreview(){
+
+ const box=$("bulkPreview");
+
+ if(!box)return;
+
+ const value=Number($("bulkValue")?.value);
+ const items=bulkTargets();
+
+ if(!value||!items.length){
+  box.innerHTML=items.length
+   ?"Miktar gir, önizleme burada görünür."
+   :"Seçilen grupta ürün yok.";
+  return;
+ }
+
+ const sample=items.slice(0,3).map(p=>
+  `${esc(p.name)}: ${money(p.price)} → <b>${Math.round(bulkNewPrice(p.price)*100)/100} ₺</b>`
+ ).join("<br>");
+
+ box.innerHTML=`<b>${items.length} ürün</b> güncellenecek.<br>${sample}${items.length>3?"<br>…":""}`;
+}
+
+function refreshAdminMenuBody(){
+
+ const body=$("adminMenuBody");
+
+ if(!body)return;
+
+ body.innerHTML=adminSearch.trim()?adminSearchResults():renderAdminCategoryList();
+
+ bindMenuTools(true);
+ resolveMediaElements(body);
+}
+
+function bindMenuTools(bodyOnly){
+
+ /* Satır olayları (her yenilemede) */
+
+ document.querySelectorAll("#adminMenuBody [data-admin-product]")
+ .forEach(btn=>{
+  btn.onclick=()=>{
+   collectAdmin();
+   const cat=DATA.categories.find(c=>(c.items||[]).some(p=>p.id===btn.dataset.adminProduct));
+   adminCategoryView=cat?cat.id:null;
+   adminProductView=btn.dataset.adminProduct;
+   advancedProduct=false;
+   pushLayer();
+   render();
+  };
+ });
+
+ document.querySelectorAll("#adminMenuBody [data-admin-category]")
+ .forEach(btn=>{
+  btn.onclick=()=>{
+   collectAdmin();
+   adminCategoryView=btn.dataset.adminCategory;
+   adminProductView=null;
+   pushLayer();
+   render();
+  };
+ });
+
+ document.querySelectorAll("[data-quick-price]")
+ .forEach(inp=>{
+
+  const commit=()=>{
+
+   const p=findProduct(inp.dataset.quickPrice);
+
+   if(!p)return;
+
+   const value=Math.max(0,Number(inp.value)||0);
+
+   if(value===Number(p.price))return;
+
+   p.price=value;
+   inp.value=value;
+
+   saveData();
+
+   const box=inp.closest(".quickPrice");
+   box?.classList.add("saved");
+   setTimeout(()=>box?.classList.remove("saved"),900);
+
+   showToast("✓ "+p.name+": "+money(value));
+  };
+
+  inp.onchange=commit;
+  inp.onkeydown=e=>{if(e.key==="Enter")inp.blur()};
+ });
+
+ document.querySelectorAll("[data-sortable]")
+ .forEach(enableDragSort);
+
+ if(bodyOnly){
+  /* Liste yenilenince kategori/çeviri butonları da yeniden bağlanır */
+  bindAdminButtonsInBody();
+  return;
+ }
+
+ /* Arama */
+
+ const search=$("adminSearchInput");
+
+ if(search){
+
+  search.oninput=()=>{
+
+   adminSearch=search.value;
+
+   const clear=$("adminSearchClear");
+
+   if(adminSearch&&!clear){
+    const b=document.createElement("button");
+    b.id="adminSearchClear";
+    b.setAttribute("aria-label","Temizle");
+    b.textContent="×";
+    search.parentElement.appendChild(b);
+    b.onclick=clearAdminSearch;
+   }
+
+   if(!adminSearch&&clear)clear.remove();
+
+   refreshAdminMenuBody();
+
+   /* Toplu fiyattaki "Arama sonuçları" seçeneği güncellensin */
+   const target=$("bulkTarget");
+   if(target){
+    let opt=target.querySelector('option[value="search"]');
+    if(adminSearch.trim()){
+     if(!opt){
+      opt=document.createElement("option");
+      opt.value="search";
+      target.insertBefore(opt,target.options[1]||null);
+     }
+     opt.textContent='Arama sonuçları ("'+adminSearch.trim()+'")';
+    }else if(opt){
+     if(target.value==="search")target.value="all";
+     opt.remove();
+    }
+    updateBulkPreview();
+   }
+  };
+ }
+
+ $("adminSearchClear")?.addEventListener("click",clearAdminSearch);
+
+ /* Toplu fiyat */
+
+ $("toggleBulk")?.addEventListener("click",()=>{
+  collectAdmin();
+  bulkOpen=!bulkOpen;
+  rememberAdminScroll();
+  render({preserveAdminScroll:true});
+ });
+
+ ["bulkTarget","bulkType","bulkValue","bulkRound"].forEach(id=>{
+  const el=$(id);
+  if(el){
+   el.addEventListener("input",updateBulkPreview);
+   el.addEventListener("change",updateBulkPreview);
+  }
+ });
+
+ $("bulkApply")?.addEventListener("click",()=>{
+
+  const value=Number($("bulkValue")?.value);
+  const items=bulkTargets();
+
+  if(!value){
+   alert("Önce bir miktar gir (örn. 10).");
+   return;
+  }
+
+  if(!items.length){
+   alert("Seçilen grupta ürün yok.");
+   return;
+  }
+
+  const type=$("bulkType").value;
+  const label=type==="amount"
+   ?(value>0?"+":"")+value+" ₺"
+   :(value>0?"+":"")+value+" %";
+
+  if(!confirm(items.length+" ürünün fiyatı "+label+" değişecek. Onaylıyor musun?"))
+   return;
+
+  const prices={};
+
+  items.forEach(p=>{
+   prices[p.id]=p.price;
+   p.price=bulkNewPrice(p.price);
+  });
+
+  DATA.lastBulk={time:Date.now(),prices};
+
+  saveData();
+
+  rememberAdminScroll();
+  render({preserveAdminScroll:true});
+
+  showToast("✓ "+items.length+" ürünün fiyatı güncellendi");
+ });
+
+ $("bulkUndo")?.addEventListener("click",()=>{
+
+  const prices=DATA.lastBulk?.prices||{};
+  const ids=Object.keys(prices);
+
+  if(!ids.length)return;
+
+  if(!confirm(ids.length+" ürünün fiyatı eski hâline dönsün mü?"))return;
+
+  ids.forEach(id=>{
+   const p=findProduct(id);
+   if(p)p.price=prices[id];
+  });
+
+  DATA.lastBulk=null;
+
+  saveData();
+
+  rememberAdminScroll();
+  render({preserveAdminScroll:true});
+
+  showToast("↶ Fiyatlar geri alındı");
+ });
+}
+
+function clearAdminSearch(){
+
+ adminSearch="";
+
+ const input=$("adminSearchInput");
+
+ if(input)input.value="";
+
+ $("adminSearchClear")?.remove();
+
+ refreshAdminMenuBody();
+
+ const target=$("bulkTarget");
+ const opt=target?.querySelector('option[value="search"]');
+ if(opt){
+  if(target.value==="search")target.value="all";
+  opt.remove();
+ }
+}
+
+function bindAdminButtonsInBody(){
+
+ /* Kategori listesi yeniden çizilince ekle/çevir butonları */
+ const add=$("addCategory");
+
+ if(add&&!add.dataset.bound){
+  add.dataset.bound="1";
+  add.onclick=()=>{
+   collectAdmin();
+   const id="category-"+Date.now();
+   DATA.categories.push({id,name:"Yeni Kategori",names:{tr:"Yeni Kategori"},image:"",items:[]});
+   adminCategoryView=id;
+   adminProductView=null;
+   pushLayer();
+   saveData();
+   render();
+  };
+ }
+
+ const all=$("translateAll");
+
+ if(all&&!all.dataset.bound){
+  all.dataset.bound="1";
+  all.onclick=()=>{
+   adminSearch="";
+   render();
+   setTimeout(()=>$("translateAll")?.click(),0);
+  };
+ }
+}
+
+/* Tutamaçtan sürükleyerek sıralama (dokunmatik + fare) */
+function enableDragSort(list){
+
+ if(list.dataset.dragReady)return;
+
+ list.dataset.dragReady="1";
+
+ list.addEventListener("pointerdown",e=>{
+
+  const handle=e.target.closest(".dragHandle");
+
+  if(!handle||!list.contains(handle))return;
+
+  const row=handle.closest(".adminRow");
+
+  if(!row)return;
+
+  e.preventDefault();
+
+  const scroller=document.querySelector(".admin");
+  const startY=e.clientY;
+  const startScroll=scroller?scroller.scrollTop:0;
+  let offset=0;
+  let autoScroll=0;
+  let lastY=e.clientY;
+
+  row.classList.add("dragging");
+  document.body.classList.add("isDragging");
+
+
+  const rows=()=>[...list.querySelectorAll(":scope > .adminRow")];
+
+  const place=y=>{
+
+   const scrollDelta=(scroller?scroller.scrollTop:0)-startScroll;
+
+   row.style.transform="translateY("+(y-startY+scrollDelta-offset)+"px)";
+
+   const others=rows().filter(r=>r!==row);
+
+   for(const other of others){
+
+    const rect=other.getBoundingClientRect();
+    const mid=rect.top+rect.height/2;
+    const rowRect=row.getBoundingClientRect();
+    const rowMid=rowRect.top+rowRect.height/2;
+
+    const before=row.compareDocumentPosition(other)&Node.DOCUMENT_POSITION_FOLLOWING;
+
+    if(before&&rowMid>mid){
+     const h=other.getBoundingClientRect().height+parseFloat(getComputedStyle(list).gap||0);
+     other.after(row);
+     offset+=h;
+     row.style.transform="translateY("+(y-startY+scrollDelta-offset)+"px)";
+     break;
+    }
+
+    if(!before&&rowMid<mid){
+     const h=other.getBoundingClientRect().height+parseFloat(getComputedStyle(list).gap||0);
+     other.before(row);
+     offset-=h;
+     row.style.transform="translateY("+(y-startY+scrollDelta-offset)+"px)";
+     break;
+    }
+   }
+  };
+
+  const tick=()=>{
+   if(!autoScroll||!scroller)return;
+   scroller.scrollTop+=autoScroll;
+   place(lastY);
+   requestAnimationFrame(tick);
+  };
+
+  const move=ev=>{
+
+   lastY=ev.clientY;
+
+   place(ev.clientY);
+
+   const h=window.innerHeight;
+   const wasScrolling=autoScroll;
+
+   autoScroll=ev.clientY<90?-8:ev.clientY>h-110?8:0;
+
+   if(autoScroll&&!wasScrolling)requestAnimationFrame(tick);
+  };
+
+  const end=()=>{
+
+   autoScroll=0;
+
+   window.removeEventListener("pointermove",move);
+   window.removeEventListener("pointerup",end);
+   window.removeEventListener("pointercancel",end);
+
+   row.classList.remove("dragging");
+   row.style.transform="";
+   document.body.classList.remove("isDragging");
+
+   const order=rows().map(r=>r.dataset.rowId);
+   const key=list.dataset.sortable;
+
+   let arr=key==="categories"?DATA.categories:findCategory(key)?.items;
+
+   if(!arr)return;
+
+   const sorted=order.map(id=>arr.find(x=>x.id===id)).filter(Boolean);
+
+   if(sorted.length!==arr.length)return;
+
+   const changed=sorted.some((x,i)=>x!==arr[i]);
+
+   if(!changed)return;
+
+   if(key==="categories")DATA.categories=sorted;
+   else findCategory(key).items=sorted;
+
+   saveData();
+   showToast("✓ Sıralama kaydedildi");
+  };
+
+  /* Satır DOM'da yer değiştirince pointer capture düşebildiği için
+     olaylar pencereden dinlenir */
+  window.addEventListener("pointermove",move);
+  window.addEventListener("pointerup",end);
+  window.addEventListener("pointercancel",end);
  });
 }
 
