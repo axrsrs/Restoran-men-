@@ -1618,8 +1618,8 @@ const PRETTY_URLS=!/github\.io$/i.test(location.hostname)&&!/^(localhost|127\.)/
 
 function menuUrl(slug){
  return PRETTY_URLS
-  ?location.origin+"/"+encodeURIComponent(slug)
-  :MENU_BASE+"?r="+encodeURIComponent(slug);
+  ?location.origin+"/menu/"+encodeURIComponent(slug)
+  :MENU_BASE+"menu/?r="+encodeURIComponent(slug);
 }
 
 function fmtDate(d){

@@ -4,31 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Yönlendiriliyor...</title>
+<title>Yönlendiriliyor... · NearDiji</title>
 <style>
- html,body{margin:0;height:100%;background:#171719;color:#929296;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+ html,body{margin:0;height:100%;background:#0f0f11;color:#8b8b95;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
  body{display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}
  a{color:#f0c45a}
 </style>
 <script>
-/* Kısa adresler: neardiji.com/kebapci-ali → menü, neardiji.com/admin → süper yönetici paneli.
-   GitHub Pages bilinmeyen yolları bu sayfaya gönderir; buradan doğru sayfaya yönlendiriyoruz. */
+/* GitHub Pages bilinmeyen yolları bu sayfaya gönderir:
+   /menu/xfirma → menü, /admin → süper yönetici, eski /xfirma → /menu/xfirma */
 (function(){
- var base=/github\.io$/i.test(location.hostname)?"/"+(location.pathname.split("/")[1]||"")+"/":"/";
- var rest=location.pathname.indexOf(base)===0?location.pathname.slice(base.length):location.pathname.replace(/^\/+/,"");
- var seg=(rest.split("/")[0]||"").toLowerCase();
- try{seg=decodeURIComponent(seg)}catch(e){}
- if(seg==="admin"||seg==="yonetim"||seg==="yönetim"){
-  location.replace(base+"admin.html");
- }else if(/^[a-z0-9]+(-[a-z0-9]+)*$/.test(seg)){
-  location.replace(base+"?r="+encodeURIComponent(seg)+location.hash);
- }else{
-  location.replace(base);
- }
+ var parts=location.pathname.split("/").filter(Boolean);
+ if(/github\.io$/i.test(location.hostname))parts.shift();
+ var a=(parts[0]||"").toLowerCase(), b=(parts[1]||"").toLowerCase();
+ try{a=decodeURIComponent(a);b=decodeURIComponent(b)}catch(e){}
+ var slug=/^[a-z0-9]+(-[a-z0-9]+)*$/;
+ if(a==="admin"||a==="yonetim"){location.replace("/admin.html");return}
+ if(a==="menu"&&slug.test(b)){location.replace("/menu/?r="+encodeURIComponent(b)+location.hash);return}
+ if(a&&a!=="menu"&&slug.test(a)){location.replace("/menu/?r="+encodeURIComponent(a)+location.hash);return}
+ location.replace("/");
 })();
 </script>
 </head>
-<body>
-<p>Yönlendiriliyor... <a href="/">Ana sayfaya git</a></p>
-</body>
+<body><p>Yönlendiriliyor... <a href="/">NearDiji ana sayfa</a></p></body>
 </html>
