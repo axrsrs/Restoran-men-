@@ -810,6 +810,90 @@ button:active{transform:scale(.97)}
  text-align:center;color:#555;font-size:10px
 }
 .help{margin-top:8px;color:#666;font-size:9px}
+
+/* =========================================================
+   AÇIK MOD (müşteri menüsü). Paneller koyu kalır.
+========================================================= */
+html[data-mode="light"]{color-scheme:light;background:#f5f2ec}
+html[data-mode="light"] body{background:#f5f2ec}
+html[data-mode="light"] .background{background-color:#f5f2ec!important}
+html[data-mode="light"] .backgroundOverlay{background:rgba(245,242,236,calc(var(--overlay) + .25))}
+
+html[data-mode="light"] .iconBtn{
+ background:rgba(255,255,255,.92);border-color:rgba(0,0,0,.08);color:#1b1a17;
+ box-shadow:0 4px 14px rgba(0,0,0,.06)
+}
+html[data-mode="light"] .iconBtn:hover{background:#efeae2;border-color:rgba(0,0,0,.14)}
+html[data-mode="light"] .searchBox input{background:#fff;color:#1b1a17;border-color:rgba(0,0,0,.1)}
+html[data-mode="light"] .searchBox input::placeholder{color:#9a958c}
+html[data-mode="light"] .quickPopup{
+ background:rgba(255,255,255,.98);border-color:rgba(0,0,0,.08);
+ box-shadow:0 20px 50px rgba(0,0,0,.14)
+}
+html[data-mode="light"] .quickPopup button{color:#5f5b54}
+html[data-mode="light"] .quickPopup button:hover,
+html[data-mode="light"] .quickPopup button.active{color:#111}
+
+html[data-mode="light"] .logo{
+ background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.9),transparent 42%),#fff;
+ color:var(--accentInk);
+ box-shadow:0 0 0 7px rgba(0,0,0,.025),0 12px 40px rgba(0,0,0,.08)
+}
+html[data-mode="light"] .heroContactBtn{background:#fff;color:var(--accentInk);border-color:rgba(0,0,0,.1)}
+html[data-mode="light"] .welcome{color:var(--accentInk)}
+html[data-mode="light"] .hint,
+html[data-mode="light"] .empty,
+html[data-mode="light"] .footer{color:#8a867e}
+
+html[data-mode="light"] .feature,
+html[data-mode="light"] .event,
+html[data-mode="light"] .category{
+ background:#e9e4dc;border-color:rgba(0,0,0,.06);
+ box-shadow:0 12px 30px rgba(0,0,0,.1)
+}
+html[data-mode="light"] .featureText span{color:var(--accent2)}
+
+html[data-mode="light"] .categoryTitle{border-bottom-color:rgba(0,0,0,.08)}
+html[data-mode="light"] .backBtn{background:#fff;color:#1b1a17;border-color:rgba(0,0,0,.1)}
+
+html[data-mode="light"] .product{
+ background:linear-gradient(145deg,rgba(255,255,255,var(--cardOpacity)),rgba(250,248,244,var(--cardOpacity)));
+ border-color:rgba(0,0,0,.06);
+ box-shadow:0 10px 28px rgba(0,0,0,.06)
+}
+html[data-mode="light"] .product:hover{border-color:rgba(0,0,0,.14)}
+html[data-mode="light"] .productImage{background:#ece7df}
+html[data-mode="light"] .productInfo p{color:#77736b}
+html[data-mode="light"] .tag{background:#f1ece4;color:#6d6a63;border-color:rgba(0,0,0,.04)}
+html[data-mode="light"] .tag.sold{background:#b91c1c;color:#fff}
+
+html[data-mode="light"] .modalOverlay{background:rgba(20,18,15,.45)}
+html[data-mode="light"] .modal{background:#fff;box-shadow:0 -15px 60px rgba(0,0,0,.18)}
+html[data-mode="light"] .modalImage{background:#ece7df}
+html[data-mode="light"] .modalBody p{color:#6d6a63}
+html[data-mode="light"] .infoRow{border-bottom-color:#ece7df}
+html[data-mode="light"] .modal .adminButton:not(.gold){background:#f1ece4;color:#1b1a17;border-color:rgba(0,0,0,.08)}
+
+html[data-mode="light"] .cloudState{color:#6d6a63}
+html[data-mode="light"] .cloudState h2{color:#1b1a17}
+html[data-mode="light"] .cloudSpinner{border-color:rgba(0,0,0,.1);border-top-color:var(--accent)}
+html[data-mode="light"] .orbital-loader{filter:invert(1) hue-rotate(180deg) brightness(.6)}
+
+/* Paneller her iki modda koyu */
+.adminOverlay,.adminLoginOverlay{
+ --text:#fff;--cardText:#fff;--muted:#929296;--price:#f0c45a;
+ color:#fff;color-scheme:dark
+}
+
+/* ---------- Tema düğmesi (Magic UI Animated Theme Toggler, kare) ---------- */
+.themeToggle{position:relative;overflow:hidden}
+.themeToggle svg{width:19px;height:19px;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .3s}
+.themeToggle .icoSun{position:absolute;opacity:0;transform:rotate(-90deg) scale(.4)}
+.themeToggle .icoMoon{opacity:1;transform:none}
+html[data-mode="light"] .themeToggle .icoSun{opacity:1;transform:none}
+html[data-mode="light"] .themeToggle .icoMoon{opacity:0;transform:rotate(90deg) scale(.4)}
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+
 .hidden{display:none!important}
 
 .heroHidden{display:none!important}
@@ -2593,7 +2677,7 @@ const DATA={
  settings:{
   portion:true,calories:true,allergens:true,
   spicy:true,sold:true,hours:true,
-  dish:true,featured:true,events:true,search:true
+  dish:true,featured:true,events:true,search:true,themeToggle:true
  },
  background:{
   type:"color",value:"#171719",
@@ -3289,7 +3373,7 @@ function mergeData(saved){
  DATA.settings=Object.assign({
   portion:true,calories:true,allergens:true,
   spicy:true,sold:true,hours:true,
-  dish:true,featured:true,events:true,search:true
+  dish:true,featured:true,events:true,search:true,themeToggle:true
  },DATA.settings||{});
 
  DATA.background=Object.assign({
@@ -5009,16 +5093,91 @@ function resolveFont(font){
  return font;
 }
 
+/* ---------- açık / koyu mod ---------- */
+
+function shadeColor(hex,amount){
+ const m=String(hex||"").trim().match(/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i);
+ if(!m)return hex;
+ let h=m[1];
+ if(h.length===3)h=h.split("").map(c=>c+c).join("");
+ const n=parseInt(h,16);
+ const f=v=>Math.max(0,Math.min(255,Math.round(amount<0?v*(1+amount):v+(255-v)*amount)));
+ return "#"+[f(n>>16&255),f(n>>8&255),f(n&255)].map(v=>v.toString(16).padStart(2,"0")).join("");
+}
+
+function currentMode(){
+ let saved=null;
+ if(DATA.settings?.themeToggle!==false)saved=safeGet("nearMenuMode");
+ const pref=saved||DATA.theme?.defaultMode||"dark";
+ if(pref==="system"){
+  try{return matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){return "dark"}
+ }
+ return pref==="light"?"light":"dark";
+}
+
+const THEME_ICONS=`<svg class="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><svg class="icoSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+
+/* Magic UI "AnimatedThemeToggler" (variant: square) davranışı:
+   yeni tema, düğmenin ortasından büyüyen bir kare ile açılır. */
+function toggleColorMode(btn){
+
+ const next=currentMode()==="light"?"dark":"light";
+
+ const apply=()=>{
+  safeSet("nearMenuMode",next);
+  applyTheme();
+  const label=next==="light"?"Koyu moda geç":"Açık moda geç";
+  document.querySelectorAll(".themeToggle").forEach(b=>{b.setAttribute("aria-label",label);b.title=label});
+ };
+
+ const reduce=(()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}})();
+
+ if(!document.startViewTransition||reduce||!btn){
+  apply();
+  return;
+ }
+
+ const r=btn.getBoundingClientRect();
+ const x=r.left+r.width/2;
+ const y=r.top+r.height/2;
+ const max=Math.max(x,innerWidth-x,y,innerHeight-y)*1.05;
+
+ const t=document.startViewTransition(apply);
+
+ t.ready.then(()=>{
+  const sq=d=>`polygon(${x-d}px ${y-d}px, ${x+d}px ${y-d}px, ${x+d}px ${y+d}px, ${x-d}px ${y+d}px)`;
+  document.documentElement.animate(
+   {clipPath:[sq(0),sq(max)]},
+   {duration:400,easing:"ease-in-out",pseudoElement:"::view-transition-new(root)"}
+  );
+ }).catch(()=>{});
+}
+
+try{
+ matchMedia("(prefers-color-scheme: light)").addEventListener("change",()=>{
+  if(currentMode&&(safeGet("nearMenuMode")||DATA.theme?.defaultMode)==="system")applyTheme();
+ });
+}catch(e){}
+
 function applyTheme(){
 
  const th=DATA.theme;
  const root=document.documentElement;
 
+ const light=currentMode()==="light";
+
+ root.dataset.mode=light?"light":"dark";
+
  root.style.setProperty("--accent",th.accent||"#d6a83d");
  root.style.setProperty("--accent2",th.accent2||"#f0c45a");
- root.style.setProperty("--text",th.text||"#fff");
- root.style.setProperty("--cardText",th.cardText||"#fff");
- root.style.setProperty("--price",th.price||"#f0c45a");
+ root.style.setProperty("--accentInk",light?shadeColor(th.accent||"#d6a83d",-.38):(th.accent||"#d6a83d"));
+ root.style.setProperty("--text",light?"#1b1a17":(th.text||"#fff"));
+ root.style.setProperty("--cardText",light?"#1b1a17":(th.cardText||"#fff"));
+ root.style.setProperty("--muted",light?"#6d6a63":"#929296");
+ root.style.setProperty("--price",light?shadeColor(th.price||th.accent||"#d6a83d",-.42):(th.price||"#f0c45a"));
+
+ const meta=document.querySelector('meta[name="theme-color"]');
+ if(meta)meta.setAttribute("content",light?"#f5f2ec":((DATA.background&&DATA.background.type==="color"&&DATA.background.value)||"#171719"));
  root.style.setProperty("--overlay",th.overlay??.55);
  root.style.setProperty("--cardOpacity",th.cardOpacity??.94);
  root.style.setProperty("--cardRadius",(th.cardRadius||20)+"px");
@@ -6601,6 +6760,23 @@ function renderAdminDesign(){
 
  <div class="adminCard">
 
+  <div class="adminCardTitle">🌗 Açık / Koyu Mod</div>
+
+  <div class="field">
+   <label>Müşteriye ilk açılan görünüm</label>
+   <select data-admin="defaultMode">
+    <option value="dark" ${(th.defaultMode||"dark")==="dark"?"selected":""}>Koyu</option>
+    <option value="light" ${th.defaultMode==="light"?"selected":""}>Açık</option>
+    <option value="system" ${th.defaultMode==="system"?"selected":""}>Telefonun ayarına göre</option>
+   </select>
+  </div>
+
+  <div class="help">Müşteri menüdeki ☾/☀ düğmesiyle değiştirebilir; seçimi o telefonda hatırlanır. Düğmeyi Görünürlük bölümünden gizleyebilirsiniz.</div>
+
+ </div>
+
+ <div class="adminCard">
+
   <div class="adminCardTitle">🎨 Renk Sistemi</div>
 
   <div class="designGrid" style="margin-top:13px">
@@ -6821,7 +6997,8 @@ function renderAdminDesign(){
     ["dish","Günün Ürünü"],
     ["featured","Çok Satanlar"],
     ["events","Etkinlikler"],
-    ["search","Ürün Arama"]
+    ["search","Ürün Arama"],
+    ["themeToggle","Açık/Koyu Mod Düğmesi"]
    ].map(o=>`
 
     <label class="toggle">
@@ -7185,6 +7362,9 @@ function collectAdmin(){
 
   else if(key==="titleFont")
    DATA.theme.titleFont=value;
+
+  else if(key==="defaultMode")
+   DATA.theme.defaultMode=value;
 
   else if(key.startsWith("categoryName-")){
 
@@ -7641,6 +7821,15 @@ function render(options={}){
     <div class="topRow">
 
      <div class="topRight">
+
+      ${
+       DATA.settings.themeToggle!==false
+       ?
+       `<button class="iconBtn themeToggle" id="themeToggle" type="button"
+         aria-label="${currentMode()==="light"?"Koyu moda geç":"Açık moda geç"}"
+         title="${currentMode()==="light"?"Koyu moda geç":"Açık moda geç"}">${THEME_ICONS}</button>`
+       :""
+      }
 
       ${
        DATA.settings.search
@@ -8736,6 +8925,8 @@ async function runTranslate(btn,job){
 }
 
 function bindAdminExtras(){
+
+ $("themeToggle")?.addEventListener("click",e=>toggleColorMode(e.currentTarget));
 
  if(CLOUD){
   bindCloudLogin();
