@@ -55,7 +55,7 @@ a{color:inherit}
 .side a{padding:9px 12px;border-radius:10px;text-decoration:none;color:var(--muted);font-size:14px}
 .side a:hover,.side a.on{background:color-mix(in srgb,var(--fg) 7%,transparent);color:var(--fg)}
 @media (max-width:860px){
- .wrap{grid-template-columns:1fr}
+ .wrap{grid-template-columns:minmax(0,1fr)}
  .side{position:static;flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:none}
  .side::-webkit-scrollbar{display:none}
  .side a{white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:13px}
@@ -88,6 +88,17 @@ textarea.in{resize:vertical;min-height:84px;line-height:1.5}
 .thumb.dark{background-color:#111110}
 .thumb.light{background-color:#EBE9E5}
 .thumb span{font-size:11px;color:var(--muted);text-align:center;padding:4px}
+.logo-prev{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.logo-prev>div{display:flex;align-items:center;gap:10px;min-height:76px;padding:14px 16px;border-radius:14px;border:1px solid var(--line);overflow:hidden}
+.logo-prev .lp-light{background:#EBE9E5;color:#111110}
+.logo-prev .lp-dark{background:#111110;color:#EBE9E5}
+.logo-prev img{height:var(--lh,34px);width:auto;max-width:100%;object-fit:contain;display:block}
+.logo-prev img.inv{filter:invert(1) hue-rotate(180deg)}
+.logo-prev .mono{height:var(--lh,34px);max-width:100%;background:currentColor;-webkit-mask:var(--lm) center/contain no-repeat;mask:var(--lm) center/contain no-repeat}
+.logo-prev span{font-size:12px;opacity:.6}
+.check{display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer}
+.check input{width:16px;height:16px;accent-color:var(--fg)}
+@media(max-width:560px){.logo-prev{grid-template-columns:1fr}}
 
 /* listeler */
 .list{display:flex;flex-direction:column;gap:10px}
@@ -299,11 +310,10 @@ function appHTML(){
   +SECTIONS.map(function(s){return '<a href="#s-'+s[0]+'" data-s="'+s[0]+'"'+(section===s[0]?' class="on"':"")+'>'+s[1]+'</a>'}).join("")
   +'</nav><main>';
 
- o+='<section class="card" id="s-marka"><h2>Marka & logo</h2><p class="sub">Logo sol üstte görünür. Şeffaf arka planlı PNG/SVG en iyi sonucu verir.</p><div class="grid">'
+ o+='<section class="card" id="s-marka"><h2>Marka & logo</h2><p class="sub">Tek logo yükleyin; otomatik PNG\'ye çevrilir, düz arka planı kaldırılır ve açık/koyu temaya göre kendiliğinden uyum sağlar.</p><div class="grid">'
   +inp("Marka adı","brand")
   +'<div></div>'
-  +imgField("Logo (açık tema)","logo",{kind:"logo",wide:true,bg:"light",hint:"Açık zeminde görünecek logo."})
-  +imgField("Logo (koyu tema)","logoDark",{kind:"logo",wide:true,bg:"dark",hint:"Boş bırakılırsa açık tema logosu kullanılır."})
+  +logoField()
   +'</div></section>';
 
  o+='<section class="card" id="s-giris"><h2>Giriş bölümü</h2><p class="sub">Sayfanın ilk ekranı. Başlıkta yeni satır için Enter\'a basın; “vurgulu kısım” italik yazılır.</p><div class="grid">'
@@ -355,6 +365,31 @@ function appHTML(){
 
  o+='</main></div>';
  return o;
+}
+function logoSrc(){return S.logo||S.logoDark||""}
+function logoInvert(dark){
+ if(S.logoMode!=="auto"||!S.logoTone)return false;
+ return dark?S.logoTone==="dark":S.logoTone==="light";
+}
+function logoPrevItem(dark){
+ var v=logoSrc();
+ if(!v)return '<span>Logo yok — marka adı yazı olarak görünür</span>';
+ if(S.logoMode==="mono")return '<div class="mono" role="img" aria-label="Logo" style="--lm:url(\''+esc(v)+'\');aspect-ratio:'+(+S.logoRatio||3)+'"></div>';
+ return '<img src="'+esc(v)+'" alt="Logo"'+(logoInvert(dark)?' class="inv"':"")+'>';
+}
+function logoField(){
+ var v=logoSrc(), sz=Math.round(+S.logoSize||34), mode=S.logoMode||"auto";
+ return '<div class="f full"><label class="f">Logo</label>'
+  +'<div class="logo-prev" id="logoPrev" style="--lh:'+sz+'px"><div class="lp-light">'+logoPrevItem(false)+'</div><div class="lp-dark">'+logoPrevItem(true)+'</div></div>'
+  +'<div class="img-field" style="margin-top:10px">'
+  +'<button class="btn sm" type="button" data-up="logo" data-kind="logo">'+(v?"Değiştir":"Yükle")+'</button>'
+  +(v?'<button class="btn sm danger" type="button" data-clear="logo">Kaldır</button>':"")
+  +'<label class="check"><input type="checkbox" data-p="logoCutBg" data-bool="1"'+(S.logoCutBg!==false?" checked":"")+'> Düz arka planı otomatik kaldır</label>'
+  +'</div><span class="hint">JPG, PNG, WEBP veya SVG yükleyebilirsiniz; hepsi şeffaf PNG\'ye çevrilir. Arka plan kaldırma bir sonraki yüklemede uygulanır.</span></div>'
+  +'<label class="f full">Logo boyutu<div class="range"><input type="range" min="18" max="90" step="1" data-p="logoSize" data-num="1" data-unit="px" value="'+sz+'"><output>'+sz+' px</output></div></label>'
+  +'<div class="f full"><label class="f">Tema uyumu</label><div class="seg" data-seg="logoMode">'
+  +[["auto","Otomatik (temaya göre)"],["mono","Tek renk"],["original","Orijinal renkler"]].map(function(x){return '<button type="button" data-v="'+x[0]+'"'+(mode===x[0]?' class="on"':"")+'>'+x[1]+'</button>'}).join("")
+  +'</div><span class="hint">Otomatik: koyu logo koyu temada açığa, açık logo açık temada koyuya döner. Tek renk: logo yazı rengine boyanır.</span></div>';
 }
 function rangeF(label,path,min,max){
  var v=+getP(path);if(!isFinite(v))v=1;
@@ -425,7 +460,8 @@ function bindApp(){
   var el=e.target,p=el.dataset&&el.dataset.p;if(!p)return;
   var v=el.dataset.bool?el.checked:el.dataset.num?+el.value:el.value;
   setP(p,v);
-  if(el.type==="range"&&el.nextElementSibling)el.nextElementSibling.textContent=(+el.value).toFixed(2);
+  if(el.type==="range"&&el.nextElementSibling)el.nextElementSibling.textContent=el.dataset.unit?Math.round(+el.value)+" "+el.dataset.unit:(+el.value).toFixed(2);
+  if(p==="logoSize"){var lp=$("logoPrev");if(lp)lp.style.setProperty("--lh",Math.round(+el.value)+"px")}
   if(/^projects\.\d+\.(name|tag)$/.test(p)){
    var it=el.closest(".item"),t=it&&it.querySelector(".item-title");
    var pr=S.projects[+p.split(".")[1]];
@@ -457,7 +493,7 @@ function bindApp(){
    setP(t.parentElement.dataset.seg,t.dataset.v);rerender();return;
   }
   if(t.dataset.up){pickImage(t.dataset.up,t.dataset.kind);return}
-  if(t.dataset.clear){setP(t.dataset.clear,"");rerender();return}
+  if(t.dataset.clear){setP(t.dataset.clear,"");if(t.dataset.clear==="logo"){S.logoDark="";S.logoTone="";S.logoRatio=0}rerender();return}
   if(t.dataset.toggle!==undefined&&!e.target.closest(".drag")){openItem=openItem===t.dataset.toggle?null:t.dataset.toggle;rerender();return}
   if(t.dataset.s){section=t.dataset.s;document.querySelectorAll(".side a").forEach(function(a){a.classList.toggle("on",a===t)})}
  });
@@ -513,14 +549,67 @@ function pickImage(path,kind){
   if(file.size>15*1024*1024){toast("Dosya çok büyük (en fazla 15 MB).");return}
   toast("Yükleniyor...");
   try{
-   var out=await prepImage(file,kind);
+   var out=kind==="logo"?await prepLogo(file,S.logoCutBg!==false):await prepImage(file,kind);
    var name=(kind||"img")+"/"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8)+"."+out.ext;
    await sb("/storage/v1/object/site-media/"+name,{method:"POST",body:out.blob,headers:{"Content-Type":out.type,"x-upsert":"true","cache-control":"31536000"}});
    setP(path,SB_URL+"/storage/v1/object/public/site-media/"+name);
+   if(kind==="logo"&&path==="logo"){S.logoDark="";S.logoTone=out.tone;S.logoRatio=out.ratio}
    rerender();toast("✓ Görsel yüklendi — yayına almak için Kaydet'e basın.");
   }catch(er){toast("Yüklenemedi: "+er.message)}
  };
  f.click();
+}
+/* Logo: PNG'ye çevir, düz arka planı kaldır, boş kenarları kırp, açık/koyu tonunu hesapla */
+function prepLogo(file,cutBg){
+ return new Promise(function(res,rej){
+  var url=URL.createObjectURL(file),img=new Image();
+  img.onload=function(){
+   var nw=img.naturalWidth||1200,nh=img.naturalHeight||400;
+   var sc=Math.min(file.type==="image/svg+xml"?4:1,1200/Math.max(nw,nh));
+   var w=Math.max(1,Math.round(nw*sc)),h=Math.max(1,Math.round(nh*sc));
+   var c=document.createElement("canvas");c.width=w;c.height=h;
+   var x=c.getContext("2d",{willReadFrequently:true});x.imageSmoothingQuality="high";x.drawImage(img,0,0,w,h);
+   URL.revokeObjectURL(url);
+   var id=x.getImageData(0,0,w,h),d=id.data,i;
+   function px(px_,py_){var k=(py_*w+px_)*4;return[d[k],d[k+1],d[k+2],d[k+3]]}
+   if(cutBg){
+    var cs=[px(0,0),px(w-1,0),px(0,h-1),px(w-1,h-1)],bg=cs[0];
+    function dist(a,b){return Math.sqrt((a[0]-b[0])*(a[0]-b[0])+(a[1]-b[1])*(a[1]-b[1])+(a[2]-b[2])*(a[2]-b[2]))}
+    var flat=cs.every(function(q){return q[3]>250&&dist(q,bg)<36});
+    if(flat){
+     var lo=30,hi=80;
+     for(i=0;i<d.length;i+=4){
+      var e=dist([d[i],d[i+1],d[i+2]],bg);
+      if(e<=lo)d[i+3]=0;
+      else if(e<hi){
+       var a=(e-lo)/(hi-lo);
+       /* kenar yumuşatma: arka plan rengini renkten ayıkla */
+       for(var ch=0;ch<3;ch++)d[i+ch]=Math.max(0,Math.min(255,Math.round((d[i+ch]-bg[ch]*(1-a))/a)));
+       d[i+3]=Math.round(d[i+3]*a);
+      }
+     }
+    }
+   }
+   /* boş kenarları kırp + ton hesapla */
+   var x0=w,y0=h,x1=-1,y1=-1,lum=0,lw=0;
+   for(var yy=0;yy<h;yy++)for(var xx=0;xx<w;xx++){
+    i=(yy*w+xx)*4;var al=d[i+3];if(al<=10)continue;
+    if(xx<x0)x0=xx;if(xx>x1)x1=xx;if(yy<y0)y0=yy;if(yy>y1)y1=yy;
+    var wt=al/255;lum+=wt*(0.2126*d[i]+0.7152*d[i+1]+0.0722*d[i+2])/255;lw+=wt;
+   }
+   if(x1<0){rej(new Error("Logo tamamen boş görünüyor; arka plan kaldırmayı kapatıp tekrar deneyin."));return}
+   x.putImageData(id,0,0);
+   var pad=2;x0=Math.max(0,x0-pad);y0=Math.max(0,y0-pad);x1=Math.min(w-1,x1+pad);y1=Math.min(h-1,y1+pad);
+   var cw=x1-x0+1,ch_=y1-y0+1,o=document.createElement("canvas");o.width=cw;o.height=ch_;
+   o.getContext("2d").drawImage(c,x0,y0,cw,ch_,0,0,cw,ch_);
+   o.toBlob(function(b){
+    if(!b){rej(new Error("Logo işlenemedi"));return}
+    res({blob:b,type:"image/png",ext:"png",tone:(function(L){return L<0.4?"dark":L>0.68?"light":"mid"})(lw?lum/lw:0),ratio:Math.round(cw/ch_*1000)/1000});
+   },"image/png");
+  };
+  img.onerror=function(){URL.revokeObjectURL(url);rej(new Error("Görsel açılamadı"))};
+  img.src=url;
+ });
 }
 function prepImage(file,kind){
  return new Promise(function(res,rej){

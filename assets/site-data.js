@@ -7,7 +7,12 @@ window.ND_SB_KEY = "sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
 window.ND_DEFAULT = {
   brand: "NearDiji",
   logo: "",
-  logoDark: "",
+  logoDark: "",                    /* eski kayıtlar için; panel artık tek logo kullanır */
+  logoSize: 34,                    /* masaüstü logo yüksekliği (px) */
+  logoMode: "auto",                /* auto: temaya göre tersine çevir | mono: yazı renginde | original */
+  logoTone: "",                    /* yüklemede hesaplanır: dark | light */
+  logoRatio: 0,                    /* genişlik / yükseklik */
+  logoCutBg: true,                 /* yüklemede düz arka planı kaldır */
   theme: "dark",
   seo: {
     title: "NearDiji — İşletmeler için dijital ürünler",
