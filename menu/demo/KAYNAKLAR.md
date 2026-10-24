@@ -1,0 +1,58 @@
+# Demo menü görselleri
+
+Tüm dosyalar CC0 / kamu malı lisanslıdır (atıf gerekmez). Kaynak: Openverse (Wikimedia Commons, Flickr).
+
+- `kahvalti-tabagi.webp` — Breakfast Food — CC0 — https://stocksnap.io/photo/breakfast-food-OC8WX0E0X3
+- `menemen.webp` — Free pouched egg spicy tomato — CC0 — https://www.rawpixel.com/image/5924130/photo-image-public-domain-food-free
+- `sucuklu-yumurta.webp` — Middle eastern Shakshuka cast iron — CC0 — https://www.rawpixel.com/image/3282863/free-photo-image-food-bread-bowl
+- `kasarli-omlet.webp` — Egg Omelette — PDM — https://www.flickr.com/photos/25802865@N08/55389785644
+- `sahanda-yumurta.webp` — Free egg fries pan babies — CC0 — https://www.rawpixel.com/image/5904734/photo-image-flower-public-domain-food
+- `sucuklu-pizza.webp` — Pepperoni pizza cooked in a wood fire brick oven. — CC0 — https://wordpress.org/photos/photo/914636e748/
+- `tavuklu-pizza.webp` — Chicken and artichoke thin crust pizza — CC0 — https://wordpress.org/photos/photo/904620ed51/
+- `ton-balikli-pizza.webp` — Pizza Cheese — CC0 — https://stocksnap.io/photo/pizza-cheese-9IKVHJPX82
+- `tavuk-burger.webp` — Fried chicken sandwich — CC0 — https://www.flickr.com/photos/7633518@N08/54606742037
+- `izgara-kofte.webp` — White appetizer plate full meatball — CC0 — https://www.rawpixel.com/image/11524468/photo-image-public-domain-plate-white
+- `lokum-et.webp` — Raw meat — CC0 — https://www.rawpixel.com/image/6038907/raw-meat-free-public-domain-cc0-photo
+- `et-sis.webp` — None — CC0 — https://www.rawpixel.com/image/6057152/free-public-domain-cc0-photo
+- `karisik-izgara.webp` — Beef Kebabs — CC0 — https://www.rawpixel.com/image/5969998/beef-kebabs
+- `et-sote.webp` — Free beef stew image — CC0 — https://www.rawpixel.com/image/5908873/image-light-public-domain-green
+- `tavuk-sis.webp` — Free barbecue skewers image — CC0 — https://www.rawpixel.com/image/5912813/image-light-public-domain-green
+- `tavuk-sote.webp` — Stir fry vegetables chicken breast — CC0 — https://www.rawpixel.com/image/8733808/photo-image-public-domain-food
+- `citir-tavuk.webp` — Fried Chicken — CC0 — https://stocksnap.io/photo/fried-chicken-VYTEWBJEXM
+- `kremali-tavuk.webp` — Pipian mole with chicken — CC0 — https://www.flickr.com/photos/7633518@N08/54351490084
+- `tavuk-fajita.webp` — Steak fajitas — CC0 — https://www.flickr.com/photos/7633518@N08/54017578756
+- `fettuccine-alfredo.webp` — Chicken Alfredo — CC0 — https://www.flickr.com/photos/7633518@N08/55009089138
+- `spaghetti-bolognese.webp` — Spaghetti — PDM — https://www.flickr.com/photos/25802865@N08/55315013693
+- `kremali-mantarli-makarna.webp` — Project 365 #89: 300315 Just A Fun Guy — PDM — https://www.flickr.com/photos/23408922@N07/16775728537
+- `pesto-soslu-makarna.webp` — Free pasta image — CC0 — https://www.rawpixel.com/image/5916890/free-pasta-image-public-domain-food-cc0-photo
+- `tavuklu-penne.webp` — Pasta Tomato — CC0 — https://stocksnap.io/photo/pasta-tomato-PF8WHPHNGH
+- `kasarli-gozleme.webp` — Chicken quesadilla — CC0 — https://www.flickr.com/photos/7633518@N08/54276816730
+- `ispanakli-gozleme.webp` — Quesadilla Times Two — CC0 — https://www.flickr.com/photos/37996646802@N01/52105543862
+- `sucuklu-kasarli-gozleme.webp` — 2025 053/365 Lemon Crepes — CC0 — https://www.flickr.com/photos/96218136@N08/54345977388
+- `sucuklu-tost.webp` — Grilled Cheese Sandwich — CC0 — https://www.rawpixel.com/image/5967139/grilled-cheese-sandwich
+- `ayvalik-tostu.webp` — Sandwich Toasted — CC0 — https://stocksnap.io/photo/sandwich-toasted-D7F9292D60
+- `kavurmali-tost.webp` — Italian Ciabatta Panini sandwich — CC0 — https://www.flickr.com/photos/192268789@N06/51336269933
+- `beyaz-peynirli-tost.webp` — BLT sandwich table American deli — CC0 — https://www.rawpixel.com/image/3305390/free-photo-image-food-restaurant-blt-sandwich
+- `coca-cola.webp` — Coca Cola tin can soft — CC0 — https://www.rawpixel.com/image/6113602/photo-image-public-domain-glass-free
+- `coca-cola-zero.webp` — Free pouring cola dining table — CC0 — https://www.rawpixel.com/image/5915384/image-public-domain-person-glass
+- `fanta.webp` — Coke, Sprint, Fanta cans, soda — CC0 — https://www.rawpixel.com/image/6113727/photo-image-public-domain-plant-green
+- `sprite.webp` — Soda tin cans, Fanta, Sprite — CC0 — https://www.rawpixel.com/image/6112370/photo-image-public-domain-free
+- `ev-yapimi-limonata.webp` — Lemonade — CC0 — https://www.flickr.com/photos/7633518@N08/54810374271
+- `taze-portakal-suyu.webp` — Free orange juice image — CC0 — https://www.rawpixel.com/image/5913187/image-background-public-domain-fruit
+- `ayran.webp` — A hand holding a glass of creamy white beverage with a straw, set against a softly lit interior with a wooden blinds background. — CC0 — https://wordpress.org/photos/photo/3486a4a6ea/
+- `su.webp` — Free water glass white background — CC0 — https://www.rawpixel.com/image/5921099/photo-image-background-public-domain-wood
+- `iced-americano.webp` — Cold coffee americano on rocks — CC0 — https://www.rawpixel.com/image/5974765/cold-coffee-americano-rocks
+- `iced-mocha.webp` — Still Items — CC0 — https://stocksnap.io/photo/still-items-8TRDBDNVUQ
+- `vanilla-iced-latte.webp` — Free iced coffee steel straw — CC0 — https://www.rawpixel.com/image/5927750/photo-image-public-domain-wooden-coffee
+- `cold-brew.webp` — Macro view iced coffee cup — CC0 — https://www.rawpixel.com/image/3298476/free-photo-image-cold-coffee-sweet-tea-accessory
+- `iced-spanish-latte.webp` — Free pouring milk ice coffee — CC0 — https://www.rawpixel.com/image/5928100/photo-image-background-public-domain-glass
+- `red-bull-energy-drink-250-ml.webp` — Sparkling red bull tin can — CC0 — https://www.rawpixel.com/image/6111541/photo-image-public-domain-blue-fashion
+- `cay.webp` — Free hot tea glass cup — CC0 — https://www.rawpixel.com/image/5911919/image-public-domain-black-glass
+- `fincan-cay.webp` — Free warm cup herbal tea — CC0 — https://www.rawpixel.com/image/5923477/photo-image-public-domain-leaf-glass
+- `demlik-cay.webp` — Tea glass tea pot — CC0 — https://www.rawpixel.com/image/6040759/photo-image-public-domain-black-background-glass
+- `ada-cayi.webp` — Herbal Tea — CC0 — https://www.rawpixel.com/image/5968441/herbal-tea
+- `ihlamur.webp` — Free herbal tea floral teacup — CC0 — https://www.rawpixel.com/image/5910371/image-public-domain-floral-free
+- `yesil-cay.webp` — Free herbal tea mint leaves — CC0 — https://www.rawpixel.com/image/5907554/image-public-domain-leaves-free
+- `kis-cayi.webp` — Tea Lemon — CC0 — https://stocksnap.io/photo/tea-lemon-3B4B5808A1
+- `canli-muzik-gecesi.webp` — Great jazz band — CC0 — https://www.flickr.com/photos/7633518@N08/54247092846
+- `pazar-brunch.webp` — People eating huevos rancheros, waffles — CC0 — https://www.rawpixel.com/image/3282913/free-photo-image-cafeteria-restaurant-brunch

@@ -5,19 +5,22 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https://rfwgjzkewtjpdcvrhepg.supabase.co https://translate.googleapis.com https://api.mymemory.translated.net https://open.er-api.com https://api.frankfurter.app https://api.frankfurter.dev; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171719">
+<meta name="theme-color" content="#111110">
 <meta name="description" content="Dijital QR menü — ürünler, fiyatlar ve etkinlikler.">
 <meta property="og:title" content="Dijital Menü">
 <meta property="og:description" content="Menümüzü inceleyin: ürünler, fiyatlar ve etkinlikler.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23171719' stroke='%23d6a83d' stroke-width='3'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23d6a83d'%3EN%3C/text%3E%3C/svg%3E">
 <title>NearMenu Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
 
 <style>
 *{box-sizing:border-box}
 html,body{
  margin:0;padding:0;min-height:100%;
- background:#171719;color:#fff;
+ background:#111110;color:#fff;
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif
 }
 body{min-height:100vh;overflow-x:hidden;font-size:13px}
@@ -26,21 +29,25 @@ button{cursor:pointer}
 a{text-decoration:none;color:inherit}
 
 :root{
+ /* NearDiji paleti — ana siteyle aynı */
+ --pBg:#0F0F0E;--pBar:rgba(15,15,14,.94);--pSurface:#1A1A19;--pSurface2:#232321;--pField:#151514;
+ --pLine:rgba(241,239,234,.09);--pLine2:rgba(241,239,234,.16);--pText:#F1EFEA;--pText2:#D3D0C9;--pMuted:#8D8B86;
+ --pOverlay:rgba(0,0,0,.8);--onAccent:#111110;
  --accent:#d6a83d;
  --accent2:#f0c45a;
  --text:#fff;
- --muted:#929296;
+ --muted:#8D8B86;
  --price:#f0c45a;
- --card:#151517;
- --line:#29292d;
+ --card:#1A1A19;
+ --line:#2A2A28;
  --overlay:.55;
  --cardOpacity:.94;
  --cardRadius:20px;
  --titleSize:34px;
  --bodySize:13px;
  --logoSize:112px;
- --fontFamily:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
- --titleFont:Georgia,serif
+ --fontFamily:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+ --titleFont:"Instrument Serif",Georgia,serif
 }
 
 body{
@@ -48,11 +55,11 @@ body{
  color:var(--text);
  font-size:var(--bodySize)
 }
-html{scroll-behavior:smooth;background:#171719}
+html{scroll-behavior:smooth;background:#111110}
 
 .background{
  position:fixed;inset:0;width:100%;height:100%;
- z-index:0;overflow:hidden;background:#171719;
+ z-index:0;overflow:hidden;background:#111110;
  pointer-events:none
 }
 .background img,.background video{
@@ -141,7 +148,7 @@ button:active{transform:scale(.97)}
  height:43px;min-width:49px;padding:0 15px;
  border:1px solid rgba(255,255,255,.07);
  border-radius:23px;background:var(--accent);
- color:#111;font-weight:950
+ color:var(--onAccent);font-weight:950
 }
 .languageBtn{font-size:10px;font-weight:900}
 
@@ -176,7 +183,7 @@ button:active{transform:scale(.97)}
 }
 .quickPopup button:hover,
 .quickPopup button.active{
- background:var(--accent);color:#111
+ background:var(--accent);color:var(--onAccent)
 }
 
 .hero{
@@ -251,7 +258,7 @@ button:active{transform:scale(.97)}
  position:relative;flex:0 0 88%;
  padding:0;border:1px solid rgba(255,255,255,.09);
  border-radius:24px;overflow:hidden;
- background:#171719;scroll-snap-align:start;
+ background:#111110;scroll-snap-align:start;
  color:#fff;
  box-shadow:
  0 20px 60px rgba(0,0,0,.38),
@@ -307,7 +314,7 @@ button:active{transform:scale(.97)}
  position:relative;height:180px;padding:0;
  border:1px solid rgba(255,255,255,.09);
  border-radius:22px;overflow:hidden;
- background:#171719;color:#fff;
+ background:#111110;color:#fff;
  box-shadow:
  0 16px 45px rgba(0,0,0,.28),
  inset 0 0 0 1px rgba(255,255,255,.02)
@@ -486,7 +493,7 @@ button:active{transform:scale(.97)}
 
 .adminOverlay{
  position:fixed;inset:0;z-index:250;
- background:rgba(0,0,0,.84);
+ background:var(--pOverlay);
  display:flex;justify-content:flex-end
 }
 .admin{
@@ -494,14 +501,14 @@ button:active{transform:scale(.97)}
  overflow-y:auto;overflow-x:hidden;
  overscroll-behavior:contain;
  -webkit-overflow-scrolling:touch;
- background:#0b0b0d;
+ background:var(--pBg);
  animation:adminIn .28s cubic-bezier(.2,.8,.2,1)
 }
 .adminHeader{
  position:sticky;top:0;z-index:50;
  padding:18px 20px 14px;
- background:rgba(11,11,13,.94);
- border-bottom:1px solid rgba(255,255,255,.07);
+ background:var(--pBar);
+ border-bottom:1px solid var(--pLine);
  backdrop-filter:blur(24px)
 }
 .adminTop{
@@ -512,13 +519,13 @@ button:active{transform:scale(.97)}
 .adminTitleIcon{
  width:44px;height:44px;border-radius:13px;
  background:linear-gradient(135deg,var(--accent),var(--accent2));
- color:#111;display:flex;
+ color:var(--onAccent);display:flex;
  align-items:center;justify-content:center;
  font-size:19px;font-weight:1000
 }
 .adminTitleText b{display:block;font-size:15px}
 .adminTitleText span{
- display:block;margin-top:3px;color:#666;
+ display:block;margin-top:3px;color:var(--pMuted);
  font-size:9px;text-transform:uppercase;
  letter-spacing:.12em
 }
@@ -528,20 +535,20 @@ button:active{transform:scale(.97)}
 }
 .adminTabs button{
  padding:12px 4px;
- border:1px solid rgba(255,255,255,.06);
- border-radius:12px;background:#151518;
- color:#777;font-size:11px;font-weight:850
+ border:1px solid var(--pLine);
+ border-radius:12px;background:var(--pSurface);
+ color:var(--pMuted);font-size:11px;font-weight:850
 }
 .adminTabs button.active{
- background:rgba(214,168,61,.15);
- border-color:rgba(214,168,61,.35);
+ background:color-mix(in srgb,var(--accent) 15%,transparent);
+ border-color:color-mix(in srgb,var(--accent) 35%,transparent);
  color:var(--accent2)
 }
 .adminBody{padding:20px;padding-bottom:100px}
 .adminSectionHeader{margin:4px 0 15px}
 .adminSectionHeader h2{margin:0;font-size:24px}
 .adminSectionHeader p{
- margin:5px 0 0;color:#666;font-size:10px
+ margin:5px 0 0;color:var(--pMuted);font-size:10px
 }
 .statsGrid{
  display:grid;grid-template-columns:repeat(2,1fr);
@@ -549,7 +556,7 @@ button:active{transform:scale(.97)}
 }
 .statCard{
  padding:15px;min-height:105px;
- border:1px solid rgba(255,255,255,.07);
+ border:1px solid var(--pLine);
  border-radius:17px;
  background:linear-gradient(
  145deg,rgba(255,255,255,.045),
@@ -560,20 +567,20 @@ button:active{transform:scale(.97)}
  width:34px;height:34px;border-radius:10px;
  display:flex;align-items:center;
  justify-content:center;
- background:rgba(214,168,61,.11);
+ background:color-mix(in srgb,var(--accent) 11%,transparent);
  color:var(--accent2);margin-bottom:12px
 }
 .statLabel{
- color:#666;font-size:9px;text-transform:uppercase
+ color:var(--pMuted);font-size:9px;text-transform:uppercase
 }
 .statValue{
  margin-top:5px;font-size:24px;font-weight:950
 }
-.statSub{margin-top:3px;color:#777;font-size:9px}
+.statSub{margin-top:3px;color:var(--pMuted);font-size:9px}
 
 .adminCard{
  padding:17px;margin-bottom:12px;
- border:1px solid rgba(255,255,255,.07);
+ border:1px solid var(--pLine);
  border-radius:17px;
  background:linear-gradient(
  145deg,rgba(255,255,255,.035),
@@ -582,33 +589,33 @@ button:active{transform:scale(.97)}
 }
 .adminCardTitle{font-size:15px;font-weight:900}
 .adminCardDescription{
- margin-top:4px;color:#666;
+ margin-top:4px;color:var(--pMuted);
  font-size:10px;line-height:1.5
 }
 .field{margin-top:13px}
 .field label{
  display:block;margin-bottom:6px;
- color:#777;font-size:10px;font-weight:700
+ color:var(--pMuted);font-size:10px;font-weight:700
 }
 .field input,.field textarea,.field select{
  width:100%;padding:13px;
- border:1px solid #303034;border-radius:11px;
- background:#141416;color:#fff;outline:none
+ border:1px solid var(--pLine2);border-radius:11px;
+ background:var(--pField);color:var(--pText);outline:none
 }
 .field textarea{min-height:88px;resize:vertical}
 .row{display:flex;gap:9px}
 .row>*{flex:1;min-width:0}
 
 .adminButton{
- min-height:42px;border:1px solid rgba(255,255,255,.07);
+ min-height:42px;border:1px solid var(--pLine);
  border-radius:11px;padding:10px 14px;
- background:#1b1b1e;color:#fff;
+ background:var(--pField);color:var(--pText);
  font-size:11px;font-weight:850
 }
 .adminButton.gold{
  border-color:transparent;
  background:linear-gradient(135deg,var(--accent),var(--accent2));
- color:#111
+ color:var(--onAccent)
 }
 .adminButton.danger{
  background:#3a1719;color:#ff9a9a;
@@ -622,21 +629,21 @@ button:active{transform:scale(.97)}
 }
 .quickAction{
  display:flex;align-items:center;gap:11px;
- padding:13px;border:1px solid rgba(255,255,255,.07);
- border-radius:14px;background:#151517;
- color:#ddd;text-align:left
+ padding:13px;border:1px solid var(--pLine);
+ border-radius:14px;background:var(--pSurface);
+ color:var(--pText2);text-align:left
 }
 .quickActionIcon{
  width:34px;height:34px;border-radius:10px;
  display:flex;align-items:center;
  justify-content:center;
- background:rgba(214,168,61,.08);
+ background:color-mix(in srgb,var(--accent) 8%,transparent);
  color:var(--accent2)
 }
 
 .adminBreadcrumb{
  display:flex;align-items:center;gap:8px;
- margin-bottom:15px;color:#666;font-size:10px
+ margin-bottom:15px;color:var(--pMuted);font-size:10px
 }
 .adminBreadcrumb button{
  border:0;background:transparent;color:var(--accent2)
@@ -647,13 +654,13 @@ button:active{transform:scale(.97)}
 .adminCategoryItem,.adminProductItem{
  display:flex;align-items:center;gap:12px;
  padding:12px;width:100%;
- border:1px solid rgba(255,255,255,.07);
- border-radius:15px;background:#141416;
- color:#fff;text-align:left
+ border:1px solid var(--pLine);
+ border-radius:15px;background:var(--pField);
+ color:var(--pText);text-align:left
 }
 .adminCategoryThumb,.adminProductThumb{
  width:58px;height:58px;flex:0 0 58px;
- border-radius:12px;overflow:hidden;background:#202023
+ border-radius:12px;overflow:hidden;background:var(--pSurface2)
 }
 .adminCategoryThumb img,.adminProductThumb img{
  width:100%;height:100%;object-fit:cover
@@ -666,50 +673,51 @@ button:active{transform:scale(.97)}
  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
 }
 .adminCategoryInfo span,.adminProductInfo span{
- display:block;margin-top:4px;color:#666;font-size:9px
+ display:block;margin-top:4px;color:var(--pMuted);font-size:9px
 }
 .adminProductInfo span{color:var(--accent2)}
 .adminArrow{
  width:28px;height:28px;border-radius:9px;
  display:flex;align-items:center;
  justify-content:center;
- background:#1e1e21;color:#777;font-size:17px
+ background:var(--pSurface2);color:var(--pMuted);font-size:17px
 }
 .fileBox{display:flex;gap:7px}
 .fileBtn{
  display:inline-flex;align-items:center;
  justify-content:center;gap:5px;flex:1;
  min-height:42px;padding:10px;
- border:1px solid #303034;border-radius:10px;
- background:#171719;color:#ddd;
+ border:1px solid var(--pLine2);border-radius:10px;
+ background:var(--pField);color:var(--pText2);
  font-size:10px;font-weight:800;cursor:pointer
 }
 .preview{
  width:100%;max-height:200px;object-fit:cover;
  border-radius:12px;margin-top:9px;
- border:1px solid #303034
+ border:1px solid var(--pLine2)
 }
 .designGrid{
  display:grid;grid-template-columns:1fr 1fr;gap:9px
 }
 .designCard{
  padding:13px;border-radius:13px;
- background:#151517;
- border:1px solid rgba(255,255,255,.06)
+ background:var(--pSurface);
+ border:1px solid var(--pLine)
 }
 .designCard h4{
- margin:0 0 10px;font-size:10px;color:#bbb
+ margin:0 0 10px;font-size:10px;color:var(--pText2)
 }
 .colorInput{
  width:100%;height:43px;padding:3px;
- border:1px solid #303034;
- border-radius:10px;background:#171719
+ border:1px solid var(--pLine2);
+ border-radius:10px;background:var(--pField)
 }
 .presetRow{display:flex;flex-wrap:wrap;gap:8px}
 .preset{
  width:38px;height:38px;border-radius:11px;
  border:2px solid transparent
 }
+.preset.neardiji{background:linear-gradient(135deg,#151514 0 50%,#F1EFEA 50% 100%)!important}
 .preset.active{
  border-color:#fff;
  box-shadow:0 0 0 2px var(--accent)
@@ -724,9 +732,9 @@ button:active{transform:scale(.97)}
  display:flex;align-items:center;
  justify-content:space-between;
  padding:12px;margin:7px 0;
- border:1px solid rgba(255,255,255,.06);
- border-radius:11px;background:#161618;
- color:#ddd;font-size:11px
+ border:1px solid var(--pLine);
+ border-radius:11px;background:var(--pSurface);
+ color:var(--pText2);font-size:11px
 }
 .toggle input{
  width:18px;height:18px;
@@ -734,10 +742,10 @@ button:active{transform:scale(.97)}
 }
 .simpleProductHero{
  padding:16px;margin-bottom:12px;
- border:1px solid rgba(214,168,61,.18);
+ border:1px solid color-mix(in srgb,var(--accent) 18%,transparent);
  border-radius:16px;
  background:linear-gradient(
- 135deg,rgba(214,168,61,.10),
+ 135deg,color-mix(in srgb,var(--accent) 10%,transparent),
  rgba(255,255,255,.015)
  )
 }
@@ -745,20 +753,20 @@ button:active{transform:scale(.97)}
  display:block;font-size:16px
 }
 .simpleProductHero span{
- display:block;margin-top:5px;color:#777;
+ display:block;margin-top:5px;color:var(--pMuted);
  font-size:10px;line-height:1.5
 }
 .advancedButton{
  width:100%;padding:13px;
- border:1px solid #303034;border-radius:11px;
- background:#18181a;color:#ddd;
+ border:1px solid var(--pLine2);border-radius:11px;
+ background:var(--pField);color:var(--pText2);
  font-size:11px;font-weight:850
 }
 .saveBar{
  position:sticky;bottom:0;z-index:60;
  padding:12px 20px;
- background:rgba(11,11,13,.95);
- border-top:1px solid rgba(255,255,255,.07);
+ background:var(--pBar);
+ border-top:1px solid var(--pLine);
  backdrop-filter:blur(20px)
 }
 .saveBar button{width:100%;min-height:47px}
@@ -767,13 +775,13 @@ button:active{transform:scale(.97)}
  position:fixed;inset:0;z-index:500;
  display:flex;align-items:center;
  justify-content:center;padding:20px;
- background:rgba(0,0,0,.93);
+ background:var(--pOverlay);
  backdrop-filter:blur(14px)
 }
 .adminLogin{
  width:min(100%,390px);padding:27px;
- border:1px solid rgba(255,255,255,.1);
- border-radius:23px;background:#111113;
+ border:1px solid var(--pLine);
+ border-radius:23px;background:var(--pBg);
  box-shadow:0 30px 90px #000
 }
 .adminLoginLogo{
@@ -787,46 +795,64 @@ button:active{transform:scale(.97)}
 .adminLogin h2{margin:0;text-align:center;font-size:22px}
 .adminLogin p{
  margin:7px 0 21px;text-align:center;
- color:#777;font-size:10px
+ color:var(--pMuted);font-size:10px
 }
 .adminPassword{
  width:100%;padding:15px;
- border:1px solid #303034;border-radius:12px;
- background:#18181a;color:#fff;outline:none;
+ border:1px solid var(--pLine2);border-radius:12px;
+ background:var(--pField);color:var(--pText);outline:none;
  text-align:center;letter-spacing:.18em
 }
 .adminLoginButton{
  width:100%;margin-top:10px;padding:14px;
  border:0;border-radius:12px;
  background:linear-gradient(135deg,var(--accent),var(--accent2));
- color:#111;font-weight:950
+ color:var(--onAccent);font-weight:950
 }
 .loginError{
  display:none;margin-top:10px;padding:9px;
  border-radius:9px;background:#3a1717;
  color:#ff8d8d;text-align:center;font-size:10px
 }
-.empty{padding:30px 10px;text-align:center;color:#666}
+.empty{padding:30px 10px;text-align:center;color:var(--pMuted)}
 .footer{
  margin-top:20px;padding:35px 0 45px;
- text-align:center;color:#555;font-size:10px
+ text-align:center;color:var(--pMuted);font-size:10px
 }
-.help{margin-top:8px;color:#666;font-size:9px}
+.help{margin-top:8px;color:var(--pMuted);font-size:9px}
 
 /* =========================================================
    AÇIK MOD (müşteri menüsü). Paneller koyu kalır.
 ========================================================= */
-html[data-mode="light"]{color-scheme:light;background:#f5f2ec}
-html[data-mode="light"] body{background:#f5f2ec}
-html[data-mode="light"] .background{background-color:#f5f2ec!important}
+html[data-mode="light"]{color-scheme:light;background:#EBE9E5;
+ --pBg:#EBE9E5;--pBar:rgba(235,233,229,.94);--pSurface:#F5F3EF;--pSurface2:#E2DFDA;--pField:#FFFFFF;
+ --pLine:rgba(21,21,20,.09);--pLine2:rgba(21,21,20,.16);--pText:#151514;--pText2:#3A3935;--pMuted:#6E6C67;
+ --pOverlay:rgba(20,19,18,.42)}
+html[data-mode="light"] .adminLoginOverlay,html[data-mode="light"] .lg-container{
+ --login-box-color:#F5F3EF;--input-color:#E7E4DF;--button-color:#151514;--footer-color:rgba(21,21,20,.58)}
+html[data-mode="light"] .lg-box{box-shadow:0 20px 50px -20px rgba(0,0,0,.25),0 0 0 1px rgba(21,21,20,.08)}
+html[data-mode="light"] .lg-box::before{background:conic-gradient(from 45deg,transparent 75%,#151514,transparent 100%)}
+html[data-mode="light"] .lg-form{box-shadow:inset 0 40px 60px -8px rgba(255,255,255,.6)}
+html[data-mode="light"] .lg-logo{border-color:#151514;background:linear-gradient(135deg,rgba(255,255,255,.7),rgba(0,0,0,.05));box-shadow:none}
+html[data-mode="light"] .lg-logo svg,html[data-mode="light"] .lg-logo *{border-color:#151514;stroke:#151514}
+html[data-mode="light"] .lg-header{color:#151514}
+html[data-mode="light"] .lg-input{color:#151514}
+html[data-mode="light"] .lg-input::placeholder{color:rgba(21,21,20,.45)}
+html[data-mode="light"] .lg-input:focus{border-color:#151514}
+html[data-mode="light"] .lg-button{color:#F1EFEA;box-shadow:none}
+html[data-mode="light"] .lg-button:hover{background:#2a2a28}
+html[data-mode="light"] .lg-link:hover,html[data-mode="light"] .lg-link:focus-visible{color:#151514}
+html[data-mode="light"] .lg-close{background:rgba(21,21,20,.07);color:#3A3935}
+html[data-mode="light"] body{background:#EBE9E5}
+html[data-mode="light"] .background{background-color:#EBE9E5!important}
 html[data-mode="light"] .backgroundOverlay{background:rgba(245,242,236,calc(var(--overlay) + .25))}
 
 html[data-mode="light"] .iconBtn{
- background:rgba(255,255,255,.92);border-color:rgba(0,0,0,.08);color:#1b1a17;
+ background:rgba(255,255,255,.92);border-color:rgba(0,0,0,.08);color:#151514;
  box-shadow:0 4px 14px rgba(0,0,0,.06)
 }
-html[data-mode="light"] .iconBtn:hover{background:#efeae2;border-color:rgba(0,0,0,.14)}
-html[data-mode="light"] .searchBox input{background:#fff;color:#1b1a17;border-color:rgba(0,0,0,.1)}
+html[data-mode="light"] .iconBtn:hover{background:#E2DFDA;border-color:rgba(0,0,0,.14)}
+html[data-mode="light"] .searchBox input{background:#F5F3EF;color:#151514;border-color:rgba(0,0,0,.1)}
 html[data-mode="light"] .searchBox input::placeholder{color:#9a958c}
 html[data-mode="light"] .quickPopup{
  background:rgba(255,255,255,.98);border-color:rgba(0,0,0,.08);
@@ -841,7 +867,7 @@ html[data-mode="light"] .logo{
  color:var(--accentInk);
  box-shadow:0 0 0 7px rgba(0,0,0,.025),0 12px 40px rgba(0,0,0,.08)
 }
-html[data-mode="light"] .heroContactBtn{background:#fff;color:var(--accentInk);border-color:rgba(0,0,0,.1)}
+html[data-mode="light"] .heroContactBtn{background:#F5F3EF;color:var(--accentInk);border-color:rgba(0,0,0,.1)}
 html[data-mode="light"] .welcome{color:var(--accentInk)}
 html[data-mode="light"] .hint,
 html[data-mode="light"] .empty,
@@ -853,10 +879,14 @@ html[data-mode="light"] .category{
  background:#e9e4dc;border-color:rgba(0,0,0,.06);
  box-shadow:0 12px 30px rgba(0,0,0,.1)
 }
-html[data-mode="light"] .featureText span{color:var(--accent2)}
+/* görsel üstündeki fiyat ve tarih: koyu katman üzerinde her modda okunur */
+html[data-mode] .featureText span{color:var(--overPrice,var(--price))}
+html[data-mode] .eventDate{color:var(--overPrice,var(--accent2))}
+html[data-mode="light"] .syncStatus:not(.saving):not(.error){background:rgba(46,125,50,.12);color:#2e7d32!important}
+html[data-mode="light"] .syncStatus.error{color:#c62828!important}
 
 html[data-mode="light"] .categoryTitle{border-bottom-color:rgba(0,0,0,.08)}
-html[data-mode="light"] .backBtn{background:#fff;color:#1b1a17;border-color:rgba(0,0,0,.1)}
+html[data-mode="light"] .backBtn{background:#F5F3EF;color:#151514;border-color:rgba(0,0,0,.1)}
 
 html[data-mode="light"] .product{
  background:linear-gradient(145deg,rgba(255,255,255,var(--cardOpacity)),rgba(250,248,244,var(--cardOpacity)));
@@ -864,27 +894,27 @@ html[data-mode="light"] .product{
  box-shadow:0 10px 28px rgba(0,0,0,.06)
 }
 html[data-mode="light"] .product:hover{border-color:rgba(0,0,0,.14)}
-html[data-mode="light"] .productImage{background:#ece7df}
+html[data-mode="light"] .productImage{background:#E2DFDA}
 html[data-mode="light"] .productInfo p{color:#77736b}
-html[data-mode="light"] .tag{background:#f1ece4;color:#6d6a63;border-color:rgba(0,0,0,.04)}
+html[data-mode="light"] .tag{background:#E4E1DC;color:#6E6C67;border-color:rgba(0,0,0,.04)}
 html[data-mode="light"] .tag.sold{background:#b91c1c;color:#fff}
 
 html[data-mode="light"] .modalOverlay{background:rgba(20,18,15,.45)}
-html[data-mode="light"] .modal{background:#fff;box-shadow:0 -15px 60px rgba(0,0,0,.18)}
-html[data-mode="light"] .modalImage{background:#ece7df}
-html[data-mode="light"] .modalBody p{color:#6d6a63}
-html[data-mode="light"] .infoRow{border-bottom-color:#ece7df}
-html[data-mode="light"] .modal .adminButton:not(.gold){background:#f1ece4;color:#1b1a17;border-color:rgba(0,0,0,.08)}
+html[data-mode="light"] .modal{background:#F5F3EF;box-shadow:0 -15px 60px rgba(0,0,0,.18)}
+html[data-mode="light"] .modalImage{background:#E2DFDA}
+html[data-mode="light"] .modalBody p{color:#6E6C67}
+html[data-mode="light"] .infoRow{border-bottom-color:#E2DFDA}
+html[data-mode="light"] .modal .adminButton:not(.gold){background:#E4E1DC;color:#151514;border-color:rgba(0,0,0,.08)}
 
-html[data-mode="light"] .cloudState{color:#6d6a63}
-html[data-mode="light"] .cloudState h2{color:#1b1a17}
+html[data-mode="light"] .cloudState{color:#6E6C67}
+html[data-mode="light"] .cloudState h2{color:#151514}
 html[data-mode="light"] .cloudSpinner{border-color:rgba(0,0,0,.1);border-top-color:var(--accent)}
 html[data-mode="light"] .orbital-loader{filter:invert(1) hue-rotate(180deg) brightness(.6)}
 
-/* Paneller her iki modda koyu */
+/* Paneller: sitenin paletini izler (açık / koyu) */
 .adminOverlay,.adminLoginOverlay{
- --text:#fff;--cardText:#fff;--muted:#929296;--price:#f0c45a;
- color:#fff;color-scheme:dark
+ --text:var(--pText);--cardText:var(--pText);--muted:var(--pMuted);--price:var(--accentInk);
+ color:var(--pText)
 }
 
 /* ---------- Tema düğmesi (Magic UI Animated Theme Toggler, kare) ---------- */
@@ -919,7 +949,7 @@ html[data-mode="light"] .themeToggle .icoMoon{opacity:0;transform:rotate(90deg) 
 .adminLogin{position:relative}
 .loginClose{
  position:absolute;top:10px;right:10px;width:34px;height:34px;
- border:0;border-radius:50%;background:#1d1d20;color:#aaa;font-size:18px
+ border:0;border-radius:50%;background:#1d1d20;color:var(--pText2);font-size:18px
 }
 .loginLink{
  display:block;margin:12px auto 0;border:0;background:transparent;
@@ -931,7 +961,7 @@ html[data-mode="light"] .themeToggle .icoMoon{opacity:0;transform:rotate(90deg) 
  font-size:9px!important;letter-spacing:.04em!important;text-transform:none!important;
  background:rgba(67,160,71,.15);color:#7bd88f!important
 }
-.syncStatus.saving{background:rgba(214,168,61,.15);color:var(--accent2)!important}
+.syncStatus.saving{background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent2)!important}
 .syncStatus.error{background:rgba(229,57,53,.15);color:#ff8d8d!important}
 
 img.imgBroken{opacity:0}
@@ -954,7 +984,7 @@ img.imgBroken{opacity:0}
 .adminRow>.adminProductItem{flex:1;min-width:0}
 .dragHandle{
  flex:0 0 30px;display:flex;align-items:center;justify-content:center;
- border-radius:10px;background:#1b1b1e;color:#777;
+ border-radius:10px;background:var(--pField);color:var(--pMuted);
  font-size:14px;letter-spacing:-2px;cursor:grab;
  touch-action:none;user-select:none;-webkit-user-select:none
 }
@@ -965,37 +995,37 @@ img.imgBroken{opacity:0}
 }
 .adminRow.dragging .adminProductItem,
 .adminRow.dragging .adminCategoryItem{border-color:var(--accent)}
-.adminRow.dragging .dragHandle{background:var(--accent);color:#111;cursor:grabbing}
+.adminRow.dragging .dragHandle{background:var(--accent);color:var(--onAccent);cursor:grabbing}
 body.isDragging{user-select:none;-webkit-user-select:none}
 
 .quickPrice{
  flex:0 0 86px;display:flex;align-items:center;gap:4px;
- padding:0 8px;border:1px solid rgba(255,255,255,.07);
- border-radius:12px;background:#141416
+ padding:0 8px;border:1px solid var(--pLine);
+ border-radius:12px;background:var(--pField)
 }
 .quickPrice input{
  width:100%;min-width:0;border:0;background:transparent;
  color:var(--accent2);font-size:14px;font-weight:800;
  text-align:right;outline:none;padding:0
 }
-.quickPrice span{color:#777;font-size:12px}
+.quickPrice span{color:var(--pMuted);font-size:12px}
 .quickPrice:focus-within{border-color:var(--accent)}
 .quickPrice.saved{border-color:#43a047}
 
 .adminSearch{
  display:flex;align-items:center;gap:8px;
  margin-bottom:14px;padding:0 12px;
- border:1px solid rgba(255,255,255,.1);border-radius:14px;
- background:#141416
+ border:1px solid var(--pLine);border-radius:14px;
+ background:var(--pField)
 }
 .adminSearch:focus-within{border-color:var(--accent)}
-.adminSearch span{color:#777;font-size:16px}
+.adminSearch span{color:var(--pMuted);font-size:16px}
 .adminSearch input{
  flex:1;min-width:0;height:46px;border:0;background:transparent;
- color:#fff;font-size:14px;outline:none
+ color:var(--pText);font-size:14px;outline:none
 }
 .adminSearch button{
- border:0;background:#222;color:#aaa;
+ border:0;background:#222;color:var(--pText2);
  width:26px;height:26px;border-radius:50%;font-size:15px
 }
 
@@ -1003,21 +1033,21 @@ body.isDragging{user-select:none;-webkit-user-select:none}
 
 .segmented{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
 .segmented button{
- min-height:42px;border:1px solid rgba(255,255,255,.08);border-radius:11px;
- background:#151518;color:#999;font-size:12px;font-weight:800
+ min-height:42px;border:1px solid var(--pLine);border-radius:11px;
+ background:var(--pSurface);color:var(--pMuted);font-size:12px;font-weight:800
 }
 .segmented button.active{
- background:rgba(214,168,61,.15);border-color:var(--accent);color:var(--accent2)
+ background:color-mix(in srgb,var(--accent) 15%,transparent);border-color:var(--accent);color:var(--accent2)
 }
 .pdfTemplates{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 .pdfTpl{
  display:flex;flex-direction:column;align-items:flex-start;gap:5px;
- padding:10px;border:1px solid rgba(255,255,255,.08);border-radius:13px;
- background:#151518;color:#ddd;text-align:left
+ padding:10px;border:1px solid var(--pLine);border-radius:13px;
+ background:var(--pSurface);color:var(--pText2);text-align:left
 }
-.pdfTpl.active{border-color:var(--accent);background:rgba(214,168,61,.1)}
+.pdfTpl.active{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
 .pdfTpl strong{font-size:12px}
-.pdfTpl small{color:#777;font-size:9px;line-height:1.35}
+.pdfTpl small{color:var(--pMuted);font-size:9px;line-height:1.35}
 .pdfTplSwatch{
  width:100%;height:46px;border-radius:8px;border:1px solid;
  display:flex;flex-direction:column;justify-content:center;gap:4px;padding:0 10px
@@ -1028,8 +1058,8 @@ body.isDragging{user-select:none;-webkit-user-select:none}
 .pdfCats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
 .pdfCat{
  display:flex;align-items:center;gap:8px;padding:9px 10px;
- border:1px solid rgba(255,255,255,.07);border-radius:10px;
- background:#151518;color:#ccc;font-size:11px
+ border:1px solid var(--pLine);border-radius:10px;
+ background:var(--pSurface);color:var(--pText2);font-size:11px
 }
 .pdfCat input{accent-color:var(--accent)}
 .pdfPreview{display:flex;flex-direction:column;gap:10px;margin-top:12px}
@@ -1039,15 +1069,15 @@ body.isDragging{user-select:none;-webkit-user-select:none}
 }
 .bulkPreview{
  margin-top:12px;padding:11px 12px;border-radius:11px;
- background:#141416;border:1px dashed rgba(255,255,255,.12);
- color:#aaa;font-size:11px;line-height:1.6
+ background:var(--pField);border:1px dashed rgba(255,255,255,.12);
+ color:var(--pText2);font-size:11px;line-height:1.6
 }
 .bulkPreview b{color:var(--accent2)}
 
 .adminWarning{
  margin-bottom:14px;padding:12px 14px;border-radius:12px;
- background:rgba(214,168,61,.1);
- border:1px solid rgba(214,168,61,.3);
+ background:color-mix(in srgb,var(--accent) 10%,transparent);
+ border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);
  color:#f0c45a;font-size:11px;line-height:1.5
 }
 
@@ -2668,13 +2698,13 @@ const DATA={
  logo:"",
  rates:{USD:40,EUR:47,auto:true,updated:0},
  theme:{
-  accent:"#d6a83d",accent2:"#f0c45a",
-  text:"#ffffff",cardText:"#ffffff",
-  price:"#f0c45a",overlay:.55,
+  accent:"auto",accent2:"auto",
+  text:"#F1EFEA",cardText:"#F1EFEA",
+  price:"auto",overlay:.55,
   cardOpacity:.94,cardRadius:20,
   logoSize:112,titleSize:34,
-  bodySize:13,fontFamily:"system",
-  titleFont:"Georgia"
+  bodySize:13,fontFamily:"geist",
+  titleFont:"Instrument Serif"
  },
  settings:{
   portion:true,calories:true,allergens:true,
@@ -2682,7 +2712,7 @@ const DATA={
   dish:true,featured:true,events:true,search:true,themeToggle:true
  },
  background:{
-  type:"color",value:"#171719",
+  type:"color",value:"#111110",
   image:"",video:""
  },
  hours:"09:00 - 23:00",
@@ -3363,13 +3393,13 @@ function mergeData(saved){
  });
 
  DATA.theme=Object.assign({
-  accent:"#d6a83d",accent2:"#f0c45a",
-  text:"#ffffff",cardText:"#ffffff",
-  price:"#f0c45a",overlay:.55,
+  accent:"auto",accent2:"auto",
+  text:"#F1EFEA",cardText:"#F1EFEA",
+  price:"auto",overlay:.55,
   cardOpacity:.94,cardRadius:20,
   logoSize:112,titleSize:34,
-  bodySize:13,fontFamily:"system",
-  titleFont:"Georgia"
+  bodySize:13,fontFamily:"geist",
+  titleFont:"Instrument Serif"
  },DATA.theme||{});
 
  DATA.settings=Object.assign({
@@ -3379,7 +3409,7 @@ function mergeData(saved){
  },DATA.settings||{});
 
  DATA.background=Object.assign({
-  type:"color",value:"#171719",
+  type:"color",value:"#111110",
   image:"",video:""
  },DATA.background||{});
 
@@ -5112,13 +5142,25 @@ function markCategoryTranslationDirty(c){
 
 function resolveFont(font){
 
- if(!font||font==="system")
+ if(!font||font==="geist")
+  return '"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif';
+ if(font==="system")
   return '-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif';
+ if(font==="Instrument Serif")
+  return '"Instrument Serif",Georgia,serif';
 
- return font;
+ return '"'+String(font).replace(/["\\;{}<>]/g,"")+'",sans-serif';
 }
 
 /* ---------- açık / koyu mod ---------- */
+
+function isLightColor(hex){
+ const m=String(hex||"").trim().match(/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i);
+ if(!m)return true;
+ let h=m[1];if(h.length===3)h=h.split("").map(c=>c+c).join("");
+ const n=parseInt(h,16),r=n>>16&255,g=n>>8&255,b=n&255;
+ return (0.2126*r+0.7152*g+0.0722*b)/255>0.55;
+}
 
 function shadeColor(hex,amount){
  const m=String(hex||"").trim().match(/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i);
@@ -5193,16 +5235,23 @@ function applyTheme(){
 
  root.dataset.mode=light?"light":"dark";
 
- root.style.setProperty("--accent",th.accent||"#d6a83d");
- root.style.setProperty("--accent2",th.accent2||"#f0c45a");
- root.style.setProperty("--accentInk",light?shadeColor(th.accent||"#d6a83d",-.38):(th.accent||"#d6a83d"));
- root.style.setProperty("--text",light?"#1b1a17":(th.text||"#fff"));
- root.style.setProperty("--cardText",light?"#1b1a17":(th.cardText||"#fff"));
- root.style.setProperty("--muted",light?"#6d6a63":"#929296");
- root.style.setProperty("--price",light?shadeColor(th.price||th.accent||"#d6a83d",-.42):(th.price||"#f0c45a"));
+ const fg=light?"#151514":"#F1EFEA";
+ const isAuto=v=>!v||v==="auto";
+ const acc=isAuto(th.accent)?fg:th.accent;
+ const acc2=isAuto(th.accent2)?(isAuto(th.accent)?fg:th.accent):th.accent2;
+ root.style.setProperty("--accent",acc);
+ root.style.setProperty("--accent2",acc2);
+ root.style.setProperty("--accentInk",isAuto(th.accent)?fg:(light?shadeColor(acc,-.38):acc));
+ root.style.setProperty("--onAccent",isLightColor(acc)?"#111110":"#F7F5F1");
+ root.style.setProperty("--text",light?"#151514":(th.text||"#fff"));
+ root.style.setProperty("--cardText",light?"#151514":(th.cardText||"#fff"));
+ root.style.setProperty("--muted",light?"#6E6C67":"#8D8B86");
+ const pr=isAuto(th.price)?(isAuto(th.accent)?fg:acc):th.price;
+ root.style.setProperty("--price",isAuto(th.price)&&isAuto(th.accent)?fg:(light?shadeColor(pr,-.42):pr));
+ root.style.setProperty("--overPrice",isAuto(th.price)&&isAuto(th.accent)?"#F7F5F1":pr);
 
  const meta=document.querySelector('meta[name="theme-color"]');
- if(meta)meta.setAttribute("content",light?"#f5f2ec":((DATA.background&&DATA.background.type==="color"&&DATA.background.value)||"#171719"));
+ if(meta)meta.setAttribute("content",light?"#EBE9E5":((DATA.background&&DATA.background.type==="color"&&DATA.background.value)||"#111110"));
  root.style.setProperty("--overlay",th.overlay??.55);
  root.style.setProperty("--cardOpacity",th.cardOpacity??.94);
  root.style.setProperty("--cardRadius",(th.cardRadius||20)+"px");
@@ -5210,7 +5259,7 @@ function applyTheme(){
  root.style.setProperty("--bodySize",(th.bodySize||13)+"px");
  root.style.setProperty("--logoSize",(th.logoSize||112)+"px");
  root.style.setProperty("--fontFamily",resolveFont(th.fontFamily));
- root.style.setProperty("--titleFont",resolveFont(th.titleFont||"Georgia"));
+ root.style.setProperty("--titleFont",resolveFont(th.titleFont||"Instrument Serif"));
 }
 
 /* =========================================================
@@ -5245,7 +5294,7 @@ function renderBackground(){
  return `
   <div class="background"
    id="siteBackground"
-   style="background-color:${esc(bg.value||"#171719")}">
+   style="background-color:${esc(bg.value||"#111110")}">
   </div>
  `;
 }
@@ -6768,6 +6817,8 @@ function renderAdminDesign(){
  const th=DATA.theme;
 
  const fonts=[
+  ["geist","Geist (NearDiji)"],
+  ["Instrument Serif","Instrument Serif (NearDiji başlık)"],
   ["system","Modern / System"],
   ["Arial","Arial"],
   ["Trebuchet MS","Trebuchet MS"],
@@ -6811,7 +6862,7 @@ function renderAdminDesign(){
     <input class="colorInput"
      type="color"
      data-color-setting="accent"
-     value="${esc(th.accent)}">
+     value="${esc(th.accent&&th.accent!=="auto"?th.accent:(currentMode()==="light"?"#151514":"#F1EFEA"))}">
    </div>
 
    <div class="designCard">
@@ -6819,7 +6870,7 @@ function renderAdminDesign(){
     <input class="colorInput"
      type="color"
      data-color-setting="accent2"
-     value="${esc(th.accent2)}">
+     value="${esc(th.accent2&&th.accent2!=="auto"?th.accent2:(currentMode()==="light"?"#151514":"#F1EFEA"))}">
    </div>
 
    <div class="designCard">
@@ -6843,7 +6894,7 @@ function renderAdminDesign(){
     <input class="colorInput"
      type="color"
      data-color-setting="price"
-     value="${esc(th.price||"#f0c45a")}">
+     value="${esc(th.price&&th.price!=="auto"?th.price:(currentMode()==="light"?"#151514":"#F1EFEA"))}">
    </div>
 
    <div class="designCard">
@@ -6851,7 +6902,7 @@ function renderAdminDesign(){
     <input class="colorInput"
      type="color"
      data-color-setting="background"
-     value="${esc(DATA.background.value||"#171719")}">
+     value="${esc(DATA.background.value||"#111110")}">
    </div>
 
   </div>
@@ -6863,6 +6914,8 @@ function renderAdminDesign(){
   <div class="adminCardTitle">Hazır Renkler</div>
 
   <div class="presetRow" style="margin-top:12px">
+
+   <button class="preset neardiji ${!th.accent||th.accent==="auto"?"active":""}" data-theme-color="auto" title="NearDiji — siyah / beyaz, temaya göre otomatik" aria-label="NearDiji otomatik renk"></button>
 
    ${
     [
