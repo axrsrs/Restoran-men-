@@ -166,6 +166,26 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--fg);outline-offset:
 .cc-dots button.on{width:26px;background:color-mix(in srgb,var(--fg) 80%,transparent)}
 @media (prefers-reduced-motion:reduce){.cc-card,.cc-card img{transition:none}.cc-info.swap{animation:none}}
 
+/* referanslar — 3D coverflow */
+.cf{position:relative;outline:none;--sw:250px;--sh:160px}
+.cf:focus-visible{outline:2px solid color-mix(in srgb,var(--fg) 35%,transparent);outline-offset:8px;border-radius:24px}
+.cf-stage{position:relative;height:calc(var(--sh) + 40px);perspective:1100px;overflow:hidden;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;
+ mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.cf-stage.drag{cursor:grabbing}
+.cf-track{position:absolute;inset:0;transform-style:preserve-3d}
+.cf-slide{position:absolute;left:50%;top:20px;width:var(--sw);height:var(--sh);margin-left:calc(var(--sw) / -2);padding:0;border:0;border-radius:18px;cursor:pointer;
+ background:#F7F5F1;box-shadow:0 18px 40px -18px rgba(0,0,0,.35),inset 0 0 0 1px rgba(0,0,0,.06);overflow:hidden;font:inherit;color:#151514;
+ transition:transform .7s cubic-bezier(.22,1,.36,1),opacity .7s;will-change:transform}
+.cf-slide img{position:absolute;inset:16% 14% 24%;width:72%;height:60%;object-fit:contain;display:block;-webkit-user-drag:none}
+.cf-slide span{position:absolute;left:10px;right:10px;bottom:10%;font-size:12px;letter-spacing:.06em;text-transform:uppercase;opacity:.55;text-align:center;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cf-slide::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,var(--shl,0)),rgba(0,0,0,var(--shr,0)));pointer-events:none;transition:opacity .7s}
+.cf-dots{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:14px}
+.cf-dots button{width:8px;height:8px;padding:0;border:0;border-radius:999px;cursor:pointer;background:color-mix(in srgb,var(--fg) 22%,transparent);transition:width .3s,background .3s;position:relative}
+.cf-dots button::before{content:"";position:absolute;inset:-10px -4px}
+.cf-dots button.on{width:22px;background:color-mix(in srgb,var(--fg) 80%,transparent)}
+@media (prefers-reduced-motion:reduce){.cf-slide{transition:none}}
+
 /* hizmetler */
 .services{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
 .svc{padding:28px clamp(0px,1.4vw,22px) 8px 0;border-right:1px solid var(--line);margin-right:clamp(0px,1.4vw,22px);min-width:0}
@@ -219,6 +239,7 @@ footer a{text-decoration:none}
   <a class="sh-brand" href="/" id="brand"></a>
   <ul class="sh-links">
    <li><a class="sh-link" href="#projeler">Projeler</a></li>
+   <li id="navRef" hidden><a class="sh-link" href="#referanslar">Referanslar</a></li>
    <li><a class="sh-link" href="#hizmetler">Hizmetler</a></li>
    <li><a class="sh-link" href="#surec">Süreç</a></li>
    <li><a class="sh-link" href="#hakkinda">Hakkında</a></li>
@@ -244,6 +265,11 @@ footer a{text-decoration:none}
  <section class="sec" id="projeler">
   <div class="sec-head rv"><h2 class="h2" id="projTitle"></h2><p class="lead" id="projIntro"></p></div>
   <div class="projects" id="projects"></div>
+ </section>
+
+ <section class="sec" id="referanslar" hidden>
+  <div class="sec-head rv"><h2 class="h2" id="refTitle"></h2><p class="lead" id="refIntro"></p></div>
+  <div class="cf rv" id="clients" tabindex="0" role="region" aria-roledescription="karusel" aria-label="Referanslar"></div>
  </section>
 
  <section class="sec" id="hizmetler">
@@ -428,6 +454,12 @@ function render(){
  var list=(C.projects||[]).filter(function(p){return p&&!p.hidden&&p.name});
  renderProjects(list);
 
+ var refs=(C.clients||[]).filter(function(c){return c&&c.logo});
+ $("referanslar").hidden=!refs.length;$("navRef").hidden=!refs.length;
+ $("refTitle").innerHTML=headlineHTML(C.clientsTitle||"Referanslar","");
+ $("refIntro").textContent=C.clientsIntro||"";
+ renderClients(refs);
+
  $("svcTitle").innerHTML=headlineHTML(C.servicesTitle,"");
  $("services").innerHTML=(C.services||[]).filter(function(s){return s&&s.title}).map(function(s,i){
   return '<div class="svc"><b>'+String(i+1).padStart(2,"0")+'</b><h3>'+esc(s.title)+'</h3><p>'+esc(s.desc)+'</p></div>';
@@ -584,6 +616,79 @@ function ccBind(){
  if("IntersectionObserver" in window)new IntersectionObserver(function(es){CC.vis=es[0].isIntersecting;CC.vis?ccStart():ccStop()},{threshold:.35}).observe(box);
  else CC.vis=true;
  var rt;window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(ccLayout,120)});
+}
+
+/* ── referanslar: 3D coverflow ── */
+var CF={i:0,list:[],timer:null,hover:false,focus:false,vis:false,bound:false,step:0};
+function renderClients(list){
+ var box=$("clients");CF.list=list;if(CF.i>=list.length)CF.i=0;
+ if(!list.length){box.innerHTML="";cfStop();return}
+ box.innerHTML='<div class="cf-stage" id="cfStage"><div class="cf-track">'
+  +list.map(function(c,i){
+   return '<button type="button" class="cf-slide" data-cf="'+i+'" aria-label="'+esc(c.name||"Firma")+'">'
+    +'<img src="'+esc(c.logo)+'" alt="'+esc(c.name||"")+'" loading="lazy" decoding="async" draggable="false">'
+    +(c.name?'<span>'+esc(c.name)+'</span>':"")+'</button>';
+  }).join("")+'</div></div>'
+  +(list.length>1?'<div class="cf-dots" id="cfDots">'+list.map(function(c,i){return '<button type="button" data-cf="'+i+'" aria-label="'+(i+1)+'. firma: '+esc(c.name||"")+'"></button>'}).join("")+'</div>':"");
+ if(!CF.bound)cfBind();
+ cfLayout(0);cfStart();
+}
+function cfLayout(drag){
+ var st=$("cfStage");if(!st)return;
+ var W=st.clientWidth||innerWidth, mob=W<640;
+ var sw=Math.round(Math.min(280,Math.max(150,W*(mob?.52:.24)))), sh=Math.round(sw*.64);
+ var box=$("clients");box.style.setProperty("--sw",sw+"px");box.style.setProperty("--sh",sh+"px");
+ var step=CF.step=sw*(mob?.62:.72), t=CF.list.length;
+ st.querySelectorAll(".cf-slide").forEach(function(el){
+  var i=+el.dataset.cf, off=i-CF.i;
+  if(t>2){if(off>t/2)off-=t;if(off<-t/2)off+=t}
+  var o=off+(drag||0)/step, a=Math.abs(o), far=a>3.2;
+  var rot=Math.max(-40,Math.min(40,-o*40)), z=-Math.min(a,3.5)*100;
+  el.style.transform="translateX("+(o*step).toFixed(1)+"px) translateZ("+z.toFixed(0)+"px) rotateY("+rot.toFixed(1)+"deg)";
+  el.style.opacity=far?0:1;el.style.zIndex=100-Math.round(a*10);
+  el.style.pointerEvents=far?"none":"";el.tabIndex=far?-1:0;
+  var sh_=Math.min(.45,a*.18);el.style.setProperty("--shl",o>0?sh_:0);el.style.setProperty("--shr",o<0?sh_:0);
+  el.style.transition=drag?"none":"";
+ });
+ var d=$("cfDots");if(d)d.querySelectorAll("button").forEach(function(b,i){b.classList.toggle("on",i===CF.i)});
+}
+function cfGo(n,user){var t=CF.list.length;if(!t)return;CF.i=((n%t)+t)%t;cfLayout(0);if(user)cfStart()}
+function cfStop(){if(CF.timer){clearInterval(CF.timer);CF.timer=null}}
+function cfStart(){
+ cfStop();
+ if(CF.list.length<2||!CF.vis||CF.hover||CF.focus||document.hidden||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+ CF.timer=setInterval(function(){cfGo(CF.i+1)},2200);
+}
+function cfBind(){
+ CF.bound=true;var box=$("clients"),sx=null,dx=0,moved=false;
+ box.addEventListener("click",function(e){
+  var b=e.target.closest("[data-cf]");if(!b||moved)return;
+  var i=+b.dataset.cf;
+  if(i!==CF.i){cfGo(i,true);return}
+  if(b.classList.contains("cf-slide")){var h=safeHref((CF.list[i]||{}).link);if(h)window.open(h,"_blank","noopener")}
+ });
+ box.addEventListener("keydown",function(e){
+  if(e.key==="ArrowLeft"){e.preventDefault();cfGo(CF.i-1,true)}else if(e.key==="ArrowRight"){e.preventDefault();cfGo(CF.i+1,true)}
+ });
+ box.addEventListener("mouseenter",function(){CF.hover=true;cfStop()});
+ box.addEventListener("mouseleave",function(){CF.hover=false;cfStart()});
+ box.addEventListener("focusin",function(){CF.focus=true;cfStop()});
+ box.addEventListener("focusout",function(e){if(!box.contains(e.relatedTarget)){CF.focus=false;cfStart()}});
+ /* sürükle (fare + dokunmatik), bırakınca en yakın logoya otur */
+ box.addEventListener("pointerdown",function(e){var st=e.target.closest("#cfStage");if(!st||e.button>0)return;sx=e.clientX;dx=0;moved=false;cfStop()});
+ window.addEventListener("pointermove",function(e){
+  if(sx===null)return;dx=e.clientX-sx;
+  if(Math.abs(dx)>6){moved=true;var st=$("cfStage");if(st)st.classList.add("drag");cfLayout(dx)}
+ });
+ function end(){
+  if(sx===null)return;sx=null;var st=$("cfStage");if(st)st.classList.remove("drag");
+  if(moved){var n=Math.round(-dx/(CF.step||200));cfGo(CF.i+n,true);setTimeout(function(){moved=false},50)}else cfStart();
+ }
+ window.addEventListener("pointerup",end);window.addEventListener("pointercancel",end);
+ document.addEventListener("visibilitychange",function(){document.hidden?cfStop():cfStart()});
+ if("IntersectionObserver" in window)new IntersectionObserver(function(es){CF.vis=es[0].isIntersecting;CF.vis?cfStart():cfStop()},{threshold:.3}).observe(box);
+ else CF.vis=true;
+ var rt;window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(function(){cfLayout(0)},120)});
 }
 
 /* ── kaydırınca giriş efekti ── */

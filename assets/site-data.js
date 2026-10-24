@@ -66,6 +66,10 @@ window.ND_DEFAULT = {
       desc: "Her firmaya dakikalar içinde uyarlanan hazır katalog altyapısı: PIN'li panel, TR/EN çeviri, kapak ve kapanış sayfalı PDF katalog.",
       link: "", linkLabel: "", image: "", featured: false, hidden: false }
   ],
+  clientsTitle: "Birlikte çalıştığımız firmalar",
+  clientsIntro: "Dijital ürünlerini birlikte hayata geçirdiğimiz işletmeler.",
+  clients: [],                     /* { id, name, logo, link } — /ayse panelinden logo yüklendikçe eklenir */
+  clientsCutBg: true,
   servicesTitle: "Neler yapıyorum",
   services: [
     { title: "QR Dijital Menü", desc: "Restoran ve kafeler için çok dilli, anında güncellenen menü; masadan okutulur, panelden yönetilir." },

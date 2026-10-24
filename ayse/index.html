@@ -96,6 +96,14 @@ textarea.in{resize:vertical;min-height:84px;line-height:1.5}
 .logo-prev img.inv{filter:invert(1) hue-rotate(180deg)}
 .logo-prev .mono{height:var(--lh,34px);max-width:100%;background:currentColor;-webkit-mask:var(--lm) center/contain no-repeat;mask:var(--lm) center/contain no-repeat}
 .logo-prev span{font-size:12px;opacity:.6}
+.client-row{display:grid;grid-template-columns:22px 108px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px}
+.client-logo{height:64px;border-radius:12px;background:#F4F2EE;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden;padding:8px}
+.client-logo img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.client-logo span{font-size:11px;color:#777}
+.client-fields{display:grid;gap:6px;min-width:0}
+.client-fields .in{padding:8px 11px;font-size:14px}
+.client-act{display:flex;gap:6px;align-items:center}
+@media(max-width:620px){.client-row{grid-template-columns:22px 84px minmax(0,1fr)}.client-act{grid-column:2/-1;justify-content:flex-end}.client-logo{height:54px}}
 .check{display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer}
 .check input{width:16px;height:16px;accent-color:var(--fg)}
 @media(max-width:560px){.logo-prev{grid-template-columns:1fr}}
@@ -297,7 +305,7 @@ var GRIP='<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" ar
 var CHEV='<svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var TRASH='<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-var SECTIONS=[["marka","Marka & logo"],["giris","Giriş bölümü"],["projeler","Projeler"],["hizmetler","Hizmetler"],["surec","Süreç"],["hakkinda","Hakkında"],["iletisim","İletişim"],["seo","Tema & SEO"]];
+var SECTIONS=[["marka","Marka & logo"],["giris","Giriş bölümü"],["projeler","Projeler"],["referanslar","Referanslar"],["hizmetler","Hizmetler"],["surec","Süreç"],["hakkinda","Hakkında"],["iletisim","İletişim"],["seo","Tema & SEO"]];
 
 function appHTML(){
  var h=S.hero;
@@ -337,6 +345,14 @@ function appHTML(){
   +inp("Bölüm başlığı","projectsTitle")+inp("Bölüm açıklaması","projectsIntro",{area:true,rows:2})
   +'</div><div class="list" id="plist" data-list="projects">'+S.projects.map(projHTML).join("")+'</div>'
   +'<button class="btn add" type="button" id="addProj">+ Proje ekle</button></section>';
+
+ if(!Array.isArray(S.clients))S.clients=[];
+ o+='<section class="card" id="s-referanslar"><h2>Referanslar</h2><p class="sub">Firma logolarını ekleyin; her yüklenen logo listeye otomatik eklenir ve sitede kayan 3D şeritte gösterilir. Birden fazla dosyayı aynı anda seçebilirsiniz. Liste boşsa bölüm sitede görünmez.</p><div class="grid" style="margin-bottom:16px">'
+  +inp("Bölüm başlığı","clientsTitle")+inp("Bölüm açıklaması","clientsIntro",{area:true,rows:2})
+  +'</div><div class="list" id="clist" data-list="clients">'+S.clients.map(clientHTML).join("")+'</div>'
+  +'<div class="img-field" style="margin-top:12px"><button class="btn add" type="button" id="addClients" style="margin-top:0">+ Logo ekle</button>'
+  +'<label class="check"><input type="checkbox" data-p="clientsCutBg" data-bool="1"'+(S.clientsCutBg!==false?" checked":"")+'> Düz arka planı otomatik kaldır</label>'
+  +'<span class="hint">'+S.clients.length+' logo · JPG, PNG, WEBP veya SVG; hepsi şeffaf PNG\'ye çevrilir.</span></div></section>';
 
  o+=miniSection("hizmetler","Hizmetler","Sunduğunuz hizmetler, dört sütun hâlinde gösterilir.","servicesTitle","services","Hizmet");
  o+=miniSection("surec","Süreç","Müşteriyle çalışma adımlarınız.","stepsTitle","steps","Adım");
@@ -394,6 +410,16 @@ function logoField(){
 function rangeF(label,path,min,max){
  var v=+getP(path);if(!isFinite(v))v=1;
  return '<label class="f">'+esc(label)+'<div class="range"><input type="range" min="'+min+'" max="'+max+'" step="0.05" data-p="'+path+'" data-num="1" value="'+v+'"><output>'+v.toFixed(2)+'</output></div></label>';
+}
+function clientHTML(c,i){
+ var base="clients."+i;
+ return '<div class="item client" data-i="'+i+'" data-id="'+esc(c.id)+'">'
+  +'<div class="client-row"><span class="drag" title="Sürükle">'+GRIP+'</span>'
+  +'<div class="client-logo">'+(c.logo?'<img src="'+esc(c.logo)+'" alt="">':'<span>Logo yok</span>')+'</div>'
+  +'<div class="client-fields"><input class="in" data-p="'+base+'.name" value="'+esc(c.name||"")+'" placeholder="Firma adı" aria-label="Firma adı" maxlength="80">'
+  +'<input class="in" data-p="'+base+'.link" value="'+esc(c.link||"")+'" placeholder="Web sitesi (isteğe bağlı)" aria-label="Web sitesi" maxlength="300" inputmode="url"></div>'
+  +'<div class="client-act"><button class="btn sm" type="button" data-up="'+base+'.logo" data-kind="clientlogo">Değiştir</button>'
+  +'<button class="btn icon sm danger" type="button" data-del="clients" data-i="'+i+'" aria-label="Sil" title="Sil">'+TRASH+'</button></div></div></div>';
 }
 function statusPill(p){
  if(p.hidden)return '<span class="pill off">Gizli</span>';
@@ -492,6 +518,7 @@ function bindApp(){
   if(t.dataset.seg===undefined&&t.parentElement&&t.parentElement.dataset.seg){
    setP(t.parentElement.dataset.seg,t.dataset.v);rerender();return;
   }
+  if(t.id==="addClients"){pickClientLogos();return}
   if(t.dataset.up){pickImage(t.dataset.up,t.dataset.kind);return}
   if(t.dataset.clear){setP(t.dataset.clear,"");if(t.dataset.clear==="logo"){S.logoDark="";S.logoTone="";S.logoRatio=0}rerender();return}
   if(t.dataset.toggle!==undefined&&!e.target.closest(".drag")){openItem=openItem===t.dataset.toggle?null:t.dataset.toggle;rerender();return}
@@ -542,14 +569,46 @@ function enableDrag(list){
 }
 
 /* ── görsel yükleme ── */
+function clientName(fn){
+ var n=String(fn||"").replace(/\.[a-z0-9]+$/i,"").replace(/[-_]+/g," ").replace(/\b(logo|logosu|final|png|jpg)\b/gi,"").replace(/\s+/g," ").trim();
+ return n?n.split(" ").map(function(w){return w.charAt(0).toLocaleUpperCase("tr")+w.slice(1)}).join(" "):"Firma";
+}
+async function uploadSiteMedia(out,folder){
+ var name=folder+"/"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8)+"."+out.ext;
+ await sb("/storage/v1/object/site-media/"+name,{method:"POST",body:out.blob,headers:{"Content-Type":out.type,"x-upsert":"true","cache-control":"31536000"}});
+ return SB_URL+"/storage/v1/object/public/site-media/"+name;
+}
+/* referans logoları: çoklu seçim, her biri otomatik listeye eklenir */
+function pickClientLogos(){
+ var f=$("file");f.value="";f.multiple=true;
+ f.onchange=async function(){
+  var files=[].slice.call(f.files||[]);f.multiple=false;if(!files.length)return;
+  if(S.clients.length+files.length>60){toast("En fazla 60 logo eklenebilir.");return}
+  var ok=0,fail=[];
+  for(var k=0;k<files.length;k++){
+   var file=files[k];
+   if(file.size>15*1024*1024){fail.push(file.name+" (çok büyük)");continue}
+   toast("Yükleniyor "+(k+1)+"/"+files.length+"...");
+   try{
+    var out=await prepLogo(file,S.clientsCutBg!==false);
+    var url=await uploadSiteMedia(out,"client");
+    S.clients.push({id:uid(),name:clientName(file.name),logo:url,link:""});ok++;
+    rerender();
+   }catch(er){fail.push(file.name)}
+  }
+  toast(ok?"✓ "+ok+" logo eklendi"+(fail.length?" · "+fail.length+" dosya yüklenemedi":"")+" — yayına almak için Kaydet'e basın.":"Yüklenemedi: "+fail.join(", "));
+  var l=$("clist");if(ok&&l&&l.lastElementChild)l.lastElementChild.scrollIntoView({block:"center",behavior:"smooth"});
+ };
+ f.click();
+}
 function pickImage(path,kind){
- var f=$("file");f.value="";
+ var f=$("file");f.value="";f.multiple=false;
  f.onchange=async function(){
   var file=f.files&&f.files[0];if(!file)return;
   if(file.size>15*1024*1024){toast("Dosya çok büyük (en fazla 15 MB).");return}
   toast("Yükleniyor...");
   try{
-   var out=kind==="logo"?await prepLogo(file,S.logoCutBg!==false):await prepImage(file,kind);
+   var out=kind==="logo"?await prepLogo(file,S.logoCutBg!==false):kind==="clientlogo"?await prepLogo(file,S.clientsCutBg!==false):await prepImage(file,kind);
    var name=(kind||"img")+"/"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8)+"."+out.ext;
    await sb("/storage/v1/object/site-media/"+name,{method:"POST",body:out.blob,headers:{"Content-Type":out.type,"x-upsert":"true","cache-control":"31536000"}});
    setP(path,SB_URL+"/storage/v1/object/public/site-media/"+name);
