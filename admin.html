@@ -67,6 +67,7 @@ a{color:var(--accent2)}
 }
 
 /* Giriş */
+.login-screen{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px 0}
 .login{max-width:380px;margin:12vh auto 0;padding:26px;border-radius:20px;background:var(--surface);border:1px solid var(--line)}
 .logo{
  width:56px;height:56px;border-radius:16px;margin-bottom:16px;
@@ -197,6 +198,135 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
  .stats .stat:first-child{grid-column:1/-1}
  .list{grid-template-columns:1fr}
 }
+
+/* ===== Giriş kartı (Uiverse.io by Priyanshu02020, menu21 için uyarlandı) ===== */
+.lg-container{
+ --form-width:315px;
+ --login-box-color:#272727;
+ --input-color:#3a3a3a;
+ --button-color:#373737;
+ --footer-color:rgba(255,255,255,.5);
+ display:flex;justify-content:center;align-items:center;
+ position:relative;overflow:hidden;
+ background:var(--login-box-color);
+ border-radius:24px;
+ width:min(calc(var(--form-width) + 2px),100%);
+ padding:1px;
+ z-index:8;
+ box-shadow:
+  0 4px 8px rgba(0,0,0,.2),
+  0 8px 16px rgba(0,0,0,.2),
+  0 0 8px rgba(255,255,255,.1),
+  0 0 16px rgba(255,255,255,.08);
+}
+.lg-container::before{
+ content:"";
+ position:absolute;left:50%;top:50%;
+ width:200%;aspect-ratio:1;
+ z-index:-2;
+ background:conic-gradient(from 45deg,transparent 75%,#fff,transparent 100%);
+ transform:translate(-50%,-50%) rotate(0deg);
+ animation:lgSpin 4s ease-in-out infinite;
+}
+@keyframes lgSpin{
+ 100%{transform:translate(-50%,-50%) rotate(360deg)}
+}
+.lg-box{
+ position:relative;z-index:10;
+ width:100%;
+ background:var(--login-box-color);
+ border-radius:23px;
+ padding:28px;
+ backdrop-filter:blur(15px);
+ -webkit-backdrop-filter:blur(15px);
+ box-shadow:
+  inset 0 40px 60px -8px rgba(255,255,255,.12),
+  inset 4px 0 12px -6px rgba(255,255,255,.12),
+  inset 0 0 12px -4px rgba(255,255,255,.12);
+}
+.lg-form{
+ display:flex;justify-content:center;align-items:center;
+ flex-direction:column;gap:10px;
+}
+.lg-logo{
+ width:65px;height:65px;flex:0 0 65px;
+ background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(0,0,0,.2));
+ box-shadow:8px 8px 16px rgba(0,0,0,.2),-8px -8px 16px rgba(255,255,255,.06);
+ border-radius:20px;border:2px solid #fff;
+ display:flex;justify-content:center;align-items:center;
+ position:relative;
+}
+.lg-logo::before{
+ content:"";position:absolute;bottom:10px;width:50%;height:20%;
+ border-top-left-radius:40px;border-top-right-radius:40px;
+ border-bottom-right-radius:20px;border-bottom-left-radius:20px;
+ border:2.5px solid #fff;
+}
+.lg-logo::after{
+ content:"";position:absolute;top:10px;width:30%;height:30%;
+ border-radius:50%;border:2.5px solid #fff;
+}
+.lg-header{
+ width:100%;text-align:center;font-size:24px;font-weight:bold;
+ padding:6px;color:#fff;margin:0;line-height:1.25
+}
+.lg-sub{
+ width:100%;margin:-4px 0 4px;text-align:center;
+ color:var(--footer-color);font-size:12.5px;line-height:1.45
+}
+.lg-input{
+ width:100%;padding:10px 12px;min-height:42px;
+ border:1px solid transparent;border-radius:12px;
+ background:var(--input-color);color:#fff;
+ outline:none;font-size:16px;
+}
+.lg-input::placeholder{color:rgba(255,255,255,.45)}
+.lg-input:focus{border:1px solid #fff}
+.lg-button{
+ width:100%;height:42px;border:none;border-radius:20px;
+ font-size:14px;font-weight:600;cursor:pointer;
+ display:grid;place-content:center;
+ background:var(--button-color);color:#fff;
+ transition:.3s;
+ box-shadow:
+  inset 0 3px 6px -4px rgba(255,255,255,.6),
+  inset 0 -3px 6px -2px rgba(0,0,0,.8);
+}
+.lg-button.sign-in{margin-top:5px}
+.lg-button:hover{
+ background:rgba(255,255,255,.25);
+ box-shadow:
+  inset 0 3px 6px rgba(255,255,255,.6),
+  inset 0 -3px 6px rgba(0,0,0,.8),
+  0 0 8px rgba(255,255,255,.05);
+}
+.lg-button:disabled{opacity:.6;cursor:default}
+.lg-footer{
+ width:100%;margin:4px 0 0;text-align:left;
+ color:var(--footer-color);font-size:12px;line-height:1.6
+}
+.lg-link{
+ position:relative;padding:0;border:0;background:none;
+ color:var(--footer-color);font-weight:600;font-size:12px;
+ text-decoration:none;cursor:pointer;transition:color .3s ease
+}
+.lg-link::after{
+ content:"";position:absolute;left:0;bottom:-2px;width:0;
+ border-radius:6px;height:1px;background:currentColor;transition:width .3s ease
+}
+.lg-link:hover,.lg-link:focus-visible{color:#fff}
+.lg-link:hover::after,.lg-link:focus-visible::after{width:100%}
+.lg-close{
+ position:absolute;top:12px;right:12px;z-index:12;
+ width:32px;height:32px;border:0;border-radius:50%;
+ background:rgba(255,255,255,.08);color:#ddd;font-size:18px;cursor:pointer
+}
+.lg-error{
+ display:none;width:100%;padding:9px 11px;border-radius:10px;
+ background:rgba(255,80,80,.14);color:#ff9d9d;font-size:12px;text-align:center
+}
+.lg-loader{margin:6px auto 0}
+@media (prefers-reduced-motion:reduce){.lg-container::before{animation-duration:16s}}
 
 /* ===== Yükleme animasyonu ===== */
 /* From Uiverse.io by r0n-dev */ 
@@ -1619,34 +1749,42 @@ function render(){
 
 function renderLogin(){
 
+ let body;
+
  if(view==="newPassword"){
-  return `
-  <div class="login">
-   <div class="logo">N</div>
-   <h1>Yeni şifre belirle</h1>
-   <p>İlk girişiniz. Geçici şifre yerine kendi şifrenizi belirleyin (en az 8 karakter).</p>
-   <div class="field"><label for="np1">Yeni şifre</label><input id="np1" type="password" autocomplete="new-password"></div>
-   <div class="field"><label for="np2">Yeni şifre (tekrar)</label><input id="np2" type="password" autocomplete="new-password"></div>
-   <button class="btn gold" id="npSave">Kaydet ve devam et</button>
-   <div class="error" id="err" hidden></div>
-  </div>`;
+  body=`
+   <div class="lg-logo" aria-hidden="true"></div>
+   <h1 class="lg-header">Yeni Şifre</h1>
+   <p class="lg-sub">İlk girişiniz. Geçici şifre yerine kendi şifrenizi belirleyin (en az 8 karakter).</p>
+   <input id="np1" class="lg-input" type="password" autocomplete="new-password" placeholder="Yeni şifre" aria-label="Yeni şifre">
+   <input id="np2" class="lg-input" type="password" autocomplete="new-password" placeholder="Yeni şifre (tekrar)" aria-label="Yeni şifre tekrar">
+   <button class="lg-button sign-in" id="npSave" type="button">Şifreyi Kaydet</button>
+   <div class="lg-error" id="err"></div>`;
+ }else{
+  body=`
+   <div class="lg-logo" aria-hidden="true"></div>
+   <h1 class="lg-header">Hoş Geldiniz!</h1>
+   <p class="lg-sub">Süper yönetici paneli: tüm restoranlar ve demolar.</p>
+   <input id="em" class="lg-input" type="email" autocomplete="username" placeholder="E-posta" aria-label="E-posta" value="${esc(safeGet("nearMenuLastEmail")||"")}">
+   <input id="pw" class="lg-input" type="password" autocomplete="current-password" placeholder="Şifre" aria-label="Şifre">
+   <button class="lg-button sign-in" id="loginBtn" type="button">Giriş Yap</button>
+   <div class="lg-error" id="err"></div>
+   <p class="lg-footer">Bu panel sadece süper yönetici hesabıyla açılır. Restoran sahipleri kendi menülerinden (logoya 3 sn basarak) giriş yapar.</p>`;
  }
 
  return `
- <div class="login">
-  <div class="logo">N</div>
-  <h1>Süper Yönetici</h1>
-  <p>Tüm restoranları yönetmek için giriş yapın.</p>
-  <div class="field"><label for="em">E-posta</label><input id="em" type="email" autocomplete="username" value="${esc(safeGet("nearMenuLastEmail")||"")}"></div>
-  <div class="field"><label for="pw">Şifre</label><input id="pw" type="password" autocomplete="current-password"></div>
-  <button class="btn gold" id="loginBtn">Giriş yap</button>
-  <div class="error" id="err" hidden></div>
+ <div class="login-screen">
+  <div class="lg-container">
+   <div class="lg-box">
+    <div class="lg-form">${body}</div>
+   </div>
+  </div>
  </div>`;
 }
 
 function showErr(msg){
  const e=$("err");
- if(e){e.textContent=msg;e.hidden=false}
+ if(e){e.textContent=msg;e.hidden=false;e.style.display="block"}
 }
 
 function renderApp(){
