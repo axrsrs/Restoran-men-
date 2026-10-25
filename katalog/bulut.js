@@ -6,7 +6,7 @@
   "use strict";
   var SB_URL = "https://rfwgjzkewtjpdcvrhepg.supabase.co";
   var SB_KEY = "sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
-  var SESSION_KEY = "nearMenuSession"; /* menü, katalog ve süper panel aynı oturumu paylaşır */
+  var SESSION_KEY = "sh21Session"; /* katalog paneli kendi oturumunu tutar; süper panel (/821) ayrı giriş ister */
   var BUCKET = "catalog-media";
   var SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -20,6 +20,7 @@
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { } }
   function lsDel(k) { try { localStorage.removeItem(k); } catch (e) { } }
+  lsDel("nearMenuSession"); /* eski ortak oturum kaydı */
   try { session = JSON.parse(lsGet(SESSION_KEY) || "null"); } catch (e) { session = null; }
   function storeSession(s) { session = s; if (s) lsSet(SESSION_KEY, JSON.stringify(s)); else lsDel(SESSION_KEY); }
   function toSession(j) {

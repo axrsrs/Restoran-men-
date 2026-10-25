@@ -3486,7 +3486,8 @@ const CLOUD=true;
 const SB_URL="https://rfwgjzkewtjpdcvrhepg.supabase.co";
 const SB_KEY="sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
 const MEDIA_BUCKET="menu-media";
-const SESSION_KEY="nearMenuSession";
+const SESSION_KEY="ndMenuSession"; /* menü paneli kendi oturumunu tutar */
+try{localStorage.removeItem("nearMenuSession")}catch(e){}
 
 /* Kendi alan adımızda (neardiji.com) kısa adres kullanılır: neardiji.com/kebapci-ali */
 /* Adresler: neardiji.com/menu = demo menü, neardiji.com/xfirma = müşterinin menüsü */

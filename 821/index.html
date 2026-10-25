@@ -8,10 +8,14 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
 <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Instrument+Serif&display=swap">
+<script>try{var t=localStorage.getItem("nd821Theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.dataset.theme=t}catch(e){}</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0f0f11">
+<meta name="theme-color" content="#111110">
 <meta name="robots" content="noindex,nofollow">
 <title>NearDiji Süper Yönetici</title>
 <style>
@@ -1583,6 +1587,71 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   }
 }
 
+
+/* ===== NearDiji teması — ana siteyle aynı palet, yazı tipi ve düğmeler ===== */
+:root{
+ color-scheme:dark;
+ --bg:#111110;--surface:#1A1A19;--surface2:#232321;--field:#151514;
+ --line:rgba(241,239,234,.10);--line2:rgba(241,239,234,.18);
+ --ink:#F1EFEA;--muted:#8D8B86;--accent:#F1EFEA;--accent2:#F1EFEA;--onAccent:#111110;
+ --ok:#6fcf8f;--warn:#e7b25a;--bad:#ff8d8d;--info:#9cc0ff;
+ --font:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+ --serif:"Instrument Serif",Georgia,serif;
+}
+:root[data-theme="light"]{
+ color-scheme:light;
+ --bg:#EBE9E5;--surface:#F5F3EF;--surface2:#E4E1DC;--field:#FFFFFF;
+ --line:rgba(21,21,20,.10);--line2:rgba(21,21,20,.18);
+ --ink:#151514;--muted:#6E6C67;--accent:#151514;--accent2:#151514;--onAccent:#F5F3EF;
+ --ok:#2e7d32;--warn:#a15c00;--bad:#c62828;--info:#1f5fbf;
+}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--font);transition:background .25s,color .25s}
+a{color:var(--ink)}
+h1,h2,h3,.brand b{letter-spacing:-.02em;font-weight:600}
+.btn{border-radius:999px;background:var(--surface2);border-color:var(--line);color:var(--ink);font-weight:600}
+.btn:hover{border-color:var(--line2)}
+.btn.gold{background:var(--ink);color:var(--onAccent);border-color:transparent}
+.btn.gold:hover{opacity:.9}
+.btn.danger{background:color-mix(in srgb,var(--bad) 12%,transparent);border-color:color-mix(in srgb,var(--bad) 35%,transparent);color:var(--bad)}
+.field input,.field select,.search{border-color:var(--line2);background:var(--field);color:var(--ink)}
+.field input:focus,.field select:focus,.search:focus-within{border-color:var(--ink)}
+.hint code,.card-head a{color:var(--muted)}
+.card-head a:hover{color:var(--ink)}
+.error{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad)}
+.stat b{font-weight:500;letter-spacing:-.03em;font-size:28px}
+.chip.on,.seg button.on{border-color:var(--ink);color:var(--ink);background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.kinds{border-color:var(--line);background:color-mix(in srgb,var(--ink) 3%,transparent)}
+.kinds button{color:var(--muted)}
+.kinds button.on{background:var(--ink);color:var(--onAccent)}
+.tag{background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.result{background:var(--field)}
+.overlay{background:rgba(10,10,9,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#toast{background:var(--surface);border-color:var(--line2);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.check input{accent-color:var(--ink)}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline-color:var(--ink)}
+.logo{background:transparent!important;border:1px solid var(--line2);overflow:hidden;padding:0}
+.logo img,.nd-mark{display:block;width:100%;height:100%}
+:root:not([data-theme="light"]) .logo img,:root:not([data-theme="light"]) .nd-mark{filter:invert(1)}
+.top-right{display:flex;align-items:center;gap:8px}
+.theme-btn{display:inline-grid;place-items:center;width:38px;height:38px;padding:0;border-radius:50%;border:1px solid var(--line2);background:transparent;color:var(--ink);cursor:pointer}
+.theme-btn svg{width:16px;height:16px}
+.login-theme{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));z-index:40}
+:root[data-theme="light"] .orbital-loader{filter:invert(1)}
+/* giriş kartı */
+.lg-container{--login-box-color:var(--surface);--input-color:var(--field);--button-color:var(--ink);--footer-color:var(--muted);
+ box-shadow:0 30px 70px -30px rgba(0,0,0,.45),0 0 0 1px var(--line)}
+.lg-container::before{background:conic-gradient(from 45deg,transparent 75%,var(--ink),transparent 100%)}
+.lg-box{box-shadow:none}
+.lg-logo{width:64px;height:64px;flex:0 0 64px;border:1px solid var(--line2);border-radius:18px;background:none;box-shadow:none;overflow:hidden}
+.lg-logo::before,.lg-logo::after{display:none}
+.lg-header{color:var(--ink);font-family:var(--serif);font-weight:400;font-size:36px;letter-spacing:-.01em}
+.lg-input{color:var(--ink);border:1px solid var(--line2)}
+.lg-input::placeholder{color:var(--muted)}
+.lg-input:focus{border-color:var(--ink)}
+.lg-button{color:var(--onAccent);box-shadow:none;border-radius:999px}
+.lg-button:hover{background:var(--ink);opacity:.88;box-shadow:none}
+.lg-link:hover,.lg-link:focus-visible{color:var(--ink)}
+.lg-error{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad)}
 </style>
 </head>
 <body>
@@ -1596,7 +1665,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 const LOADER_HTML=`<div class="orbital-loader" role="img" aria-label="Yükleniyor"><div class="core-system"><div class="core-halo"></div><div class="core-outer-ring"></div><div class="core-secondary-ring"></div><div class="core-thin-ring"></div><div class="core-inner-glow"></div><div class="core-micro-center"></div></div><div class="pulse-system"><div class="pulse-ring pulse-ring-1"></div><div class="pulse-ring pulse-ring-2"></div><div class="pulse-ring pulse-ring-3"></div></div><div class="orbit-system orbit-1"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-circle"></div><div class="object-trail"></div></div></div><div class="orbit-system orbit-2"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-ring"></div></div></div><div class="orbit-system orbit-3"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-bright-point"></div></div></div><div class="orbit-system orbit-4"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-diamond"></div></div></div><div class="orbit-system orbit-5"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-line"></div></div></div><div class="orbit-system orbit-6"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-square"></div></div></div><div class="orbit-system orbit-7"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-fragment"></div></div></div><div class="particle-system"><div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div><div class="particle p4"></div><div class="particle p5"></div><div class="particle p6"></div><div class="particle p7"></div><div class="particle p8"></div><div class="particle p9"></div><div class="particle p10"></div><div class="particle p11"></div><div class="particle p12"></div><div class="particle p13"></div><div class="particle p14"></div><div class="particle p15"></div></div><div class="energy-fragments"><div class="energy-fragment ef1"></div><div class="energy-fragment ef2"></div><div class="energy-fragment ef3"></div></div></div>`;
 const SB_URL="https://rfwgjzkewtjpdcvrhepg.supabase.co";
 const SB_KEY="sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
-const SESSION_KEY="nearMenuSession";
+const SESSION_KEY="nd821Session"; /* süper panel oturumu sadece bu sekmede (sessionStorage) tutulur */
 const MAIN_DEMO="nearmenu-demo";
 const RESERVED=["821","katalog","demo","menu","ammar","admin","yonetim","api","www","assets","static","index","404","ayse","site"];
 const CATALOG_DEMO="sh21-demo";
@@ -1700,11 +1769,12 @@ async function copyText(text){
    SUPABASE (fetch ile)
 ========================================================= */
 let session=null;
-try{session=JSON.parse(safeGet(SESSION_KEY)||"null")}catch(e){}
+try{localStorage.removeItem("nearMenuSession")}catch(e){} /* eski ortak oturum kaydı */
+try{session=JSON.parse(sessionStorage.getItem(SESSION_KEY)||"null")}catch(e){}
 
 function storeSession(s){
  session=s;
- if(s)safeSet(SESSION_KEY,JSON.stringify(s));else safeDel(SESSION_KEY);
+ try{if(s)sessionStorage.setItem(SESSION_KEY,JSON.stringify(s));else sessionStorage.removeItem(SESSION_KEY)}catch(e){}
 }
 
 async function authReq(path,body,method,withToken){
@@ -1800,7 +1870,7 @@ function renderLogin(){
 
  if(view==="newPassword"){
   body=`
-   <div class="lg-logo" aria-hidden="true"></div>
+   <div class="lg-logo" aria-hidden="true"><img class="nd-mark" src="/assets/icons/icon-192.png" alt=""></div>
    <h1 class="lg-header">Yeni Şifre</h1>
    <p class="lg-sub">İlk girişiniz. Geçici şifre yerine kendi şifrenizi belirleyin (en az 8 karakter).</p>
    <input id="np1" class="lg-input" type="password" autocomplete="new-password" placeholder="Yeni şifre" aria-label="Yeni şifre">
@@ -1809,7 +1879,7 @@ function renderLogin(){
    <div class="lg-error" id="err"></div>`;
  }else{
   body=`
-   <div class="lg-logo" aria-hidden="true"></div>
+   <div class="lg-logo" aria-hidden="true"><img class="nd-mark" src="/assets/icons/icon-192.png" alt=""></div>
    <h1 class="lg-header">Hoş Geldiniz!</h1>
    <p class="lg-sub">Süper yönetici paneli: tüm restoranlar, kataloglar ve demolar.</p>
    <input id="em" class="lg-input" type="email" autocomplete="username" placeholder="E-posta" aria-label="E-posta" value="${esc(safeGet("nearMenuLastEmail")||"")}">
@@ -1820,6 +1890,7 @@ function renderLogin(){
  }
 
  return `
+ ${themeBtn("login-theme")}
  <div class="login-screen">
   <div class="lg-container">
    <div class="lg-box">
@@ -1828,6 +1899,21 @@ function renderLogin(){
   </div>
  </div>`;
 }
+
+const ICON_SUN='<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="3.2" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M3.2 12.8l1.1-1.1M11.7 4.3l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+const ICON_MOON='<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.6 10.1A5.9 5.9 0 0 1 5.9 2.4a5.9 5.9 0 1 0 7.7 7.7Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>';
+function themeBtn(cls){
+ const dark=document.documentElement.dataset.theme!=="light";
+ return `<button type="button" class="theme-btn ${cls}" data-theme-toggle aria-label="${dark?"Açık temaya geç":"Koyu temaya geç"}" title="${dark?"Açık tema":"Koyu tema"}">${dark?ICON_SUN:ICON_MOON}</button>`;
+}
+document.addEventListener("click",e=>{
+ const b=e.target.closest("[data-theme-toggle]");if(!b)return;
+ const next=document.documentElement.dataset.theme==="light"?"dark":"light";
+ document.documentElement.dataset.theme=next;
+ safeSet("nd821Theme",next);
+ const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=next==="light"?"#EBE9E5":"#111110";
+ document.querySelectorAll("[data-theme-toggle]").forEach(x=>{x.outerHTML=themeBtn(x.classList.contains("login-theme")?"login-theme":"")});
+});
 
 function showErr(msg){
  const e=$("err");
@@ -1868,10 +1954,10 @@ function renderApp(){
  return `
  <div class="top">
   <div class="brand">
-   <div class="logo">N</div>
+   <div class="logo"><img src="/assets/icons/icon-192.png" alt=""></div>
    <div><b>NearDiji Süper Yönetici</b><span>${esc(session?.user?.email||"")}</span></div>
   </div>
-  <button class="btn small" id="logout">Çıkış</button>
+  <div class="top-right">${themeBtn("")}<button class="btn small" id="logout">Çıkış</button></div>
  </div>
 
  <div class="kinds" role="tablist" aria-label="Ürün">
