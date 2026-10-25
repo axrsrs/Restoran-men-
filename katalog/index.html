@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-I5grjnbS7kTXL4HZsZDNcTZZgE9U0da0OE90/9t3NU0=' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: data: blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-ku5oETLsDG+EesRIWwSOfp5zb0PAl7fTX9eIE8Aaa8g=' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: data: blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -7180,7 +7180,7 @@ function App() {
                         window.SH21 && React.createElement("div", { className: "flex gap-2 mb-5" },
                             React.createElement("button", { type: "button", onClick: () => SH21.changePassword().then(ok => ok && showToast("\u015Eifre g\u00FCncellendi.")), className: "flex-1 py-2.5 bg-neutral-800 border border-neutral-700 rounded-lg text-xs font-bold" }, "\u015Eifreyi De\u011Fi\u015Ftir"),
                             React.createElement("button", { type: "button", onClick: () => SH21.logout(), className: "flex-1 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-xs font-bold text-red-400" }, "\u00C7\u0131k\u0131\u015F Yap")),
-                        window.SH21 && SH21.isSuper() && React.createElement("a", { href: "/ammar/?k=katalog", className: "block w-full text-center py-3 mb-5 rounded-lg text-sm font-bold", style: { background: theme.accent, color: ink } }, "\uD83D\uDEE0 S\u00FCper Y\u00F6netici Paneli (kataloglar ve men\u00FCler)"),
+                        window.SH21 && SH21.isSuper() && React.createElement("a", { href: "/821/?k=katalog", className: "block w-full text-center py-3 mb-5 rounded-lg text-sm font-bold", style: { background: theme.accent, color: ink } }, "\uD83D\uDEE0 S\u00FCper Y\u00F6netici Paneli (kataloglar ve men\u00FCler)"),
                         !window.SH21 && React.createElement(AdminLabel, null, "Y\u00F6netim PIN'ini De\u011Fi\u015Ftir"),
                         !window.SH21 && React.createElement("div", { className: "flex gap-2 mb-5" },
                             React.createElement("input", { className: "admin-input flex-1", type: "password", value: newPinInput, placeholder: "Yeni PIN (4-8 hane)", inputMode: "numeric", maxLength: "8", autoComplete: "new-password", onChange: e => setNewPinInput(e.target.value.replace(/\D/g, "")), style: { letterSpacing: ".3em" } }),
