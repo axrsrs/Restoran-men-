@@ -3787,6 +3787,10 @@ async function refreshFromServer(force){
  if(!m){
   cloud.state="notfound";
   cloud.ready=false;
+  try{
+   const t=await sb("/rest/v1/rpc/tenant_state",{method:"POST",body:{p_kind:"menu",p_slug:RESTAURANT_SLUG},auth:false});
+   cloud.suspended=t&&(t.state==="expired"||t.state==="passive")?(t.name||""):null;
+  }catch(e){cloud.suspended=null}
   return true;
  }
 
@@ -3875,8 +3879,8 @@ function renderCloudState(){
   return `
   <div class="cloudState">
    <div class="cloudStateIcon">🍽</div>
-   <h2>Menü şu an yayında değil</h2>
-   <p>Bu adreste açık bir menü bulunamadı. Lütfen işletmeye danışın.</p>
+   <h2>${cloud.suspended!==null&&cloud.suspended!==undefined?"Menü geçici olarak hizmet dışı":"Menü şu an yayında değil"}</h2>
+   <p>${cloud.suspended!==null&&cloud.suspended!==undefined?esc(cloud.suspended||"Bu işletme")+" menüsü şu an yayında değil. Lütfen işletmeye danışın.":"Bu adreste açık bir menü bulunamadı. Lütfen işletmeye danışın."}</p>
   </div>`;
  }
 

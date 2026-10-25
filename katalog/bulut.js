@@ -79,6 +79,12 @@
       if (session) { storeSession(null); try { rec = await sb("/rest/v1/rpc/get_catalog", { method: "POST", body: { p_slug: slug } }); } catch (e2) { rec = null; } }
     }
     if (!rec || !rec.id) {
+      var ts = null;
+      try { ts = await sb("/rest/v1/rpc/tenant_state", { method: "POST", body: { p_kind: "catalog", p_slug: slug }, anon: true }); } catch (e) { }
+      if (ts && (ts.state === "expired" || ts.state === "passive")) {
+        fatal("Katalog geçici olarak hizmet dışı", (ts.name || "Bu firma") + " kataloğu şu an yayında değil. Lütfen firmayla iletişime geçin.");
+        throw new Error("katalog askıda");
+      }
       fatal("Katalog bulunamadı", "Bu adreste yayında bir katalog yok ya da katalog şu an kapalı. Lütfen firmayla iletişime geçin.");
       throw new Error("katalog yok");
     }

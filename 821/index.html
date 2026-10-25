@@ -1837,7 +1837,14 @@ function statusOf(r){
   const d=daysLeft(r.trial_ends);
   return d!==null&&d<0?"expired":"trial";
  }
- return "active";
+ const p=daysLeft(r.paid_until);
+ return p!==null&&p<0?"expired":"active";
+}
+/* Biten tarih: denemede deneme sonu, aktifte abonelik sonu */
+function endOf(r){return r.status==="trial"?r.trial_ends:r.status==="active"?r.paid_until:null}
+function endingSoon(r){
+ const s=statusOf(r),d=daysLeft(endOf(r));
+ return d!==null&&((s==="trial"&&d<=3)||(s==="active"&&d<=7));
 }
 
 const STATUS_LABEL={active:"Aktif",trial:"Deneme",expired:"Süresi doldu",passive:"Pasif"};
@@ -1928,7 +1935,7 @@ function renderApp(){
   all:all.length,
   active:all.filter(r=>statusOf(r)==="active").length,
   trial:all.filter(r=>statusOf(r)==="trial").length,
-  ending:all.filter(r=>{const d=daysLeft(r.trial_ends);return statusOf(r)==="trial"&&d!==null&&d<=3}).length,
+  ending:all.filter(endingSoon).length,
   expired:all.filter(r=>statusOf(r)==="expired").length,
   passive:all.filter(r=>statusOf(r)==="passive").length
  };
@@ -1940,7 +1947,7 @@ function renderApp(){
   const s=statusOf(r);
   if(filter==="active"&&s!=="active")return false;
   if(filter==="trial"&&s!=="trial")return false;
-  if(filter==="ending"&&!(s==="trial"&&daysLeft(r.trial_ends)<=3))return false;
+  if(filter==="ending"&&!endingSoon(r))return false;
   if(filter==="expired"&&s!=="expired")return false;
   if(filter==="passive"&&s!=="passive")return false;
   if(q){
@@ -2011,6 +2018,12 @@ function renderCard(r){
   trial=d<0
    ?`<div class="trialline warn">Deneme ${fmtDate(r.trial_ends)} tarihinde bitti. ${K().closed}</div>`
    :`<div class="trialline ${d<=3?"warn":""}">Deneme ${fmtDate(r.trial_ends)} tarihine kadar · <b>${d===0?"bugün son gün":d+" gün kaldı"}</b></div>`;
+ }
+ if(r.status==="active"&&r.paid_until){
+  const p=daysLeft(r.paid_until);
+  trial=p<0
+   ?`<div class="trialline warn">Abonelik ${fmtDate(r.paid_until)} tarihinde bitti. ${K().closed}</div>`
+   :`<div class="trialline ${p<=7?"warn":""}">Abonelik ${fmtDate(r.paid_until)} tarihine kadar · <b>${p===0?"bugün son gün":p+" gün kaldı"}</b></div>`;
  }
 
  const members=(r.members||[]).map(m=>`
@@ -2170,6 +2183,16 @@ function renderModal(){
       <button class="btn small" data-extend="7">+7 gün</button>
       <button class="btn small" data-extend="14">+14 gün</button>
       <button class="btn small" data-extend="30">+30 gün</button>
+     </div>
+    </div>
+
+    <div class="field">
+     <label for="ePaid">Abonelik bitiş tarihi (Aktif için, boş bırakılırsa süresiz)</label>
+     <input id="ePaid" type="date" value="${esc(r.paid_until||"")}">
+     <div class="ext">
+      <button class="btn small" data-paid="1">+1 ay</button>
+      <button class="btn small" data-paid="3">+3 ay</button>
+      <button class="btn small" data-paid="12">+1 yıl</button>
      </div>
     </div>
 
@@ -2477,13 +2500,23 @@ function bindModal(){
   $("eStatus").value="trial";
  });
 
+ document.querySelectorAll("[data-paid]").forEach(b=>b.onclick=()=>{
+  const cur=$("ePaid").value;
+  const base=cur&&daysLeft(cur)>=0?cur:isoPlus(0);
+  const [y,m,d]=base.split("-").map(Number);
+  const dt=new Date(y,m-1+Number(b.dataset.paid),d);
+  $("ePaid").value=dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");
+  $("eStatus").value="active";
+ });
+
  $("eSave")?.addEventListener("click",async()=>{
   const status=$("eStatus").value;
   const body={
    name:$("eName").value.trim()||r.name,
    status,
    plan:$("ePlan").value,
-   trial_ends:status==="trial"?($("eTrial").value||isoPlus(14)):null
+   trial_ends:status==="trial"?($("eTrial").value||isoPlus(14)):null,
+   paid_until:status==="active"?($("ePaid").value||null):null
   };
   try{
    await sb("/rest/v1/"+K().table+"?id=eq."+r.id,{method:"PATCH",headers:{"Prefer":"return=minimal"},body});
