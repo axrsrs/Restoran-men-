@@ -22,7 +22,9 @@ Durum (hazır olanlar):
   özel alan adı: `PUT /accounts/{id}/workers/domains`, Pages: `POST /accounts/{id}/pages/projects` + direct upload).
 
 Adımlar:
-1. `npx wrangler@3 whoami` → hesap kimliği. `npx wrangler@3 r2 bucket create neardiji-media`
+1. Hesap kimliği: `curl -s https://api.cloudflare.com/client/v4/accounts`. R2 etkin (25 Ekim 2026). Bucket'ı **Avrupa konumuyla** aç:
+   `curl -s -X POST https://api.cloudflare.com/client/v4/accounts/<id>/r2/buckets -H 'Content-Type: application/json' -d '{"name":"neardiji-media","locationHint":"eeur"}'`
+   (kullanıcılar Türkiye'de; ENAM varsayılanı yavaş olur)
 2. `cd cloudflare/media-worker && npx wrangler@3 deploy` → media.neardiji.com özel alan adı.
    Kontrol: `curl -I https://media.neardiji.com/menu-media/yok.png` → 404; yetkisiz PUT → 403.
 3. Dosyaları taşı: Supabase'te `select bucket_id, name, metadata->>'mimetype' from storage.objects` →
