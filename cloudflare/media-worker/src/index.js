@@ -42,7 +42,7 @@ async function canWrite(env, auth, bucket, path) {
 }
 
 export default {
-  async fetch(req, env) {
+  async fetch(req, env, ctx) {
     const url = new URL(req.url);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(req) });
 
@@ -55,6 +55,18 @@ export default {
     const key = bucket + "/" + path;
 
     if (req.method === "GET" || req.method === "HEAD") {
+      /* Kenar önbelleği: tam dosya istekleri en yakın Cloudflare noktasından döner (R2'ye gitmez) */
+      const plain = req.method === "GET" && !req.headers.has("Range") && !req.headers.has("If-None-Match");
+      const cacheKey = new Request(url.origin + url.pathname, { method: "GET" });
+      if (plain) {
+        const hit = await caches.default.match(cacheKey);
+        if (hit) {
+          const h = new Headers(hit.headers);
+          for (const [k, v] of Object.entries(cors(req))) h.set(k, v);
+          h.set("X-Cache", "HIT");
+          return new Response(hit.body, { status: hit.status, headers: h });
+        }
+      }
       const obj = await env.MEDIA.get(key, { range: req.headers, onlyIf: req.headers });
       if (!obj) return json(req, 404, { error: "Bulunamadı" });
       const h = new Headers(cors(req));
@@ -71,13 +83,22 @@ export default {
         h.set("Content-Length", String(len));
         status = 206;
       } else h.set("Content-Length", String(obj.size));
+      if (plain && status === 200) {
+        const [a, b] = obj.body.tee();
+        const store = new Headers(h);
+        for (const k of Object.keys(cors(req))) store.delete(k);
+        ctx.waitUntil(caches.default.put(cacheKey, new Response(b, { status: 200, headers: store })));
+        h.set("X-Cache", "MISS");
+        return new Response(a, { status, headers: h });
+      }
       return new Response(req.method === "HEAD" ? null : obj.body, { status, headers: h });
     }
 
     if (req.method === "PUT" || req.method === "DELETE") {
       const auth = req.headers.get("Authorization");
       if (!(await canWrite(env, auth, bucket, path))) return json(req, 403, { error: "Bu dosyayı yüklemeye / silmeye yetkiniz yok." });
-      if (req.method === "DELETE") { await env.MEDIA.delete(key); return json(req, 200, { ok: true }); }
+      const cacheKey = new Request(url.origin + url.pathname, { method: "GET" });
+      if (req.method === "DELETE") { await env.MEDIA.delete(key); ctx.waitUntil(caches.default.delete(cacheKey)); return json(req, 200, { ok: true }); }
 
       const type = (req.headers.get("Content-Type") || "").split(";")[0].trim().toLowerCase();
       if (!rule.types.includes(type)) return json(req, 415, { error: "Bu dosya türü desteklenmiyor: " + (type || "bilinmiyor") });
@@ -85,6 +106,7 @@ export default {
       if (!len) return json(req, 411, { error: "Dosya boyutu bildirilmedi." });
       if (len > rule.max) return json(req, 413, { error: "Dosya çok büyük (en fazla " + Math.round(rule.max / 1048576) + " MB)." });
       await env.MEDIA.put(key, req.body, { httpMetadata: { contentType: type, cacheControl: "public, max-age=31536000, immutable" } });
+      ctx.waitUntil(caches.default.delete(cacheKey)); /* aynı ada yeniden yükleme (upsert) eski önbelleği bozmasın */
       return json(req, 200, { ok: true, url: "https://media.neardiji.com/" + key });
     }
 

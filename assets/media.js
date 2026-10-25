@@ -6,7 +6,7 @@
   "use strict";
   var SB = "https://rfwgjzkewtjpdcvrhepg.supabase.co";
   var KEY = "sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
-  var BASE = ""; /* Cloudflare R2'ye geçişte: "https://media.neardiji.com" */
+  var BASE = "https://media.neardiji.com"; /* boş bırakılırsa Supabase Storage */
   var SB_PUBLIC = SB + "/storage/v1/object/public/";
 
   function enc(p) { return String(p).split("/").map(encodeURIComponent).join("/"); }
