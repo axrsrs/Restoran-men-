@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0f0f11">
 <meta name="robots" content="noindex,nofollow">
-<title>NearMenu Süper Yönetici</title>
+<title>NearDiji Süper Yönetici</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d6a83d'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23111'%3EN%3C/text%3E%3C/svg%3E">
 <style>
 /* Tek koyu görünüm: menü panelinin altın vurgulu tasarım dili */
@@ -116,6 +116,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 }
 .chip.on{border-color:var(--accent);color:var(--accent2);background:rgba(214,168,61,.1)}
 
+/* Ürün sekmesi: Menüler | Kataloglar */
+.kinds{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;margin:0 0 14px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.03)}
+.kinds button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 8px;border:0;border-radius:12px;background:transparent;color:#a1a1aa;font:inherit;font-weight:700;font-size:14px;cursor:pointer;min-height:48px}
+.kinds button small{font-weight:500;font-size:11px;opacity:.7}
+.kinds button.on{background:#d6a83d;color:#111}
 /* Restoran listesi */
 .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-top:16px}
 .card{
@@ -1588,7 +1593,8 @@ const SB_URL="https://rfwgjzkewtjpdcvrhepg.supabase.co";
 const SB_KEY="sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
 const SESSION_KEY="nearMenuSession";
 const MAIN_DEMO="nearmenu-demo";
-const RESERVED=["menu","ammar","admin","yonetim","api","www","assets","static","index","404","ayse","site"];
+const RESERVED=["katalog","demo","menu","ammar","admin","yonetim","api","www","assets","static","index","404","ayse","site"];
+const CATALOG_DEMO="sh21-demo";
 const MENU_BASE=new URL("./",location.href).href;
 
 /* =========================================================
@@ -1624,6 +1630,34 @@ function menuUrl(slug){
   ?location.origin+"/"+encodeURIComponent(slug)
   :new URL("../menu/",location.href).href+"?r="+encodeURIComponent(slug);
 }
+
+function katalogUrl(slug){
+ return PRETTY_URLS
+  ?location.origin+"/katalog/"+encodeURIComponent(slug)
+  :new URL("../katalog/",location.href).href+"?f="+encodeURIComponent(slug);
+}
+
+/* İki ürün aynı panelden yönetilir: NearMenu (restoranlar) ve sh21 (kataloglar) */
+const KINDS={
+ menu:{tab:"Menüler",title:"NearMenu",noun:"restoran",Noun:"Restoran",thing:"menü",Thing:"Menü",acc:"Menüyü",
+  list:"admin_list_restaurants",create:"admin_create_restaurant",addOwner:"admin_add_owner",ownerParam:"p_restaurant",
+  table:"restaurants",demo:MAIN_DEMO,url:s=>menuUrl(s),open:"Menüyü aç",nameLabel:"İşletme adı",namePh:"örn. Kebapçı Ali",slugPh:"kebapci-ali",
+  copyLabel:"Demo menüyü kopyala (75 ürün, çevirileriyle)",visits:"Bugün menü açılışı",open30:"açılış / 30 gün",
+  shareDemo:"için hazırladığım dijital menü demosu:",shareReady:"dijital menünüz hazır:",
+  edit:"Menüyü kendiniz düzenlemek için menüde logoya 3 saniye basılı tutun ve giriş yapın:",
+  demoEmail:"demo.nearmenu.app",mainNote:"Bu ana demo menüdür; diğer demolar buradan kopyalanır, silinemez.",delLabel:"Restoranı ve menüsünü kalıcı olarak sil",
+  closed:"Menü müşterilere kapalı.",passiveOpt:"Pasif (menü kapalı)"},
+ katalog:{tab:"Kataloglar",title:"sh21 Katalog",noun:"katalog",Noun:"Katalog",thing:"katalog",Thing:"Katalog",acc:"Kataloğu",
+  list:"catalog_admin_list",create:"catalog_admin_create",addOwner:"catalog_admin_add_owner",ownerParam:"p_catalog",
+  table:"catalogs",demo:CATALOG_DEMO,url:s=>katalogUrl(s),open:"Kataloğu aç",nameLabel:"Firma adı",namePh:"örn. Asoda Mobilya",slugPh:"asoda-mobilya",
+  copyLabel:"Demo kataloğu kopyala (sh21-demo içeriği)",visits:"Bugün katalog açılışı",open30:"açılış / 30 gün",
+  shareDemo:"için hazırladığım ürün kataloğu demosu:",shareReady:"ürün kataloğunuz hazır:",
+  edit:"Kataloğu kendiniz düzenlemek için katalogda logoya 2 saniye basılı tutun ve giriş yapın:",
+  demoEmail:"demo.sh21.app",mainNote:"Bu ana demo katalogdur; yeni kataloglar buradan kopyalanır, silinemez.",delLabel:"Kataloğu ve tüm içeriğini kalıcı olarak sil",
+  closed:"Katalog ziyaretçilere kapalı.",passiveOpt:"Pasif (katalog kapalı)"}
+};
+let kind=(()=>{const k=safeGet("superKind");return k==="katalog"?"katalog":"menu"})();
+const K=()=>KINDS[kind];
 
 function fmtDate(d){
  if(!d)return "";
@@ -1771,12 +1805,12 @@ function renderLogin(){
   body=`
    <div class="lg-logo" aria-hidden="true"></div>
    <h1 class="lg-header">Hoş Geldiniz!</h1>
-   <p class="lg-sub">Süper yönetici paneli: tüm restoranlar ve demolar.</p>
+   <p class="lg-sub">Süper yönetici paneli: tüm restoranlar, kataloglar ve demolar.</p>
    <input id="em" class="lg-input" type="email" autocomplete="username" placeholder="E-posta" aria-label="E-posta" value="${esc(safeGet("nearMenuLastEmail")||"")}">
    <input id="pw" class="lg-input" type="password" autocomplete="current-password" placeholder="Şifre" aria-label="Şifre">
    <button class="lg-button sign-in" id="loginBtn" type="button">Giriş Yap</button>
    <div class="lg-error" id="err"></div>
-   <p class="lg-footer">Bu panel sadece süper yönetici hesabıyla açılır. Restoran sahipleri kendi menülerinden (logoya 3 sn basarak) giriş yapar.</p>`;
+   <p class="lg-footer">Bu panel sadece süper yönetici hesabıyla açılır. Restoran ve firma sahipleri kendi menü/kataloglarından (logoya basılı tutarak) giriş yapar.</p>`;
  }
 
  return `
@@ -1829,17 +1863,21 @@ function renderApp(){
  <div class="top">
   <div class="brand">
    <div class="logo">N</div>
-   <div><b>NearMenu Süper Yönetici</b><span>${esc(session?.user?.email||"")}</span></div>
+   <div><b>NearDiji Süper Yönetici</b><span>${esc(session?.user?.email||"")}</span></div>
   </div>
   <button class="btn small" id="logout">Çıkış</button>
  </div>
 
+ <div class="kinds" role="tablist" aria-label="Ürün">
+  ${Object.keys(KINDS).map(k=>`<button role="tab" aria-selected="${k===kind}" class="${k===kind?"on":""}" data-kind="${k}">${KINDS[k].tab}<small>${KINDS[k].title}</small></button>`).join("")}
+ </div>
+
  <div class="stats">
-  <div class="stat"><small>Toplam restoran</small><b>${counts.all}</b></div>
+  <div class="stat"><small>Toplam ${K().noun}</small><b>${counts.all}</b></div>
   <div class="stat"><small>Aktif (ödeyen)</small><b>${counts.active}</b></div>
   <div class="stat"><small>Denemede</small><b>${counts.trial}</b></div>
   <div class="stat ${counts.ending+counts.expired?"warn":""}"><small>Bitiyor / bitti</small><b>${counts.ending} / ${counts.expired}</b></div>
-  <div class="stat"><small>Bugün menü açılışı</small><b>${visitsToday}</b></div>
+  <div class="stat"><small>${K().visits}</small><b>${visitsToday}</b></div>
  </div>
 
  <div class="actions">
@@ -1848,7 +1886,7 @@ function renderApp(){
  </div>
 
  <div class="toolbar">
-  <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="text" placeholder="Restoran, adres veya e-posta ara" value="${esc(query)}" aria-label="Ara"></label>
+  <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="text" placeholder="${K().Noun}, adres veya e-posta ara" value="${esc(query)}" aria-label="Ara"></label>
   <button class="btn small" id="reload" aria-label="Yenile">↻ Yenile</button>
  </div>
 
@@ -1863,10 +1901,10 @@ function renderApp(){
 
  ${
   loading&&!all.length
-  ?`<div class="loading">${LOADER_HTML}<span>Restoranlar yükleniyor...</span></div>`
+  ?`<div class="loading">${LOADER_HTML}<span>${K().Noun==="Katalog"?"Kataloglar":"Restoranlar"} yükleniyor...</span></div>`
   :list.length
   ?`<div class="list">${list.map(renderCard).join("")}</div>`
-  :`<div class="empty">${all.length?"Bu filtreye uyan restoran yok.":"Henüz restoran yok. \"Demo Oluştur\" ile başlayın."}</div>`
+  :`<div class="empty">${all.length?"Bu filtreye uyan "+K().noun+" yok.":"Henüz "+K().noun+" yok. \"Demo Oluştur\" ile başlayın."}</div>`
  }`;
 }
 
@@ -1878,7 +1916,7 @@ function renderCard(r){
 
  if(r.status==="trial"&&r.trial_ends){
   trial=d<0
-   ?`<div class="trialline warn">Deneme ${fmtDate(r.trial_ends)} tarihinde bitti. Menü müşterilere kapalı.</div>`
+   ?`<div class="trialline warn">Deneme ${fmtDate(r.trial_ends)} tarihinde bitti. ${K().closed}</div>`
    :`<div class="trialline ${d<=3?"warn":""}">Deneme ${fmtDate(r.trial_ends)} tarihine kadar · <b>${d===0?"bugün son gün":d+" gün kaldı"}</b></div>`;
  }
 
@@ -1890,20 +1928,20 @@ function renderCard(r){
   <div class="card-head">
    <div style="min-width:0">
     <h3>${esc(r.name)}</h3>
-    <a href="${esc(menuUrl(r.slug))}" target="_blank" rel="noopener">${esc(menuUrl(r.slug).replace(/^https?:\/\//,""))}</a>
+    <a href="${esc(K().url(r.slug))}" target="_blank" rel="noopener">${esc(K().url(r.slug).replace(/^https?:\/\//,""))}</a>
    </div>
    <span class="pill ${s}">${STATUS_LABEL[s]}</span>
   </div>
   <div class="meta">
    <span><b>${r.products}</b> ürün</span>
    <span><b>${r.categories}</b> kategori</span>
-   <span><b>${r.visits_30d}</b> açılış / 30 gün</span>
+   <span><b>${r.visits_30d}</b> ${K().open30}</span>
    <span>${r.plan==="premium"?"Premium":"Temel"} paket</span>
   </div>
   ${trial}
   ${members?`<div class="members">${members}</div>`:`<div class="hint">Henüz panel hesabı yok.</div>`}
   <div class="card-actions">
-   <a class="btn small" href="${esc(menuUrl(r.slug))}" target="_blank" rel="noopener">Menüyü aç</a>
+   <a class="btn small" href="${esc(K().url(r.slug))}" target="_blank" rel="noopener">${K().open}</a>
    <button class="btn small" data-share="${esc(r.id)}">Paylaş</button>
    <button class="btn small gold" data-edit="${esc(r.id)}">Yönet</button>
   </div>
@@ -1929,11 +1967,11 @@ function renderModal(){
      <button class="${demo?"":"on"}" data-mode="customer">Gerçek müşteri<small>aktif, süresiz</small></button>
     </div>
 
-    <div class="field"><label for="fName">İşletme adı</label><input id="fName" value="${esc(f.name)}" placeholder="örn. Kebapçı Ali"></div>
+    <div class="field"><label for="fName">${K().nameLabel}</label><input id="fName" value="${esc(f.name)}" placeholder="${K().namePh}" maxlength="120"></div>
     <div class="field">
-     <label for="fSlug">Menü adresi</label>
-     <input id="fSlug" value="${esc(f.slug)}" placeholder="kebapci-ali" autocapitalize="off" autocorrect="off" spellcheck="false">
-     <span class="hint">Menü linki: <code id="slugPreview">${esc(menuUrl(f.slug||"..."))}</code></span>
+     <label for="fSlug">${K().Thing} adresi</label>
+     <input id="fSlug" value="${esc(f.slug)}" placeholder="${K().slugPh}" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="60">
+     <span class="hint">${K().Thing} linki: <code id="slugPreview">${esc(K().url(f.slug||"..."))}</code></span>
     </div>
 
     ${demo?`
@@ -1942,7 +1980,7 @@ function renderModal(){
      <select id="fDays">
       ${[7,14,30].map(n=>`<option value="${n}" ${Number(f.days)===n?"selected":""}>${n} gün</option>`).join("")}
      </select>
-     <span class="hint">Süre bitince menü kendiliğinden kapanır, veriler silinmez.</span>
+     <span class="hint">Süre bitince ${K().thing} kendiliğinden kapanır, veriler silinmez.</span>
     </div>`:`
     <div class="field">
      <label for="fPlan">Paket</label>
@@ -1952,13 +1990,13 @@ function renderModal(){
      </select>
     </div>`}
 
-    <label class="check"><input type="checkbox" id="fCopy" ${f.copy?"checked":""}> Demo menüyü kopyala (75 ürün, çevirileriyle)</label>
+    <label class="check"><input type="checkbox" id="fCopy" ${f.copy?"checked":""}> ${K().copyLabel}</label>
 
     <div class="section-title">Panel hesabı</div>
-    <label class="check"><input type="checkbox" id="fAccount" ${f.account?"checked":""}> Menüyü düzenleyebilsin diye giriş hesabı oluştur</label>
+    <label class="check"><input type="checkbox" id="fAccount" ${f.account?"checked":""}> ${K().acc} düzenleyebilsin diye giriş hesabı oluştur</label>
     <div class="field" ${f.account?"":"hidden"} id="emailWrap">
      <label for="fEmail">E-posta</label>
-     <input id="fEmail" type="email" value="${esc(f.email)}" placeholder="${demo?"otomatik: adres@demo.nearmenu.app":"isletme@ornek.com"}" autocapitalize="off">
+     <input id="fEmail" type="email" value="${esc(f.email)}" placeholder="${demo?"otomatik: adres@"+K().demoEmail:"isletme@ornek.com"}" autocapitalize="off">
      <span class="hint">${demo
       ?"Boş bırakırsanız sahte bir demo e-postası oluşturulur; gerçek e-posta gerekmez."
       :"İşletme sahibinin e-postası. İlk girişte kendi şifresini belirleyecek."}</span>
@@ -1991,7 +2029,7 @@ function renderModal(){
      <a class="btn gold" href="https://wa.me/?text=${encodeURIComponent(text)}" target="_blank" rel="noopener">WhatsApp'ta gönder</a>
      <button class="btn" id="copyShare">Metni kopyala</button>
      <button class="btn" id="copyLink">Sadece linki kopyala</button>
-     <a class="btn" href="${esc(menuUrl(r.slug))}" target="_blank" rel="noopener">Menüyü aç</a>
+     <a class="btn" href="${esc(K().url(r.slug))}" target="_blank" rel="noopener">${K().open}</a>
     </div>
     ${modal.owner&&modal.owner.temp_password?`<p class="hint" style="margin-top:12px">Geçici şifre sadece şimdi gösteriliyor. Kaybolursa "Yönet" ekranından yeni şifre oluşturabilirsiniz.</p>`:""}
    </div>
@@ -2002,15 +2040,15 @@ function renderModal(){
 
   const r=restaurants.find(x=>x.id===modal.id);
   if(!r){modal=null;return ""}
-  const isMain=r.slug===MAIN_DEMO;
+  const isMain=r.slug===K().demo;
 
   return `
   <div class="overlay" id="overlay">
    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
     <div class="modal-head"><h2 id="mTitle">${esc(r.name)}</h2><button class="x" id="mClose" aria-label="Kapat">×</button></div>
-    <p class="hint"><code>${esc(menuUrl(r.slug))}</code></p>
+    <p class="hint"><code>${esc(K().url(r.slug))}</code></p>
 
-    <div class="field"><label for="eName">İşletme adı</label><input id="eName" value="${esc(r.name)}"></div>
+    <div class="field"><label for="eName">${K().nameLabel}</label><input id="eName" value="${esc(r.name)}" maxlength="120"></div>
 
     <div class="row2">
      <div class="field">
@@ -2018,7 +2056,7 @@ function renderModal(){
       <select id="eStatus">
        <option value="active" ${r.status==="active"?"selected":""}>Aktif (süresiz)</option>
        <option value="trial" ${r.status==="trial"?"selected":""}>Deneme</option>
-       <option value="passive" ${r.status==="passive"?"selected":""}>Pasif (menü kapalı)</option>
+       <option value="passive" ${r.status==="passive"?"selected":""}>${K().passiveOpt}</option>
       </select>
      </div>
      <div class="field">
@@ -2051,13 +2089,13 @@ function renderModal(){
      <div class="field"><button class="btn" id="eAddOwner">Ekle</button></div>
     </div>
 
-    ${isMain?`<p class="hint" style="margin-top:20px">Bu ana demo menüdür; diğer demolar buradan kopyalanır, silinemez.</p>`:`
+    ${isMain?`<p class="hint" style="margin-top:20px">${K().mainNote}</p>`:`
     <div class="section-title">Tehlikeli bölge</div>
     <div class="field">
      <label for="eDel">Silmek için adresi yazın: <code>${esc(r.slug)}</code></label>
      <input id="eDel" autocapitalize="off" autocorrect="off" spellcheck="false">
     </div>
-    <button class="btn danger" id="eDelete" style="margin-top:10px;width:100%">Restoranı ve menüsünü kalıcı olarak sil</button>`}
+    <button class="btn danger" id="eDelete" style="margin-top:10px;width:100%">${K().delLabel}</button>`}
 
     <div class="error" id="err" hidden></div>
    </div>
@@ -2070,18 +2108,18 @@ function renderModal(){
 function shareText(r,owner){
 
  const lines=[];
- const url=menuUrl(r.slug);
+ const url=K().url(r.slug);
 
  if(r.status==="trial"){
-  lines.push("Merhaba! "+r.name+" için hazırladığım dijital menü demosu:");
+  lines.push("Merhaba! "+r.name+" "+K().shareDemo);
  }else{
-  lines.push("Merhaba! "+r.name+" dijital menünüz hazır:");
+  lines.push("Merhaba! "+r.name+" "+K().shareReady);
  }
  lines.push(url);
 
  if(owner&&owner.temp_password){
   lines.push("");
-  lines.push("Menüyü kendiniz düzenlemek için menüde logoya 3 saniye basılı tutun ve giriş yapın:");
+  lines.push(K().edit);
   lines.push("E-posta: "+owner.email);
   lines.push("Şifre: "+owner.temp_password);
  }
@@ -2168,7 +2206,7 @@ async function afterLogin(){
 
 async function loadRestaurants(){
  loading=true;
- const list=await rpc("admin_list_restaurants");
+ const list=await rpc(K().list);
  restaurants=Array.isArray(list)?list:[];
  loading=false;
 }
@@ -2192,6 +2230,13 @@ function bindApp(){
  });
 
  $("reload")?.addEventListener("click",reload);
+
+ document.querySelectorAll("[data-kind]").forEach(b=>b.onclick=async()=>{
+  if(b.dataset.kind===kind)return;
+  kind=b.dataset.kind;safeSet("superKind",kind);
+  restaurants=[];filter="all";query="";loading=true;render();
+  await reload();
+ });
 
  const q=$("q");
  if(q){
@@ -2261,14 +2306,14 @@ function bindModal(){
   name.oninput=()=>{
    if(!modal.form.slugTouched){
     slug.value=slugify(name.value);
-    $("slugPreview").textContent=menuUrl(slug.value||"...");
+    $("slugPreview").textContent=K().url(slug.value||"...");
    }
   };
   slug.oninput=()=>{
    modal.form.slugTouched=true;
    const clean=slugify(slug.value);
    if(clean!==slug.value&&!slug.value.endsWith("-"))slug.value=clean;
-   $("slugPreview").textContent=menuUrl(slugify(slug.value)||"...");
+   $("slugPreview").textContent=K().url(slugify(slug.value)||"...");
   };
  }
 
@@ -2281,13 +2326,13 @@ function bindModal(){
   const demo=modal.mode==="demo";
   const slugV=slugify(f.slug);
 
-  if(!f.name.trim()){showErr("İşletme adını yazın.");return}
-  if(slugV.length<3){showErr("Menü adresi en az 3 karakter olmalı.");return}
+  if(!f.name.trim()){showErr(K().nameLabel+"nı yazın.");return}
+  if(slugV.length<3){showErr(K().Thing+" adresi en az 3 karakter olmalı.");return}
   if(RESERVED.includes(slugV)){showErr("\""+slugV+"\" adresi sistem tarafından kullanılıyor, başka bir adres seçin.");return}
 
   let email=(f.email||"").trim().toLowerCase();
   if(f.account&&!email){
-   if(demo)email=slugV+"@demo.nearmenu.app";
+   if(demo)email=slugV+"@"+K().demoEmail;
    else{showErr("Gerçek müşteri için işletme sahibinin e-postasını yazın.");return}
   }
 
@@ -2295,13 +2340,13 @@ function bindModal(){
   btn.disabled=true;btn.textContent="Oluşturuluyor...";
 
   try{
-   const res=await rpc("admin_create_restaurant",{
+   const res=await rpc(K().create,{
     p_name:f.name.trim(),
     p_slug:slugV,
     p_status:demo?"trial":"active",
     p_plan:demo?"basic":f.plan,
     p_trial_days:demo?f.days:14,
-    p_copy_from:f.copy?MAIN_DEMO:null,
+    p_copy_from:f.copy?K().demo:null,
     p_owner_email:f.account?email:null,
     p_force_change:!demo
    });
@@ -2318,7 +2363,7 @@ function bindModal(){
 
  /* result / share */
  $("copyShare")?.addEventListener("click",()=>copyText($("shareText").textContent));
- $("copyLink")?.addEventListener("click",()=>copyText(menuUrl(modal.restaurant.slug)));
+ $("copyLink")?.addEventListener("click",()=>copyText(K().url(modal.restaurant.slug)));
 
  /* edit */
  const r=modal.type==="edit"?restaurants.find(x=>x.id===modal.id):null;
@@ -2341,7 +2386,7 @@ function bindModal(){
    trial_ends:status==="trial"?($("eTrial").value||isoPlus(14)):null
   };
   try{
-   await sb("/rest/v1/restaurants?id=eq."+r.id,{method:"PATCH",headers:{"Prefer":"return=minimal"},body});
+   await sb("/rest/v1/"+K().table+"?id=eq."+r.id,{method:"PATCH",headers:{"Prefer":"return=minimal"},body});
    Object.assign(r,body);
    toast("✓ Kaydedildi");
    modal=null;
@@ -2363,7 +2408,7 @@ function bindModal(){
   const email=($("eOwner").value||"").trim().toLowerCase();
   if(!email){showErr("E-posta yazın.");return}
   try{
-   const res=await rpc("admin_add_owner",{p_restaurant:r.id,p_email:email,p_force_change:r.status!=="trial"});
+   const res=await rpc(K().addOwner,{[K().ownerParam]:r.id,p_email:email,p_force_change:r.status!=="trial"});
    await loadRestaurants();
    modal={type:"share",restaurant:restaurants.find(x=>x.id===r.id)||r,owner:res};
    render();
@@ -2372,9 +2417,9 @@ function bindModal(){
 
  $("eDelete")?.addEventListener("click",async()=>{
   if(($("eDel").value||"").trim()!==r.slug){showErr("Onay için adresi tam olarak yazın: "+r.slug);return}
-  if(!confirm(r.name+" ve tüm menüsü kalıcı olarak silinecek. Emin misiniz?"))return;
+  if(!confirm(r.name+" ve tüm içeriği kalıcı olarak silinecek. Emin misiniz?"))return;
   try{
-   await sb("/rest/v1/restaurants?id=eq."+r.id,{method:"DELETE",headers:{"Prefer":"return=minimal"}});
+   await sb("/rest/v1/"+K().table+"?id=eq."+r.id,{method:"DELETE",headers:{"Prefer":"return=minimal"}});
    restaurants=restaurants.filter(x=>x.id!==r.id);
    modal=null;
    render();
