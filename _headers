@@ -1,0 +1,21 @@
+# Cloudflare Pages güvenlik ve önbellek başlıkları (GitHub Pages bu dosyayı yok sayar)
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Frame-Options: DENY
+
+/assets/*
+  Cache-Control: public, max-age=604800
+
+/menu/demo/*
+  Cache-Control: public, max-age=2592000, immutable
+
+/821/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+
+/ayse/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store

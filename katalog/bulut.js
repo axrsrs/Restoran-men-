@@ -116,9 +116,9 @@
     var blob = dataUrlToBlob(u);
     if (!blob || !EXT[blob.type]) return u; /* SVG vb. veride kalır */
     var name = catalog.id + "/" + (await sha(blob)) + "." + EXT[blob.type];
-    await sb("/storage/v1/object/" + BUCKET + "/" + name, { method: "POST", body: blob,
-      headers: { "Content-Type": blob.type, "x-upsert": "true", "cache-control": "31536000" } });
-    var url = SB_URL + "/storage/v1/object/public/" + BUCKET + "/" + name;
+    await ensureFresh();
+    if (!session) throw new Error("Oturum süresi doldu, lütfen tekrar giriş yapın.");
+    var url = await NDMedia.put(BUCKET, name, blob, session.access_token);
     uploaded.set(u, url);
     return url;
   }

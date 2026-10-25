@@ -2496,6 +2496,7 @@ a.adminButton{
 <body>
 <div id="app"></div>
 
+<script src="/assets/media.js"></script>
 <script>
 const DEFAULT_ADMIN_PIN="1234";
 const STORAGE_KEY="nearMenuData";
@@ -4142,7 +4143,7 @@ async function syncNow(){
 /* ---------- fotoğraf yükleme ---------- */
 
 function mediaPublicUrl(path){
- return SB_URL+"/storage/v1/object/public/"+MEDIA_BUCKET+"/"+path.split("/").map(encodeURIComponent).join("/");
+ return NDMedia.url(MEDIA_BUCKET,path);
 }
 
 async function uploadMedia(type,id,blob){
@@ -4153,21 +4154,17 @@ async function uploadMedia(type,id,blob){
            mime.includes("mp4")?"mp4":mime.includes("webm")?"webm":mime.includes("quicktime")?"mov":"jpg";
  const path=rid+"/"+type+"/"+String(id).replace(/[^a-zA-Z0-9-]/g,"")+"-"+Date.now()+"."+ext;
 
- await sb("/storage/v1/object/"+MEDIA_BUCKET+"/"+path,{
-  method:"POST",
-  headers:{"Content-Type":mime,"x-upsert":"true"},
-  body:blob
- });
-
- return mediaPublicUrl(path);
+ await validSession();
+ if(!cloud.session)throw new Error("Oturum süresi doldu, lütfen tekrar giriş yapın.");
+ return await NDMedia.put(MEDIA_BUCKET,path,blob.type?blob:new Blob([blob],{type:mime}),cloud.session.access_token);
 }
 
 async function deleteServerMedia(url){
- const prefix=SB_URL+"/storage/v1/object/public/"+MEDIA_BUCKET+"/";
- if(!url||!String(url).startsWith(prefix)||!canWrite())return;
- const path=String(url).slice(prefix.length).split("/").map(decodeURIComponent).map(encodeURIComponent).join("/");
+ const x=NDMedia.parse(url);
+ if(!x||x.bucket!==MEDIA_BUCKET||!canWrite())return;
  try{
-  await sb("/storage/v1/object/"+MEDIA_BUCKET+"/"+path,{method:"DELETE"});
+  await validSession();
+  if(cloud.session)await NDMedia.del(url,cloud.session.access_token);
  }catch(e){}
 }
 

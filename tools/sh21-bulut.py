@@ -23,7 +23,7 @@ def rep(old, new, count=1):
 
 # 1) bulut katmanı uygulamadan önce yüklenir
 rep('<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>',
-    '<script src="/katalog/bulut.js"></script>\n'
+    '<script src="/assets/media.js"></script>\n<script src="/katalog/bulut.js"></script>\n'
     '<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>')
 
 # 2) yerel kayıt fonksiyonları bulutta Supabase'e gider

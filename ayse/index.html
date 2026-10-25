@@ -19,6 +19,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
 <script src="/assets/site-data.js"></script>
+<script src="/assets/media.js"></script>
 <style>
 :root{--bg:#EBE9E5;--panel:#F5F4F1;--fg:#151514;--muted:color-mix(in srgb,var(--fg) 58%,transparent);--line:color-mix(in srgb,var(--fg) 13%,transparent);
  --field:#fff;--ok:#2f9e6c;--warn:#c98a1d;--bad:#d2493f;--head:'Geist','Helvetica Neue',Arial,sans-serif;--accent:'Instrument Serif',Georgia,serif;color-scheme:light}
@@ -581,8 +582,9 @@ function clientName(fn){
 }
 async function uploadSiteMedia(out,folder){
  var name=folder+"/"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8)+"."+out.ext;
- await sb("/storage/v1/object/site-media/"+name,{method:"POST",body:out.blob,headers:{"Content-Type":out.type,"x-upsert":"true","cache-control":"31536000"}});
- return SB_URL+"/storage/v1/object/public/site-media/"+name;
+ await ensureFresh();
+ if(!session)throw new Error("Oturum süresi doldu, lütfen tekrar giriş yapın.");
+ return await NDMedia.put("site-media",name,out.blob,session.access_token);
 }
 /* referans logoları: çoklu seçim, her biri otomatik listeye eklenir */
 function pickClientLogos(){
@@ -615,9 +617,7 @@ function pickImage(path,kind){
   toast("Yükleniyor...");
   try{
    var out=kind==="logo"?await prepLogo(file,S.logoCutBg!==false):kind==="clientlogo"?await prepLogo(file,S.clientsCutBg!==false):await prepImage(file,kind);
-   var name=(kind||"img")+"/"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8)+"."+out.ext;
-   await sb("/storage/v1/object/site-media/"+name,{method:"POST",body:out.blob,headers:{"Content-Type":out.type,"x-upsert":"true","cache-control":"31536000"}});
-   setP(path,SB_URL+"/storage/v1/object/public/site-media/"+name);
+   setP(path,await uploadSiteMedia(out,kind||"img"));
    if(kind==="logo"&&path==="logo"){S.logoDark="";S.logoTone=out.tone;S.logoRatio=out.ratio}
    rerender();toast("✓ Görsel yüklendi — yayına almak için Kaydet'e basın.");
   }catch(er){toast("Yüklenemedi: "+er.message)}
