@@ -4394,6 +4394,79 @@ function bindCloudLogin(){
  });
 }
 
+/* ---------- JSON yedek ---------- */
+
+function backupCard(){
+ return `
+ <div class="adminCard">
+  <div class="adminCardTitle">💾 Yedek</div>
+  <div class="adminCardDescription">
+   Menünün tamamını (kategoriler, ürünler, etkinlikler, ayarlar) tek bir JSON dosyası olarak indirin ya da eski bir yedeği geri yükleyin.
+   Görseller dosyada bağlantı olarak durur. Geri yükleme mevcut menünün yerine geçer.
+  </div>
+  <button class="adminButton gold full" id="backupDown">⬇ JSON Yedek İndir</button>
+  <button class="adminButton full" id="backupUp" style="margin-top:8px">⬆ JSON Yedek Yükle</button>
+  <input type="file" id="backupFile" accept="application/json,.json" hidden>
+ </div>`;
+}
+
+function backupExport(){
+ collectAdmin();
+ ensureIds();
+ const rid=DATA.restaurantId;
+ const o={
+  format:"nearmenu-yedek",surum:1,tarih:new Date().toISOString(),adres:RESTAURANT_SLUG,
+  menu:{
+   restaurant:restaurantRow(),
+   categories:DATA.categories.map((c,i)=>Object.assign(categoryRow(c,i,rid),{items:(c.items||[]).map((p,j)=>productRow(p,j,c.id,rid))})),
+   events:DATA.events.map((e,i)=>eventRow(e,i,rid))
+  }
+ };
+ const a=document.createElement("a");
+ const u=URL.createObjectURL(new Blob([JSON.stringify(o,null,2)],{type:"application/json"}));
+ a.href=u;a.download=RESTAURANT_SLUG+"-menu-yedek-"+new Date().toISOString().slice(0,10)+".json";
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(u),4000);
+ showToast("✓ Yedek indirildi.");
+}
+
+function backupImport(file){
+ if(!file)return;
+ if(file.size>8*1024*1024){alert("Dosya çok büyük (en fazla 8 MB).");return}
+ const rd=new FileReader();
+ rd.onerror=()=>alert("Dosya okunamadı.");
+ rd.onload=async()=>{
+  let o;
+  try{o=JSON.parse(String(rd.result))}catch(e){alert("Bu dosya geçerli bir JSON değil.");return}
+  const m=o&&o.format==="nearmenu-yedek"?o.menu:null;
+  if(!m||!m.restaurant||!Array.isArray(m.categories)||!Array.isArray(m.events||[])){alert("Bu dosya bir NearMenu yedeği değil.");return}
+  const nProd=m.categories.reduce((a,c)=>a+(Array.isArray(c.items)?c.items.length:0),0);
+  if(m.categories.length>200||nProd>3000||(m.events||[]).length>300){alert("Yedek çok büyük.");return}
+  if(!canWrite()){alert("Bu menüyü düzenleme yetkiniz yok.");return}
+  if(!confirm("Mevcut menü silinip bu yedekle ("+m.categories.length+" kategori, "+nProd+" ürün) değiştirilsin mi? Bu işlem geri alınamaz.")){return}
+  /* kimlikler yeniden üretilir: başka bir restorana ait yedek de güvenle yüklenir */
+  const cats=m.categories.map(c=>{
+   const id=newId();
+   return Object.assign({},c,{id,items:(Array.isArray(c.items)?c.items:[]).map(p=>Object.assign({},p,{id:newId(),category_id:id}))});
+  });
+  const evs=(m.events||[]).map(e=>Object.assign({},e,{id:newId()}));
+  const d=serverToData({restaurant:Object.assign({},m.restaurant,{id:DATA.restaurantId}),categories:cats,events:evs});
+  if(d.pdf===undefined)delete d.pdf;
+  const rid=DATA.restaurantId;
+  DATA.categories=[];
+  DATA.events=[];
+  mergeData(d);
+  DATA.restaurantId=rid;
+  adminCategoryView=null;adminProductView=null;adminEventView=null;
+  try{
+   await syncNow();
+   showToast(cloud.status==="error"?"⚠ Yedek yüklendi ama kaydedilemedi, tekrar denenecek.":"✓ Yedek yüklendi.");
+  }catch(e){showToast("⚠ Yedek kaydedilemedi.")}
+  render();
+ };
+ rd.readAsText(file);
+}
+
 function renderAccountCard(){
 
  const email=cloud.session?.user?.email||"";
@@ -4431,6 +4504,10 @@ function renderAccountCard(){
 }
 
 function bindAccountCard(){
+
+ $("backupDown")?.addEventListener("click",backupExport);
+ $("backupUp")?.addEventListener("click",()=>$("backupFile")?.click());
+ $("backupFile")?.addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];e.target.value="";backupImport(f)});
 
  $("accountQr")?.addEventListener("click",()=>NDQR.open({url:publicMenuUrl(RESTAURANT_SLUG),title:(DATA&&DATA.name)||"Menü QR Kodu",file:RESTAURANT_SLUG}));
 
@@ -6250,7 +6327,7 @@ function renderAdminGeneral(){
 
  </div>
 
- ${CLOUD?renderAccountCard():` <div class="adminCard">
+ ${CLOUD?backupCard()+renderAccountCard():` <div class="adminCard">
 
   <div class="adminCardTitle">🔐 Güvenlik</div>
 

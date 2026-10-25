@@ -312,7 +312,7 @@ var GRIP='<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" ar
 var CHEV='<svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var TRASH='<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-var SECTIONS=[["marka","Marka & logo"],["giris","Giriş bölümü"],["projeler","Projeler"],["referanslar","Referanslar"],["hizmetler","Hizmetler"],["surec","Süreç"],["hakkinda","Hakkında"],["iletisim","İletişim"],["seo","Tema & SEO"]];
+var SECTIONS=[["marka","Marka & logo"],["giris","Giriş bölümü"],["projeler","Projeler"],["referanslar","Referanslar"],["hizmetler","Hizmetler"],["surec","Süreç"],["hakkinda","Hakkında"],["iletisim","İletişim"],["seo","Tema & SEO"],["yedek","Yedek"]];
 
 function appHTML(){
  var h=S.hero;
@@ -385,6 +385,12 @@ function appHTML(){
   +inp("Sayfa başlığı (Google)","seo.title",{full:true})
   +inp("Sayfa açıklaması (Google)","seo.description",{area:true,full:true,rows:2})
   +'</div></section>';
+
+ o+='<section class="card" id="s-yedek"><h2>Yedek</h2><p class="sub">Tüm site içeriğini tek bir JSON dosyası olarak indirin ya da daha önce indirdiğiniz yedeği geri yükleyin. Görseller dosyanın içinde değil, bağlantı olarak saklanır; yüklenen görseller silinmediği sürece geri yüklemede de görünür.</p>'
+  +'<div class="img-field"><button class="btn" id="bkDown" type="button">JSON yedek indir</button>'
+  +'<button class="btn" id="bkUp" type="button">JSON yedek yükle</button>'
+  +'<input id="bkFile" type="file" accept="application/json,.json" hidden></div>'
+  +'<span class="hint">Yükleme mevcut içeriğin yerine geçer ve yayına almak için ayrıca “Kaydet”e basmanız gerekir.</span></section>';
 
  o+='</main></div>';
  return o;
@@ -503,12 +509,15 @@ function bindApp(){
   updateStatus();
  });
  app.addEventListener("change",function(e){
+  if(e.target&&e.target.id==="bkFile"){backupUp(e.target);return}
   var el=e.target;if(el.dataset&&el.dataset.bool){setP(el.dataset.p,el.checked);rerender()}
  });
  app.addEventListener("click",function(e){
   var t=e.target.closest("button,a,[data-toggle]");if(!t)return;
   if(t.id==="save"){save();return}
   if(t.id==="logout"){logout();return}
+  if(t.id==="bkDown"){backupDown();return}
+  if(t.id==="bkUp"){$("bkFile").click();return}
   if(t.id==="addProj"){
    var p={id:uid(),name:"Yeni proje",tag:"",year:String(new Date().getFullYear()),status:"dev",desc:"",link:"",linkLabel:"",image:"",featured:false,hidden:false};
    S.projects.push(p);openItem=p.id;rerender();
@@ -531,6 +540,35 @@ function bindApp(){
   if(t.dataset.toggle!==undefined&&!e.target.closest(".drag")){openItem=openItem===t.dataset.toggle?null:t.dataset.toggle;rerender();return}
   if(t.dataset.s){section=t.dataset.s;document.querySelectorAll(".side a").forEach(function(a){a.classList.toggle("on",a===t)})}
  });
+}
+/* ── JSON yedek ── */
+function backupDown(){
+ var o={format:"neardiji-site-yedek",surum:1,tarih:new Date().toISOString(),icerik:clone(S)};
+ var a=document.createElement("a"),u=URL.createObjectURL(new Blob([JSON.stringify(o,null,2)],{type:"application/json"}));
+ a.href=u;a.download="neardiji-site-yedek-"+new Date().toISOString().slice(0,10)+".json";
+ document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000);
+ toast("✓ Yedek indirildi.");
+}
+function backupUp(inp){
+ var f=inp.files&&inp.files[0];inp.value="";
+ if(!f)return;
+ if(f.size>3*1024*1024){toast("Dosya çok büyük (en fazla 3 MB).");return}
+ var rd=new FileReader();
+ rd.onerror=function(){toast("Dosya okunamadı.")};
+ rd.onload=function(){
+  var o;
+  try{o=JSON.parse(String(rd.result))}catch(er){toast("Bu dosya geçerli bir JSON değil.");return}
+  var d=o&&o.format==="neardiji-site-yedek"?o.icerik:null;
+  if(!d||typeof d!=="object"||Array.isArray(d)||!Array.isArray(d.projects)){toast("Bu dosya bir NearDiji site yedeği değil.");return}
+  if(!confirm("Mevcut site içeriği bu yedekle değiştirilsin mi? (Yayına almak için ayrıca Kaydet'e basmanız gerekir.)"))return;
+  var n=merge(clone(DEF),d);
+  n.hero=merge(clone(DEF.hero),n.hero||{});
+  n.contact=merge(clone(DEF.contact),n.contact||{});
+  n.seo=merge(clone(DEF.seo),n.seo||{});
+  S=n;openItem=null;rerender();
+  toast("✓ Yedek yüklendi. Yayına almak için Kaydet'e basın.");
+ };
+ rd.readAsText(f);
 }
 var secIO=null;
 function observeSections(){
