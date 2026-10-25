@@ -11,6 +11,16 @@ Durum (hazır olanlar):
 2. API anahtarı → ortam değişkeni `CLOUDFLARE_API_TOKEN` (izinler: Account: Workers Scripts Edit, Workers R2 Storage Edit,
    Cloudflare Pages Edit, Account Settings Read · Zone neardiji.com: DNS Edit, Workers Routes Edit, Zone Read).
 
+ÖNEMLİ — anahtar nasıl verildi:
+- Anahtar ortam değişkeni DEĞİL, "Network secret" olarak eklendi: `api.cloudflare.com`'a giden her isteğe proxy
+  `Authorization: Bearer <anahtar>` başlığını kendisi ekler. Anahtar oturumda görünmez.
+- Bu yüzden Cloudflare REST API'sini doğrudan `curl https://api.cloudflare.com/client/v4/...` ile (Authorization başlığı
+  YAZMADAN) çağır. Önce doğrula: `curl -s https://api.cloudflare.com/client/v4/user/tokens/verify`.
+- wrangler kullanılacaksa `CLOUDFLARE_API_TOKEN=yer-tutucu` ile çalıştırmayı dene; proxy başlığı değiştirmezse
+  wrangler yerine REST API kullan (Worker yükleme: `PUT /accounts/{id}/workers/scripts/neardiji-media` multipart,
+  R2: `POST /accounts/{id}/r2/buckets`, nesne: `PUT /accounts/{id}/r2/buckets/neardiji-media/objects/<anahtar>`,
+  özel alan adı: `PUT /accounts/{id}/workers/domains`, Pages: `POST /accounts/{id}/pages/projects` + direct upload).
+
 Adımlar:
 1. `npx wrangler@3 whoami` → hesap kimliği. `npx wrangler@3 r2 bucket create neardiji-media`
 2. `cd cloudflare/media-worker && npx wrangler@3 deploy` → media.neardiji.com özel alan adı.
