@@ -1,0 +1,10 @@
+// neardiji.com — Cloudflare Workers statik site (GitHub'a push → otomatik yayın)
+{
+  "name": "neardiji",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    "directory": "./",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}
