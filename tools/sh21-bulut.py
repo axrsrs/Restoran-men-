@@ -81,6 +81,8 @@ digest = base64.b64encode(hashlib.sha256(m.group(1).encode("utf-8")).digest()).d
 s, n = re.subn(r"'sha256-[A-Za-z0-9+/=]+'", f"'sha256-{digest}'", s, count=1)
 if n != 1:
     sys.exit("CSP özeti güncellenemedi")
+# Cloudflare Web Analytics (çerezsiz ziyaretçi istatistiği)
+s = s.replace(" https://unpkg.com;", " https://unpkg.com https://static.cloudflareinsights.com;", 1)
 
 open(dst, "w", encoding="utf-8").write(s)
 print("tamam:", dst, len(s), "bayt, betik özeti", digest[:12] + "…")
