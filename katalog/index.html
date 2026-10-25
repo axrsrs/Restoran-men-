@@ -2556,7 +2556,7 @@ function getCurrencyByData(source) {
 function applyDiscountToValue(source, v) {
     if (v === null || v === undefined)
         return v;
-    const d = Math.min(99, Math.max(0, Number(source?.__discount) || 0));
+    const d = Math.min(100, Math.max(0, Number(source?.__discount) || 0));
     return d > 0 ? v * (1 - d / 100) : v;
 }
 function convertPriceByData(source, amount) {
@@ -4701,8 +4701,8 @@ function App() {
     /* İskonto oranları: { TRY: 10, USD: 25, ... } — cihaza özel, sekme kapanınca sıfırlanır. */
     const [discountRates, setDiscountRates] = useState(() => discountLoad());
     function setDiscountRate(cur, raw) {
-        const digits = String(raw == null ? "" : raw).replace(/[^\d]/g, "").slice(0, 2);
-        const val = digits === "" ? "" : Math.min(99, parseInt(digits, 10));
+        const digits = String(raw == null ? "" : raw).replace(/[^\d]/g, "").slice(0, 3);
+        const val = digits === "" ? "" : Math.min(100, parseInt(digits, 10));
         setDiscountRates(prev => {
             const next = { ...prev, [cur]: val };
             discountSave(next);
@@ -7028,7 +7028,7 @@ function App() {
                     React.createElement("div", { className: "inline-flex items-center gap-2 pl-4 pr-3 py-2 rounded-full", style: { background: theme.card, border: "1px solid " + theme.accent + "66", boxShadow: "0 6px 20px " + theme.accent + "22" } },
                         React.createElement("span", { className: "text-[11px] font-bold uppercase tracking-wider", style: { color: theme.accent } }, language === "EN" ? "Discount" : "İskonto"),
                         React.createElement("span", { className: "inline-flex items-baseline", style: { color: theme.text } },
-                            React.createElement("input", { type: "text", inputMode: "numeric", "aria-label": language === "EN" ? "Discount percent" : "İskonto yüzdesi", value: (discountRates[viewCurrencyId] === 0 || discountRates[viewCurrencyId]) ? String(discountRates[viewCurrencyId]) : "", placeholder: "0", onChange: e => setDiscountRate(viewCurrencyId, e.target.value), className: "w-10 bg-transparent text-right text-base font-extrabold tabular-nums outline-none border-0 p-0", style: { color: theme.text } }),
+                            React.createElement("input", { type: "text", inputMode: "numeric", "aria-label": language === "EN" ? "Discount percent" : "İskonto yüzdesi", value: (discountRates[viewCurrencyId] === 0 || discountRates[viewCurrencyId]) ? String(discountRates[viewCurrencyId]) : "", placeholder: "0", onChange: e => setDiscountRate(viewCurrencyId, e.target.value), className: "w-12 bg-transparent text-right text-base font-extrabold tabular-nums outline-none border-0 p-0", style: { color: theme.text } }),
                             React.createElement("span", { className: "text-base font-extrabold ml-0.5" }, "%")),
                         (Number(discountRates[viewCurrencyId]) > 0) && React.createElement("button", { type: "button", "aria-label": language === "EN" ? "Reset discount" : "İskontoyu sıfırla", onClick: () => setDiscountRate(viewCurrencyId, ""), className: "ml-1 w-6 h-6 rounded-full inline-flex items-center justify-center text-sm leading-none opacity-70 hover:opacity-100", style: { color: theme.text, background: theme.accent + "1f" } }, "×"))),
                 React.createElement("div", { className: "mt-4 flex flex-wrap items-center justify-center gap-2" },
