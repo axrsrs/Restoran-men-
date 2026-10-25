@@ -1025,6 +1025,14 @@ function sanitizeCatalogData(data) {
         usdRate: rateOf(clean.currency?.usdRate),
         eurRate: rateOf(clean.currency?.eurRate)
     };
+    clean.discount = {
+        enabled: !!clean.discount?.enabled,
+        currencies: {
+            TRY: clean.discount?.currencies?.TRY !== false,
+            USD: clean.discount?.currencies?.USD !== false,
+            EUR: clean.discount?.currencies?.EUR !== false
+        }
+    };
     if (clean.pdf) {
         for (const k of ["title", "footer", "website", "catalogTitle"])
             clean.pdf[k] = safeText(clean.pdf[k], 200);
@@ -1084,6 +1092,23 @@ function sanitizeCatalogData(data) {
 const BACKUP_KEY = "katalog_sablon_catalog_backup_v6";
 const LANG_KEY = "katalog_premium_lang_v1";
 const VIEW_CURRENCY_KEY = "katalog_view_currency_v1";
+/* İskonto oranı cihaza özeldir ve SEKME KAPANINCA SIFIRLANIR (sessionStorage). Veritabanına yazılmaz. */
+const DISCOUNT_KEY = "katalog_discount_v1";
+function discountLoad() {
+    try {
+        const v = JSON.parse(window.sessionStorage.getItem(DISCOUNT_KEY) || "{}");
+        return v && typeof v === "object" ? v : {};
+    }
+    catch (_) {
+        return {};
+    }
+}
+function discountSave(obj) {
+    try {
+        window.sessionStorage.setItem(DISCOUNT_KEY, JSON.stringify(obj || {}));
+    }
+    catch (_) { }
+}
 /* SABİT KATEGORİLER — sitede, yönetim panelinde, fiyat listesinde ve katalogda tek kaynak.
    Ad, sıra ve İngilizce karşılık buradan gelir; panelden eklenemez, silinemez, yeniden adlandırılamaz.
    "aliases": eski sürümlerdeki kategori adları → ürünler doğru kategoriye otomatik taşınır. */
@@ -1372,6 +1397,7 @@ function defaultData() {
         logo: { src: null, size: 110, width: 110, height: 110, position: "center" },
         theme: { ...THEMES[0], bgImage: null }, themeRev: 2, cardImgSize: 180,
         currency: { enabled: false, editCur: "TRY", selected: "TRY", usdRate: null, eurRate: null },
+        discount: { enabled: false, currencies: { TRY: true, USD: true, EUR: true } },
         categories: createDefaultCategories().map(c => ({ ...c, coverImage: PRELOADED_COVERS[c.id] || null, items: JSON.parse(JSON.stringify(PRELOADED_ITEMS[c.id] || [])) })), language: "TR",
         pdf: { title: "FİYAT LİSTESİ", footer: "", showPageNumbers: true, website: "", useCategoryCovers: true, catalogTitle: "ÜRÜN KATALOĞU", catalogTemplate: "akilli", coverLogo: { src: DEFAULT_PDF_COVER_LOGO }, instagram: "", email: "", closingNote: "", coverImage: "", closingImage: "" }
     };
@@ -1505,6 +1531,14 @@ function normalizeData(input) {
     /* Eski kayıtlar: "kur açık" bilgisi yoksa, kur değeri girilmişse açık kabul edilir. */
     if (input.currency && typeof input.currency === "object" && input.currency.enabled === undefined)
         r.currency.enabled = Number(input.currency.usdRate) > 0 || Number(input.currency.eurRate) > 0;
+    /* İskonto ayarı (yöneticiye özel): oran burada tutulmaz, sadece hangi birimlerde girilebileceği ve açık/kapalı bilgisi. */
+    r.discount = { ...base.discount, ...(input.discount || {}) };
+    r.discount.enabled = !!r.discount.enabled;
+    r.discount.currencies = {
+        TRY: r.discount.currencies?.TRY !== false,
+        USD: r.discount.currencies?.USD !== false,
+        EUR: r.discount.currencies?.EUR !== false
+    };
     r.pdf = { ...base.pdf, ...(input.pdf || {}) };
     if (!r.pdf.coverLogo || !r.pdf.coverLogo.src)
         r.pdf.coverLogo = { src: DEFAULT_PDF_COVER_LOGO };
@@ -2517,24 +2551,35 @@ function getCurrencyByData(source) {
     const id = source?.currency?.selected || "TRY";
     return CURRENCIES.find(x => x.id === id) || CURRENCIES[0];
 }
+/* Cihaza özel, para birimine özel iskonto: kur dönüşümünden SONRA uygulanır.
+   Oran source.__discount içinde taşınır (viewCurrencyData tarafından); veriye yazılmaz. */
+function applyDiscountToValue(source, v) {
+    if (v === null || v === undefined)
+        return v;
+    const d = Math.min(99, Math.max(0, Number(source?.__discount) || 0));
+    return d > 0 ? v * (1 - d / 100) : v;
+}
 function convertPriceByData(source, amount) {
     if (amount === null || amount === undefined || amount === "")
         return null;
     const n = Number(amount), c = source?.currency?.selected || "TRY";
     if (!Number.isFinite(n))
         return null;
+    let base;
     /* Kur kapalı: fiyat zaten seçili para biriminde girilmiştir, çevrilmez. */
     if (!curEnabled(source))
-        return n;
-    if (c === "USD") {
+        base = n;
+    else if (c === "USD") {
         const r = Number(source?.currency?.usdRate);
-        return r > 0 ? n / r : null;
+        base = r > 0 ? n / r : null;
     }
-    if (c === "EUR") {
+    else if (c === "EUR") {
         const r = Number(source?.currency?.eurRate);
-        return r > 0 ? n / r : null;
+        base = r > 0 ? n / r : null;
     }
-    return n;
+    else
+        base = n;
+    return applyDiscountToValue(source, base);
 }
 function formatAmountByData(source, amount) {
     const v = convertPriceByData(source, amount);
@@ -3182,6 +3227,12 @@ async function renderPdfCoverPage(data, lang, titleOverride) {
     const defTitle = /^(\d{4}(-\d+)?\s*)?(TL|USD|EUR)?\s*F[İI]YAT L[İI]STES[İI]$/i.test(String(data.pdf?.title || "").trim());
     const title = titleOverride || (lang === "EN" ? (data.pdf?.title_en || autoTitle) : ((data.pdf?.title && !defTitle) ? data.pdf.title : autoTitle));
     content += pdfTextOp(title, W - 42, 55, 17.5, { align: "right", bold: true, maxWidth: 455, maxLines: 2, color: [1, 1, 1] });
+    /* Ekranda girili iskonto oranı varsa kapakta şeffafça belirtilir (fiyatlar zaten indirimli basılır). */
+    const discPct = Math.round(Number(data.__discount) || 0);
+    if (discPct > 0) {
+        const dnote = lang === "EN" ? `${discPct}% discount applied` : `Fiyatlara %${discPct} iskonto uygulanmıştır`;
+        content += pdfTextOp(dnote, W - 42, 76, 9.5, { align: "right", maxWidth: 455, maxLines: 1, color: [0.85, 0.72, 0.30] });
+    }
     return { content, images, pageNo: null };
 }
 /* ==================== KAPANIŞ SAYFASI + TAM SAYFA KAPAK GÖRSELLERİ ==================== */
@@ -4647,6 +4698,17 @@ function App() {
     /* Yeni yönetim paneli durumu */
     const [admView, setAdmView] = useState("table"), [admSel, setAdmSel] = useState(() => new Set()), [admEdit, setAdmEdit] = useState(null), [admTab, setAdmTab] = useState("bilgi"), [admCat, setAdmCat] = useState(""), [admQuery, setAdmQuery] = useState(""), [admIssues, setAdmIssues] = useState(false), [admBulk, setAdmBulk] = useState({ mode: "pct", value: "" }), [admLimit, setAdmLimit] = useState(80), [admAddPick, setAdmAddPick] = useState(false), [admDrag, setAdmDrag] = useState(null);
     const admBaseRef = useRef(null);
+    /* İskonto oranları: { TRY: 10, USD: 25, ... } — cihaza özel, sekme kapanınca sıfırlanır. */
+    const [discountRates, setDiscountRates] = useState(() => discountLoad());
+    function setDiscountRate(cur, raw) {
+        const digits = String(raw == null ? "" : raw).replace(/[^\d]/g, "").slice(0, 2);
+        const val = digits === "" ? "" : Math.min(99, parseInt(digits, 10));
+        setDiscountRates(prev => {
+            const next = { ...prev, [cur]: val };
+            discountSave(next);
+            return next;
+        });
+    }
     const [aiCfg, setAiCfg] = useState(() => aiCfgLoad()), [aiTest, setAiTest] = useState("");
     useEffect(() => { document.documentElement.lang = language.toLowerCase(); }, [language]);
     useEffect(() => {
@@ -5339,7 +5401,10 @@ function App() {
         let cur = (!panelOpen && viewCurrency) ? viewCurrency : data.currency?.selected;
         if (!avail.includes(cur))
             cur = avail.includes(data.currency?.selected) ? data.currency.selected : avail[0];
-        return { ...data, currency: { ...(data.currency || {}), selected: cur } };
+        /* İskonto yalnızca site görünümünde (panel kapalıyken), özellik açıkken ve bu para birimi izinliyken uygulanır. */
+        const disc = (!panelOpen && data.discount?.enabled && data.discount?.currencies?.[cur] !== false)
+            ? (Number(discountRates[cur]) || 0) : 0;
+        return { ...data, currency: { ...(data.currency || {}), selected: cur }, __discount: disc };
     }
     function getCurrency() { return getCurrencyByData(viewCurrencyData()); }
     function convertPrice(amount) { return convertPriceByData(viewCurrencyData(), amount); }
@@ -6959,6 +7024,13 @@ function App() {
                 React.createElement("div", { className: "text-[10px] font-bold tracking-[.28em] mb-2", style: { color: theme.accent } }, eyebrow),
                 React.createElement("h1", { className: "text-3xl font-bold leading-tight" }, siteName),
                 React.createElement("p", { className: "text-sm opacity-80 mt-2" }, subtitle),
+                (data.discount?.enabled && data.discount?.currencies?.[viewCurrencyId] !== false) && React.createElement("div", { className: "mt-4 flex items-center justify-center" },
+                    React.createElement("div", { className: "inline-flex items-center gap-2 pl-4 pr-3 py-2 rounded-full", style: { background: theme.card, border: "1px solid " + theme.accent + "66", boxShadow: "0 6px 20px " + theme.accent + "22" } },
+                        React.createElement("span", { className: "text-[11px] font-bold uppercase tracking-wider", style: { color: theme.accent } }, language === "EN" ? "Discount" : "İskonto"),
+                        React.createElement("span", { className: "inline-flex items-baseline", style: { color: theme.text } },
+                            React.createElement("input", { type: "text", inputMode: "numeric", "aria-label": language === "EN" ? "Discount percent" : "İskonto yüzdesi", value: (discountRates[viewCurrencyId] === 0 || discountRates[viewCurrencyId]) ? String(discountRates[viewCurrencyId]) : "", placeholder: "0", onChange: e => setDiscountRate(viewCurrencyId, e.target.value), className: "w-10 bg-transparent text-right text-base font-extrabold tabular-nums outline-none border-0 p-0", style: { color: theme.text } }),
+                            React.createElement("span", { className: "text-base font-extrabold ml-0.5" }, "%")),
+                        (Number(discountRates[viewCurrencyId]) > 0) && React.createElement("button", { type: "button", "aria-label": language === "EN" ? "Reset discount" : "İskontoyu sıfırla", onClick: () => setDiscountRate(viewCurrencyId, ""), className: "ml-1 w-6 h-6 rounded-full inline-flex items-center justify-center text-sm leading-none opacity-70 hover:opacity-100", style: { color: theme.text, background: theme.accent + "1f" } }, "×"))),
                 React.createElement("div", { className: "mt-4 flex flex-wrap items-center justify-center gap-2" },
                     data.phone && React.createElement("a", { href: "tel:" + data.phone.replace(/\s/g, ""), className: "inline-flex items-center gap-2 px-5 min-h-[44px] rounded-full text-sm font-semibold", style: { background: theme.accent, color: ink } },
                         React.createElement(Icon, { type: "phone", size: 15 }),
@@ -7210,6 +7282,18 @@ function App() {
                                 React.createElement("div", { className: "text-[12px] text-neutral-300 leading-relaxed" }, "Kur kapal\u0131: \u00FCr\u00FCnlerde her fiyat kalemi i\u00E7in \u20BA TL, $ USD ve \u20AC EUR kutular\u0131 yan yana \u00E7\u0131kar. Bo\u015F b\u0131rak\u0131lan para biriminde sitede \u201CFiyat i\u00E7in ileti\u015Fime ge\u00E7in\u201D yazar. Fiyat\u0131 olmayan kalem i\u00E7in \u201CFiyat sorunuz\u201D i\u015Faretlenebilir.")),
                             React.createElement(AdminLabel, null, "Sitede ve PDF'te varsay\u0131lan para birimi"),
                             React.createElement("div", { className: "grid grid-cols-3 gap-2" }, CURRENCIES.map(c => { const ok = availableCurrencies(data).includes(c.id); const on = (data.currency?.selected || "TRY") === c.id; return React.createElement("button", { key: c.id, type: "button", disabled: !ok, title: ok ? "" : (curEnabled(data) ? "\u00D6nce kur girin" : "Bu para biriminde fiyat yok"), onClick: () => setPath(["currency", "selected"], c.id), className: "py-2.5 rounded-lg text-xs font-bold disabled:opacity-40", style: { background: on ? theme.accent : "#FFFFFF", color: on ? ink : "#424245", border: "1px solid " + (on ? theme.accent : "#D2D2D7") } }, c.symbol + " " + c.name); }))),
+                        React.createElement("div", { className: "bg-neutral-900 rounded-xl p-4 mt-5" },
+                            React.createElement("label", { className: "flex items-center justify-between gap-3 cursor-pointer" },
+                                React.createElement("span", null,
+                                    React.createElement("span", { className: "block text-sm font-bold" }, "Ana sayfada iskonto kutusu"),
+                                    React.createElement("span", { className: "block text-[11px] text-neutral-400 mt-1" }, data.discount?.enabled ? "Açık: ana sayfada iskonto oranı kutusu görünür; oranı orada siz girersiniz." : "Kapalı: iskonto kutusu gizli, fiyatlar normal gösterilir.")),
+                                React.createElement("button", { type: "button", role: "switch", "aria-checked": !!data.discount?.enabled, "aria-label": "İskonto kutusu", onClick: () => setPath(["discount", "enabled"], !data.discount?.enabled), className: "ui-switch" + (data.discount?.enabled ? " is-on" : "") },
+                                    React.createElement("span", null))),
+                            data.discount?.enabled && React.createElement("div", { className: "mt-4" },
+                                React.createElement(AdminLabel, null, "Hangi para birimlerinde iskonto girilebilsin?"),
+                                React.createElement("div", { className: "grid grid-cols-3 gap-2" }, CURRENCIES.map(c => { const on = data.discount?.currencies?.[c.id] !== false; return React.createElement("button", { key: c.id, type: "button", "aria-pressed": on, onClick: () => setPath(["discount", "currencies", c.id], !on), className: "py-2 rounded-lg text-sm font-bold", style: { background: on ? theme.accent : "#FFFFFF", color: on ? ink : "#424245", border: "1px solid " + (on ? theme.accent : "#D2D2D7") } }, c.symbol + " " + c.name); })),
+                                React.createElement("div", { className: "text-[11px] text-neutral-400 mt-3 leading-relaxed" }, "Oranı ana sayfada siz girersiniz (ör. %10, %50) ve bütün fiyatlara anında uygulanır. İskonto o cihaza özeldir: kimse başkasının oranını görmez ve sekme kapanınca sıfırlanır. PDF fiyat listesi de ekranda girili oranla indirimli iner.")),
+                        ),
                     ),
                     React.createElement("div", { className: adminSection === "katalog" ? "" : "hidden" },
                         React.createElement("div", { id: "catalog-tab" },
