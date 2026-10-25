@@ -4,11 +4,16 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https://rfwgjzkewtjpdcvrhepg.supabase.co https://translate.googleapis.com https://api.mymemory.translated.net https://open.er-api.com https://api.frankfurter.app https://api.frankfurter.dev; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0f0f11">
 <meta name="robots" content="noindex,nofollow">
 <title>NearDiji Süper Yönetici</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d6a83d'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23111'%3EN%3C/text%3E%3C/svg%3E">
 <style>
 /* Tek koyu görünüm: menü panelinin altın vurgulu tasarım dili */
 :root{
@@ -1632,6 +1637,7 @@ function menuUrl(slug){
 }
 
 function katalogUrl(slug){
+ if(slug===CATALOG_DEMO)return PRETTY_URLS?location.origin+"/katalog":new URL("../katalog/",location.href).href;
  return PRETTY_URLS
   ?location.origin+"/katalog/"+encodeURIComponent(slug)
   :new URL("../katalog/",location.href).href+"?f="+encodeURIComponent(slug);
@@ -1639,24 +1645,24 @@ function katalogUrl(slug){
 
 /* İki ürün aynı panelden yönetilir: NearMenu (restoranlar) ve sh21 (kataloglar) */
 const KINDS={
- menu:{tab:"Menüler",title:"NearMenu",noun:"restoran",Noun:"Restoran",thing:"menü",Thing:"Menü",acc:"Menüyü",
-  list:"admin_list_restaurants",create:"admin_create_restaurant",addOwner:"admin_add_owner",ownerParam:"p_restaurant",
-  table:"restaurants",demo:MAIN_DEMO,url:s=>menuUrl(s),open:"Menüyü aç",nameLabel:"İşletme adı",namePh:"örn. Kebapçı Ali",slugPh:"kebapci-ali",
-  copyLabel:"Demo menüyü kopyala (75 ürün, çevirileriyle)",visits:"Bugün menü açılışı",open30:"açılış / 30 gün",
-  shareDemo:"için hazırladığım dijital menü demosu:",shareReady:"dijital menünüz hazır:",
-  edit:"Menüyü kendiniz düzenlemek için menüde logoya 3 saniye basılı tutun ve giriş yapın:",
-  demoEmail:"demo.nearmenu.app",mainNote:"Bu ana demo menüdür; diğer demolar buradan kopyalanır, silinemez.",delLabel:"Restoranı ve menüsünü kalıcı olarak sil",
-  closed:"Menü müşterilere kapalı.",passiveOpt:"Pasif (menü kapalı)"},
- katalog:{tab:"Kataloglar",title:"sh21 Katalog",noun:"katalog",Noun:"Katalog",thing:"katalog",Thing:"Katalog",acc:"Kataloğu",
+ katalog:{tab:"Katalog",title:"sh21 Katalog",noun:"katalog",Noun:"Katalog",thing:"katalog",Thing:"Katalog",acc:"Kataloğu",
   list:"catalog_admin_list",create:"catalog_admin_create",addOwner:"catalog_admin_add_owner",ownerParam:"p_catalog",
   table:"catalogs",demo:CATALOG_DEMO,url:s=>katalogUrl(s),open:"Kataloğu aç",nameLabel:"Firma adı",namePh:"örn. Asoda Mobilya",slugPh:"asoda-mobilya",
   copyLabel:"Demo kataloğu kopyala (sh21-demo içeriği)",visits:"Bugün katalog açılışı",open30:"açılış / 30 gün",
   shareDemo:"için hazırladığım ürün kataloğu demosu:",shareReady:"ürün kataloğunuz hazır:",
   edit:"Kataloğu kendiniz düzenlemek için katalogda logoya 2 saniye basılı tutun ve giriş yapın:",
   demoEmail:"demo.sh21.app",mainNote:"Bu ana demo katalogdur; yeni kataloglar buradan kopyalanır, silinemez.",delLabel:"Kataloğu ve tüm içeriğini kalıcı olarak sil",
-  closed:"Katalog ziyaretçilere kapalı.",passiveOpt:"Pasif (katalog kapalı)"}
+  closed:"Katalog ziyaretçilere kapalı.",passiveOpt:"Pasif (katalog kapalı)"},
+ menu:{tab:"Menü",title:"NearMenu",noun:"restoran",Noun:"Restoran",thing:"menü",Thing:"Menü",acc:"Menüyü",
+  list:"admin_list_restaurants",create:"admin_create_restaurant",addOwner:"admin_add_owner",ownerParam:"p_restaurant",
+  table:"restaurants",demo:MAIN_DEMO,url:s=>menuUrl(s),open:"Menüyü aç",nameLabel:"İşletme adı",namePh:"örn. Kebapçı Ali",slugPh:"kebapci-ali",
+  copyLabel:"Demo menüyü kopyala (75 ürün, çevirileriyle)",visits:"Bugün menü açılışı",open30:"açılış / 30 gün",
+  shareDemo:"için hazırladığım dijital menü demosu:",shareReady:"dijital menünüz hazır:",
+  edit:"Menüyü kendiniz düzenlemek için menüde logoya 3 saniye basılı tutun ve giriş yapın:",
+  demoEmail:"demo.nearmenu.app",mainNote:"Bu ana demo menüdür; diğer demolar buradan kopyalanır, silinemez.",delLabel:"Restoranı ve menüsünü kalıcı olarak sil",
+  closed:"Menü müşterilere kapalı.",passiveOpt:"Pasif (menü kapalı)"}
 };
-let kind=(()=>{const k=safeGet("superKind");return k==="katalog"?"katalog":"menu"})();
+let kind=(()=>{const q=new URLSearchParams(location.search).get("k");const k=q||safeGet("superKind");return k==="menu"?"menu":"katalog"})();
 const K=()=>KINDS[kind];
 
 function fmtDate(d){

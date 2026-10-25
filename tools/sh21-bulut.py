@@ -60,6 +60,17 @@ rep('                        React.createElement(AdminLabel, null, "Y\\u00F6neti
 rep('showToast(STORAGE_OK ? t(language, \'saved\') : "Kaydedildi (yalnızca bu oturumda). Kalıcı kayıt için dosyayı kendi sitenize yükleyin.");',
     'showToast(window.SH21 ? (language === "EN" ? "Saved — your catalog is live." : "Kaydedildi — katalog yayında.") : STORAGE_OK ? t(language, \'saved\') : "Kaydedildi (yalnızca bu oturumda). Kalıcı kayıt için dosyayı kendi sitenize yükleyin.");')
 
+# 5b) süper yöneticiye panelden süper panele geçiş
+rep('                            React.createElement("button", { type: "button", onClick: () => SH21.logout(), className: "flex-1 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-xs font-bold text-red-400" }, "\\u00C7\\u0131k\\u0131\\u015F Yap")),\n',
+    '                            React.createElement("button", { type: "button", onClick: () => SH21.logout(), className: "flex-1 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-xs font-bold text-red-400" }, "\\u00C7\\u0131k\\u0131\\u015F Yap")),\n'
+    '                        window.SH21 && SH21.isSuper() && React.createElement("a", { href: "/ammar/?k=katalog", className: "block w-full text-center py-3 mb-5 rounded-lg text-sm font-bold", style: { background: theme.accent, color: ink } }, "\\uD83D\\uDEE0 S\\u00FCper Y\\u00F6netici Paneli (kataloglar ve men\\u00FCler)"),\n')
+
+# 5c) NearDiji ikonları ve ana ekran (manifest)
+rep('<meta name="apple-mobile-web-app-capable" content="yes">',
+    '<link rel="icon" href="/favicon.ico" sizes="any">\n<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">\n'
+    '<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">\n<link rel="manifest" href="/site.webmanifest">\n'
+    '<meta name="apple-mobile-web-app-capable" content="yes">')
+
 # 6b) panel alt bilgisi: bulutta "bu cihaza" değil, yayına kaydedilir
 rep('React.createElement("small", null, "De\\u011Fi\\u015Fiklikler \\u201CKaydet ve yay\\u0131nla\\u201D ile bu cihaza kaydedilir.")',
     'React.createElement("small", null, window.SH21 ? "De\\u011Fi\\u015Fiklikler \\u201CKaydet ve yay\\u0131nla\\u201D ile hemen yay\\u0131na al\\u0131n\\u0131r." : "De\\u011Fi\\u015Fiklikler \\u201CKaydet ve yay\\u0131nla\\u201D ile bu cihaza kaydedilir.")')

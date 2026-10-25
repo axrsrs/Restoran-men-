@@ -6,7 +6,7 @@
   "use strict";
   var SB_URL = "https://rfwgjzkewtjpdcvrhepg.supabase.co";
   var SB_KEY = "sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
-  var SESSION_KEY = "sh21Session";
+  var SESSION_KEY = "nearMenuSession"; /* menü, katalog ve süper panel aynı oturumu paylaşır */
   var BUCKET = "catalog-media";
   var SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -37,6 +37,8 @@
     return j;
   }
   async function ensureFresh() {
+    /* başka sayfa (menü / süper panel) oturumu yenilediyse en güncelini al */
+    try { var cur = JSON.parse(lsGet(SESSION_KEY) || "null"); if (cur && (!session || (cur.expires_at || 0) > (session.expires_at || 0))) session = cur; } catch (e) { }
     if (!session) return;
     if ((session.expires_at || 0) - Math.floor(Date.now() / 1000) > 90) return;
     try { storeSession(toSession(await authReq("token?grant_type=refresh_token", { refresh_token: session.refresh_token }))); }
@@ -260,6 +262,7 @@
   window.SH21 = {
     slug: slug, ready: ready, loadRecord: loadRecord, save: save, requireAdmin: requireAdmin,
     changePassword: function () { return askNewPassword(false); }, logout: logout,
-    email: function () { return (session && session.user && session.user.email) || ""; }
+    email: function () { return (session && session.user && session.user.email) || ""; },
+    isSuper: function () { return !!(access && access.super); }
   };
 })();
