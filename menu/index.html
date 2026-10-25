@@ -7909,6 +7909,14 @@ function render(options={}){
  const oldBg=$("siteBackground");
  const oldSig=oldBg&&oldBg.dataset.sig;
  const hScroll=samePage?[...app.querySelectorAll(".horizontal")].map(h=>h.scrollLeft):[];
+ /* yüklenmiş görselleri sakla: yeni çizimde aynı görsel varsa eski (hazır) öğe taşınır, yeniden yüklenmez */
+ const imgPool=new Map();
+ app.querySelectorAll("img[src]").forEach(im=>{
+  const k=im.getAttribute("src");
+  if(!imgPool.has(k))imgPool.set(k,[]);
+  imgPool.get(k).push(im);
+ });
+ const winY=window.scrollY;
 
  app.innerHTML=`
 
@@ -8007,6 +8015,17 @@ function render(options={}){
   ${renderAdmin()}
   ${renderAdminLogin()}
  `;
+
+ app.querySelectorAll("img[src]").forEach(im=>{
+  const list=imgPool.get(im.getAttribute("src"));
+  if(!list||!list.length)return;
+  const old=list.shift();
+  /* yeni öğenin özniteliklerini eskisine aktar (sınıf, alt vb.) */
+  [...old.attributes].forEach(a=>{if(!im.hasAttribute(a.name))old.removeAttribute(a.name)});
+  [...im.attributes].forEach(a=>{if(old.getAttribute(a.name)!==a.value)old.setAttribute(a.name,a.value)});
+  im.replaceWith(old);
+ });
+ if(samePage&&Math.abs(window.scrollY-winY)>2)window.scrollTo(0,winY);
 
  const newBg=$("siteBackground");
  if(oldBg&&newBg&&oldSig&&oldSig===newBg.dataset.sig)newBg.replaceWith(oldBg);
