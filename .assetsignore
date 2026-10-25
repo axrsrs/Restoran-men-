@@ -1,9 +1,16 @@
+# Cloudflare'a yüklenmeyecekler (site dosyası değil)
 .git
+.git/
+.git/**
+**/.git/**
 .github
 .assetsignore
+.gitignore
 wrangler.jsonc
 CNAME
 tools
+tools/**
 cloudflare
+cloudflare/**
 node_modules
 *.md
