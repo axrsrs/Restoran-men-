@@ -264,6 +264,7 @@
     slug: slug, ready: ready, loadRecord: loadRecord, save: save, requireAdmin: requireAdmin,
     changePassword: function () { return askNewPassword(false); }, logout: logout,
     email: function () { return (session && session.user && session.user.email) || ""; },
-    isSuper: function () { return !!(access && access.super); }
+    isSuper: function () { return !!(access && access.super); },
+    url: function () { return location.origin + "/katalog" + (slug === "sh21-demo" ? "" : "/" + slug); }
   };
 })();

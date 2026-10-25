@@ -23,7 +23,7 @@ def rep(old, new, count=1):
 
 # 1) bulut katmanı uygulamadan önce yüklenir
 rep('<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>',
-    '<script src="/assets/media.js"></script>\n<script src="/katalog/bulut.js"></script>\n'
+    '<script src="/assets/media.js"></script>\n<script src="/assets/qr.js"></script>\n<script src="/katalog/bulut.js"></script>\n'
     '<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>')
 
 # 2) yerel kayıt fonksiyonları bulutta Supabase'e gider
@@ -63,6 +63,7 @@ rep('showToast(STORAGE_OK ? t(language, \'saved\') : "Kaydedildi (yalnızca bu o
 # 5b) süper yöneticiye panelden süper panele geçiş
 rep('                            React.createElement("button", { type: "button", onClick: () => SH21.logout(), className: "flex-1 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-xs font-bold text-red-400" }, "\\u00C7\\u0131k\\u0131\\u015F Yap")),\n',
     '                            React.createElement("button", { type: "button", onClick: () => SH21.logout(), className: "flex-1 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-xs font-bold text-red-400" }, "\\u00C7\\u0131k\\u0131\\u015F Yap")),\n'
+    '                        window.SH21 && React.createElement("button", { type: "button", onClick: () => NDQR.open({ url: SH21.url(), title: (language === "EN" ? "Catalog QR code" : "Katalog QR Kodu"), file: SH21.slug }), className: "block w-full text-center py-3 mb-3 rounded-lg text-sm font-bold bg-neutral-800 border border-neutral-700" }, language === "EN" ? "Download QR code" : "QR Kodu \u0130ndir"),\n'
     '                        window.SH21 && SH21.isSuper() && React.createElement("a", { href: "/821/?k=katalog", className: "block w-full text-center py-3 mb-5 rounded-lg text-sm font-bold", style: { background: theme.accent, color: ink } }, "\\uD83D\\uDEE0 S\\u00FCper Y\\u00F6netici Paneli (kataloglar ve men\\u00FCler)"),\n')
 
 # 5c) NearDiji ikonları ve ana ekran (manifest)

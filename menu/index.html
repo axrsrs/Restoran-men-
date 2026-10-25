@@ -2497,6 +2497,7 @@ a.adminButton{
 <div id="app"></div>
 
 <script src="/assets/media.js"></script>
+<script src="/assets/qr.js"></script>
 <script>
 const DEFAULT_ADMIN_PIN="1234";
 const STORAGE_KEY="nearMenuData";
@@ -4414,6 +4415,8 @@ function renderAccountCard(){
    <input id="accountPw2" type="password" autocomplete="new-password">
   </div>
 
+  <button class="adminButton gold full" id="accountQr" style="margin-bottom:8px">▦ Menü QR Kodu (indir)</button>
+
   <button class="adminButton gold full" id="accountChangePw">🔐 Şifreyi Değiştir</button>
 
   <button class="adminButton full" id="accountLogout" style="margin-top:8px">Çıkış Yap</button>
@@ -4424,6 +4427,8 @@ function renderAccountCard(){
 }
 
 function bindAccountCard(){
+
+ $("accountQr")?.addEventListener("click",()=>NDQR.open({url:publicMenuUrl(RESTAURANT_SLUG),title:(DATA&&DATA.name)||"Menü QR Kodu",file:RESTAURANT_SLUG}));
 
  $("accountChangePw")?.addEventListener("click",async()=>{
 

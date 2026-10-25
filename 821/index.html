@@ -1658,6 +1658,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{ou
 <div class="wrap" id="app"></div>
 <div id="toast"></div>
 
+<script src="/assets/qr.js"></script>
 <script>
 /* =========================================================
    AYARLAR
@@ -2034,6 +2035,7 @@ function renderCard(r){
   ${members?`<div class="members">${members}</div>`:`<div class="hint">Henüz panel hesabı yok.</div>`}
   <div class="card-actions">
    <a class="btn small" href="${esc(K().url(r.slug))}" target="_blank" rel="noopener">${K().open}</a>
+   <button class="btn small" data-qr="${esc(r.id)}">QR</button>
    <button class="btn small" data-share="${esc(r.id)}">Paylaş</button>
    <button class="btn small gold" data-edit="${esc(r.id)}">Yönet</button>
   </div>
@@ -2121,6 +2123,7 @@ function renderModal(){
      <a class="btn gold" href="https://wa.me/?text=${encodeURIComponent(text)}" target="_blank" rel="noopener">WhatsApp'ta gönder</a>
      <button class="btn" id="copyShare">Metni kopyala</button>
      <button class="btn" id="copyLink">Sadece linki kopyala</button>
+     <button class="btn" id="qrBtn">QR kod</button>
      <a class="btn" href="${esc(K().url(r.slug))}" target="_blank" rel="noopener">${K().open}</a>
     </div>
     ${modal.owner&&modal.owner.temp_password?`<p class="hint" style="margin-top:12px">Geçici şifre sadece şimdi gösteriliyor. Kaybolursa "Yönet" ekranından yeni şifre oluşturabilirsiniz.</p>`:""}
@@ -2346,6 +2349,10 @@ function bindApp(){
  $("newCustomer")?.addEventListener("click",()=>openCreate("customer"));
 
  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{modal={type:"edit",id:b.dataset.edit};render()});
+ document.querySelectorAll("[data-qr]").forEach(b=>b.onclick=()=>{
+  const r=restaurants.find(x=>x.id===b.dataset.qr);
+  if(r)NDQR.open({url:K().url(r.slug),title:r.name,file:r.slug});
+ });
  document.querySelectorAll("[data-share]").forEach(b=>b.onclick=()=>{
   const r=restaurants.find(x=>x.id===b.dataset.share);
   modal={type:"share",restaurant:r,owner:null};
@@ -2456,6 +2463,7 @@ function bindModal(){
  /* result / share */
  $("copyShare")?.addEventListener("click",()=>copyText($("shareText").textContent));
  $("copyLink")?.addEventListener("click",()=>copyText(K().url(modal.restaurant.slug)));
+ $("qrBtn")?.addEventListener("click",()=>NDQR.open({url:K().url(modal.restaurant.slug),title:modal.restaurant.name,file:modal.restaurant.slug}));
 
  /* edit */
  const r=modal.type==="edit"?restaurants.find(x=>x.id===modal.id):null;
