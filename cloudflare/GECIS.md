@@ -1,3 +1,19 @@
+# Cloudflare geçişi — TAMAMLANDI (25 Ekim 2026)
+
+- Site: Cloudflare Workers statik varlıklar (`wrangler.jsonc`, `.assetsignore`). Worker adı `neardiji`; GitHub `main`'e her push
+  otomatik derlenir. Alan adları `neardiji.com` ve `www.neardiji.com` bu Worker'a bağlı; "Always Use HTTPS" açık.
+- Medya: R2 `neardiji-media` + Worker `neardiji-media` → `https://media.neardiji.com` (kenar önbellekli, Range destekli).
+  Yetki: Supabase `public.media_can_write`. Tüm yüklemeler `assets/media.js` üzerinden.
+- 10 eski dosya R2'ye kopyalandı, veritabanındaki linkler çevrildi.
+- Eski GitHub Pages DNS kayıtları (yedek): A 185.199.108-111.153, CNAME www → axrsrs.github.io.
+
+Kalan:
+- Bir hafta sorunsuz çalışınca Supabase Storage'daki menu-media / site-media / catalog-media kovaları ve storage politikaları silinir.
+- GitHub repo ayarlarından GitHub Pages kapatılabilir (artık trafik almıyor).
+
+---
+Geçiş sırasında kullanılan talimatlar (arşiv):
+
 # Cloudflare'a geçiş — yapılacaklar (sıradaki oturum için)
 
 Durum (hazır olanlar):
