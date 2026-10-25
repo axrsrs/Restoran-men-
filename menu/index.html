@@ -98,6 +98,8 @@ html{scroll-behavior:smooth;background:#111110}
  50%{opacity:.45}
 }
 
+#app.noAnim .pageContent,#app.noAnim .section,#app.noAnim .product,#app.noAnim .category,
+#app.noAnim .feature,#app.noAnim .event,#app.noModalAnim .modal,#app.noModalAnim .modalOverlay{animation:none!important}
 .pageContent{animation:pageIn .28s ease both}
 .section{animation:pageIn .32s ease both}
 .product,.category,.feature,.event{animation:cardIn .38s ease both}
@@ -4678,6 +4680,11 @@ async function saveMedia(type,id,file){
 
 const mediaUrlCache=new Map();
 
+function mediaAttr(value){
+ const u=cachedMediaUrl(value);
+ return `data-media-ref="${esc(value)}"`+(u?` src="${esc(u)}"`:"");
+}
+
 function cachedMediaUrl(value){
 
  if(!value)return "";
@@ -5273,9 +5280,9 @@ function renderBackground(){
  if(bg.type==="video"&&bg.video){
 
   return `
-   <div class="background" id="siteBackground">
+   <div class="background" id="siteBackground" data-sig="v|${esc(bg.video)}">
     <video autoplay muted loop playsinline
-     data-media-ref="${esc(bg.video)}"></video>
+     ${mediaAttr(bg.video)}></video>
     <div class="backgroundOverlay"></div>
    </div>
   `;
@@ -5284,8 +5291,8 @@ function renderBackground(){
  if(bg.type==="image"&&bg.image){
 
   return `
-   <div class="background" id="siteBackground">
-    <img loading="lazy" decoding="async" data-media-ref="${esc(bg.image)}" alt="">
+   <div class="background" id="siteBackground" data-sig="i|${esc(bg.image)}">
+    <img loading="lazy" decoding="async" ${mediaAttr(bg.image)} alt="">
     <div class="backgroundOverlay"></div>
    </div>
   `;
@@ -5293,7 +5300,7 @@ function renderBackground(){
 
  return `
   <div class="background"
-   id="siteBackground"
+   id="siteBackground" data-sig="c|${esc(bg.value||"#111110")}"
    style="background-color:${esc(bg.value||"#111110")}">
   </div>
  `;
@@ -5314,7 +5321,7 @@ function renderHero(){
    ${
     DATA.logo
     ?
-    `<img loading="lazy" decoding="async" data-media-ref="${esc(DATA.logo)}" alt="Logo">`
+    `<img loading="lazy" decoding="async" ${mediaAttr(DATA.logo)} alt="Logo">`
     :
     "N"
    }
@@ -5413,7 +5420,7 @@ function renderFeatured(){
       ${
        item.image
        ?
-       `<img loading="lazy" decoding="async" data-media-ref="${esc(item.image)}" alt="">`
+       `<img loading="lazy" decoding="async" ${mediaAttr(item.image)} alt="">`
        :""
       }
 
@@ -5464,7 +5471,7 @@ function renderEvents(){
       ${
        event.image
        ?
-       `<img loading="lazy" decoding="async" data-media-ref="${esc(event.image)}" alt="">`
+       `<img loading="lazy" decoding="async" ${mediaAttr(event.image)} alt="">`
        :""
       }
 
@@ -5516,7 +5523,7 @@ function renderCategories(){
        ${
         c.image
         ?
-        `<img loading="lazy" decoding="async" data-media-ref="${esc(c.image)}" alt="">`
+        `<img loading="lazy" decoding="async" ${mediaAttr(c.image)} alt="">`
         :
         `<div style="width:100%;height:100%;background:#222"></div>`
        }
@@ -5609,7 +5616,7 @@ function renderProductCard(item){
    ${
     item.image
     ?
-    `<img loading="lazy" decoding="async" data-media-ref="${esc(item.image)}"
+    `<img loading="lazy" decoding="async" ${mediaAttr(item.image)}
      alt="${esc(localizedName(item))}">`
     :
     `<div style="
@@ -5816,7 +5823,7 @@ function renderProductModal(){
     ${
      item.image
      ?
-     `<img loading="lazy" decoding="async" data-media-ref="${esc(item.image)}"
+     `<img loading="lazy" decoding="async" ${mediaAttr(item.image)}
       alt="${esc(localizedName(item))}">`
      :""
     }
@@ -5917,7 +5924,7 @@ function renderEventModal(){
     ${
      ev.image
      ?
-     `<img loading="lazy" decoding="async" data-media-ref="${esc(ev.image)}" alt="">`
+     `<img loading="lazy" decoding="async" ${mediaAttr(ev.image)} alt="">`
      :""
     }
 
@@ -6099,7 +6106,7 @@ function fileField(type,id,label,value,accept){
    value
    ?
    `<img class="preview"
-    data-media-ref="${esc(value)}" alt="">`
+    ${mediaAttr(value)} alt="">`
    :
    `<div class="help">Henüz dosya seçilmedi.</div>`
   }
@@ -6302,7 +6309,7 @@ function adminProductRow(item,category,draggable){
     ${
      item.image
      ?
-     `<img loading="lazy" decoding="async" data-media-ref="${esc(item.image)}" alt="">`
+     `<img loading="lazy" decoding="async" ${mediaAttr(item.image)} alt="">`
      :
      `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#555">N</div>`
     }
@@ -6501,7 +6508,7 @@ function renderAdminCategoryList(){
       ${
        category.image
        ?
-       `<img loading="lazy" decoding="async" data-media-ref="${esc(category.image)}" alt="">`
+       `<img loading="lazy" decoding="async" ${mediaAttr(category.image)} alt="">`
        :
        `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#555">N</div>`
       }
@@ -7168,7 +7175,7 @@ function renderAdminEvents(){
      ${
       ev.image
       ?
-      `<img loading="lazy" decoding="async" data-media-ref="${esc(ev.image)}" alt="">`
+      `<img loading="lazy" decoding="async" ${mediaAttr(ev.image)} alt="">`
       :
       `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#555">✨</div>`
      }
@@ -7859,6 +7866,8 @@ function closeAdminAfterSave(){
    RENDER
 ========================================================= */
 
+let lastPageKey="";
+
 function render(options={}){
 
  if(options.preserveAdminScroll)
@@ -7890,7 +7899,18 @@ function render(options={}){
  else
   content=renderHome();
 
- document.getElementById("app").innerHTML=`
+ const app=document.getElementById("app");
+ const pageKey=(CLOUD&&!cloud.ready?"yukleniyor":searchText?"arama":selectedCategory?"kat:"+selectedCategory:"ana")+"|"+language;
+ const samePage=pageKey===lastPageKey;
+ const modalWasOpen=!!(app.querySelector(".modalOverlay"));
+ lastPageKey=pageKey;
+ app.classList.toggle("noAnim",samePage);
+ /* arka plan (video dahil) ve yatay kaydırma konumları korunur */
+ const oldBg=$("siteBackground");
+ const oldSig=oldBg&&oldBg.dataset.sig;
+ const hScroll=samePage?[...app.querySelectorAll(".horizontal")].map(h=>h.scrollLeft):[];
+
+ app.innerHTML=`
 
   ${renderBackground()}
 
@@ -7987,6 +8007,11 @@ function render(options={}){
   ${renderAdmin()}
   ${renderAdminLogin()}
  `;
+
+ const newBg=$("siteBackground");
+ if(oldBg&&newBg&&oldSig&&oldSig===newBg.dataset.sig)newBg.replaceWith(oldBg);
+ if(hScroll.length)app.querySelectorAll(".horizontal").forEach((h,k)=>{if(hScroll[k])h.scrollLeft=hScroll[k]});
+ app.classList.toggle("noModalAnim",modalWasOpen);
 
  bindEvents();
 
