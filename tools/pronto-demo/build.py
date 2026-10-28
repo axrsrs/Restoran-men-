@@ -50,7 +50,7 @@ def teklif(kaynak: Path):
     (cikti / 'index.html').write_text(s, encoding='utf-8')
     shutil.copy(BURASI / 'teklif-demo.js', cikti / 'demo.js')
     shutil.copy(BURASI / 'gorseller.js', cikti / 'gorseller.js')
-    shutil.copytree(kaynak / 'adres', cikti / 'adres')
+    shutil.copytree(kaynak / 'adres', cikti / 'adres', ignore=lambda d, ad: [x for x in ad if not x.endswith('.json')])
     (cikti / 'manifest.webmanifest').write_text('''{
   "name": "PRONTO Teklif · Demo",
   "short_name": "PRONTO Demo",
