@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-M0OoQDBtJZt8v4fa4QMWgYfR46AO7qWVud8z7xZWdZo=' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: data: blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-3UnzcvS3CpmJ/5vqx0ixn8w8VJfUQ4POkS3zFK2gjLY=' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: data: blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -1033,6 +1033,11 @@ function sanitizeCatalogData(data) {
             EUR: clean.discount?.currencies?.EUR !== false
         }
     };
+    clean.vade = {
+        enabled: !!clean.vade?.enabled,
+        rate: vadeRateValue(clean.vade?.rate),
+        label: safeText(clean.vade?.label, 40)
+    };
     if (clean.pdf) {
         for (const k of ["title", "footer", "website", "catalogTitle"])
             clean.pdf[k] = safeText(clean.pdf[k], 200);
@@ -1398,6 +1403,7 @@ function defaultData() {
         theme: { ...THEMES[0], bgImage: null }, themeRev: 2, cardImgSize: 180,
         currency: { enabled: false, editCur: "TRY", selected: "TRY", usdRate: null, eurRate: null },
         discount: { enabled: false, currencies: { TRY: true, USD: true, EUR: true } },
+        vade: { enabled: false, rate: null, label: "" },
         categories: createDefaultCategories().map(c => ({ ...c, coverImage: PRELOADED_COVERS[c.id] || null, items: JSON.parse(JSON.stringify(PRELOADED_ITEMS[c.id] || [])) })), language: "TR",
         pdf: { title: "FİYAT LİSTESİ", footer: "", showPageNumbers: true, website: "", useCategoryCovers: true, catalogTitle: "ÜRÜN KATALOĞU", catalogTemplate: "akilli", coverLogo: { src: DEFAULT_PDF_COVER_LOGO }, instagram: "", email: "", closingNote: "", coverImage: "", closingImage: "" }
     };
@@ -1539,6 +1545,11 @@ function normalizeData(input) {
         USD: r.discount.currencies?.USD !== false,
         EUR: r.discount.currencies?.EUR !== false
     };
+    /* TL vade: yalnızca oran ve etiket saklanır; vadeli fiyat hiçbir zaman veriye yazılmaz, her seferinde hesaplanır. */
+    r.vade = { ...base.vade, ...(input.vade && typeof input.vade === "object" ? input.vade : {}) };
+    r.vade.enabled = !!r.vade.enabled;
+    r.vade.rate = vadeRateValue(r.vade.rate);
+    r.vade.label = typeof r.vade.label === "string" ? r.vade.label : "";
     r.pdf = { ...base.pdf, ...(input.pdf || {}) };
     if (!r.pdf.coverLogo || !r.pdf.coverLogo.src)
         r.pdf.coverLogo = { src: DEFAULT_PDF_COVER_LOGO };
@@ -1796,7 +1807,7 @@ const UI = {
         products: "ürün", clear: "Aramayı temizle", found: "ürün bulundu",
         notFound: "Aradığınız ürün bulunamadı.", empty: "Henüz ürün eklenmedi.",
         detailedPrices: "Detaylı fiyatlar", dimensions: "Ölçüler", prices: "Fiyatlar",
-        contactPrice: "Fiyat için iletişime geçin", call: "Fiyat / Bilgi İçin Ara",
+        contactPrice: "Fiyat için iletişime geçin", cashPrice: "Peşin", call: "Fiyat / Bilgi İçin Ara",
         premium: "Premium", admin: "Yönetim Girişi", wrongPin: "Hatalı PIN.", cancel: "Vazgeç",
         login: "Giriş Yap", adminPanel: "Yönetim Paneli", general: "Genel", catalog: "Ürün Kataloğu",
         siteName: "Site Adı", eyebrow: "Üst Etiket", phone: "Telefon", save: "Kaydet ve Kapat",
@@ -1812,7 +1823,7 @@ const UI = {
         products: "products", clear: "Clear search", found: "products found",
         notFound: "No products found.", empty: "No products have been added yet.",
         detailedPrices: "Detailed pricing", dimensions: "Dimensions", prices: "Prices",
-        contactPrice: "Contact us for price", call: "Call for Price / Information",
+        contactPrice: "Contact us for price", cashPrice: "Cash", call: "Call for Price / Information",
         premium: "Premium", admin: "Admin Login", wrongPin: "Incorrect PIN.", cancel: "Cancel",
         login: "Log In", adminPanel: "Admin Panel", general: "General", catalog: "Product Catalog",
         siteName: "Site Name", eyebrow: "Top Label", phone: "Phone", save: "Save & Close",
@@ -2581,10 +2592,35 @@ function convertPriceByData(source, amount) {
         base = n;
     return applyDiscountToValue(source, base);
 }
+/* TL vade oranı: 0 < oran ≤ 100 (ondalık kabul, "12,5" → 12.5). Geçersizse null. */
+function vadeRateValue(v) {
+    if (v === null || v === undefined || v === "")
+        return null;
+    const n = Number(String(v).replace(",", "."));
+    return Number.isFinite(n) && n > 0 && n <= 100 ? Math.round(n * 100) / 100 : null;
+}
+/* Görünümde etkin vade oranı: source.__vade (viewCurrencyData tarafından yalnızca TL'de konur). */
+function vadeRateOf(source) {
+    return (source?.currency?.selected || "TRY") === "TRY" ? (vadeRateValue(source?.__vade) || 0) : 0;
+}
+function vadeLabelOf(source, lang) {
+    const custom = String(source?.vade?.label || "").trim();
+    return lang === "EN" ? "Installment" : (custom || "Vadeli");
+}
+function vadePctText(rate) { return "%" + String(rate).replace(".", ","); }
+/* Vadeli fiyat = peşin (kur + iskonto sonrası) × (1 + oran/100). Vade yoksa null. */
+function formatVadeByData(source, amount) {
+    const r = vadeRateOf(source);
+    if (!r)
+        return null;
+    const v = convertPriceByData(source, amount);
+    return v === null ? null : formatValueByData(source, v * (1 + r / 100));
+}
 function formatAmountByData(source, amount) {
     const v = convertPriceByData(source, amount);
-    if (v === null)
-        return null;
+    return v === null ? null : formatValueByData(source, v);
+}
+function formatValueByData(source, v) {
     const c = getCurrencyByData(source);
     /* Kuruş / cent yazılmaz: ondalık kısım yuvarlanmadan doğrudan atılır (21.560,63 → 21.560). */
     const locale = c.id === "TRY" ? "tr-TR" : "en-US";
@@ -3146,15 +3182,15 @@ function pdfCategoryBlock(category, lang, x, y, w) {
     return c;
 }
 /* ORTAK KART İSKELETİ (takım tablosu + klasik katalog): yumuşak gölgeli kart, bej görsel paneli, ad + altın çizgi */
-function pdfTblFrame(item, lang, x, y, w, h, asset, id, acc, nameRight) {
-    const T = PDF_TBL, top = y + h, title = pdfText(lang, item.name, item.name_en, item.name) || "—";
+function pdfTblFrame(item, lang, x, y, w, h, asset, id, acc, nameRight, imgW = PDF_TBL.imgW) {
+    const top = y + h, title = pdfText(lang, item.name, item.name_en, item.name) || "—";
     let c = pdfSoftCard(x, y, w, h, 7);
-    c += pdfRoundRect(x + 5, y + 5, T.imgW - 10, h - 10, 5, PDF_IMG_BG);
+    c += pdfRoundRect(x + 5, y + 5, imgW - 10, h - 10, 5, PDF_IMG_BG);
     if (asset)
-        c += pdfDrawImage("Im" + id, asset, x + 10, y + 9, T.imgW - 20, h - 18, true);
+        c += pdfDrawImage("Im" + id, asset, x + 10, y + 9, imgW - 20, h - 18, true);
     else
-        c += pdfTextOp(lang === "EN" ? "NO PRODUCT IMAGE" : "ÜRÜN GÖRSELİ YOK", x + T.imgW / 2, y + h / 2 - 3, 7.4, { align: "center", bold: true, color: [0.62, 0.62, 0.62], maxWidth: T.imgW - 20 });
-    const tx = x + T.imgW + 8, nameMax = nameRight - tx;
+        c += pdfTextOp(lang === "EN" ? "NO PRODUCT IMAGE" : "ÜRÜN GÖRSELİ YOK", x + imgW / 2, y + h / 2 - 3, 7.4, { align: "center", bold: true, color: [0.62, 0.62, 0.62], maxWidth: imgW - 20 });
+    const tx = x + imgW + 8, nameMax = nameRight - tx;
     c += pdfTextOp(title, tx, top - 16, 11.6, { bold: true, maxWidth: nameMax, maxLines: 1, color: [0.06, 0.06, 0.06] });
     c += pdfRect(tx, top - 22.5, 20, 1.5, acc);
     c += pdfLine(tx + 24, top - 21.75, nameRight, top - 21.75, [0.89, 0.885, 0.875], .4);
@@ -3164,13 +3200,17 @@ function pdfTblCaption(text, x, y, align) { return pdfTextOp(text, x, y, 6.3, { 
 function pdfProductBlock(data, category, item, lang, x, y, w, h, asset, id) {
     const T = PDF_TBL, acc = pdfCatalogAccent(data), rows = pdfVisibleRows(item, lang);
     const setX = x + w - 8 - T.setW, right = setX - 10;
-    let { c, tx, top } = pdfTblFrame(item, lang, x, y, w, h, asset, id, acc, right);
-    /* Sütunlar: Modül · G/D/Y · Birim fiyat (sağa yaslı) */
-    const unitW = 74, dimW = 78, third = dimW / 3, ux = right, dx = right - unitW - dimW, modW = dx - tx - 6;
+    /* TL vade açıksa: görsel paneli biraz daralır, fiyat sütunu PEŞİN + VADELİ olarak ikiye ayrılır. */
+    const V = !!pdfVade, imgW = V ? 150 : T.imgW;
+    let { c, tx, top } = pdfTblFrame(item, lang, x, y, w, h, asset, id, acc, right, imgW);
+    /* Sütunlar: Modül · G/D/Y · Birim fiyat (sağa yaslı) [· Vadeli] */
+    const vadeW = V ? 60 : 0, unitW = V ? 60 : 74, dimW = V ? 66 : 78, third = dimW / 3, vx = right, ux = right - vadeW, dx = ux - unitW - dimW, modW = dx - tx - 6;
     const capY = top - 31;
     c += pdfTblCaption(lang === "EN" ? "MODULE" : "MODÜL", tx, capY, "left");
     ["G/W", "D/D", "Y/H"].forEach((t, j) => { c += pdfTblCaption(t, dx + third * (j + .5), capY, "center"); });
-    c += pdfTblCaption(lang === "EN" ? "UNIT PRICE" : "BİRİM FİYAT", ux, capY, "right");
+    c += pdfTblCaption(V ? (lang === "EN" ? "CASH" : "PEŞİN") : (lang === "EN" ? "UNIT PRICE" : "BİRİM FİYAT"), ux, capY, "right");
+    if (V)
+        c += pdfTblCaption(pdfVade.label.toLocaleUpperCase(lang === "EN" ? "en-US" : "tr-TR"), vx, capY, "right");
     const rowsTop = top - T.headTop, rowH = Math.min(15.5, (rowsTop - (y + T.pad)) / Math.max(rows.length, 1));
     for (let i = 0; i < rows.length; i++) {
         const rt = rowsTop - i * rowH, rb = rt - rowH, part = rows[i] || {};
@@ -3186,15 +3226,23 @@ function pdfProductBlock(data, category, item, lang, x, y, w, h, asset, id) {
         pdfDimsParts(part.dims).forEach((v, j) => { c += pdfTextOp(v, dx + third * (j + .5), cy, fs - .3, { align: "center", maxWidth: third - 2, maxLines: 1, color: [0.3, 0.3, 0.3] }); });
         const muted = part.contactOnly || part.amount === null || part.amount === undefined;
         const price = muted ? (lang === "EN" ? "Contact us" : "İletişime geçin") : pdfMoney(data, part.amount);
-        c += pdfTextOp(price, ux, cy, muted ? fs - 1 : fs + .2, { align: "right", bold: !muted, maxWidth: unitW - 2, maxLines: 1, color: muted ? [0.5, 0.5, 0.5] : [0.06, 0.06, 0.06] });
+        c += pdfTextOp(price, ux, cy, muted ? fs - 1 : (V ? fs : fs + .2), { align: "right", bold: !muted, maxWidth: unitW - 2, maxLines: 1, color: muted ? [0.5, 0.5, 0.5] : [0.06, 0.06, 0.06] });
+        const vp = muted ? "" : pdfVadeMoney(data, part.amount);
+        if (vp)
+            c += pdfTextOp(vp, vx, cy, fs - .4, { align: "right", maxWidth: vadeW - 2, maxLines: 1, color: [0.42, 0.35, 0.15] });
     }
     /* Takım fiyatı: sağda ayrı, altın vurgulu panel */
     const ph = h - 12, py = y + 6, mid = py + ph / 2;
     c += pdfRoundRect(setX, py, T.setW, ph, 6, [0.99, 0.982, 0.958], [acc[0] * .6 + .4, acc[1] * .6 + .4, acc[2] * .6 + .4], .6);
-    c += pdfTextOp(lang === "EN" ? "SET PRICE" : "TAKIM FİYATI", setX + T.setW / 2, mid + 9, 6.5, { align: "center", bold: true, color: [0.5, 0.47, 0.4], maxWidth: T.setW - 8, maxLines: 1 });
-    c += pdfRect(setX + T.setW / 2 - 8, mid + 4.5, 16, 1.1, acc);
     const total = pdfTotal(data, item, lang), isMoney = /\d/.test(total);
-    c += pdfTextOp(total, setX + T.setW / 2, mid - 9, isMoney ? 12.4 : 8.6, { align: "center", bold: true, maxWidth: T.setW - 8, maxLines: 1, color: isMoney ? [acc[0] * .72, acc[1] * .72, acc[2] * .72] : [0.45, 0.45, 0.45] });
+    const vTotal = (V && isMoney) ? pdfVadeMoney(data, priceTotal(item?.price)) : "", sh = vTotal ? 10 : 0;
+    c += pdfTextOp(lang === "EN" ? "SET PRICE" : "TAKIM FİYATI", setX + T.setW / 2, mid + 9 + sh, 6.5, { align: "center", bold: true, color: [0.5, 0.47, 0.4], maxWidth: T.setW - 8, maxLines: 1 });
+    c += pdfRect(setX + T.setW / 2 - 8, mid + 4.5 + sh, 16, 1.1, acc);
+    c += pdfTextOp(total, setX + T.setW / 2, mid - 9 + sh, isMoney ? 12.4 : 8.6, { align: "center", bold: true, maxWidth: T.setW - 8, maxLines: 1, color: isMoney ? [acc[0] * .72, acc[1] * .72, acc[2] * .72] : [0.45, 0.45, 0.45] });
+    if (vTotal) {
+        c += pdfTextOp(pdfVade.label.toLocaleUpperCase(lang === "EN" ? "en-US" : "tr-TR"), setX + T.setW / 2, mid - 15, 5.8, { align: "center", bold: true, color: [0.6, 0.57, 0.5], maxWidth: T.setW - 8, maxLines: 1 });
+        c += pdfTextOp(vTotal, setX + T.setW / 2, mid - 25, 9.4, { align: "center", bold: true, maxWidth: T.setW - 8, maxLines: 1, color: [0.42, 0.35, 0.15] });
+    }
     return c;
 }
 async function renderPdfCoverPage(data, lang, titleOverride) {
@@ -3232,6 +3280,11 @@ async function renderPdfCoverPage(data, lang, titleOverride) {
     if (discPct > 0) {
         const dnote = lang === "EN" ? `${discPct}% discount applied` : `Fiyatlara %${discPct} iskonto uygulanmıştır`;
         content += pdfTextOp(dnote, W - 42, 76, 9.5, { align: "right", maxWidth: 455, maxLines: 1, color: [0.85, 0.72, 0.30] });
+    }
+    /* TL vade açıksa oran kapakta açıkça yazılır. */
+    if (pdfVade && !titleOverride) {
+        const vnote = lang === "EN" ? `Installment prices include a ${pdfVade.rate}% term difference` : `${pdfVade.label} fiyatlara ${vadePctText(pdfVade.rate)} vade farkı uygulanmıştır`;
+        content += pdfTextOp(vnote, W - 42, discPct > 0 ? 91 : 76, 9.5, { align: "right", maxWidth: 455, maxLines: 1, color: [0.85, 0.72, 0.30] });
     }
     return { content, images, pageNo: null };
 }
@@ -3475,6 +3528,13 @@ function pdfVariantRows(item, lang) {
 }
 /* Fiyatsız katalogda ölçü kartları / model sıraları fiyat göstermez. */
 let pdfNoPrice = false;
+/* TL vade (yalnızca fiyat listesi): { rate, label } ya da null. buildPriceListPDF kurar, bitince sıfırlar. */
+let pdfVade = null;
+function pdfVadeMoney(data, amount) {
+    if (!pdfVade || amount === null || amount === undefined || amount === "" || !Number.isFinite(Number(amount)))
+        return "";
+    return formatVadeByData(data, amount) || "";
+}
 /* Fiyatsız katalogda açıklamadaki fiyatla ilgili cümleler ("… dahil fiyatlar", "130.200 TL" vb.) gösterilmez. */
 const PDF_PRICE_TEXT = /fiyat|price|₺|\bTL\b|\bUSD\b|\bEUR\b|[$€]|\d{1,3}(?:\.\d{3})+(?:,\d+)?/i;
 function pdfDescText(lang, item) {
@@ -3490,11 +3550,12 @@ function pdfVariantPrice(data, r, lang) {
         return { text: lang === "EN" ? "Ask for price" : "Fiyat sorunuz", muted: true };
     return { text: pdfMoney(data, r.amount), muted: false };
 }
+function pdfSizeRowH() { return PDF_SIZE.rowH + (pdfVade ? 9 : 0); }
 function pdfSizeColW() { const L = PDF_LAYOUT; return (L.cardW - PDF_SIZE.gap * (PDF_SIZE.cols - 1)) / PDF_SIZE.cols; }
 function pdfSizeCardHeight(item, lang) {
     const w = pdfSizeColW(), name = pdfText(lang, item.name, item.name_en, item.name) || "—";
     const nl = pdfWrapText(name, w - 18, 10.2, 2).length, rows = pdfVariantRows(item, lang).length;
-    return Math.ceil(PDF_SIZE.imgH + 15 + (nl - 1) * 12.4 + 13 + PDF_SIZE.headH + rows * PDF_SIZE.rowH + 8);
+    return Math.ceil(PDF_SIZE.imgH + 15 + (nl - 1) * 12.4 + 13 + PDF_SIZE.headH + rows * pdfSizeRowH() + 8);
 }
 function pdfSizeRowBlocks(items, lang) {
     const out = [];
@@ -3538,12 +3599,14 @@ function pdfSizeCard(data, item, lang, x, y, w, h, asset, acc) {
     ty -= 5;
     c += pdfTextOp(lang === "EN" ? "SIZE (cm)" : "ÖLÇÜ (cm)", x + pad, ty - 8, 6.4, { bold: true, color: [0.55, 0.55, 0.55] });
     if (!pdfNoPrice)
-        c += pdfTextOp(lang === "EN" ? "PRICE" : "FİYAT", x + w - pad, ty - 8, 6.4, { align: "right", bold: true, color: [0.55, 0.55, 0.55] });
+        c += pdfTextOp(pdfVade ? (lang === "EN" ? "CASH / " : "PEŞİN / ") + pdfVade.label.toLocaleUpperCase(lang === "EN" ? "en-US" : "tr-TR") : (lang === "EN" ? "PRICE" : "FİYAT"), x + w - pad, ty - 8, 6.4, { align: "right", bold: true, color: [0.55, 0.55, 0.55], maxWidth: w * .6, maxLines: 1 });
     ty -= PDF_SIZE.headH;
+    const rowH = pdfSizeRowH();
     pdfVariantRows(item, lang).forEach((r, i) => {
-        const rowTop = ty - i * PDF_SIZE.rowH, cy = rowTop - PDF_SIZE.rowH + 5;
+        /* Vade açıksa satır uzar: peşin üstte, vadeli altında; model adı ortada kalır. */
+        const rowTop = ty - i * rowH, cy = pdfVade ? rowTop - rowH / 2 - 3 : rowTop - rowH + 5;
         if (i % 2 === 0)
-            c += pdfRoundRect(x + pad - 4, rowTop - PDF_SIZE.rowH + 1, w - 2 * pad + 8, PDF_SIZE.rowH - 2, 3, [0.972, 0.969, 0.962]);
+            c += pdfRoundRect(x + pad - 4, rowTop - rowH + 1, w - 2 * pad + 8, rowH - 2, 3, [0.972, 0.969, 0.962]);
         const pr = pdfVariantPrice(data, r, lang), prSize = pr.muted ? 7.2 : 9.2, prW = pr.none ? 0 : pdfFontWidth(pr.text, prSize) + 4;
         const dl = String(r.dims || "").trim() ? pdfDimsLabel(r.dims) : "", main = dl || r.name || "—", sub = dl ? r.name : "";
         const mainMax = Math.max(30, w - 2 * pad - prW - 6), mainW = Math.min(pdfFontWidth(main, 8.8) + 3, mainMax);
@@ -3553,12 +3616,15 @@ function pdfSizeCard(data, item, lang, x, y, w, h, asset, acc) {
             if (subMax > 18)
                 c += pdfTextOp(sub, x + pad + mainW + 3, cy, 7.2, { maxWidth: subMax, maxLines: 1, color: [0.48, 0.48, 0.48] });
         }
+        const vp = (pr.none || pr.muted) ? "" : pdfVadeMoney(data, r.amount);
         if (!pr.none)
-            c += pdfTextOp(pr.text, x + w - pad, cy, prSize, { align: "right", bold: !pr.muted, maxWidth: prW + 2, maxLines: 1, color: pr.muted ? [0.5, 0.5, 0.5] : [0.06, 0.06, 0.06] });
+            c += pdfTextOp(pr.text, x + w - pad, vp ? rowTop - 10.5 : cy, prSize, { align: "right", bold: !pr.muted, maxWidth: prW + 2, maxLines: 1, color: pr.muted ? [0.5, 0.5, 0.5] : [0.06, 0.06, 0.06] });
+        if (vp)
+            c += pdfTextOp(vp, x + w - pad, rowTop - 19.5, 7.6, { align: "right", maxWidth: prW + 2, maxLines: 1, color: [0.42, 0.35, 0.15] });
     });
     return c;
 }
-function pdfModelCellH() { return PDF_MODEL.cellH - (pdfNoPrice ? 14 : 0); }
+function pdfModelCellH() { return PDF_MODEL.cellH - (pdfNoPrice ? 14 : 0) + (pdfVade ? 11 : 0); }
 function pdfModelCols(n) { return Math.min(PDF_MODEL.maxCols, Math.max(PDF_MODEL.minCols, n)); }
 function pdfModelRowHeight(item, lang) {
     const n = Math.max(1, pdfVariantRows(item, lang).length), cols = pdfModelCols(n);
@@ -3597,6 +3663,9 @@ function pdfModelRow(data, item, lang, x, y, w, h, useImg, acc) {
         const pr = pdfVariantPrice(data, r, lang);
         if (!pr.none)
             c += pdfTextOp(pr.text, cx + cellW / 2, ly, pr.muted ? 7.4 : 10.8, { align: "center", bold: !pr.muted, maxWidth: cellW - 10, maxLines: 1, color: pr.muted ? [0.5, 0.5, 0.5] : [0.06, 0.06, 0.06] });
+        const vp = (pr.none || pr.muted) ? "" : pdfVadeMoney(data, r.amount);
+        if (vp)
+            c += pdfTextOp(pdfVade.label + " " + vp, cx + cellW / 2, ly - 11.5, 7.6, { align: "center", maxWidth: cellW - 10, maxLines: 1, color: [0.42, 0.35, 0.15] });
     });
     return c;
 }
@@ -3667,11 +3736,18 @@ async function buildPriceListPDF(rawData, lang) {
     const pdfLang = lang === "EN" ? "EN" : lang === "TR" ? "TR" : (currency === "TRY" ? "TR" : "EN");
     pdfAccentCurrent = pdfCatalogAccent(source);
     pdfNoPrice = false;
-    const prepared = await pdfPrepareImages(source), data = prepared.data;
-    const pages = [await renderPdfCoverPage(data, pdfLang)];
-    await pdfFlowPages(data, pdfLang, prepared.images, pages);
-    pages.push(await renderPdfClosingPage(data, pdfLang));
-    return await pdfCreateVectorDocument(pages);
+    const vr = vadeRateOf(source);
+    pdfVade = vr ? { rate: vr, label: vadeLabelOf(source, pdfLang) } : null;
+    try {
+        const prepared = await pdfPrepareImages(source), data = prepared.data;
+        const pages = [await renderPdfCoverPage(data, pdfLang)];
+        await pdfFlowPages(data, pdfLang, prepared.images, pages);
+        pages.push(await renderPdfClosingPage(data, pdfLang));
+        return await pdfCreateVectorDocument(pages);
+    }
+    finally {
+        pdfVade = null;
+    }
 }
 /* ==================== KATALOG PDF (FİYATSIZ) ==================== */
 function pdfHexToRgb(hex, fallback = [0.79, 0.64, 0.15]) {
@@ -5354,6 +5430,17 @@ function App() {
             return null;
         return React.createElement("div", { className: "adm-seg", role: "group", "aria-label": "Fiyat girilen para birimi", title: "Fiyatları hangi para biriminde giriyorsunuz?" }, CURRENCIES.map(c => React.createElement("button", { key: c.id, type: "button", "aria-pressed": curEditId(data) === c.id, onClick: () => setEditCurrency(c.id) }, c.symbol + " " + c.name)));
     }
+    /* TL vade oranı kutusu: yazılırken "12," gibi ara değerler kaybolmasın diye metin ayrı tutulur. */
+    const [vadeRateText, setVadeRateText] = useState("");
+    useEffect(() => {
+        const r = data?.vade?.rate ?? null;
+        setVadeRateText(prev => vadeRateValue(prev) === r ? prev : (r === null ? "" : String(r).replace(".", ",")));
+    }, [data?.vade?.rate]);
+    function changeVadeRate(raw) {
+        const txt = String(raw ?? "").replace(/[^\d.,]/g, "").replace(/([.,].*)[.,]/g, "$1").slice(0, 6);
+        setVadeRateText(txt);
+        setPath(["vade", "rate"], vadeRateValue(txt));
+    }
     function setPath(path, value) { updateData(copy => { let target = copy; for (let i = 0; i < path.length - 1; i++) {
         const key = path[i];
         target[key] = { ...(target[key] || {}) };
@@ -5404,11 +5491,16 @@ function App() {
         /* İskonto yalnızca site görünümünde (panel kapalıyken), özellik açıkken ve bu para birimi izinliyken uygulanır. */
         const disc = (!panelOpen && data.discount?.enabled && data.discount?.currencies?.[cur] !== false)
             ? (Number(discountRates[cur]) || 0) : 0;
-        return { ...data, currency: { ...(data.currency || {}), selected: cur }, __discount: disc };
+        /* TL vade yalnızca site görünümünde ve TL seçiliyken uygulanır (USD/EUR ve panel önizlemesi etkilenmez). */
+        const vade = (!panelOpen && cur === "TRY" && data.vade?.enabled) ? (vadeRateValue(data.vade?.rate) || 0) : 0;
+        return { ...data, currency: { ...(data.currency || {}), selected: cur }, __discount: disc, __vade: vade };
     }
     function getCurrency() { return getCurrencyByData(viewCurrencyData()); }
     function convertPrice(amount) { return convertPriceByData(viewCurrencyData(), amount); }
     function formatAmount(amount) { return formatAmountByData(viewCurrencyData(), amount); }
+    function formatVade(amount) { return formatVadeByData(viewCurrencyData(), amount); }
+    function vadeLabel() { return vadeLabelOf(data, language); }
+    function vadeOn() { return vadeRateOf(viewCurrencyData()) > 0; }
     function chooseViewCurrency(id) {
         setViewCurrency(id);
         lsSet(VIEW_CURRENCY_KEY, id);
@@ -7087,8 +7179,11 @@ function App() {
                     productDesc(item) && React.createElement("div", { className: "text-xs opacity-65 mt-1 leading-snug line-clamp-2" }, productDesc(item)),
                     cardPrice(item) !== null ? React.createElement("div", { className: "mt-3 pt-3 border-t", style: { borderColor: theme.text + "14" } },
                         React.createElement("div", { className: "flex items-center justify-between flex-wrap", style: { columnGap: 8, rowGap: 2 } },
-                            React.createElement("span", { className: "text-[10px] uppercase tracking-wider font-bold opacity-75 whitespace-nowrap" }, cardPriceLabel(item)),
+                            React.createElement("span", { className: "text-[10px] uppercase tracking-wider font-bold opacity-75 whitespace-nowrap" }, (vadeOn() && !isVariantLayout(layoutOfItem(item))) ? t(language, "cashPrice") : cardPriceLabel(item)),
                             React.createElement("span", { className: "text-[13px] font-bold whitespace-nowrap tabular-nums", style: { color: theme.accent } }, formatAmount(cardPrice(item)))),
+                        vadeOn() && formatVade(cardPrice(item)) && React.createElement("div", { className: "flex items-center justify-between flex-wrap mt-0.5", style: { columnGap: 8, rowGap: 0 } },
+                            React.createElement("span", { className: "text-[10px] uppercase tracking-wider font-bold opacity-60 whitespace-nowrap" }, vadeLabel()),
+                            React.createElement("span", { className: "text-[11.5px] font-semibold whitespace-nowrap tabular-nums opacity-80" }, formatVade(cardPrice(item)))),
                         React.createElement("div", { className: "mt-1 text-[11px] opacity-75 flex items-center gap-1" },
                             cardPriceSub(item),
                             React.createElement(Icon, { type: "arrow", size: 11 }))) : React.createElement("div", { className: "mt-3 pt-3 border-t text-[11px] font-semibold", style: { borderColor: theme.text + "14", color: theme.accent } }, t(language, "contactPrice")))))),
@@ -7131,10 +7226,15 @@ function App() {
                                         ":"),
                                     " ",
                                     partDimensionDisplay(part))),
-                            React.createElement("div", { className: "text-sm font-bold whitespace-nowrap", style: { color: theme.accent } }, priceText(part))))) : React.createElement("div", { className: "rounded-xl p-4 text-center", style: { background: theme.accent + "12", color: theme.accent } }, t(language, "contactPrice")),
+                            React.createElement("div", { className: "text-right shrink-0" },
+                                React.createElement("div", { className: "text-sm font-bold whitespace-nowrap tabular-nums", style: { color: theme.accent } }, priceText(part)),
+                                vadeOn() && !part.contactOnly && formatVade(part.amount) && React.createElement("div", { className: "text-[11px] font-medium whitespace-nowrap tabular-nums opacity-75 mt-0.5" }, vadeLabel() + " " + formatVade(part.amount)))))) : React.createElement("div", { className: "rounded-xl p-4 text-center", style: { background: theme.accent + "12", color: theme.accent } }, t(language, "contactPrice")),
                         !isVariantLayout(layoutOfItem(selectedProduct)) && priceTotal(selectedProduct.price) !== null && React.createElement("div", { className: "mt-3 rounded-xl p-4 flex items-center justify-between", style: { background: theme.accent + "12", border: "1px solid " + theme.accent + "28" } },
-                            React.createElement("span", { className: "text-[11px] uppercase tracking-widest font-bold opacity-65" }, t(language, "total")),
-                            React.createElement("span", { className: "text-base font-bold", style: { color: theme.accent } }, productMainPrice(selectedProduct))),
+                            React.createElement("span", { className: "text-[11px] uppercase tracking-widest font-bold opacity-65" }, t(language, "total") + (vadeOn() ? " · " + t(language, "cashPrice") : "")),
+                            React.createElement("span", { className: "text-base font-bold tabular-nums", style: { color: theme.accent } }, productMainPrice(selectedProduct))),
+                        vadeOn() && !isVariantLayout(layoutOfItem(selectedProduct)) && priceTotal(selectedProduct.price) !== null && formatVade(priceTotal(selectedProduct.price)) && React.createElement("div", { className: "mt-2 rounded-xl px-4 py-3 flex items-center justify-between gap-3", style: { background: theme.accent + "0a", border: "1px solid " + theme.accent + "1c" } },
+                            React.createElement("span", { className: "text-[11px] uppercase tracking-widest font-bold opacity-65" }, t(language, "total") + " · " + vadeLabel() + " (" + vadePctText(vadeRateOf(viewCurrencyData())) + ")"),
+                            React.createElement("span", { className: "text-sm font-bold tabular-nums whitespace-nowrap" }, formatVade(priceTotal(selectedProduct.price)))),
                         !isVariantLayout(layoutOfItem(selectedProduct)) && priceTotal(selectedProduct.price) !== null && hasContactParts(selectedProduct) && React.createElement("div", { className: "text-[11px] opacity-65 mt-2" }, language === "EN" ? "* Total excludes items marked “contact for price”." : "* Toplama, fiyatı sorulacak kalemler dahil değildir.")),
                     data.phone && React.createElement("a", { href: "tel:" + data.phone.replace(/\s/g, ""), className: "mt-5 w-full py-3.5 rounded-xl flex items-center justify-center gap-2 font-bold text-sm", style: { background: theme.accent, color: ink } },
                         React.createElement(Icon, { type: "phone", size: 16 }),
@@ -7293,6 +7393,30 @@ function App() {
                                 React.createElement(AdminLabel, null, "Hangi para birimlerinde iskonto girilebilsin?"),
                                 React.createElement("div", { className: "grid grid-cols-3 gap-2" }, CURRENCIES.map(c => { const on = data.discount?.currencies?.[c.id] !== false; return React.createElement("button", { key: c.id, type: "button", "aria-pressed": on, onClick: () => setPath(["discount", "currencies", c.id], !on), className: "py-2 rounded-lg text-sm font-bold", style: { background: on ? theme.accent : "#FFFFFF", color: on ? ink : "#424245", border: "1px solid " + (on ? theme.accent : "#D2D2D7") } }, c.symbol + " " + c.name); })),
                                 React.createElement("div", { className: "text-[11px] text-neutral-400 mt-3 leading-relaxed" }, "Oranı ana sayfada siz girersiniz (ör. %10, %50) ve bütün fiyatlara anında uygulanır. İskonto o cihaza özeldir: kimse başkasının oranını görmez ve sekme kapanınca sıfırlanır. PDF fiyat listesi de ekranda girili oranla indirimli iner.")),
+                        ),
+                        React.createElement("div", { className: "bg-neutral-900 rounded-xl p-4 mt-5" },
+                            React.createElement("label", { className: "flex items-center justify-between gap-3 cursor-pointer" },
+                                React.createElement("span", null,
+                                    React.createElement("span", { className: "block text-sm font-bold" }, "TL vadeli fiyat"),
+                                    React.createElement("span", { className: "block text-[11px] text-neutral-400 mt-1" }, data.vade?.enabled ? "Açık: TL fiyatların yanında vadeli fiyat da gösterilir." : "Kapalı: yalnızca peşin fiyat gösterilir.")),
+                                React.createElement("button", { type: "button", role: "switch", "aria-checked": !!data.vade?.enabled, "aria-label": "TL vadeli fiyat", onClick: () => setPath(["vade", "enabled"], !data.vade?.enabled), className: "ui-switch" + (data.vade?.enabled ? " is-on" : "") },
+                                    React.createElement("span", null))),
+                            data.vade?.enabled && React.createElement("div", { className: "mt-4" },
+                                React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3" },
+                                    React.createElement("div", null,
+                                        React.createElement(AdminLabel, null, "Vade farkı (%)"),
+                                        React.createElement("div", { className: "flex items-center h-11 rounded-lg px-3", style: { background: "#FFFFFF", border: "1px solid " + (vadeRateValue(vadeRateText) ? "#D2D2D7" : "#FF3B30") } },
+                                            React.createElement("input", { id: "vade-rate", type: "text", inputMode: "decimal", autoComplete: "off", "aria-label": "Vade farkı yüzdesi", value: vadeRateText, placeholder: "Örn. 10", onChange: e => changeVadeRate(e.target.value), className: "flex-1 min-w-0 bg-transparent outline-none border-0 p-0 text-base font-bold tabular-nums", style: { color: "#1D1D1F" } }),
+                                            React.createElement("span", { className: "text-sm font-bold", style: { color: "#86868B" } }, "%"))),
+                                    React.createElement("div", null,
+                                        React.createElement(AdminLabel, null, "Etiket (isteğe bağlı)"),
+                                        React.createElement("input", { id: "vade-label", type: "text", maxLength: 40, autoComplete: "off", "aria-label": "Vade etiketi", value: data.vade?.label || "", placeholder: "Vadeli", onChange: e => setPath(["vade", "label"], safeText(e.target.value, 40)), className: "w-full h-11 rounded-lg px-3 text-sm font-semibold outline-none", style: { background: "#FFFFFF", color: "#1D1D1F", border: "1px solid #D2D2D7" } }))),
+                                vadeRateValue(vadeRateText)
+                                    ? React.createElement("div", { className: "mt-3 rounded-lg px-3 py-2.5 text-[12px] flex flex-wrap items-center justify-between gap-x-4 gap-y-1", style: { background: "#FFFFFF14" } },
+                                        React.createElement("span", null, "Örnek: Peşin ", React.createElement("b", { className: "tabular-nums" }, "10.000 ₺")),
+                                        React.createElement("span", null, (String(data.vade?.label || "").trim() || "Vadeli") + " ", React.createElement("b", { className: "tabular-nums" }, Math.floor(10000 * (1 + vadeRateValue(vadeRateText) / 100) + 1e-9).toLocaleString("tr-TR") + " ₺")))
+                                    : React.createElement("div", { className: "mt-3 text-[12px]", style: { color: "#FF6961" } }, "Geçerli bir oran girin (0'dan büyük, en fazla 100). Oran girilmezse vadeli fiyat gösterilmez."),
+                                React.createElement("div", { className: "text-[11px] text-neutral-400 mt-3 leading-relaxed" }, "Yalnızca TL fiyatlarında, ana sitede ve fiyat listesi PDF'inde görünür. USD/EUR fiyatları ve fiyatsız katalog değişmez. İskonto girildiyse vade farkı iskontolu fiyatın üzerine eklenir.")),
                         ),
                     ),
                     React.createElement("div", { className: adminSection === "katalog" ? "" : "hidden" },
