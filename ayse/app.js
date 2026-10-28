@@ -1,0 +1,627 @@
+(function(){
+"use strict";
+var SB_URL=window.ND_SB_URL, SB_KEY=window.ND_SB_KEY, DEF=window.ND_DEFAULT;
+var SESSION_KEY="ndSiteSession"; try{localStorage.removeItem("nearMenuSession")}catch(e){}
+var $=function(id){return document.getElementById(id)};
+var esc=function(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")};
+function clone(o){return JSON.parse(JSON.stringify(o))}
+function toast(m){var t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove("show")},2600)}
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function lsDel(k){try{localStorage.removeItem(k)}catch(e){}}
+function uid(){return "p"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function merge(base,over){
+ if(Array.isArray(base))return Array.isArray(over)?over:base;
+ if(!over||typeof over!=="object")return base;
+ var out=Object.assign({},base);
+ for(var k in over){
+  if(over[k]&&typeof over[k]==="object"&&!Array.isArray(over[k])&&base[k]&&typeof base[k]==="object")out[k]=merge(base[k],over[k]);
+  else if(over[k]!==undefined&&over[k]!==null)out[k]=over[k];
+ }
+ return out;
+}
+
+/* ── oturum ── */
+var session=null;try{session=JSON.parse(lsGet(SESSION_KEY)||"null")}catch(e){}
+function storeSession(s){session=s;if(s)lsSet(SESSION_KEY,JSON.stringify(s));else lsDel(SESSION_KEY)}
+function toSession(j){return {access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),user:j.user||(session&&session.user)||null}}
+async function authReq(path,body,method,withToken){
+ var h={"apikey":SB_KEY,"Content-Type":"application/json"};
+ if(withToken&&session)h.Authorization="Bearer "+session.access_token;
+ var r=await fetch(SB_URL+"/auth/v1/"+path,{method:method||"POST",headers:h,body:JSON.stringify(body||{})});
+ var j={};try{j=await r.json()}catch(e){}
+ if(!r.ok){var er=new Error(j.error_description||j.msg||j.message||("HTTP "+r.status));er.status=r.status;throw er}
+ return j;
+}
+async function ensureFresh(){
+ if(!session)return;
+ if((session.expires_at||0)-Math.floor(Date.now()/1000)>90)return;
+ try{storeSession(toSession(await authReq("token?grant_type=refresh_token",{refresh_token:session.refresh_token})))}
+ catch(e){if(e.status>=400&&e.status<500)storeSession(null)}
+}
+async function sb(path,opts){
+ opts=opts||{};
+ await ensureFresh();
+ var h=Object.assign({"apikey":SB_KEY},opts.headers||{});
+ if(opts.body!==undefined&&!(opts.body instanceof Blob))h["Content-Type"]="application/json";
+ if(session)h.Authorization="Bearer "+session.access_token;
+ var body=opts.body===undefined?undefined:(opts.body instanceof Blob?opts.body:JSON.stringify(opts.body));
+ var r=await fetch(SB_URL+path,{method:opts.method||"GET",headers:h,body:body});
+ if(!r.ok){var j={};try{j=await r.json()}catch(e){}var er=new Error(j.message||j.error||("HTTP "+r.status));er.status=r.status;throw er}
+ if(r.status===204)return null;
+ var t=await r.text();return t?JSON.parse(t):null;
+}
+
+/* ── durum ── */
+var view="checking", S=null, savedJSON="", saving=false, openItem=null, section="marka";
+
+function render(){
+ var app=$("app");
+ if(view==="checking"){app.innerHTML='<div class="loading"><div class="spin"></div></div>';return}
+ if(view==="login"){app.innerHTML=loginHTML();bindLogin();return}
+ if(view==="newPassword"){app.innerHTML=newPwHTML();bindNewPw();return}
+ app.innerHTML=appHTML();bindApp();updateStatus();
+}
+
+function loginHTML(){
+ return '<div class="auth"><form class="auth-card" id="lf" autocomplete="on">'
+  +'<h1>NearDiji <em>panel</em></h1><p>Ana site içeriğini yönetmek için giriş yapın.</p>'
+  +'<div class="grid" style="grid-template-columns:1fr">'
+  +'<label class="f">E-posta<input class="in" id="em" type="email" autocomplete="username" value="'+esc(lsGet("nearMenuLastEmail")||"")+'"></label>'
+  +'<label class="f">Şifre<input class="in" id="pw" type="password" autocomplete="current-password"></label>'
+  +'<button class="btn primary block" id="lb" type="submit">Giriş yap</button></div>'
+  +'<div class="err" id="err"></div></form></div>';
+}
+function bindLogin(){
+ var f=$("lf");
+ (lsGet("nearMenuLastEmail")?$("pw"):$("em")).focus();
+ f.addEventListener("submit",async function(e){
+  e.preventDefault();
+  var em=($("em").value||"").trim().toLowerCase(), pw=$("pw").value||"", b=$("lb");
+  if(!em||!pw){$("err").textContent="E-posta ve şifreyi girin.";return}
+  b.disabled=true;b.textContent="Giriş yapılıyor...";
+  try{
+   storeSession(toSession(await authReq("token?grant_type=password",{email:em,password:pw})));
+   lsSet("nearMenuLastEmail",em);
+   await afterLogin();
+  }catch(er){
+   b.disabled=false;b.textContent="Giriş yap";
+   var el=$("err");if(el)el.textContent=er.status===400?"E-posta veya şifre yanlış.":er.status===429?"Çok fazla deneme. Biraz bekleyin.":(er.message||"Giriş yapılamadı.");
+  }
+ });
+}
+function newPwHTML(){
+ return '<div class="auth"><form class="auth-card" id="nf"><h1>Yeni <em>şifre</em></h1><p>İlk girişte kendi şifrenizi belirleyin.</p>'
+  +'<div class="grid" style="grid-template-columns:1fr">'
+  +'<label class="f">Yeni şifre<input class="in" id="n1" type="password" autocomplete="new-password"></label>'
+  +'<label class="f">Tekrar<input class="in" id="n2" type="password" autocomplete="new-password"></label>'
+  +'<button class="btn primary block" id="nb" type="submit">Kaydet</button></div><div class="err" id="err"></div></form></div>';
+}
+function bindNewPw(){
+ $("nf").addEventListener("submit",async function(e){
+  e.preventDefault();
+  var a=$("n1").value,b=$("n2").value;
+  if(a.length<8){$("err").textContent="Şifre en az 8 karakter olmalı.";return}
+  if(a!==b){$("err").textContent="Şifreler aynı değil.";return}
+  $("nb").disabled=true;
+  try{await ensureFresh();var u=await authReq("user",{password:a,data:{must_change_password:false}},"PUT",true);session.user=u;storeSession(session);await afterLogin()}
+  catch(er){$("nb").disabled=false;$("err").textContent="Şifre kaydedilemedi: "+er.message}
+ });
+}
+
+async function afterLogin(){
+ if(session&&session.user&&session.user.user_metadata&&session.user.user_metadata.must_change_password){view="newPassword";render();return}
+ try{
+  var ok=await sb("/rest/v1/rpc/am_i_super",{method:"POST",body:{}});
+  if(ok!==true){storeSession(null);view="login";render();$("err").textContent="Bu hesabın site paneline yetkisi yok.";return}
+  var rows=await sb("/rest/v1/site_content?key=eq.main&select=data");
+  var data=rows&&rows[0]&&rows[0].data;
+  S=merge(clone(DEF),data||{});
+  S.hero=merge(clone(DEF.hero),S.hero||{});
+  S.contact=merge(clone(DEF.contact),S.contact||{});
+  S.seo=merge(clone(DEF.seo),S.seo||{});
+  savedJSON=data?JSON.stringify(S):"";
+  view="app";render();
+  if(!data)toast("Henüz kayıt yok — varsayılan içerik yüklendi. Kaydedince yayına alınır.");
+ }catch(er){
+  if(er.status===401){storeSession(null);view="login";render();return}
+  view="login";render();$("err").textContent="Bağlantı hatası: "+er.message;
+ }
+}
+
+/* ── yol ile değer okuma/yazma ── */
+function getP(path){return path.split(".").reduce(function(o,k){return o==null?o:o[k]},S)}
+function setP(path,v){var ks=path.split("."),o=S;for(var i=0;i<ks.length-1;i++){if(o[ks[i]]==null)o[ks[i]]={};o=o[ks[i]]}o[ks[ks.length-1]]=v}
+
+function inp(label,path,opt){
+ opt=opt||{};
+ var v=getP(path);v=v==null?"":v;
+ var field=opt.area
+  ?'<textarea class="in" data-p="'+path+'" rows="'+(opt.rows||3)+'"'+(opt.ph?' placeholder="'+esc(opt.ph)+'"':"")+'>'+esc(v)+'</textarea>'
+  :'<input class="in" data-p="'+path+'" type="'+(opt.type||"text")+'" value="'+esc(v)+'"'+(opt.ph?' placeholder="'+esc(opt.ph)+'"':"")+(opt.mode?' inputmode="'+opt.mode+'"':"")+'>';
+ return '<label class="f'+(opt.full?" full":"")+'">'+esc(label)+field+(opt.hint?'<span class="hint">'+esc(opt.hint)+'</span>':"")+'</label>';
+}
+function imgField(label,path,opt){
+ opt=opt||{};
+ var v=getP(path)||"";
+ return '<div class="f'+(opt.full?" full":"")+'"><label class="f">'+esc(label)+'</label><div class="img-field">'
+  +'<div class="thumb'+(opt.wide?" wide":"")+(opt.bg?" "+opt.bg:"")+'">'+(v?'<img src="'+esc(v)+'" alt="">':'<span>Görsel yok</span>')+'</div>'
+  +'<button class="btn sm" type="button" data-up="'+path+'" data-kind="'+(opt.kind||"photo")+'">'+(v?"Değiştir":"Yükle")+'</button>'
+  +(v?'<button class="btn sm danger" type="button" data-clear="'+path+'">Kaldır</button>':"")
+  +'</div>'+(opt.hint?'<span class="hint">'+esc(opt.hint)+'</span>':"")+'</div>';
+}
+var GRIP='<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="5.5" cy="3.5" r="1.3"/><circle cx="10.5" cy="3.5" r="1.3"/><circle cx="5.5" cy="8" r="1.3"/><circle cx="10.5" cy="8" r="1.3"/><circle cx="5.5" cy="12.5" r="1.3"/><circle cx="10.5" cy="12.5" r="1.3"/></svg>';
+var CHEV='<svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var TRASH='<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+var SECTIONS=[["marka","Marka & logo"],["giris","Giriş bölümü"],["projeler","Projeler"],["referanslar","Referanslar"],["hizmetler","Hizmetler"],["surec","Süreç"],["hakkinda","Hakkında"],["iletisim","İletişim"],["seo","Tema & SEO"],["yedek","Yedek"]];
+
+function appHTML(){
+ var h=S.hero;
+ var o='<header class="top"><div class="brand">NearDiji <span>site paneli</span></div>'
+  +'<span class="status" id="status"></span>'
+  +'<a class="btn" href="/" target="_blank" rel="noopener">Siteyi aç</a>'
+  +'<button class="btn primary" id="save" type="button">Kaydet</button>'
+  +'<button class="btn icon" id="logout" type="button" title="Çıkış" aria-label="Çıkış"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 2.5H3.5v11H6M10 5l3 3-3 3M13 8H6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
+  +'</header><div class="wrap"><nav class="side" id="side">'
+  +SECTIONS.map(function(s){return '<a href="#s-'+s[0]+'" data-s="'+s[0]+'"'+(section===s[0]?' class="on"':"")+'>'+s[1]+'</a>'}).join("")
+  +'</nav><main>';
+
+ o+='<section class="card" id="s-marka"><h2>Marka & logo</h2><p class="sub">Tek logo yükleyin; otomatik PNG\'ye çevrilir, düz arka planı kaldırılır ve açık/koyu temaya göre kendiliğinden uyum sağlar.</p><div class="grid">'
+  +inp("Marka adı","brand")
+  +'<div></div>'
+  +logoField()
+  +'</div></section>';
+
+ o+='<section class="card" id="s-giris"><h2>Giriş bölümü</h2><p class="sub">Sayfanın ilk ekranı. Başlıkta yeni satır için Enter\'a basın; “vurgulu kısım” italik yazılır.</p><div class="grid">'
+  +inp("Üst etiket","hero.eyebrow",{full:true})
+  +inp("Başlık","hero.headline",{area:true,rows:2})
+  +inp("Vurgulu kısım","hero.accent",{hint:"Başlıktaki aynı ifade italik olur."})
+  +inp("Açıklama","hero.body",{area:true,full:true,rows:3})
+  +inp("Ana buton yazısı","hero.primary.label")+inp("Ana buton bağlantısı","hero.primary.href",{ph:"#iletisim"})
+  +inp("İkinci buton yazısı","hero.secondary.label")+inp("İkinci buton bağlantısı","hero.secondary.href",{ph:"#projeler"})
+  +inp("Arka plandaki büyük yazı","hero.backdrop",{hint:"Boş bırakılırsa gösterilmez."})
+  +inp("İpucu yazısı","hero.hint")
+  +'<div class="f full"><label class="f">Sıvı heykel görseli</label><div class="seg" data-seg="hero.sculpture">'
+  +[["default","Hazır heykel"],["logo","Logom"],["custom","Özel görsel"]].map(function(x){return '<button type="button" data-v="'+x[0]+'"'+(h.sculpture===x[0]?' class="on"':"")+'>'+x[1]+'</button>'}).join("")
+  +'</div><span class="hint">Görselin kendi piksellerinden parçacıklar oluşur; imleç dokununca sıvılaşır.</span></div>'
+  +(h.sculpture==="custom"?imgField("Özel görsel (açık tema)","hero.image",{kind:"hero",wide:true,bg:"light"})+imgField("Özel görsel (koyu tema)","hero.imageDark",{kind:"hero",wide:true,bg:"dark"}):"")
+  +(h.sculpture==="logo"&&!S.logo&&!S.logoDark?'<p class="hint full">Önce yukarıdan logo yükleyin.</p>':"")
+  +rangeF("Etki gücü","hero.strength",0,2)+rangeF("Akışkanlık","hero.liquid",0,2)+rangeF("Parçacık yoğunluğu","hero.density",.3,2)
+  +'</div></section>';
+
+ o+='<section class="card" id="s-projeler"><h2>Projeler</h2><p class="sub">Sıralamak için soldaki tutamaçtan sürükleyin. Öne çıkan proje tam genişlikte gösterilir.</p><div class="grid" style="margin-bottom:16px">'
+  +inp("Bölüm başlığı","projectsTitle")+inp("Bölüm açıklaması","projectsIntro",{area:true,rows:2})
+  +'</div><div class="list" id="plist" data-list="projects">'+S.projects.map(projHTML).join("")+'</div>'
+  +'<button class="btn add" type="button" id="addProj">+ Proje ekle</button></section>';
+
+ if(!Array.isArray(S.clients))S.clients=[];
+ o+='<section class="card" id="s-referanslar"><h2>Referanslar</h2><p class="sub">Firma logolarını ekleyin; her yüklenen logo listeye otomatik eklenir ve sitede kayan 3D şeritte gösterilir. Birden fazla dosyayı aynı anda seçebilirsiniz. Liste boşsa bölüm sitede görünmez.</p><div class="grid" style="margin-bottom:16px">'
+  +inp("Bölüm başlığı","clientsTitle")+inp("Bölüm açıklaması","clientsIntro",{area:true,rows:2})
+  +'</div><div class="list" id="clist" data-list="clients">'+S.clients.map(clientHTML).join("")+'</div>'
+  +'<div class="img-field" style="margin-top:12px"><button class="btn add" type="button" id="addClients" style="margin-top:0">+ Logo ekle</button>'
+  +'<label class="check"><input type="checkbox" data-p="clientsCutBg" data-bool="1"'+(S.clientsCutBg!==false?" checked":"")+'> Düz arka planı otomatik kaldır</label>'
+  +'<span class="hint">'+S.clients.length+' logo · JPG, PNG, WEBP veya SVG; hepsi şeffaf PNG\'ye çevrilir.</span></div></section>';
+
+ o+=miniSection("hizmetler","Hizmetler","Sunduğunuz hizmetler, dört sütun hâlinde gösterilir.","servicesTitle","services","Hizmet");
+ o+=miniSection("surec","Süreç","Müşteriyle çalışma adımlarınız.","stepsTitle","steps","Adım");
+
+ o+='<section class="card" id="s-hakkinda"><h2>Hakkında</h2><p class="sub">Boş bırakılırsa bu bölüm sitede görünmez.</p><div class="grid">'
+  +inp("Bölüm etiketi","aboutTitle")+inp("Diller","languages")
+  +inp("Metin","about",{area:true,full:true,rows:4})+'</div></section>';
+
+ o+='<section class="card" id="s-iletisim"><h2>İletişim</h2><p class="sub">Doldurduğunuz bilgiler sitenin sonunda buton ve etiket olarak görünür.</p><div class="grid">'
+  +inp("Başlık","contactTitle")+inp("Alt metin","contactText")
+  +inp("WhatsApp numarası","contact.whatsapp",{type:"tel",mode:"tel",ph:"0555 555 55 55"})
+  +inp("Telefon","contact.phone",{type:"tel",mode:"tel"})
+  +inp("E-posta","contact.email",{type:"email"})
+  +inp("Instagram","contact.instagram",{ph:"@kullaniciadi"})
+  +inp("Adres / konum","contact.address",{full:true})
+  +inp("Alt bilgi","footer",{full:true,hint:"Yanına otomatik olarak yıl eklenir."})
+  +'</div></section>';
+
+ o+='<section class="card" id="s-seo"><h2>Tema & SEO</h2><p class="sub">Ziyaretçi temayı kendisi değiştirmediyse açılışta bu tema kullanılır.</p><div class="grid">'
+  +'<div class="f full"><label class="f">Varsayılan tema</label><div class="seg" data-seg="theme">'
+  +[["dark","Koyu"],["light","Açık"]].map(function(x){return '<button type="button" data-v="'+x[0]+'"'+(S.theme===x[0]?' class="on"':"")+'>'+x[1]+'</button>'}).join("")
+  +'</div></div>'
+  +inp("Sayfa başlığı (Google)","seo.title",{full:true})
+  +inp("Sayfa açıklaması (Google)","seo.description",{area:true,full:true,rows:2})
+  +'</div></section>';
+
+ o+='<section class="card" id="s-yedek"><h2>Yedek</h2><p class="sub">Tüm site içeriğini tek bir JSON dosyası olarak indirin ya da daha önce indirdiğiniz yedeği geri yükleyin. Görseller dosyanın içinde değil, bağlantı olarak saklanır; yüklenen görseller silinmediği sürece geri yüklemede de görünür.</p>'
+  +'<div class="img-field"><button class="btn" id="bkDown" type="button">JSON yedek indir</button>'
+  +'<button class="btn" id="bkUp" type="button">JSON yedek yükle</button>'
+  +'<input id="bkFile" type="file" accept="application/json,.json" hidden></div>'
+  +'<span class="hint">Yükleme mevcut içeriğin yerine geçer ve yayına almak için ayrıca “Kaydet”e basmanız gerekir.</span></section>';
+
+ o+='</main></div>';
+ return o;
+}
+function logoSrc(){return S.logo||S.logoDark||""}
+function logoInvert(dark){
+ if(S.logoMode!=="auto"||!S.logoTone)return false;
+ return dark?S.logoTone==="dark":S.logoTone==="light";
+}
+function logoPrevItem(dark){
+ var v=logoSrc();
+ if(!v)return '<span>Logo yok — marka adı yazı olarak görünür</span>';
+ if(S.logoMode==="mono")return '<div class="mono" role="img" aria-label="Logo" style="--lm:url(\''+esc(v)+'\');aspect-ratio:'+(+S.logoRatio||3)+'"></div>';
+ return '<img src="'+esc(v)+'" alt="Logo"'+(logoInvert(dark)?' class="inv"':"")+'>';
+}
+function logoField(){
+ var v=logoSrc(), sz=Math.round(+S.logoSize||34), mode=S.logoMode||"auto";
+ return '<div class="f full"><label class="f">Logo</label>'
+  +'<div class="logo-prev" id="logoPrev" style="--lh:'+sz+'px"><div class="lp-light">'+logoPrevItem(false)+'</div><div class="lp-dark">'+logoPrevItem(true)+'</div></div>'
+  +'<div class="img-field" style="margin-top:10px">'
+  +'<button class="btn sm" type="button" data-up="logo" data-kind="logo">'+(v?"Değiştir":"Yükle")+'</button>'
+  +(v?'<button class="btn sm danger" type="button" data-clear="logo">Kaldır</button>':"")
+  +'<label class="check"><input type="checkbox" data-p="logoCutBg" data-bool="1"'+(S.logoCutBg!==false?" checked":"")+'> Düz arka planı otomatik kaldır</label>'
+  +'</div><span class="hint">JPG, PNG, WEBP veya SVG yükleyebilirsiniz; hepsi şeffaf PNG\'ye çevrilir. Arka plan kaldırma bir sonraki yüklemede uygulanır.</span></div>'
+  +'<label class="f full">Logo boyutu<div class="range"><input type="range" min="18" max="90" step="1" data-p="logoSize" data-num="1" data-unit="px" value="'+sz+'"><output>'+sz+' px</output></div></label>'
+  +'<div class="f full"><label class="f">Tema uyumu</label><div class="seg" data-seg="logoMode">'
+  +[["auto","Otomatik (temaya göre)"],["mono","Tek renk"],["original","Orijinal renkler"]].map(function(x){return '<button type="button" data-v="'+x[0]+'"'+(mode===x[0]?' class="on"':"")+'>'+x[1]+'</button>'}).join("")
+  +'</div><span class="hint">Otomatik: koyu logo koyu temada açığa, açık logo açık temada koyuya döner. Tek renk: logo yazı rengine boyanır.</span></div>';
+}
+function rangeF(label,path,min,max){
+ var v=+getP(path);if(!isFinite(v))v=1;
+ return '<label class="f">'+esc(label)+'<div class="range"><input type="range" min="'+min+'" max="'+max+'" step="0.05" data-p="'+path+'" data-num="1" value="'+v+'"><output>'+v.toFixed(2)+'</output></div></label>';
+}
+function clientHTML(c,i){
+ var base="clients."+i;
+ return '<div class="item client" data-i="'+i+'" data-id="'+esc(c.id)+'">'
+  +'<div class="client-row"><span class="drag" title="Sürükle">'+GRIP+'</span>'
+  +'<div class="client-logo">'+(c.logo?'<img src="'+esc(c.logo)+'" alt="">':'<span>Logo yok</span>')+'</div>'
+  +'<div class="client-fields"><input class="in" data-p="'+base+'.name" value="'+esc(c.name||"")+'" placeholder="Firma adı" aria-label="Firma adı" maxlength="80">'
+  +'<input class="in" data-p="'+base+'.link" value="'+esc(c.link||"")+'" placeholder="Web sitesi (isteğe bağlı)" aria-label="Web sitesi" maxlength="300" inputmode="url"></div>'
+  +'<div class="client-act"><button class="btn sm" type="button" data-up="'+base+'.logo" data-kind="clientlogo">Değiştir</button>'
+  +'<button class="btn icon sm danger" type="button" data-del="clients" data-i="'+i+'" aria-label="Sil" title="Sil">'+TRASH+'</button></div></div></div>';
+}
+function statusPill(p){
+ if(p.hidden)return '<span class="pill off">Gizli</span>';
+ if(p.status==="live")return '<span class="pill live">Yayında</span>';
+ if(p.status==="dev")return '<span class="pill dev">Geliştiriliyor</span>';
+ return "";
+}
+function projHTML(p,i){
+ var base="projects."+i, open=openItem===p.id;
+ return '<div class="item'+(open?" open":"")+'" data-i="'+i+'" data-id="'+esc(p.id)+'">'
+  +'<div class="item-head" data-toggle="'+esc(p.id)+'"><span class="drag" title="Sürükle">'+GRIP+'</span>'
+  +'<div class="item-title">'+esc(p.name||"Adsız proje")+(p.featured?'<small>★ öne çıkan</small>':"")+'<small>'+esc(p.tag||"")+'</small></div>'
+  +statusPill(p)+CHEV+'</div>'
+  +(open?'<div class="item-body"><div class="grid">'
+   +inp("Proje adı",base+".name")+inp("Etiket",base+".tag",{ph:"QR Menü · SaaS"})
+   +inp("Açıklama",base+".desc",{area:true,full:true,rows:3})
+   +inp("Bağlantı",base+".link",{ph:"https://... veya /menu"})+inp("Bağlantı yazısı",base+".linkLabel",{ph:"İncele"})
+   +inp("Yıl",base+".year",{mode:"numeric"})
+   +'<div class="f"><label class="f">Durum</label><div class="seg" data-seg="'+base+'.status">'
+   +[["live","Yayında"],["dev","Geliştiriliyor"],["","Yok"]].map(function(x){return '<button type="button" data-v="'+x[0]+'"'+((p.status||"")===x[0]?' class="on"':"")+'>'+x[1]+'</button>'}).join("")
+   +'</div></div>'
+   +imgField("Kapak görseli",base+".image",{kind:"photo",wide:true,full:true,hint:"Boş bırakılırsa projeye uygun hazır bir görsel kullanılır. Önerilen: yatay ekran görüntüsü (3:2)."})
+   +'</div><div class="row-actions">'
+   +'<label class="toggle"><input type="checkbox" data-p="'+base+'.featured" data-bool="1"'+(p.featured?" checked":"")+'>Öne çıkar</label>'
+   +'<label class="toggle"><input type="checkbox" data-p="'+base+'.hidden" data-bool="1"'+(p.hidden?" checked":"")+'>Sitede gizle</label>'
+   +'<span style="flex:1"></span><button class="btn sm danger" type="button" data-del="projects" data-i="'+i+'">'+TRASH+'Sil</button>'
+   +'</div></div>':"")
+  +'</div>';
+}
+function miniSection(id,title,sub,titlePath,listKey,word){
+ return '<section class="card" id="s-'+id+'"><h2>'+title+'</h2><p class="sub">'+sub+' Sürükleyerek sıralayın.</p><div class="grid" style="margin-bottom:14px">'
+  +inp("Bölüm başlığı",titlePath,{full:true})+'</div><div class="list" data-list="'+listKey+'">'
+  +S[listKey].map(function(s,i){
+   return '<div class="mini item" data-i="'+i+'"><span class="drag" title="Sürükle">'+GRIP+'</span>'
+    +'<input class="in" data-p="'+listKey+"."+i+'.title" value="'+esc(s.title)+'" placeholder="'+word+' adı">'
+    +'<textarea class="in" data-p="'+listKey+"."+i+'.desc" rows="2" placeholder="Kısa açıklama">'+esc(s.desc)+'</textarea>'
+    +'<button class="btn icon sm danger" type="button" data-del="'+listKey+'" data-i="'+i+'" aria-label="Sil">'+TRASH+'</button></div>';
+  }).join("")+'</div><button class="btn add" type="button" data-addmini="'+listKey+'">+ '+word+' ekle</button></section>';
+}
+
+/* ── değişiklik takibi ── */
+function dirty(){return JSON.stringify(S)!==savedJSON}
+function updateStatus(){
+ var st=$("status"),sv=$("save");if(!st)return;
+ var d=dirty();
+ st.textContent=saving?"Kaydediliyor...":d?"Kaydedilmemiş değişiklik var":"Tüm değişiklikler kayıtlı";
+ st.className="status"+(d&&!saving?" dirty":"");
+ sv.disabled=saving||!d;
+}
+window.addEventListener("beforeunload",function(e){if(view==="app"&&dirty()){e.preventDefault();e.returnValue=""}});
+
+function rerender(keepScroll){
+ var y=window.scrollY;render();if(keepScroll!==false)window.scrollTo(0,y);
+}
+
+var appBound=false;
+function bindApp(){
+ var app=$("app");
+ app.querySelectorAll("[data-list]").forEach(enableDrag);
+ observeSections();
+ if(appBound)return;
+ appBound=true;
+ app.addEventListener("input",function(e){
+  var el=e.target,p=el.dataset&&el.dataset.p;if(!p)return;
+  var v=el.dataset.bool?el.checked:el.dataset.num?+el.value:el.value;
+  setP(p,v);
+  if(el.type==="range"&&el.nextElementSibling)el.nextElementSibling.textContent=el.dataset.unit?Math.round(+el.value)+" "+el.dataset.unit:(+el.value).toFixed(2);
+  if(p==="logoSize"){var lp=$("logoPrev");if(lp)lp.style.setProperty("--lh",Math.round(+el.value)+"px")}
+  if(/^projects\.\d+\.(name|tag)$/.test(p)){
+   var it=el.closest(".item"),t=it&&it.querySelector(".item-title");
+   var pr=S.projects[+p.split(".")[1]];
+   if(t)t.innerHTML=esc(pr.name||"Adsız proje")+(pr.featured?'<small>★ öne çıkan</small>':"")+'<small>'+esc(pr.tag||"")+'</small>';
+  }
+  updateStatus();
+ });
+ app.addEventListener("change",function(e){
+  if(e.target&&e.target.id==="bkFile"){backupUp(e.target);return}
+  var el=e.target;if(el.dataset&&el.dataset.bool){setP(el.dataset.p,el.checked);rerender()}
+ });
+ app.addEventListener("click",function(e){
+  var t=e.target.closest("button,a,[data-toggle]");if(!t)return;
+  if(t.id==="save"){save();return}
+  if(t.id==="logout"){logout();return}
+  if(t.id==="bkDown"){backupDown();return}
+  if(t.id==="bkUp"){$("bkFile").click();return}
+  if(t.id==="addProj"){
+   var p={id:uid(),name:"Yeni proje",tag:"",year:String(new Date().getFullYear()),status:"dev",desc:"",link:"",linkLabel:"",image:"",featured:false,hidden:false};
+   S.projects.push(p);openItem=p.id;rerender();
+   var el=document.querySelector('[data-id="'+p.id+'"]');if(el){el.scrollIntoView({block:"center"});var n=el.querySelector('input');if(n){n.focus();n.select()}}
+   return;
+  }
+  if(t.dataset.addmini){S[t.dataset.addmini].push({title:"",desc:""});rerender();
+   var l=document.querySelector('[data-list="'+t.dataset.addmini+'"]');var ins=l&&l.querySelectorAll(".item");if(ins&&ins.length)ins[ins.length-1].querySelector("input").focus();return}
+  if(t.dataset.del){
+   var arr=S[t.dataset.del],i=+t.dataset.i,nm=arr[i]&&(arr[i].name||arr[i].title);
+   if(!confirm((nm?"“"+nm+"” ":"Bu öğe ")+"silinsin mi?"))return;
+   arr.splice(i,1);rerender();return;
+  }
+  if(t.dataset.seg===undefined&&t.parentElement&&t.parentElement.dataset.seg){
+   setP(t.parentElement.dataset.seg,t.dataset.v);rerender();return;
+  }
+  if(t.id==="addClients"){pickClientLogos();return}
+  if(t.dataset.up){pickImage(t.dataset.up,t.dataset.kind);return}
+  if(t.dataset.clear){setP(t.dataset.clear,"");if(t.dataset.clear==="logo"){S.logoDark="";S.logoTone="";S.logoRatio=0}rerender();return}
+  if(t.dataset.toggle!==undefined&&!e.target.closest(".drag")){openItem=openItem===t.dataset.toggle?null:t.dataset.toggle;rerender();return}
+  if(t.dataset.s){section=t.dataset.s;document.querySelectorAll(".side a").forEach(function(a){a.classList.toggle("on",a===t)})}
+ });
+}
+/* ── JSON yedek ── */
+function backupDown(){
+ var o={format:"neardiji-site-yedek",surum:1,tarih:new Date().toISOString(),icerik:clone(S)};
+ var a=document.createElement("a"),u=URL.createObjectURL(new Blob([JSON.stringify(o,null,2)],{type:"application/json"}));
+ a.href=u;a.download="neardiji-site-yedek-"+new Date().toISOString().slice(0,10)+".json";
+ document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000);
+ toast("✓ Yedek indirildi.");
+}
+function backupUp(inp){
+ var f=inp.files&&inp.files[0];inp.value="";
+ if(!f)return;
+ if(f.size>3*1024*1024){toast("Dosya çok büyük (en fazla 3 MB).");return}
+ var rd=new FileReader();
+ rd.onerror=function(){toast("Dosya okunamadı.")};
+ rd.onload=function(){
+  var o;
+  try{o=JSON.parse(String(rd.result))}catch(er){toast("Bu dosya geçerli bir JSON değil.");return}
+  var d=o&&o.format==="neardiji-site-yedek"?o.icerik:null;
+  if(!d||typeof d!=="object"||Array.isArray(d)||!Array.isArray(d.projects)){toast("Bu dosya bir NearDiji site yedeği değil.");return}
+  if(!confirm("Mevcut site içeriği bu yedekle değiştirilsin mi? (Yayına almak için ayrıca Kaydet'e basmanız gerekir.)"))return;
+  var n=merge(clone(DEF),d);
+  n.hero=merge(clone(DEF.hero),n.hero||{});
+  n.contact=merge(clone(DEF.contact),n.contact||{});
+  n.seo=merge(clone(DEF.seo),n.seo||{});
+  S=n;openItem=null;rerender();
+  toast("✓ Yedek yüklendi. Yayına almak için Kaydet'e basın.");
+ };
+ rd.readAsText(f);
+}
+var secIO=null;
+function observeSections(){
+ /* yan menü: görünür bölümü işaretle */
+ if(secIO)secIO.disconnect();
+ if("IntersectionObserver" in window){
+  var io=secIO=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){var id=en.target.id.slice(2);section=id;
+   document.querySelectorAll(".side a").forEach(function(a){a.classList.toggle("on",a.dataset.s===id)})}})},{rootMargin:"-30% 0px -60% 0px"});
+  document.querySelectorAll(".card[id]").forEach(function(c){io.observe(c)});
+ }
+}
+
+/* ── sürükle-bırak sıralama ── */
+function enableDrag(list){
+ list.addEventListener("pointerdown",function(e){
+  var h=e.target.closest(".drag");if(!h||e.button>0)return;
+  e.preventDefault();e.stopPropagation();
+  var item=h.closest(".item"),key=list.dataset.list,startY=e.clientY,from=+item.dataset.i;
+  var items=[].slice.call(list.children);
+  var rects=items.map(function(n){return n.getBoundingClientRect()});
+  var to=from, sy0=window.scrollY, lastY=e.clientY;
+  item.classList.add("dragging");
+  function move(ev){
+   if(ev&&ev.clientY!=null)lastY=ev.clientY;
+   var dy=lastY-startY+(window.scrollY-sy0);
+   item.style.transform="translateY("+dy+"px)";
+   var c=rects[from].top+rects[from].height/2+dy;
+   to=from;
+   for(var i=0;i<rects.length;i++){var mid=rects[i].top+rects[i].height/2;if(i<from&&c<mid){to=i;break}if(i>from&&c>mid)to=i}
+   var gap=rects[from].height+10;
+   items.forEach(function(n,i){if(n===item)return;var s=0;if(from<to&&i>from&&i<=to)s=-gap;if(from>to&&i>=to&&i<from)s=gap;n.style.transition="transform .2s";n.style.transform=s?"translateY("+s+"px)":""});
+   if(lastY<70)window.scrollBy(0,-14);else if(lastY>innerHeight-70)window.scrollBy(0,14);
+  }
+  function onScroll(){move(null)}
+  window.addEventListener("scroll",onScroll);
+  function up(){
+   window.removeEventListener("pointermove",move);window.removeEventListener("pointerup",up);window.removeEventListener("pointercancel",up);window.removeEventListener("scroll",onScroll);
+   items.forEach(function(n){n.style.transform="";n.style.transition=""});item.classList.remove("dragging");
+   if(to!==from){var arr=S[key],x=arr.splice(from,1)[0];arr.splice(to,0,x);rerender()}
+  }
+  window.addEventListener("pointermove",move);window.addEventListener("pointerup",up);window.addEventListener("pointercancel",up);
+ });
+}
+
+/* ── görsel yükleme ── */
+function clientName(fn){
+ var n=String(fn||"").replace(/\.[a-z0-9]+$/i,"").replace(/[-_]+/g," ").replace(/\b(logo|logosu|final|png|jpg)\b/gi,"").replace(/\s+/g," ").trim();
+ return n?n.split(" ").map(function(w){return w.charAt(0).toLocaleUpperCase("tr")+w.slice(1)}).join(" "):"Firma";
+}
+async function uploadSiteMedia(out,folder){
+ var name=folder+"/"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8)+"."+out.ext;
+ await ensureFresh();
+ if(!session)throw new Error("Oturum süresi doldu, lütfen tekrar giriş yapın.");
+ return await NDMedia.put("site-media",name,out.blob,session.access_token);
+}
+/* referans logoları: çoklu seçim, her biri otomatik listeye eklenir */
+function pickClientLogos(){
+ var f=$("file");f.value="";f.multiple=true;
+ f.onchange=async function(){
+  var files=[].slice.call(f.files||[]);f.multiple=false;if(!files.length)return;
+  if(S.clients.length+files.length>60){toast("En fazla 60 logo eklenebilir.");return}
+  var ok=0,fail=[];
+  for(var k=0;k<files.length;k++){
+   var file=files[k];
+   if(file.size>15*1024*1024){fail.push(file.name+" (çok büyük)");continue}
+   toast("Yükleniyor "+(k+1)+"/"+files.length+"...");
+   try{
+    var out=await prepLogo(file,S.clientsCutBg!==false);
+    var url=await uploadSiteMedia(out,"client");
+    S.clients.push({id:uid(),name:clientName(file.name),logo:url,link:""});ok++;
+    rerender();
+   }catch(er){fail.push(file.name)}
+  }
+  toast(ok?"✓ "+ok+" logo eklendi"+(fail.length?" · "+fail.length+" dosya yüklenemedi":"")+" — yayına almak için Kaydet'e basın.":"Yüklenemedi: "+fail.join(", "));
+  var l=$("clist");if(ok&&l&&l.lastElementChild)l.lastElementChild.scrollIntoView({block:"center",behavior:"smooth"});
+ };
+ f.click();
+}
+function pickImage(path,kind){
+ var f=$("file");f.value="";f.multiple=false;
+ f.onchange=async function(){
+  var file=f.files&&f.files[0];if(!file)return;
+  if(file.size>15*1024*1024){toast("Dosya çok büyük (en fazla 15 MB).");return}
+  toast("Yükleniyor...");
+  try{
+   var out=kind==="logo"?await prepLogo(file,S.logoCutBg!==false):kind==="clientlogo"?await prepLogo(file,S.clientsCutBg!==false):await prepImage(file,kind);
+   setP(path,await uploadSiteMedia(out,kind||"img"));
+   if(kind==="logo"&&path==="logo"){S.logoDark="";S.logoTone=out.tone;S.logoRatio=out.ratio}
+   rerender();toast("✓ Görsel yüklendi — yayına almak için Kaydet'e basın.");
+  }catch(er){toast("Yüklenemedi: "+er.message)}
+ };
+ f.click();
+}
+/* Logo: PNG'ye çevir, düz arka planı kaldır, boş kenarları kırp, açık/koyu tonunu hesapla */
+function prepLogo(file,cutBg){
+ return new Promise(function(res,rej){
+  var url=URL.createObjectURL(file),img=new Image();
+  img.onload=function(){
+   var nw=img.naturalWidth||1200,nh=img.naturalHeight||400;
+   var sc=Math.min(file.type==="image/svg+xml"?4:1,1200/Math.max(nw,nh));
+   var w=Math.max(1,Math.round(nw*sc)),h=Math.max(1,Math.round(nh*sc));
+   var c=document.createElement("canvas");c.width=w;c.height=h;
+   var x=c.getContext("2d",{willReadFrequently:true});x.imageSmoothingQuality="high";x.drawImage(img,0,0,w,h);
+   URL.revokeObjectURL(url);
+   var id=x.getImageData(0,0,w,h),d=id.data,i;
+   function px(px_,py_){var k=(py_*w+px_)*4;return[d[k],d[k+1],d[k+2],d[k+3]]}
+   if(cutBg){
+    var cs=[px(0,0),px(w-1,0),px(0,h-1),px(w-1,h-1)],bg=cs[0];
+    function dist(a,b){return Math.sqrt((a[0]-b[0])*(a[0]-b[0])+(a[1]-b[1])*(a[1]-b[1])+(a[2]-b[2])*(a[2]-b[2]))}
+    var flat=cs.every(function(q){return q[3]>250&&dist(q,bg)<36});
+    if(flat){
+     var lo=30,hi=80;
+     for(i=0;i<d.length;i+=4){
+      var e=dist([d[i],d[i+1],d[i+2]],bg);
+      if(e<=lo)d[i+3]=0;
+      else if(e<hi){
+       var a=(e-lo)/(hi-lo);
+       /* kenar yumuşatma: arka plan rengini renkten ayıkla */
+       for(var ch=0;ch<3;ch++)d[i+ch]=Math.max(0,Math.min(255,Math.round((d[i+ch]-bg[ch]*(1-a))/a)));
+       d[i+3]=Math.round(d[i+3]*a);
+      }
+     }
+    }
+   }
+   /* boş kenarları kırp + ton hesapla */
+   var x0=w,y0=h,x1=-1,y1=-1,lum=0,lw=0;
+   for(var yy=0;yy<h;yy++)for(var xx=0;xx<w;xx++){
+    i=(yy*w+xx)*4;var al=d[i+3];if(al<=10)continue;
+    if(xx<x0)x0=xx;if(xx>x1)x1=xx;if(yy<y0)y0=yy;if(yy>y1)y1=yy;
+    var wt=al/255;lum+=wt*(0.2126*d[i]+0.7152*d[i+1]+0.0722*d[i+2])/255;lw+=wt;
+   }
+   if(x1<0){rej(new Error("Logo tamamen boş görünüyor; arka plan kaldırmayı kapatıp tekrar deneyin."));return}
+   x.putImageData(id,0,0);
+   var pad=2;x0=Math.max(0,x0-pad);y0=Math.max(0,y0-pad);x1=Math.min(w-1,x1+pad);y1=Math.min(h-1,y1+pad);
+   var cw=x1-x0+1,ch_=y1-y0+1,o=document.createElement("canvas");o.width=cw;o.height=ch_;
+   o.getContext("2d").drawImage(c,x0,y0,cw,ch_,0,0,cw,ch_);
+   o.toBlob(function(b){
+    if(!b){rej(new Error("Logo işlenemedi"));return}
+    res({blob:b,type:"image/png",ext:"png",tone:(function(L){return L<0.4?"dark":L>0.68?"light":"mid"})(lw?lum/lw:0),ratio:Math.round(cw/ch_*1000)/1000});
+   },"image/png");
+  };
+  img.onerror=function(){URL.revokeObjectURL(url);rej(new Error("Görsel açılamadı"))};
+  img.src=url;
+ });
+}
+function prepImage(file,kind){
+ return new Promise(function(res,rej){
+  if(file.type==="image/svg+xml"){res({blob:file,type:"image/svg+xml",ext:"svg"});return}
+  var url=URL.createObjectURL(file),img=new Image();
+  img.onload=function(){
+   var max=kind==="logo"?900:kind==="hero"?2200:1600;
+   var sc=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
+   var w=Math.max(1,Math.round(img.naturalWidth*sc)),h=Math.max(1,Math.round(img.naturalHeight*sc));
+   var c=document.createElement("canvas");c.width=w;c.height=h;
+   var x=c.getContext("2d");x.imageSmoothingQuality="high";x.drawImage(img,0,0,w,h);
+   URL.revokeObjectURL(url);
+   /* logo ve heykel görselleri şeffaflığı korusun diye webp (alfa destekli) */
+   c.toBlob(function(b){
+    if(b&&b.type==="image/webp")res({blob:b,type:"image/webp",ext:"webp"});
+    else c.toBlob(function(b2){b2?res({blob:b2,type:"image/png",ext:"png"}):rej(new Error("Görsel işlenemedi"))},"image/png");
+   },"image/webp",kind==="photo"?.84:.92);
+  };
+  img.onerror=function(){URL.revokeObjectURL(url);rej(new Error("Görsel açılamadı"))};
+  img.src=url;
+ });
+}
+
+/* Kayıttan sonra sitede artık kullanılmayan yüklenmiş görseller R2'den silinir */
+function siteMediaUrls(json){
+ var out={},re=/https:\/\/media\.neardiji\.com\/site-media\/[^"\\\s]+/g,m;
+ while((m=re.exec(json||"")))out[m[0]]=1;
+ return out;
+}
+function removeUnusedMedia(beforeJSON,afterJSON){
+ if(!beforeJSON||!session)return;
+ var now=siteMediaUrls(afterJSON);
+ Object.keys(siteMediaUrls(beforeJSON)).forEach(function(u){
+  if(!now[u])NDMedia.del(u,session.access_token).catch(function(){});
+ });
+}
+
+/* ── kaydet / çıkış ── */
+async function save(){
+ if(saving)return;
+ S.projects.forEach(function(p){if(!p.id)p.id=uid()});
+ saving=true;updateStatus();
+ try{
+  var data=clone(S);
+  await sb("/rest/v1/site_content?on_conflict=key",{method:"POST",body:{key:"main",data:data},headers:{"Prefer":"resolution=merge-duplicates,return=minimal"}});
+  var before=savedJSON;
+  savedJSON=JSON.stringify(S);
+  removeUnusedMedia(before,savedJSON);
+  lsSet("nd-site",JSON.stringify(data));
+  toast("✓ Kaydedildi — site güncellendi.");
+ }catch(er){
+  toast(er.status===401||er.status===403?"Yetki hatası — tekrar giriş yapın.":"Kaydedilemedi: "+er.message);
+ }finally{saving=false;updateStatus()}
+}
+async function logout(){
+ if(dirty()&&!confirm("Kaydedilmemiş değişiklikler kaybolacak. Çıkılsın mı?"))return;
+ try{await fetch(SB_URL+"/auth/v1/logout",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+session.access_token}})}catch(e){}
+ storeSession(null);S=null;savedJSON="";view="login";render();
+}
+document.addEventListener("keydown",function(e){if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="s"&&view==="app"){e.preventDefault();save()}});
+
+/* ── başlat ── */
+(async function(){
+ if(!session){view="login";render();return}
+ await ensureFresh();
+ if(!session){view="login";render();return}
+ view="checking";render();
+ await afterLogin();
+})();
+})();
