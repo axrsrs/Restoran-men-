@@ -38,7 +38,14 @@ const TEXT={
   reserveWhatsApp:"WhatsApp ile Rezervasyon",
   reserveCall:"Arayarak Rezervasyon",
   reserveMsg:"Merhaba, {event} ({date}) için rezervasyon yapmak istiyorum.",
-  date:"Tarih",time:"Saat",products_count:"ürün"
+  date:"Tarih",time:"Saat",products_count:"ürün",
+  hoursTitle:"Çalışma Saatleri",openNow:"Şu an açık",closedNow:"Şu an kapalı",
+  closesAt:"Kapanış {t}",opensAt:"Açılış {t}",closedDay:"Kapalı",today:"Bugün",
+  days:["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"],
+  wifiNet:"Ağ",wifiPass:"Şifre",copy:"Kopyala",copied:"Kopyalandı",
+  review:"Google'da yorum yapın",reviewSub:"Deneyiminizi paylaşın, bizim için çok değerli.",
+  order:"Paket servis",follow:"Bizi takip edin",
+  vat:"Fiyatlarımıza KDV dahildir.",madeWith:"ile hazırlandı"
  },
  en:{
   welcome:"WELCOME",best:"Best Sellers",events:"Events",
@@ -67,7 +74,14 @@ const TEXT={
   reserveWhatsApp:"Reserve via WhatsApp",
   reserveCall:"Call to Reserve",
   reserveMsg:"Hello, I would like to make a reservation for {event} ({date}).",
-  date:"Date",time:"Time",products_count:"products"
+  date:"Date",time:"Time",products_count:"products",
+  hoursTitle:"Opening Hours",openNow:"Open now",closedNow:"Closed now",
+  closesAt:"Closes {t}",opensAt:"Opens {t}",closedDay:"Closed",today:"Today",
+  days:["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+  wifiNet:"Network",wifiPass:"Password",copy:"Copy",copied:"Copied",
+  review:"Review us on Google",reviewSub:"Share your experience, it means a lot to us.",
+  order:"Order delivery",follow:"Follow us",
+  vat:"All prices include VAT.",madeWith:"Made with"
  },
  ar:{
   welcome:"مرحباً بكم",best:"الأكثر مبيعاً",
@@ -98,7 +112,14 @@ const TEXT={
   reserveWhatsApp:"احجز عبر واتساب",
   reserveCall:"احجز بالاتصال",
   reserveMsg:"مرحباً، أود الحجز لفعالية {event} ({date}).",
-  date:"التاريخ",time:"الوقت",products_count:"منتج"
+  date:"التاريخ",time:"الوقت",products_count:"منتج",
+  hoursTitle:"ساعات العمل",openNow:"مفتوح الآن",closedNow:"مغلق الآن",
+  closesAt:"يغلق {t}",opensAt:"يفتح {t}",closedDay:"مغلق",today:"اليوم",
+  days:["الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت","الأحد"],
+  wifiNet:"الشبكة",wifiPass:"كلمة المرور",copy:"نسخ",copied:"تم النسخ",
+  review:"قيّمنا على Google",reviewSub:"شاركنا تجربتك، رأيك يهمنا.",
+  order:"اطلب توصيل",follow:"تابعونا",
+  vat:"جميع الأسعار تشمل ضريبة القيمة المضافة.",madeWith:"صُنع بواسطة"
  }
 };
 
@@ -133,9 +154,38 @@ const DATA={
   image:"",video:""
  },
  hours:"09:00 - 23:00",
+ info:defaultInfo(),
  categories:[],
  events:[]
 };
+
+/* Menü altı bilgi kartı: haftalık saatler, Wi-Fi, Google yorum, sosyal medya, paket servis */
+function defaultInfo(){
+ return {
+  weekOn:false,
+  week:Array.from({length:7},()=>({o:"09:00",c:"23:00",off:false})),
+  wifiName:"",wifiPass:"",
+  review:"",
+  instagram:"",tiktok:"",facebook:"",x:"",
+  yemeksepeti:"",getir:"",trendyol:"",migros:"",
+  vat:true
+ };
+}
+
+function normalizeInfo(v){
+ const d=defaultInfo();
+ const o=Object.assign(d,v&&typeof v==="object"?v:{});
+ const okTime=x=>/^([01]\d|2[0-3]):[0-5]\d$/.test(String(x||""));
+ o.week=Array.from({length:7},(_,i)=>{
+  const w=(Array.isArray(v?.week)&&v.week[i])||{};
+  return {o:okTime(w.o)?w.o:"09:00",c:okTime(w.c)?w.c:"23:00",off:!!w.off};
+ });
+ ["wifiName","wifiPass","review","instagram","tiktok","facebook","x","yemeksepeti","getir","trendyol","migros"]
+  .forEach(k=>{o[k]=String(o[k]??"").trim().slice(0,300)});
+ o.weekOn=!!o.weekOn;
+ o.vat=o.vat!==false;
+ return o;
+}
 
 function isoDate(offsetDays){
 
@@ -235,6 +285,8 @@ function mergeData(saved){
 
  if(!Array.isArray(DATA.events))
   DATA.events=[];
+
+ DATA.info=normalizeInfo(DATA.info);
 
  DATA.events.forEach(ev=>{
   if(!ev.id)ev.id="event-"+Date.now()+Math.random();
@@ -527,6 +579,7 @@ function serverToData(m){
   whatsapp:r.whatsapp||"",
   hours:r.hours||"",
   logo:r.logo||"",
+  info:st.info||{},
   theme:st.theme||{},
   settings:st.visibility||{},
   background:st.background||{},
@@ -793,7 +846,8 @@ function restaurantRow(){
    }),
    rates:{USD:DATA.rates.USD,EUR:DATA.rates.EUR,auto:!!DATA.rates.auto,updated:DATA.rates.updated||0},
    pdf:DATA.pdf||null,
-   lastBulk:DATA.lastBulk||null
+   lastBulk:DATA.lastBulk||null,
+   info:normalizeInfo(DATA.info)
   }
  };
 }
@@ -1385,6 +1439,7 @@ function bindAccountCard(){
  DATA.phone="";
  DATA.whatsapp="";
  DATA.hours="";
+ DATA.info=defaultInfo();
 
 function saveData(){
 
@@ -2270,7 +2325,11 @@ function renderHero(){
   }
 
   ${
-   DATA.settings.hours
+   DATA.settings.hours&&DATA.info?.weekOn
+   ?
+   (()=>{const st=openState();return `<div class="heroStatus ${st.open?"on":"off"}"><i></i>${esc(st.label)}${st.sub?` · ${esc(st.sub)}`:""}</div>`})()
+   :
+   DATA.settings.hours&&DATA.hours
    ?
    `<div style="margin-top:9px;color:#666;font-size:10px">
     ${esc(DATA.hours)}
@@ -2661,6 +2720,194 @@ function renderSearch(){
 
  </section>
  `;
+}
+
+/* =========================================================
+   MENÜ ALTI BİLGİ KARTI
+========================================================= */
+
+function safeLink(v){
+ v=String(v||"").trim();
+ if(!v)return "";
+ if(/^https:\/\//i.test(v))return v;
+ if(/^http:\/\//i.test(v))return "https://"+v.slice(7);
+ if(/^(www\.)?[a-z0-9-]+(\.[a-z0-9-]+)+(\/\S*)?$/i.test(v))return "https://"+v;
+ return "";
+}
+
+function socialHref(v,base){
+ v=String(v||"").trim();
+ if(!v)return "";
+ if(/^https?:\/\//i.test(v)||/^(www\.)?[a-z0-9-]+\.[a-z]{2,}\//i.test(v))return safeLink(v);
+ return base+encodeURIComponent(v.replace(/^@/,""));
+}
+
+const toMin=x=>{const [h,m]=String(x).split(":").map(Number);return h*60+m};
+
+/* İşletmenin saatleri Türkiye saatine göre; turistin telefonu başka saat diliminde olabilir */
+function istanbulNow(){
+ try{
+  const parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Istanbul",weekday:"short",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date());
+  const g=k=>parts.find(p=>p.type===k)?.value;
+  const day=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].indexOf(g("weekday"));
+  return {day:day<0?0:day,min:(+g("hour")%24)*60+(+g("minute"))};
+ }catch(e){
+  const d=new Date();
+  return {day:(d.getDay()+6)%7,min:d.getHours()*60+d.getMinutes()};
+ }
+}
+
+/* aynı saat = 24 saat açık; kapanış açılıştan önceyse gece yarısından sonra kapanır */
+function slotSpan(w){
+ const o=toMin(w.o);let c=toMin(w.c);
+ if(c<=o)c+=1440;
+ return [o,c];
+}
+
+function openState(){
+ const week=DATA.info?.week||[];
+ const {day,min}=istanbulNow();
+ const today=week[day], prev=week[(day+6)%7];
+
+ if(prev&&!prev.off){
+  const [o,c]=slotSpan(prev);
+  if(c>1440&&min<c-1440)return {open:true,label:t("openNow"),sub:t("closesAt").replace("{t}",prev.c)};
+ }
+ if(today&&!today.off){
+  const [o,c]=slotSpan(today);
+  if(min>=o&&min<c)return {open:true,label:t("openNow"),sub:c-o>=1440?"":t("closesAt").replace("{t}",today.c)};
+  if(min<o)return {open:false,label:t("closedNow"),sub:t("opensAt").replace("{t}",today.o)};
+ }
+ for(let k=1;k<=7;k++){
+  const i=(day+k)%7, w=week[i];
+  if(w&&!w.off)return {open:false,label:t("closedNow"),sub:t("opensAt").replace("{t}",t("days")[i]+" "+w.o)};
+ }
+ return {open:false,label:t("closedNow"),sub:""};
+}
+
+const INFO_ICONS={
+ clock:`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
+ wifi:`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 9a14 14 0 0 1 19 0M5.5 12.3a9.5 9.5 0 0 1 13 0M8.6 15.5a5 5 0 0 1 6.8 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/></svg>`,
+ copy:`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.6"/></svg>`,
+ chev:`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+ google:`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.4h6.5a5.5 5.5 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.7z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6h-4a12 12 0 0 0 0 10.8l4-3.1z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/></svg>`,
+ star:`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z"/></svg>`,
+ instagram:`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.3" stroke="currentColor" stroke-width="1.8"/><circle cx="17.6" cy="6.4" r="1.2" fill="currentColor"/></svg>`,
+ tiktok:`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>`,
+ facebook:`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.45 18.63.07 12 .07S0 5.45 0 12.07c0 5.99 4.39 10.95 10.13 11.85v-8.38H7.08v-3.47h3.05V9.43c0-3.01 1.79-4.67 4.53-4.67 1.31 0 2.69.24 2.69.24v2.95h-1.51c-1.49 0-1.96.93-1.96 1.87v2.25h3.33l-.53 3.47h-2.8v8.38C19.61 23.03 24 18.06 24 12.07z"/></svg>`,
+ x:`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.59-6.64 7.59H.47l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93zm-1.29 19.5h2.04L6.49 3.24H4.3l13.31 17.41z"/></svg>`
+};
+
+const DELIVERY=[
+ ["yemeksepeti","Yemeksepeti","#FA0050"],
+ ["getir","Getir","#5D3EBC"],
+ ["trendyol","Trendyol Yemek","#F27A1A"],
+ ["migros","Migros Yemek","#FF7A00"]
+];
+
+const SOCIALS=[
+ ["instagram","Instagram","https://instagram.com/"],
+ ["tiktok","TikTok","https://tiktok.com/@"],
+ ["facebook","Facebook","https://facebook.com/"],
+ ["x","X","https://x.com/"]
+];
+
+function renderInfo(){
+
+ const I=DATA.info||defaultInfo();
+ const parts=[];
+
+ if(DATA.settings.hours&&I.weekOn){
+  const st=openState(), today=istanbulNow().day, days=t("days");
+  parts.push(`
+  <details class="infoCard hoursCard">
+   <summary>
+    <span class="infoIcon">${INFO_ICONS.clock}</span>
+    <span class="infoMain">
+     <small>${t("hoursTitle")}</small>
+     <b class="openBadge ${st.open?"on":"off"}"><i></i>${esc(st.label)}</b>
+     ${st.sub?`<span class="infoSub">${esc(st.sub)}</span>`:""}
+    </span>
+    <span class="infoChev">${INFO_ICONS.chev}</span>
+   </summary>
+   <ul class="weekList">
+    ${I.week.map((w,i)=>`<li class="${i===today?"today":""}"><span>${esc(days[i])}${i===today?` <em>${t("today")}</em>`:""}</span><span dir="ltr">${w.off?esc(t("closedDay")):esc(w.o)+" – "+esc(w.c)}</span></li>`).join("")}
+   </ul>
+  </details>`);
+ }
+
+ if(I.wifiName||I.wifiPass){
+  parts.push(`
+  <div class="infoCard wifiCard">
+   <span class="infoIcon">${INFO_ICONS.wifi}</span>
+   <div class="infoMain">
+    <small>Wi-Fi</small>
+    ${I.wifiName?`<div class="wifiRow"><span>${t("wifiNet")}</span><b dir="ltr">${esc(I.wifiName)}</b></div>`:""}
+    ${I.wifiPass?`<div class="wifiRow"><span>${t("wifiPass")}</span><b dir="ltr">${esc(I.wifiPass)}</b></div>`:""}
+   </div>
+   ${I.wifiPass?`<button type="button" class="copyBtn" data-copy="${esc(I.wifiPass)}" aria-label="${esc(t("copy"))}">${INFO_ICONS.copy}<span>${t("copy")}</span></button>`:""}
+  </div>`);
+ }
+
+ const review=safeLink(I.review);
+ if(review){
+  parts.push(`
+  <a class="infoCard reviewCard" href="${esc(review)}" target="_blank" rel="noopener">
+   <span class="infoIcon g">${INFO_ICONS.google}</span>
+   <span class="infoMain">
+    <b>${t("review")}</b>
+    <span class="infoSub">${t("reviewSub")}</span>
+   </span>
+   <span class="stars" aria-hidden="true">${INFO_ICONS.star.repeat(5)}</span>
+  </a>`);
+ }
+
+ const del=DELIVERY.map(([k,n,c])=>{const h=safeLink(I[k]);return h?`<a class="deliveryBtn" href="${esc(h)}" target="_blank" rel="noopener" style="--dc:${c}"><i></i>${n}</a>`:""}).join("");
+ if(del){
+  parts.push(`
+  <div class="infoBlock">
+   <div class="infoLabel">${t("order")}</div>
+   <div class="deliveryList">${del}</div>
+  </div>`);
+ }
+
+ const soc=SOCIALS.map(([k,n,b])=>{const h=socialHref(I[k],b);return h?`<a class="socialBtn" href="${esc(h)}" target="_blank" rel="noopener" aria-label="${n}" title="${n}">${INFO_ICONS[k]}</a>`:""}).join("");
+ if(soc){
+  parts.push(`
+  <div class="infoBlock center">
+   <div class="infoLabel">${t("follow")}</div>
+   <div class="socialList">${soc}</div>
+  </div>`);
+ }
+
+ if(I.vat)parts.push(`<p class="vatNote">${t("vat")}</p>`);
+
+ return parts.length?`<section class="menuInfo">${parts.join("")}</section>`:"";
+}
+
+/* Her menüde NearDiji imzası; kapatılamaz */
+function renderSignature(){
+ const href="https://neardiji.com/?utm_source=nearmenu&utm_medium=imza&utm_campaign="+encodeURIComponent(RESTAURANT_SLUG);
+ const mark=`<span class="sigBrand"><svg class="sigMark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.5 20.5H3.5v-17h17v17L8.6 8.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="square"/></svg><b>NearMenu</b></span>`;
+ return `
+ <div class="footer">
+  <a class="signature" href="${href}" target="_blank" rel="noopener" aria-label="NearMenu — neardiji.com">
+   ${language==="tr"?mark+`<span>${t("madeWith")}</span>`:`<span>${t("madeWith")}</span>`+mark}
+  </a>
+ </div>`;
+}
+
+function copyText(text){
+ if(navigator.clipboard&&window.isSecureContext)
+  return navigator.clipboard.writeText(text);
+ return new Promise((res,rej)=>{
+  const ta=document.createElement("textarea");
+  ta.value=text;ta.setAttribute("readonly","");
+  ta.style.cssText="position:fixed;opacity:0;top:0;left:0";
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy")?res():rej()}catch(e){rej(e)}
+  ta.remove();
+ });
 }
 
 function renderHome(){
@@ -3158,6 +3405,8 @@ function renderAdminGeneral(){
 
  </div>
 
+ ${renderInfoAdmin()}
+
  ${backupCard()+renderAccountCard()}
 
  <div class="adminCard">
@@ -3185,6 +3434,85 @@ function renderAdminGeneral(){
    Kuru her gün otomatik güncelle
    <input type="checkbox" id="autoRates" ${DATA.rates.auto?"checked":""}>
   </label>
+
+ </div>
+ `;
+}
+
+function renderInfoAdmin(){
+
+ const I=DATA.info||defaultInfo();
+ const days=TEXT.tr.days;
+ const chk=(flag,label,on)=>`<label class="toggle">${label}<input type="checkbox" data-info-flag="${flag}" ${on?"checked":""}></label>`;
+
+ return `
+ <div class="adminCard">
+
+  <div class="adminCardTitle">🕘 Haftalık Çalışma Saatleri</div>
+  <div class="adminCardDescription">Menünün altında gün gün saatler ve Türkiye saatine göre canlı “Şu an açık / kapalı” bilgisi görünür. Gece yarısından sonra kapanıyorsanız kapanışı olduğu gibi yazın (ör. 10:00 – 02:00).</div>
+
+  ${chk("weekOn","Haftalık saatleri menüde göster",I.weekOn)}
+
+  <div class="weekEdit">
+   ${I.week.map((w,i)=>`
+   <div class="weekEditRow">
+    <span>${days[i]}</span>
+    <input type="time" data-admin="info.week.${i}.o" value="${esc(w.o)}" aria-label="${days[i]} açılış">
+    <input type="time" data-admin="info.week.${i}.c" value="${esc(w.c)}" aria-label="${days[i]} kapanış">
+    <label class="weekOff"><input type="checkbox" data-info-flag="off.${i}" ${w.off?"checked":""}>Kapalı</label>
+   </div>`).join("")}
+  </div>
+
+ </div>
+
+ <div class="adminCard">
+
+  <div class="adminCardTitle">📶 Wi-Fi</div>
+  <div class="adminCardDescription">Müşteri şifreyi tek dokunuşla kopyalar. Boş bırakılırsa gösterilmez.</div>
+
+  ${input("info.wifiName","Ağ adı",I.wifiName)}
+  ${input("info.wifiPass","Şifre",I.wifiPass)}
+
+ </div>
+
+ <div class="adminCard">
+
+  <div class="adminCardTitle">⭐ Google Yorum</div>
+  <div class="adminCardDescription">Google İşletme Profili → “Yorum iste” bölümündeki bağlantıyı yapıştırın (ör. g.page/r/…/review).</div>
+
+  ${input("info.review","Google yorum bağlantısı",I.review,"url")}
+
+ </div>
+
+ <div class="adminCard">
+
+  <div class="adminCardTitle">🛵 Paket Servis</div>
+  <div class="adminCardDescription">İşletmenizin platformdaki sayfa bağlantısı. Sadece doldurulanlar menüde görünür.</div>
+
+  ${input("info.yemeksepeti","Yemeksepeti",I.yemeksepeti,"url")}
+  ${input("info.getir","Getir",I.getir,"url")}
+  ${input("info.trendyol","Trendyol Yemek",I.trendyol,"url")}
+  ${input("info.migros","Migros Yemek",I.migros,"url")}
+
+ </div>
+
+ <div class="adminCard">
+
+  <div class="adminCardTitle">📱 Sosyal Medya</div>
+  <div class="adminCardDescription">Kullanıcı adı (@isletme) ya da tam bağlantı yazabilirsiniz.</div>
+
+  ${input("info.instagram","Instagram",I.instagram)}
+  ${input("info.tiktok","TikTok",I.tiktok)}
+  ${input("info.facebook","Facebook",I.facebook)}
+  ${input("info.x","X",I.x)}
+
+ </div>
+
+ <div class="adminCard">
+
+  <div class="adminCardTitle">🧾 Bilgilendirme</div>
+
+  ${chk("vat","“Fiyatlarımıza KDV dahildir.” notunu göster",I.vat)}
 
  </div>
  `;
@@ -5193,6 +5521,18 @@ function collectAdmin(){
   else if(key==="hours")
    DATA.hours=value;
 
+  else if(key.startsWith("info.week.")){
+   const [,,i,f]=key.split(".");
+   const w=DATA.info?.week?.[+i];
+   if(w&&(f==="o"||f==="c")&&/^\d{2}:\d{2}$/.test(value))w[f]=value;
+  }
+
+  else if(key.startsWith("info.")){
+   const k=key.slice(5);
+   if(DATA.info&&k in DATA.info&&typeof DATA.info[k]==="string")
+    DATA.info[k]=String(value).trim().slice(0,300);
+  }
+
   else if(key==="rateUSD")
    DATA.rates.USD=Number(value)||0;
 
@@ -5384,6 +5724,13 @@ function collectAdmin(){
    item.descriptions.tr=item.description||"";
    item.descriptions[lang]=value;
   }
+ });
+
+ document.querySelectorAll("[data-info-flag]").forEach(el=>{
+  const f=el.dataset.infoFlag;
+  if(!DATA.info)return;
+  if(f==="weekOn"||f==="vat")DATA.info[f]=el.checked;
+  else if(f.startsWith("off.")){const w=DATA.info.week[+f.slice(4)];if(w)w.off=el.checked}
  });
 }
 
@@ -5782,9 +6129,9 @@ function render(options={}){
     ${content}
    </main>
 
-   <div class="footer">
-    NearMenu • Premium Digital Menu
-   </div>
+   ${CLOUD&&!cloud.ready||searchText?"":renderInfo()}
+
+   ${renderSignature()}
 
   </div>
 
@@ -5840,6 +6187,17 @@ function render(options={}){
 function bindEvents(){
 
  bindAdminExtras();
+
+ document.querySelectorAll("[data-copy]").forEach(b=>{
+  b.onclick=()=>{
+   copyText(b.dataset.copy).then(()=>{
+    b.classList.add("done");
+    const sp=b.querySelector("span");if(sp)sp.textContent=t("copied");
+    showToast("✓ "+t("copied"));
+    setTimeout(()=>{b.classList.remove("done");if(sp)sp.textContent=t("copy")},1800);
+   }).catch(()=>{});
+  };
+ });
 
  (()=>{
 
