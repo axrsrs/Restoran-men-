@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-3UnzcvS3CpmJ/5vqx0ixn8w8VJfUQ4POkS3zFK2gjLY=' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: data: blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-ifX5XGo9w8nLaayh9vM9poC/o5UAFtjZG2ws667T/J4=' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: data: blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -284,6 +284,11 @@ header{animation:luxuryEnter 1s cubic-bezier(.2,.75,.2,1) both}
 .adm-thumb-empty{display:flex;align-items:center;justify-content:center;color:#6E6A62;background:#202024}
 .adm-headrow{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .adm-row-gap{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.discount-badge-input::placeholder{color:inherit;opacity:.55}
+.adm-logi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.adm-logi label{display:flex;flex-direction:column;gap:4px;min-width:0}
+.adm-logi small{font-size:11px;font-weight:600;opacity:.7}
+.adm-logi .adm-input{min-width:0;width:100%}
 .adm-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid #3A3A40;background:transparent;font-weight:700;white-space:nowrap}
 .adm-btn:hover{background:#1D1D22}
 .adm-btn-gold{background:var(--adm-accent,#C9A227);border-color:transparent;color:#141414!important;font-weight:800}
@@ -1074,6 +1079,9 @@ function sanitizeCatalogData(data) {
                 item[k] = safeText(item[k]);
             item.dims = safeText(item.dims, 500);
             item.dims_en = safeText(item.dims_en, 500);
+            item.m3 = logiNumber(item.m3, 3);
+            item.pkg = logiNumber(item.pkg, 0);
+            item.kg = logiNumber(item.kg, 2);
             item.image = safeAssetSource(item.image) || null;
             item.images = (Array.isArray(item.images) ? item.images : []).map(safeAssetSource).filter(Boolean).slice(0, SECURITY_LIMITS.imageCount);
             if (item.price) {
@@ -1478,7 +1486,30 @@ function normalizeItem(item) {
         desc_en: typeof item.desc_en === "string" ? item.desc_en : "",
         dims: typeof item.dims === "string" ? item.dims : "",
         dims_en: typeof item.dims_en === "string" ? item.dims_en : "",
-        image: item.image || null, images: Array.isArray(item.images) ? item.images.filter(Boolean) : (item.image ? [item.image] : []), price: normalizePrice(item.price) };
+        image: item.image || null, images: Array.isArray(item.images) ? item.images.filter(Boolean) : (item.image ? [item.image] : []), price: normalizePrice(item.price),
+        m3: logiNumber(item.m3, 3), pkg: logiNumber(item.pkg, 0), kg: logiNumber(item.kg, 2) };
+}
+/* Lojistik bilgisi (isteğe bağlı): hacim m³, paket sayısı, ağırlık kg. Boşsa null; PDF'lerde yalnızca doluysa basılır. */
+function logiNumber(v, digits) {
+    if (v === null || v === undefined || v === "")
+        return null;
+    const n = Number(String(v).replace(",", "."));
+    if (!Number.isFinite(n) || n <= 0 || n > 1000000)
+        return null;
+    const f = Math.pow(10, digits);
+    return Math.round(n * f) / f || null;
+}
+function logiText(item, lang) {
+    const loc = lang === "EN" ? "en-US" : "tr-TR", num = (v, d) => Number(v).toLocaleString(loc, { maximumFractionDigits: d });
+    const out = [];
+    item = { pkg: logiNumber(item?.pkg, 0), m3: logiNumber(item?.m3, 3), kg: logiNumber(item?.kg, 2) };
+    if (item?.pkg)
+        out.push(lang === "EN" ? `${num(item.pkg, 0)} ${item.pkg === 1 ? "package" : "packages"}` : `${num(item.pkg, 0)} paket`);
+    if (item?.m3)
+        out.push(`${num(item.m3, 3)} m³`);
+    if (item?.kg)
+        out.push(`${num(item.kg, 2)} kg`);
+    return out.join(" · ");
 }
 function normalizeCategories(categories) {
     /* Kategoriler yönetim panelinden eklenir, silinir, yeniden adlandırılır ve sıralanır; verideki sıra korunur. */
@@ -3202,7 +3233,11 @@ function pdfProductBlock(data, category, item, lang, x, y, w, h, asset, id) {
     const setX = x + w - 8 - T.setW, right = setX - 10;
     /* TL vade açıksa: görsel paneli biraz daralır, fiyat sütunu PEŞİN + VADELİ olarak ikiye ayrılır. */
     const V = !!pdfVade, imgW = V ? 150 : T.imgW;
-    let { c, tx, top } = pdfTblFrame(item, lang, x, y, w, h, asset, id, acc, right, imgW);
+    /* Paket / m³ / kg girildiyse ürün adının sağında küçük gri yazı; ad için yer daralır. */
+    const logi = logiText(item, lang), logiW = logi ? Math.min(pdfFontWidth(logi, 7.4) + 2, 170) : 0;
+    let { c, tx, top } = pdfTblFrame(item, lang, x, y, w, h, asset, id, acc, logi ? right - logiW - 10 : right, imgW);
+    if (logi)
+        c += pdfTextOp(logi, right, top - 15.5, 7.4, { align: "right", maxWidth: logiW, maxLines: 1, color: [0.42, 0.42, 0.42] });
     /* Sütunlar: Modül · G/D/Y · Birim fiyat (sağa yaslı) [· Vadeli] */
     const vadeW = V ? 60 : 0, unitW = V ? 60 : 74, dimW = V ? 66 : 78, third = dimW / 3, vx = right, ux = right - vadeW, dx = ux - unitW - dimW, modW = dx - tx - 6;
     const capY = top - 31;
@@ -3537,11 +3572,13 @@ function pdfVadeMoney(data, amount) {
 }
 /* Fiyatsız katalogda açıklamadaki fiyatla ilgili cümleler ("… dahil fiyatlar", "130.200 TL" vb.) gösterilmez. */
 const PDF_PRICE_TEXT = /fiyat|price|₺|\bTL\b|\bUSD\b|\bEUR\b|[$€]|\d{1,3}(?:\.\d{3})+(?:,\d+)?/i;
-function pdfDescText(lang, item) {
-    const t = pdfText(lang, item?.desc, item?.desc_en, item?.desc) || "";
-    if (!pdfNoPrice || !t)
-        return t;
-    return t.split(/\n+/).map(line => line.split(/(?<=[.!?;])\s+(?=\S)/).filter(seg => !PDF_PRICE_TEXT.test(seg)).join(" ")).filter(x => x.trim()).join("\n").trim();
+function pdfDescText(lang, item, withLogi = true) {
+    let t = pdfText(lang, item?.desc, item?.desc_en, item?.desc) || "";
+    if (pdfNoPrice && t)
+        t = t.split(/\n+/).map(line => line.split(/(?<=[.!?;])\s+(?=\S)/).filter(seg => !PDF_PRICE_TEXT.test(seg)).join(" ")).filter(x => x.trim()).join("\n").trim();
+    /* Paket / m³ / kg girildiyse açıklamanın başında gösterilir (kesilmesin diye önce gelir). */
+    const logi = withLogi ? logiText(item, lang) : "";
+    return logi ? (t ? logi + "  |  " + t : logi) : t;
 }
 function pdfVariantPrice(data, r, lang) {
     if (pdfNoPrice)
@@ -3555,7 +3592,7 @@ function pdfSizeColW() { const L = PDF_LAYOUT; return (L.cardW - PDF_SIZE.gap * 
 function pdfSizeCardHeight(item, lang) {
     const w = pdfSizeColW(), name = pdfText(lang, item.name, item.name_en, item.name) || "—";
     const nl = pdfWrapText(name, w - 18, 10.2, 2).length, rows = pdfVariantRows(item, lang).length;
-    return Math.ceil(PDF_SIZE.imgH + 15 + (nl - 1) * 12.4 + 13 + PDF_SIZE.headH + rows * pdfSizeRowH() + 8);
+    return Math.ceil(PDF_SIZE.imgH + 15 + (nl - 1) * 12.4 + 13 + (logiText(item, lang) ? 11 : 0) + PDF_SIZE.headH + rows * pdfSizeRowH() + 8);
 }
 function pdfSizeRowBlocks(items, lang) {
     const out = [];
@@ -3595,6 +3632,11 @@ function pdfSizeCard(data, item, lang, x, y, w, h, asset, acc) {
     const name = pdfText(lang, item.name, item.name_en, item.name) || "—", nl = pdfWrapText(name, w - 2 * pad, 10.2, 2).length;
     c += pdfTextOp(name, x + pad, ty, 10.2, { bold: true, maxWidth: w - 2 * pad, maxLines: 2, leading: 12.4, color: [0.06, 0.06, 0.06] });
     ty -= (nl - 1) * 12.4 + 8;
+    const logi = logiText(item, lang);
+    if (logi) {
+        c += pdfTextOp(logi, x + pad, ty - 3, 7.2, { maxWidth: w - 2 * pad, maxLines: 1, color: [0.42, 0.42, 0.42] });
+        ty -= 11;
+    }
     c += pdfRect(x + pad, ty, 18, 1.5, acc);
     ty -= 5;
     c += pdfTextOp(lang === "EN" ? "SIZE (cm)" : "ÖLÇÜ (cm)", x + pad, ty - 8, 6.4, { bold: true, color: [0.55, 0.55, 0.55] });
@@ -3635,7 +3677,7 @@ function pdfModelRowHeight(item, lang) {
 function pdfModelRow(data, item, lang, x, y, w, h, useImg, acc) {
     const top = y + h;
     let c = pdfSoftCard(x, y, w, h, 8);
-    const name = pdfText(lang, item.name, item.name_en, item.name) || "—", desc = pdfDescText(lang, item) || "";
+    const name = pdfText(lang, item.name, item.name_en, item.name) || "—", desc = pdfDescText(lang, item, true) || "";
     const nameW = Math.min(pdfFontWidth(name, 12.5) + 6, w * 0.55);
     c += pdfTextOp(name, x + 14, top - 20, 12.5, { bold: true, maxWidth: w * 0.55, maxLines: 1, color: [0.06, 0.06, 0.06] });
     if (desc)
@@ -4775,7 +4817,7 @@ function App() {
     const [admView, setAdmView] = useState("table"), [admSel, setAdmSel] = useState(() => new Set()), [admEdit, setAdmEdit] = useState(null), [admTab, setAdmTab] = useState("bilgi"), [admCat, setAdmCat] = useState(""), [admQuery, setAdmQuery] = useState(""), [admIssues, setAdmIssues] = useState(false), [admBulk, setAdmBulk] = useState({ mode: "pct", value: "" }), [admLimit, setAdmLimit] = useState(80), [admAddPick, setAdmAddPick] = useState(false), [admDrag, setAdmDrag] = useState(null);
     const admBaseRef = useRef(null);
     /* İskonto oranları: { TRY: 10, USD: 25, ... } — cihaza özel, sekme kapanınca sıfırlanır. */
-    const [discountRates, setDiscountRates] = useState(() => discountLoad());
+    const [discountRates, setDiscountRates] = useState(() => discountLoad()), [discountOpen, setDiscountOpen] = useState(false);
     function setDiscountRate(cur, raw) {
         const digits = String(raw == null ? "" : raw).replace(/[^\d]/g, "").slice(0, 3);
         const val = digits === "" ? "" : Math.min(100, parseInt(digits, 10));
@@ -6881,6 +6923,13 @@ function App() {
                         p.parts.length === 0 && React.createElement("label", { className: "adm-field" },
                             React.createElement("span", null, "\u00D6l\u00E7\u00FCler"),
                             React.createElement("input", { className: "adm-input", value: it.dims, onChange: e => { const v = e.target.value; updateItem(c.id, it.id, "dims", v); updateItem(c.id, it.id, "dims_en", v); }, placeholder: "\u00D6r. 200\u00D790\u00D775 cm" })),
+                        React.createElement("div", { className: "adm-field" },
+                            React.createElement("span", null, "Paket ve sevkiyat bilgisi (isteğe bağlı)"),
+                            React.createElement("div", { className: "adm-logi" },
+                                [["pkg", "Paket sayısı", "Örn. 3", "numeric"], ["m3", "Hacim (m³)", "Örn. 1,85", "decimal"], ["kg", "Ağırlık (kg)", "Örn. 120", "decimal"]].map(([k, label, ph, mode]) => React.createElement("label", { key: k },
+                                    React.createElement("small", null, label),
+                                    React.createElement("input", { className: "adm-input", type: "text", inputMode: mode, autoComplete: "off", maxLength: 10, value: it[k] === null || it[k] === undefined ? "" : String(it[k]).replace(".", ","), placeholder: ph, onChange: e => { let v = String(e.target.value).replace(k === "pkg" ? /[^\d]/g : /[^\d.,]/g, "").replace(/([.,].*)[.,]/g, "$1").slice(0, 10); updateItem(c.id, it.id, k, v === "" ? null : v); } })))),
+                            React.createElement("div", { className: "adm-muted", style: { fontSize: 12 } }, "Doldurulan bilgiler fiyat listesi ve katalog PDF'lerinde ürün adının yanında görünür (örn. \u201C3 paket · 1,85 m³ · 120 kg\u201D). Boş bırakılanlar hiçbir yerde çıkmaz.")),
                         React.createElement("div", { className: "adm-info" }, "\u0130ngilizce kar\u015F\u0131l\u0131klar yazmay\u0131 b\u0131rakt\u0131\u011F\u0131n\u0131zda otomatik \u00E7evrilir; ayr\u0131ca bir \u015Fey yapman\u0131z gerekmez."),
                         React.createElement("div", { className: "adm-field" },
                             React.createElement("span", null, "S\u0131radaki yeri"),
@@ -7116,13 +7165,22 @@ function App() {
                 React.createElement("div", { className: "text-[10px] font-bold tracking-[.28em] mb-2", style: { color: theme.accent } }, eyebrow),
                 React.createElement("h1", { className: "text-3xl font-bold leading-tight" }, siteName),
                 React.createElement("p", { className: "text-sm opacity-80 mt-2" }, subtitle),
-                (data.discount?.enabled && data.discount?.currencies?.[viewCurrencyId] !== false) && React.createElement("div", { className: "mt-4 flex items-center justify-center" },
-                    React.createElement("div", { className: "inline-flex items-center gap-2 pl-4 pr-3 py-2 rounded-full", style: { background: theme.card, border: "1px solid " + theme.accent + "66", boxShadow: "0 6px 20px " + theme.accent + "22" } },
-                        React.createElement("span", { className: "text-[11px] font-bold uppercase tracking-wider", style: { color: theme.accent } }, language === "EN" ? "Discount" : "İskonto"),
-                        React.createElement("span", { className: "inline-flex items-baseline", style: { color: theme.text } },
-                            React.createElement("input", { type: "text", inputMode: "numeric", "aria-label": language === "EN" ? "Discount percent" : "İskonto yüzdesi", value: (discountRates[viewCurrencyId] === 0 || discountRates[viewCurrencyId]) ? String(discountRates[viewCurrencyId]) : "", placeholder: "0", onChange: e => setDiscountRate(viewCurrencyId, e.target.value), className: "w-12 bg-transparent text-right text-base font-extrabold tabular-nums outline-none border-0 p-0", style: { color: theme.text } }),
-                            React.createElement("span", { className: "text-base font-extrabold ml-0.5" }, "%")),
-                        (Number(discountRates[viewCurrencyId]) > 0) && React.createElement("button", { type: "button", "aria-label": language === "EN" ? "Reset discount" : "İskontoyu sıfırla", onClick: () => setDiscountRate(viewCurrencyId, ""), className: "ml-1 w-6 h-6 rounded-full inline-flex items-center justify-center text-sm leading-none opacity-70 hover:opacity-100", style: { color: theme.text, background: theme.accent + "1f" } }, "×"))),
+                (data.discount?.enabled && data.discount?.currencies?.[viewCurrencyId] !== false) && React.createElement("div", { className: "mt-4 flex items-center justify-center" }, (() => {
+                    /* İskonto rozeti: boşken kesikli "İskonto uygula" düğmesi; oran girilince/yazarken dolu vurgu renkli rozet. */
+                    const rate = discountRates[viewCurrencyId], has = Number(rate) > 0, EN = language === "EN";
+                    if (!has && !discountOpen)
+                        return React.createElement("button", { type: "button", onClick: () => setDiscountOpen(true), className: "inline-flex items-center gap-2 h-10 px-4 rounded-full text-[13px] font-semibold transition-colors", style: { color: theme.accent, border: "1px dashed " + theme.accent + "8c", background: "transparent" } },
+                            React.createElement("svg", { viewBox: "0 0 24 24", width: 15, height: 15, fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": "true" },
+                                React.createElement("path", { d: "M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z" }),
+                                React.createElement("circle", { cx: 7.5, cy: 7.5, r: 1.5 })),
+                            EN ? "Apply discount" : "İskonto uygula");
+                    return React.createElement("div", { className: "inline-flex items-center gap-1.5 h-10 pl-4 pr-1.5 rounded-full", style: { background: theme.accent, color: ink, boxShadow: "0 8px 22px " + theme.accent + "4d" } },
+                        React.createElement("span", { className: "inline-flex items-baseline text-[15px] font-extrabold tabular-nums" },
+                        React.createElement("span", { style: { marginRight: 2 } }, "%"),
+                        React.createElement("input", { type: "text", inputMode: "numeric", autoFocus: !has, "aria-label": EN ? "Discount percent" : "İskonto yüzdesi", value: (rate === 0 || rate) ? String(rate) : "", placeholder: "0", onChange: e => setDiscountRate(viewCurrencyId, e.target.value), onBlur: () => { if (!(Number(discountRates[viewCurrencyId]) > 0)) setDiscountOpen(false); }, className: "discount-badge-input bg-transparent text-left text-[15px] font-extrabold tabular-nums outline-none border-0 p-0", style: { color: "inherit", fontFamily: "inherit", letterSpacing: 0, width: String((rate === 0 || rate) ? rate : "0").length + 0.7 + "ch" } })),
+                        React.createElement("span", { className: "text-[12px] font-semibold whitespace-nowrap", style: { opacity: .92 } }, has ? (EN ? "discount applied" : "iskonto uygulandı") : (EN ? "discount" : "iskonto")),
+                        React.createElement("button", { type: "button", "aria-label": EN ? "Reset discount" : "İskontoyu sıfırla", onMouseDown: e => e.preventDefault(), onClick: () => { setDiscountRate(viewCurrencyId, ""); setDiscountOpen(false); }, className: "ml-1 w-7 h-7 rounded-full inline-flex items-center justify-center text-[15px] leading-none", style: { background: "rgba(255,255,255,.22)", color: "inherit" } }, "×"));
+                })()),
                 React.createElement("div", { className: "mt-4 flex flex-wrap items-center justify-center gap-2" },
                     data.phone && React.createElement("a", { href: "tel:" + data.phone.replace(/\s/g, ""), className: "inline-flex items-center gap-2 px-5 min-h-[44px] rounded-full text-sm font-semibold", style: { background: theme.accent, color: ink } },
                         React.createElement(Icon, { type: "phone", size: 15 }),
