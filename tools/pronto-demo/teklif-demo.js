@@ -7,7 +7,7 @@
    ===================================================================== */
 (function () {
   'use strict';
-  const DEMO_V = 1;                       /* örnek veri değişince artır: eski demo verisi silinip yeniden kurulur */
+  const DEMO_V = 2;                       /* örnek veri değişince artır: eski demo verisi silinip yeniden kurulur */
   const KAPALI = 'Bu işlem demo sürümünde kapalı.';
   const IMG = window.NEAR_DEMO_IMG || {};
   const bekle = ms => new Promise(r => setTimeout(r, ms));
@@ -44,12 +44,65 @@
     for (const el of [$('#sync'), $('#sync2')]) { if (!el) continue; el.className = 'sync on'; mount(el, html`<i></i><span>Demo</span>`); }
   };
 
-  /* Sipariş Takibi'nin yazdığı satırları taklit et (yalnız bu cihaz) */
+  const P = window.ProntoDemo;
+  const SIPARIS_URL = '/pronto/siparis/';
+
+  /* Sipariş Takibi'nin yazdığı "siparis" satırları (yalnız bu cihazın önbelleği) */
   function uzakYaz(tbl, id, data) {
-    mem(tbl).set(id, data);
-    idbTx('rows', s => s.put({ k: kOf(tbl, id), tbl, id, data })).catch(() => {});
+    if (data == null) { if (!mem(tbl).has(id)) return false; mem(tbl).delete(id); idbTx('rows', s => s.delete(kOf(tbl, id))).catch(() => {}); }
+    else { if (JSON.stringify(mem(tbl).get(id)) === JSON.stringify(data)) return false; mem(tbl).set(id, data); idbTx('rows', s => s.put({ k: kOf(tbl, id), tbl, id, data })).catch(() => {}); }
     tableRegistry.get(tbl)?.invalidate();
+    return true;
   }
+
+  /* Ortak depodaki siparişlerden Teklif'teki durumları hesapla (Sipariş Takibi'nde yapılan her değişiklik buraya yansır) */
+  let esitlemeIlk = true;
+  function siparisleriEsitle() {
+    let degisti = false;
+    for (const t of DB.teklif.all()) {
+      degisti = uzakYaz('siparis', t.id, P.teklifSiparisDurumu(t.id)) || degisti;
+      /* silme talebi Sipariş Takibi'nde onaylandıysa teklif çöp kutusuna gider */
+      const sil = P.tablo('pronto_gelen').filter(g => g.teklif_id === t.id && g.tur === 'silme' && g.durum === 'onaylandi').pop();
+      if (sil && !t.deletedAt && !t._silOnay) { DB.teklif.upsert({ ...t, deletedAt: Date.now(), silen: 'SİPARİŞ TAKİBİ' }); degisti = true;
+        if (!esitlemeIlk) toast(`Sipariş ${t.no} silme talebi Sipariş Takibi'nde onaylandı; Geri Dönüşüm Kutusu'na taşındı.`, 'ok', 6000); }
+    }
+    esitlemeIlk = false;
+    if (degisti) remoteChanged();
+  }
+
+  /* Sipariş Takibi'nin okuduğu teklif özeti (ödeme / kalan, notlar) */
+  function ozetYaz(t) {
+    if (!t) return;
+    const pays = DB.odeme.all().filter(o => o.teklifId === t.id), c = calc(t, pays);
+    const row = { id: t.id, no: t.no, doviz: t.doviz, genel: c.genel, alinan: c.pes, kalan: c.kalan, genel_not: t.genelNot || '', ic_not: t.icNot || '', silindi: !!t.deletedAt };
+    const eski = P.bul('teklif_ozet', t.id);
+    if (!eski) P.ekle('teklif_ozet', row);
+    else if (JSON.stringify({ ...eski, created_at: 0, updated_at: 0 }) !== JSON.stringify({ ...eski, ...row, created_at: 0, updated_at: 0 })) P.guncelle('teklif_ozet', t.id, row);
+  }
+  /* Teklif'teki katalog (ürünler + model fotoğrafları) Sipariş Takibi'nin kataloğudur */
+  function katalogYaz(tbl, id, data) {
+    if (tbl === 'urunler') {
+      const row = data && { id, kod: data.kod, kategori: data.kategori, model: data.model, modul: data.modul || '', olcu: data.olcu || '', renk: data.renk || '', yon: data.yon || '', fiyat: data.fiyat, doviz: data.doviz };
+      if (!row) P.sil('katalog', id); else if (P.bul('katalog', id)) P.guncelle('katalog', id, row); else P.ekle('katalog', row);
+    } else if (tbl === 'photo' && id !== 'logo' && !String(id).startsWith('offer|')) {
+      if (!data) P.sil('katalog_foto', id);
+      else { const row = { id, v: data.v, gorsel: '', at: Date.now() }; P.bul('katalog_foto', id) ? P.guncelle('katalog_foto', id, row) : P.ekle('katalog_foto', row); }
+    }
+  }
+  const ilkPut = Sync.put, ilkDel = Sync.del;
+  Sync.put = function (tbl, id, data) {
+    ilkPut.call(this, tbl, id, data);
+    if (tbl === 'teklifler') ozetYaz(data);
+    else if (tbl === 'odemeler') ozetYaz(DB.teklif.find(data.teklifId));
+    else if (tbl === 'urunler' || tbl === 'photo') katalogYaz(tbl, id, data);
+  };
+  Sync.del = function (tbl, id) {
+    const eski = mem(tbl).get(id);
+    ilkDel.call(this, tbl, id);
+    if (tbl === 'odemeler' && eski) ozetYaz(DB.teklif.find(eski.teklifId));
+    else if (tbl === 'urunler' || tbl === 'photo') katalogYaz(tbl, id, null);
+  };
+  P.dinle(e => { if (e.tablo === 'orders' || e.tablo === 'pronto_gelen') siparisleriEsitle(); });
 
   /* ---------- sayaçlar ---------- */
   function sira(ad) { const s = Local.get('demo_seq', {}); s[ad] = (s[ad] || 0) + 1; Local.set('demo_seq', s); return s[ad]; }
@@ -59,36 +112,58 @@
     await bekle(150);
     const fn = String(path).startsWith('rpc/') ? path.slice(4) : '';
     if (fn === 'next_seq') return sira(body?.p_name || 'genel');
-    if (fn === 'pronto_teklif_gonder') return siparisGonder(body?.p_teklif_id);
-    if (fn === 'pronto_teklif_sil_iste') return { sonuc: 'serbest' };
+    if (fn === 'pronto_teklif_gonder') return siparisGonder(body?.p_teklif_id, body?.p_foto || {});
+    if (fn === 'pronto_teklif_sil_iste') return silmeIste(body?.p_teklif_id, body?.p_neden || '');
     if (fn === 'pronto_cari_onizle') throw Object.assign(new Error('demo'), { code: 'P0002', status: 404 });
     throw Object.assign(new Error(KAPALI), { status: 403 });
   };
 
-  /* Teklif Sipariş Takibi'ne gider; 3 sn sonra "onaylandı" olur ve kalemler sipariş numarası alır */
-  function siparisGonder(id) {
+  function gelenVeri(t, foto, tur) {
+    const c = t.cariSnap || DB.cari.find(t.cariId) || {};
+    return { cari: { unvan: c.unvan, gsm: c.gsm, eposta: c.eposta, adres: c.adres, ilce: c.ilce, sehir: c.sehir, yetkili: c.yetkili },
+      kalemler: (t.items || []).map(k => ({ uid: k.uid, kategori: k.kategori, model: k.model, modul: k.modul || '', urun: P.urunAdi(k), olcu: k.olcu || '', renk: k.renk || '', yon: k.yon || '', adet: +k.adet || 0, aciklama: k.aciklama || '', foto: foto[k.uid] || '' })),
+      tarih: t.tarih, teslim: t.teslim, personel: t.personelAd || '', montaj: t.montaj, nakliye: t.nakliye, teslimYeri: t.teslimYeri,
+      genel_not: t.genelNot || '', ic_not: t.icNot || '', tur };
+  }
+  /* Teklif → Sipariş Takibi: onay kutusuna düşer (yeni sipariş ya da güncelleme) */
+  function siparisGonder(id, foto) {
     const t = DB.teklif.find(id); if (!t) throw new Error('Sipariş bulunamadı');
-    const eski = mem('siparis').get(id);
-    if (eski && eski.bag !== 'reddedildi') {
-      const k = { ...(eski.kalemler || {}) }; let yeni = 0;
-      for (const it of t.items || []) if (!k[it.uid]) { k[it.uid] = { no: sira('siparis_kalem'), durum: 'Beklemede' }; yeni++; }
-      uzakYaz('siparis', id, { ...eski, kalemler: k }); remoteChanged();
-      return { sonuc: yeni ? 'guncelleme_gonderildi' : 'degisiklik_yok' };
-    }
-    uzakYaz('siparis', id, { bag: 'bekliyor', kalemler: {} }); remoteChanged();
-    setTimeout(() => {
-      const g = DB.teklif.find(id); if (!g || mem('siparis').get(id)?.bag !== 'bekliyor') return;
-      const k = {}; for (const it of g.items || []) k[it.uid] = { no: sira('siparis_kalem'), durum: 'Beklemede' };
-      uzakYaz('siparis', id, { bag: 'onay', kalemler: k }); remoteChanged();
-      toast(`Demo: Sipariş Takibi ${g.no} numaralı siparişi onayladı.`, 'ok', 5000);
-    }, 3000);
+    const bagli = P.tablo('orders').some(o => o.teklif_id === id);
+    const tur = bagli ? 'guncelleme' : 'yeni';
+    const fotolar = {}; for (const k of Object.values(foto)) { const v = photoGet(k); if (v) fotolar[k] = v; }
+    const veri = gelenVeri(t, foto, tur);
+    const bekleyen = P.tablo('pronto_gelen').find(g => g.teklif_id === id && g.durum === 'bekliyor' && g.tur !== 'silme');
+    const kisi = Local.get('kisi', '') || t.personelAd || '';
+    if (bekleyen) P.guncelle('pronto_gelen', bekleyen.id, { tur, veri, fotolar, gonderen: kisi });
+    else P.ekle('pronto_gelen', { teklif_id: id, teklif_no: t.no, tur, durum: 'bekliyor', veri, fotolar, gonderen: kisi });
+    siparisleriEsitle();
+    setTimeout(() => duyuru(`Sipariş ${t.no} Sipariş Takibi'nde onay bekliyor.`), 600);
+    return { sonuc: bagli ? 'guncelleme_gonderildi' : 'gonderildi' };
+  }
+  function silmeIste(id, neden) {
+    const t = DB.teklif.find(id); if (!t) throw new Error('Sipariş bulunamadı');
+    const sip = P.tablo('orders').filter(o => o.teklif_id === id);
+    const bekleyen = P.tablo('pronto_gelen').filter(g => g.teklif_id === id && g.durum === 'bekliyor');
+    if (!sip.length) { bekleyen.forEach(g => P.guncelle('pronto_gelen', g.id, { durum: 'geri_cekildi' })); siparisleriEsitle(); return { sonuc: bekleyen.length ? 'geri_cekildi' : 'serbest' }; }
+    if (bekleyen.some(g => g.tur === 'silme')) return { sonuc: 'zaten' };
+    const c = t.cariSnap || {};
+    P.ekle('pronto_gelen', { teklif_id: id, teklif_no: t.no, tur: 'silme', durum: 'bekliyor', gonderen: Local.get('kisi', ''),
+      veri: { cari: { unvan: c.unvan }, personel: t.personelAd || '', neden, siparisler: sip.map(o => ({ id: o.id, urun: o.product, adet: o.quantity, durum: o.status, tedarikci: o.supplier })), tur: 'silme' } });
+    siparisleriEsitle();
+    setTimeout(() => duyuru(`Sipariş ${t.no} için silme talebi Sipariş Takibi'nde onay bekliyor.`), 600);
     return { sonuc: 'gonderildi' };
   }
+  /* Sipariş Takibi demosuna yönlendiren kısa bildirim */
+  function duyuru(metin) {
+    $('.near-duyuru')?.remove();
+    const el = document.createElement('div'); el.className = 'near-duyuru'; el.setAttribute('role', 'status');
+    mount(el, html`<span>${metin}</span><a href="${SIPARIS_URL}" target="near-pronto-siparis">Sipariş Takibi'ni aç</a><button type="button" aria-label="Kapat">${I('x')}</button>`);
+    el.querySelector('button').onclick = () => el.remove();
+    document.body.appendChild(el); setTimeout(() => el.remove(), 9000);
+  }
 
-  /* ---------- örnek veriler ---------- */
-  const gun = n => { const d = new Date(); d.setDate(d.getDate() - n); return d; };
-  const tarih = n => isoOf(gun(n));
-  const zaman = n => gun(n).getTime();
+  /* ---------- örnek veriler (ortak senaryodan) ---------- */
+  const zaman = n => { const d = new Date(); d.setDate(d.getDate() - n); return d.getTime(); };
 
   function ornekVeri() {
     const rows = [];
@@ -99,89 +174,39 @@
     ekle('meta', 'settings', { ...deep(DEF), firma: { ad: 'NEAR DEMO MOBİLYA', tel: '0 (224) 000 00 00', adres: 'İnegöl / Bursa', eposta: 'demo@neardiji.com' }, logoSize: 40, bankalar: [banka] });
     if (IMG.logo) ekle('photo', 'logo', { v: IMG.logo });
 
-    const per = ['AYŞE YILMAZ', 'MEHMET KAYA', 'ELİF DEMİR'].map((ad, i) => ekle('personeller', 'pr' + (i + 1), { id: 'pr' + (i + 1), ad, created: zaman(120) }));
+    const per = P.PERSONEL.map((ad, i) => ekle('personeller', 'pr' + (i + 1), { id: 'pr' + (i + 1), ad, created: zaman(120) }));
     const yon = ['Nakit', 'Havale', 'Kart', 'Çek'].map((ad, i) => ekle('odeme_yontemleri', 'oy' + (i + 1), { id: 'oy' + (i + 1), ad, aciklama: '', sira: i }));
 
-    const cari = (id, tur, unvan, gsm, eposta, sehir, ilce, mahalle, sokak, binaNo, yetkili) => {
-      const d = { id, tur, unvan, gsm, sabit: '', eposta, ulke: 'Türkiye', sehir, ilce, mahalle, sokak, binaNo, daireNo: '', pk: '', adresEk: '', vkn: '', vd: '', yetkili, created: zaman(110) };
-      d.adres = typeof trAdresMetni === 'function' ? trAdresMetni(d).slice(0, 250) : `${mahalle} MAH. ${sokak} NO:${binaNo} ${ilce}/${sehir}`;
-      return ekle('cariler', id, d);
-    };
-    const C = {
-      otel: cari('c1', 'Kurumsal', 'MAVİ OTEL İŞLETMELERİ A.Ş.', '0555 010 20 31', 'satinalma@ornek-otel.com', 'Antalya', 'MURATPAŞA', 'LARA', 'SAHİL CAD.', '12', 'BURAK ŞEN'),
-      yapi: cari('c2', 'Kurumsal', 'ARDA YAPI İNŞAAT LTD. ŞTİ.', '0555 010 20 32', 'info@ornek-yapi.com', 'Bursa', 'NİLÜFER', 'ÖZLÜCE', 'GÜL SK.', '4', 'SELİN ARDA'),
-      zeynep: cari('c3', 'Bireysel', 'ZEYNEP ÖZTÜRK', '0555 010 20 33', 'zeynep@ornek.com', 'İstanbul', 'KADIKÖY', 'MODA', 'BAHARİYE CAD.', '27', ''),
-      kuzey: cari('c4', 'Bayi', 'KUZEY EV DEKORASYON', '0555 010 20 34', 'siparis@ornek-kuzey.com', 'Ankara', 'ÇANKAYA', 'KIZILAY', 'ATATÜRK BLV.', '88', 'ONUR KUZEY'),
-      can: cari('c5', 'Bireysel', 'CAN AKSOY', '0555 010 20 35', 'can@ornek.com', 'İzmir', 'KARŞIYAKA', 'BOSTANLI', 'CEMAL GÜRSEL CAD.', '15', ''),
-      nova: cari('c6', 'Kurumsal', 'NOVA YAZILIM TEKNOLOJİ A.Ş.', '0555 010 20 36', 'ofis@ornek-nova.com', 'İstanbul', 'ATAŞEHİR', 'BARBAROS', 'BEGONYA SK.', '3', 'DENİZ ER')
-    };
-
-    let un = 0;
-    const urun = (kategori, model, modul, olcu, renk, yon_, fiyat, foto) => {
-      un++; const id = 'u' + un;
-      return ekle('urunler', id, { id, kod: 'UR-' + pad(un), kategori, model, modul, olcu, renk, yon: yon_, fiyat, doviz: 'TRY', created: zaman(115), _foto: foto });
-    };
-    const U = {
-      luna3: urun('KANEPE', 'LUNA', "3'LÜ", '220 CM', 'YEŞİL KADİFE', '', 38500, 'kanepe_luna'),
-      luna2: urun('KANEPE', 'LUNA', "2'Lİ", '170 CM', 'YEŞİL KADİFE', '', 31900, 'kanepe_luna'),
-      milano3: urun('KANEPE', 'MİLANO', "3'LÜ", '230 CM', 'GRİ', '', 42750, 'kanepe_milano'),
-      milanoK: urun('KANEPE', 'MİLANO', 'KÖŞE', '280X200 CM', 'GRİ', 'SAĞ', 58900, 'kanepe_milano'),
-      sohoH: urun('BERJER', 'SOHO', 'TEKLİ', '80 CM', 'HARDAL', '', 14250, 'berjer'),
-      sohoA: urun('BERJER', 'SOHO', 'TEKLİ', '80 CM', 'ANTRASİT', '', 14250, 'berjer'),
-      noraB: urun('SANDALYE', 'NORA', '', '46X52 CM', 'BEYAZ', '', 3450, 'sandalye'),
-      noraS: urun('SANDALYE', 'NORA', '', '46X52 CM', 'SİYAH', '', 3450, 'sandalye'),
-      oslo: urun('TABURE', 'OSLO', '', '75 CM', 'DOĞAL MEŞE', '', 2150, 'tabure'),
-      atlas120: urun('ÇALIŞMA MASASI', 'ATLAS', '', '120X60 CM', 'BEYAZ', '', 9800, 'masa'),
-      atlas140: urun('ÇALIŞMA MASASI', 'ATLAS', '', '140X70 CM', 'BEYAZ', '', 11400, 'masa'),
-      atlasL: urun('ÇALIŞMA MASASI', 'ATLAS', 'L', '160X140 CM', 'BEYAZ', 'SOL', 16900, 'masa'),
-      arc: urun('AYDINLATMA', 'ARC', 'LAMBADER', '170 CM', 'ANTRASİT', '', 4650, 'lambader')
-    };
-    /* model fotoğrafları (kategori|model anahtarı, uygulamanın kendi biçimi) */
-    const fotoYazildi = new Set();
-    for (const r of rows) if (r.tbl === 'urunler') {
-      const u = r.data, k = trLower(u.kategori) + '|' + trLower(u.model);
-      if (u._foto && IMG[u._foto] && !fotoYazildi.has(k)) { fotoYazildi.add(k); ekle('photo', k, { v: IMG[u._foto] }); }
-      delete u._foto;
+    const C = {};
+    for (const c of P.CARILER) {
+      const d = { id: c.id, tur: c.tur, unvan: c.unvan, gsm: c.gsm, sabit: '', eposta: c.eposta, ulke: 'Türkiye', sehir: c.sehir, ilce: c.ilce, mahalle: c.mahalle, sokak: c.sokak, binaNo: c.binaNo,
+        daireNo: '', pk: '', adresEk: '', vkn: '', vd: '', yetkili: c.yetkili, created: zaman(110) };
+      d.adres = typeof trAdresMetni === 'function' ? trAdresMetni(d).slice(0, 250) : c.adres;
+      C[c.id] = ekle('cariler', c.id, d);
     }
-
-    let tn = 0, kalemNo = 0;
-    const kalem = (u, adet, fiyat, aciklama = '') => ({ uid: uid(), urunId: u.id, kod: u.kod, kategori: u.kategori, model: u.model, modul: u.modul, olcu: u.olcu, renk: u.renk, yon: u.yon, fiyat: fiyat ?? u.fiyat, adet, aciklama });
-    const teklif = (o) => {
-      const c = o.cari, p = per[o.per || 0];
+    const fotoYazildi = new Set();
+    for (const u of P.URUNLER) {
+      const { foto, ...d } = u;
+      ekle('urunler', u.id, { ...d, created: zaman(115) });
+      const k = trLower(u.kategori) + '|' + trLower(u.model);
+      if (foto && IMG[foto] && !fotoYazildi.has(k)) { fotoYazildi.add(k); ekle('photo', k, { v: IMG[foto] }); }
+    }
+    for (const s of P.TEKLIFLER) {
+      const c = C[s.cari], p = per[s.per];
       const t = {
-        tarih: tarih(o.gun), teslim: tarih(o.gun - (o.teslimGun || 30)), doviz: o.doviz || 'TRY', cariId: c.id, personelId: p.id, personelAd: p.ad,
-        items: o.items, iskontoTip: 'tutar', iskontoDeger: 0, iskontoTutar: o.iskonto || 0, pesinat: 0, pesinatTarih: '', kdv: 10,
-        bankalar: (o.doviz || 'TRY') === 'TRY' ? [bkKopya(banka)] : [], montaj: o.montaj || 'dahil', nakliye: o.nakliye || 'dahil', teslimYeri: 'adres', durum: 'Beklemede',
-        id: 't' + (++tn), no: o.proforma ? 'P-' + pad(1, 4) : pad(tn), created: zaman(o.gun), updated: zaman(o.gun),
+        tarih: s.tarih, teslim: s.teslim, doviz: s.doviz, cariId: c.id, personelId: p.id, personelAd: p.ad,
+        items: s.kalemler.map(k => ({ ...k })), iskontoTip: 'tutar', iskontoDeger: 0, iskontoTutar: s.iskonto || 0, pesinat: 0, pesinatTarih: '', kdv: s.kdv,
+        bankalar: s.doviz === 'TRY' ? [bkKopya(banka)] : [], montaj: s.montaj, nakliye: s.nakliye, teslimYeri: s.teslimYeri, durum: 'Beklemede',
+        id: s.id, no: s.no, created: zaman(s.gun), updated: zaman(s.gun),
         cariSnap: { unvan: c.unvan, gsm: c.gsm, sabit: c.sabit, eposta: c.eposta, adres: c.adres, ilce: c.ilce, sehir: c.sehir, ulke: c.ulke, vkn: c.vkn, vd: c.vd, yetkili: c.yetkili },
-        olusturan: p.ad, olusturanAt: zaman(o.gun), duzenleyen: p.ad, duzenleyenAt: zaman(o.gun)
+        olusturan: p.ad, olusturanAt: zaman(s.gun), duzenleyen: p.ad, duzenleyenAt: zaman(s.gun)
       };
-      if (o.proforma) Object.assign(t, { tur: 'proforma', pfDurum: 'acik', gecerlilik: isoOf(new Date(zaman(o.gun) + 15 * 864e5)) });
-      if (o.genelNot) t.genelNot = o.genelNot;
+      if (s.proforma) Object.assign(t, { tur: 'proforma', pfDurum: 'acik', gecerlilik: isoOf(new Date(zaman(s.gun) + 15 * 864e5)) });
+      if (s.genelNot) t.genelNot = s.genelNot;
       ekle('teklifler', t.id, t);
-      if (o.sip) {
-        if (o.sip === 'bekliyor') ekle('siparis', t.id, { bag: 'bekliyor', kalemler: {} });
-        else { const k = {}; t.items.forEach((it, i) => { k[it.uid] = { no: ++kalemNo, durum: Array.isArray(o.sip) ? o.sip[i] : o.sip }; }); ekle('siparis', t.id, { bag: 'onay', kalemler: k }); }
-      }
-      const toplam = calc(t, []).genel;
-      (o.odeme || []).forEach(([oran, gunSonra, yi], i) => {
-        const tu = r2(toplam * oran);
-        ekle('odemeler', t.id + 'o' + i, { id: t.id + 'o' + i, teklifId: t.id, tarih: tarih(Math.max(0, o.gun - gunSonra)), tutar: tu, doviz: t.doviz, kur: 1, cevrilmis: tu, yontemId: yon[yi].id, aciklama: '', created: zaman(Math.max(0, o.gun - gunSonra)) });
-      });
-      return t;
-    };
-
-    teklif({ cari: C.otel, gun: 78, per: 0, iskonto: 15000, items: [kalem(U.noraB, 40), kalem(U.atlas120, 12), kalem(U.arc, 12)], sip: 'Teslim Edildi', odeme: [[0.4, 0, 1], [0.6, 40, 1]], genelNot: 'TESLİMAT OTEL YÜK ASANSÖRÜNDEN YAPILACAKTIR.' });
-    teklif({ cari: C.yapi, gun: 62, per: 1, items: [kalem(U.milanoK, 2), kalem(U.sohoA, 4)], sip: ['Teslim Edildi', 'Teslim Edildi'], odeme: [[0.5, 0, 1], [0.3, 30, 2]] });
-    teklif({ cari: C.zeynep, gun: 44, per: 2, items: [kalem(U.luna3, 1), kalem(U.sohoH, 2), kalem(U.oslo, 4)], sip: ['Sevkiyata Hazır', 'Sevkiyata Hazır', 'Teslim Edildi'], odeme: [[0.3, 0, 2]] });
-    teklif({ cari: C.nova, gun: 31, per: 0, iskonto: 20000, items: [kalem(U.atlasL, 8), kalem(U.atlas140, 10), kalem(U.noraS, 18)], sip: ['Üretimde', 'Üretimde', 'Sevkiyata Hazır'], odeme: [[0.5, 0, 1]] });
-    teklif({ cari: C.kuzey, gun: 19, per: 1, iskonto: 12000, items: [kalem(U.luna2, 3, 28900), kalem(U.luna3, 3, 34900), kalem(U.milano3, 2, 38500)], sip: 'Beklemede', odeme: [[0.25, 0, 3]] });
-    teklif({ cari: C.can, gun: 9, per: 2, montaj: 'haric', items: [kalem(U.milanoK, 1), kalem(U.arc, 1)], sip: 'bekliyor' });
-    teklif({ cari: C.yapi, gun: 4, per: 1, items: [kalem(U.atlas120, 6), kalem(U.noraB, 6)] });
-    teklif({ cari: C.otel, gun: 2, per: 0, doviz: 'EUR', items: [kalem(U.sohoH, 20, 295), kalem(U.oslo, 20, 45)] });
-    teklif({ cari: C.nova, gun: 6, per: 0, proforma: true, items: [kalem(U.atlas140, 20, 10900)] });
-
-    Local.set('demo_seq', { teklif: 8, proforma: 1, urun: un, siparis_kalem: kalemNo });
+      for (const o of P.odemeleri(s)) ekle('odemeler', o.id, { id: o.id, teklifId: s.id, tarih: o.tarih, tutar: o.tutar, doviz: s.doviz, kur: 1, cevrilmis: o.tutar, yontemId: yon[o.yontem].id, aciklama: '', created: zaman(o.gun) });
+    }
+    Local.set('demo_seq', { teklif: 8, proforma: 1, urun: P.URUNLER.length });
     return rows;
   }
 
@@ -195,49 +220,50 @@
     for (const t of tableRegistry.values()) t.invalidate();
     Local.set('log', []);
     Local.set('kisi', 'AYŞE YILMAZ');
-    Local.set('demo_v', DEMO_V);
+    Local.set('demo_v', DEMO_V + '.' + P.SURUM);
   }
 
   const ilkInit = Sync.init;
   Sync.init = async function () {
-    await ilkInit.call(this);
-    if (Local.get('demo_v', 0) !== DEMO_V || !mem('teklifler').size) await kur();
+    await Promise.all([ilkInit.call(this), P.hazir()]);
+    if (Local.get('demo_v', 0) !== DEMO_V + '.' + P.SURUM || !mem('teklifler').size) await kur();
+    esitlemeIlk = true; siparisleriEsitle();
   };
 
-  /* ---------- sıfırla ---------- */
+  /* ---------- sıfırla (iki demo birlikte) ---------- */
   async function sifirla() {
-    if (!await confirmBox({ title: 'Demoyu sıfırla', ok: 'Sıfırla', danger: true, body: html`<p style="margin-top:0">Bu tarayıcıda yaptığınız tüm değişiklikler silinir ve demo ilk hâline döner.</p>` })) return;
-    await kur();
-    location.reload();
+    if (!await confirmBox({ title: 'Demoyu sıfırla', ok: 'Sıfırla', danger: true, body: html`<p style="margin-top:0">Bu tarayıcıda yaptığınız tüm değişiklikler silinir; PRONTO Teklif ve Sipariş Takibi demoları birlikte ilk hâline döner.</p>` })) return;
+    await P.sifirla();
   }
 
   /* ---------- demo şeridi ---------- */
   const st = document.createElement('style');
   st.textContent = `
-.near-demo{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:9000;display:flex;align-items:center;gap:8px;max-width:calc(100vw - 32px);
- padding:6px 6px 6px 14px;border-radius:999px;background:rgba(17,17,16,.92);color:#F1EFEA;font:600 12.5px/1.2 Manrope,system-ui,sans-serif;
- box-shadow:0 14px 34px rgba(0,0,0,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.near-demo{display:flex;align-items:center;gap:8px;width:100%;box-sizing:border-box;height:calc(40px + env(safe-area-inset-top));
+ padding:env(safe-area-inset-top) max(10px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left));background:#111110;color:#F1EFEA;
+ font:700 12.5px/1.2 Manrope,Inter,system-ui,sans-serif;position:relative;z-index:9000}
 .near-demo svg{width:16px;height:16px;flex:none}
-.near-demo span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.near-demo span em{display:none;font-style:normal;opacity:.6;font-weight:500;margin-left:6px}
-.near-demo button,.near-demo a{flex:none;display:inline-flex;align-items:center;min-height:32px;padding:0 12px;border-radius:999px;border:0;cursor:pointer;
+.near-demo span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.near-demo span em{font-style:normal;opacity:.6;font-weight:500;margin-left:8px}
+.near-demo button,.near-demo a{flex:none;display:inline-flex;align-items:center;min-height:30px;padding:0 12px;border-radius:999px;border:0;cursor:pointer;
  background:rgba(255,255,255,.12);color:inherit;font:inherit;text-decoration:none}
 .near-demo button:hover,.near-demo a:hover{background:rgba(255,255,255,.22)}
-@media(min-width:1500px){.near-demo span em{display:inline}}
-@media(max-width:900px){
- .near-demo{position:relative;left:auto;top:auto;transform:none;max-width:none;width:100%;box-sizing:border-box;border-radius:0;box-shadow:none;
-  height:calc(40px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 6px 0 14px;font-size:12px;gap:6px;background:#111110}
- .near-demo span{flex:1}
- .near-demo button,.near-demo a{min-height:30px;padding:0 11px}
- .app{height:calc(100% - 40px - env(safe-area-inset-top))!important}}
-@media print{.near-demo{display:none!important}}
+@media(max-width:760px){.near-demo{gap:6px;font-size:12px}.near-demo span em{display:none}.near-demo button,.near-demo a{padding:0 10px}}
+.app{height:calc(100% - 40px - env(safe-area-inset-top))!important}
+@media print{.near-demo,.near-duyuru{display:none!important}}
+.near-duyuru{position:fixed;right:16px;bottom:16px;z-index:9001;display:flex;align-items:center;gap:10px;max-width:min(460px,calc(100vw - 32px));padding:10px 8px 10px 16px;border-radius:16px;
+ background:#111110;color:#F1EFEA;font:600 13px/1.35 Manrope,system-ui,sans-serif;box-shadow:0 18px 40px rgba(0,0,0,.3);animation:nearIn .35s ease}
+.near-duyuru span{flex:1;min-width:0}.near-duyuru a{flex:none;display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:999px;background:#E6B22A;color:#1b1407;text-decoration:none;font-weight:800}
+.near-duyuru button{flex:none;width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:inherit;cursor:pointer;display:grid;place-items:center}
+@keyframes nearIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(max-width:900px){.near-duyuru{left:12px;right:12px;bottom:calc(96px + env(safe-area-inset-bottom));max-width:none}}
 .brand img,.pin-card .pin-logo{filter:invert(1)}
 [data-theme=dark] .cb-logo img{filter:invert(1)}`;
   document.head.appendChild(st);
   const bar = document.createElement('div'); bar.className = 'near-demo'; bar.setAttribute('role', 'note');
   mount(bar, html`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.5 20.5H3.5v-17h17v17L8.6 8.6" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     <span>Demo<em>Örnek verilerle çalışır, değişiklikler bu tarayıcıda kalır.</em></span>
-    <button type="button" data-near-ayar>Ayarlar</button><button type="button" data-near-sifirla>Sıfırla</button><a href="/#iletisim">İletişim</a>`);
+    <a href="/pronto/siparis/" target="near-pronto-siparis">Sipariş Takibi</a><button type="button" data-near-ayar>Ayarlar</button><button type="button" data-near-sifirla>Sıfırla</button>`);
   bar.querySelector('[data-near-sifirla]').addEventListener('click', sifirla);
   bar.querySelector('[data-near-ayar]').addEventListener('click', () => { if (!$('#main')) return; if (state.view === 'ayarlar') go('teklifler'); else openSettings(); });
   document.body.prepend(bar);

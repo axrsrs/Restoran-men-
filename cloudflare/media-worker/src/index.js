@@ -5,14 +5,32 @@
    DELETE    /<bucket>/<id>/  → klasörü silme (firma silinince; aynı yetki)
    POST      /translate       → çeviri (Workers AI; sadece giriş yapmış panel kullanıcıları)
    Yetki Supabase'te public.media_can_write(bucket, yol) ile kullanıcının kendi oturumuyla denetlenir;
-   Worker'da gizli anahtar yoktur. */
+   Worker'da gizli anahtar yoktur.
+   Her bölümün kendi R2 deposu var (adresler değişmedi, /<bucket>/ öneki depoyu seçer):
+     menu-media    → neardiji-menu      (NearMenu: logo, ürün görseli, video arka plan)
+     catalog-media → neardiji-katalog   (katalog / sh21)
+     site-media    → neardiji-site      (neardiji.com ve demolar)
+   Geçiş: yeni depoda bulunmayan dosya eski ortak depodan (LEGACY, "<bucket>/<yol>") okunur. */
 
 const IMAGES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const BUCKETS = {
-  "menu-media": { max: 20 * 1024 * 1024, types: [...IMAGES, "video/mp4", "video/webm", "video/quicktime"] },
-  "site-media": { max: 8 * 1024 * 1024, types: IMAGES },
-  "catalog-media": { max: 10 * 1024 * 1024, types: IMAGES },
+  "menu-media": { r2: "MENU", max: 20 * 1024 * 1024, types: [...IMAGES, "video/mp4", "video/webm", "video/quicktime"] },
+  "site-media": { r2: "SITE", max: 8 * 1024 * 1024, types: IMAGES },
+  "catalog-media": { r2: "KATALOG", max: 10 * 1024 * 1024, types: IMAGES },
 };
+/* Bölümün deposu ve o depodaki anahtar */
+const store = (env, bucket) => env[BUCKETS[bucket].r2];
+/* Okuma: önce bölümün deposu, yoksa geçiş dönemi için eski ortak depo */
+async function r2get(env, bucket, path, opts) {
+  const o = await store(env, bucket).get(path, opts);
+  if (o || !env.LEGACY) return o;
+  return env.LEGACY.get(bucket + "/" + path, opts);
+}
+async function r2head(env, bucket, path) {
+  const o = await store(env, bucket).head(path);
+  if (o || !env.LEGACY) return o;
+  return env.LEGACY.head(bucket + "/" + path);
+}
 const PATH_RE = /^[A-Za-z0-9][A-Za-z0-9._\-\/]{0,299}$/;
 const ALLOWED_ORIGINS = ["https://neardiji.com", "https://www.neardiji.com"];
 /* Önbellekten parça (Range) verilecek en büyük dosya; video arka planları bu sınırın altında */
@@ -107,25 +125,25 @@ async function translate(req, env) {
 
 /* Parça isteği: dosyanın tamamı önbellekten (yoksa R2'den bir kez alınıp önbelleğe yazılır) kesilir.
    Böylece video her oynatmada R2'ye gitmez. Büyük dosyada null döner, normal R2 parça okuması yapılır. */
-async function rangeFromCache(req, env, ctx, key, cacheKey) {
+async function rangeFromCache(req, env, ctx, bucket, path, cacheKey) {
   const m = /^bytes=(\d*)-(\d*)$/.exec(req.headers.get("Range") || "");
   if (!m || (m[1] === "" && m[2] === "")) return null;
   let hit = await caches.default.match(cacheKey);
   if (!hit) {
-    const head = await env.MEDIA.head(key);
+    const head = await r2head(env, bucket, path);
     if (!head || head.size > RANGE_FROM_CACHE_MAX) return null;
-    const obj = await env.MEDIA.get(key);
+    const obj = await r2get(env, bucket, path);
     if (!obj) return null;
-    const store = new Headers();
-    obj.writeHttpMetadata(store);
-    store.set("ETag", obj.httpEtag);
-    store.set("Cache-Control", "public, max-age=31536000, immutable");
-    store.set("Accept-Ranges", "bytes");
-    store.set("X-Content-Type-Options", "nosniff");
-    store.set("Content-Length", String(obj.size));
+    const kayit = new Headers();
+    obj.writeHttpMetadata(kayit);
+    kayit.set("ETag", obj.httpEtag);
+    kayit.set("Cache-Control", "public, max-age=31536000, immutable");
+    kayit.set("Accept-Ranges", "bytes");
+    kayit.set("X-Content-Type-Options", "nosniff");
+    kayit.set("Content-Length", String(obj.size));
     const buf = await obj.arrayBuffer();
-    ctx.waitUntil(caches.default.put(cacheKey, new Response(buf, { status: 200, headers: store })));
-    hit = new Response(buf, { status: 200, headers: store });
+    ctx.waitUntil(caches.default.put(cacheKey, new Response(buf, { status: 200, headers: kayit })));
+    hit = new Response(buf, { status: 200, headers: kayit });
   }
   const size = Number(hit.headers.get("Content-Length") || 0);
   if (!size || size > RANGE_FROM_CACHE_MAX) return null;
@@ -147,13 +165,17 @@ async function rangeFromCache(req, env, ctx, key, cacheKey) {
 }
 
 async function deleteFolder(env, bucket, folder) {
-  let cursor, n = 0;
-  do {
-    const list = await env.MEDIA.list({ prefix: bucket + "/" + folder + "/", cursor, limit: 1000 });
-    const keys = list.objects.map(o => o.key);
-    if (keys.length) { await env.MEDIA.delete(keys); n += keys.length; }
-    cursor = list.truncated ? list.cursor : undefined;
-  } while (cursor);
+  let n = 0;
+  for (const [r2, prefix] of [[store(env, bucket), folder + "/"], [env.LEGACY, bucket + "/" + folder + "/"]]) {
+    if (!r2) continue;
+    let cursor;
+    do {
+      const list = await r2.list({ prefix, cursor, limit: 1000 });
+      const keys = list.objects.map(o => o.key);
+      if (keys.length) { await r2.delete(keys); n += keys.length; }
+      cursor = list.truncated ? list.cursor : undefined;
+    } while (cursor);
+  }
   return n;
 }
 
@@ -185,7 +207,7 @@ export default {
       const plain = req.method === "GET" && !req.headers.has("Range") && !req.headers.has("If-None-Match");
       const cacheKey = new Request(url.origin + url.pathname, { method: "GET" });
       if (req.headers.has("Range") && !req.headers.has("If-Range")) {
-        const part = await rangeFromCache(req, env, ctx, key, cacheKey);
+        const part = await rangeFromCache(req, env, ctx, bucket, path, cacheKey);
         if (part) return part;
       }
       if (plain) {
@@ -197,7 +219,7 @@ export default {
           return new Response(hit.body, { status: hit.status, headers: h });
         }
       }
-      const obj = await env.MEDIA.get(key, { range: req.headers, onlyIf: req.headers });
+      const obj = await r2get(env, bucket, path, { range: req.headers, onlyIf: req.headers });
       if (!obj) return json(req, 404, { error: "Bulunamadı" });
       const h = new Headers(cors(req));
       obj.writeHttpMetadata(h);
@@ -215,9 +237,9 @@ export default {
       } else h.set("Content-Length", String(obj.size));
       if (plain && status === 200) {
         const [a, b] = obj.body.tee();
-        const store = new Headers(h);
-        for (const k of Object.keys(cors(req))) store.delete(k);
-        ctx.waitUntil(caches.default.put(cacheKey, new Response(b, { status: 200, headers: store })));
+        const kayit = new Headers(h);
+        for (const k of Object.keys(cors(req))) kayit.delete(k);
+        ctx.waitUntil(caches.default.put(cacheKey, new Response(b, { status: 200, headers: kayit })));
         h.set("X-Cache", "MISS");
         return new Response(a, { status, headers: h });
       }
@@ -228,14 +250,18 @@ export default {
       const auth = req.headers.get("Authorization");
       if (!(await canWrite(env, auth, bucket, path))) return json(req, 403, { error: "Bu dosyayı yüklemeye / silmeye yetkiniz yok." });
       const cacheKey = new Request(url.origin + url.pathname, { method: "GET" });
-      if (req.method === "DELETE") { await env.MEDIA.delete(key); ctx.waitUntil(caches.default.delete(cacheKey)); return json(req, 200, { ok: true }); }
+      if (req.method === "DELETE") {
+        await store(env, bucket).delete(path);
+        if (env.LEGACY) await env.LEGACY.delete(key);
+        ctx.waitUntil(caches.default.delete(cacheKey)); return json(req, 200, { ok: true });
+      }
 
       const type = (req.headers.get("Content-Type") || "").split(";")[0].trim().toLowerCase();
       if (!rule.types.includes(type)) return json(req, 415, { error: "Bu dosya türü desteklenmiyor: " + (type || "bilinmiyor") });
       const len = Number(req.headers.get("Content-Length") || 0);
       if (!len) return json(req, 411, { error: "Dosya boyutu bildirilmedi." });
       if (len > rule.max) return json(req, 413, { error: "Dosya çok büyük (en fazla " + Math.round(rule.max / 1048576) + " MB)." });
-      await env.MEDIA.put(key, req.body, { httpMetadata: { contentType: type, cacheControl: "public, max-age=31536000, immutable" } });
+      await store(env, bucket).put(path, req.body, { httpMetadata: { contentType: type, cacheControl: "public, max-age=31536000, immutable" } });
       ctx.waitUntil(caches.default.delete(cacheKey)); /* aynı ada yeniden yükleme (upsert) eski önbelleği bozmasın */
       return json(req, 200, { ok: true, url: "https://media.neardiji.com/" + key });
     }

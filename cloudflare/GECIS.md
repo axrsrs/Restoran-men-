@@ -7,6 +7,22 @@
 - 10 eski dosya R2'ye kopyalandı, veritabanındaki linkler çevrildi.
 - Eski GitHub Pages DNS kayıtları (yedek): A 185.199.108-111.153, CNAME www → axrsrs.github.io.
 
+## R2 depoları bölümlere ayrıldı (28 Ekim 2026)
+Adresler değişmedi (`https://media.neardiji.com/<bucket>/<yol>`); Worker öneke göre depoyu seçer:
+
+| Önek | Depo (Doğu Avrupa) | Kullanan |
+|---|---|---|
+| `menu-media/` | `neardiji-menu` | NearMenu: logo, ürün görseli, video arka plan |
+| `catalog-media/` | `neardiji-katalog` | Katalog / sh21 |
+| `site-media/` | `neardiji-site` | neardiji.com ve demolar |
+
+- Yeni depolarda anahtar önek içermez (`menu-media/a/b.png` → `neardiji-menu` içinde `a/b.png`).
+- 6 dosya (4 MB) kopyalandı; içerik türü ve önbellek ayarı korundu.
+- Geçiş dönemi: eski ortak depo `neardiji-media` (ENAM) Worker'a `LEGACY` olarak bağlı, yalnız okuma yedeği.
+  Silme işlemleri iki depoda birden yapılır.
+- Kalan: Worker canlıda bir hafta sorunsuz çalışınca `LEGACY` bağlantısı `wrangler.toml` ve koddan kaldırılır,
+  `neardiji-media` ve boş `neardiji-media-eu` depoları silinir.
+
 Kalan:
 - Bir hafta sorunsuz çalışınca Supabase Storage'daki menu-media / site-media / catalog-media kovaları ve storage politikaları silinir.
 - GitHub repo ayarlarından GitHub Pages kapatılabilir (artık trafik almıyor).
