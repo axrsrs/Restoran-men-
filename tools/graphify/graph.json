@@ -100,7 +100,7 @@
    "id": "sitedata",
    "label": "site-data.js",
    "type": "js",
-   "desc": "ND_DEFAULT varsayılan içerik ve Supabase istemci ayarı. 114 satır, 0 fonksiyon.",
+   "desc": "ND_DEFAULT varsayılan içerik ve Supabase istemci ayarı. 115 satır, 0 fonksiyon.",
    "file": "assets/site-data.js"
   },
   {
@@ -215,10 +215,28 @@
    "desc": "Auth (auth/v1), REST ve RPC. Tek proje."
   },
   {
-   "id": "r2",
-   "label": "Cloudflare R2: neardiji-media",
+   "id": "r2_menu",
+   "label": "R2: neardiji-menu",
    "type": "ext",
-   "desc": "Medya deposu (MEDIA bağlama)."
+   "desc": "menu-media: görsel ve video, en fazla 20 MB (MENU bağlama)."
+  },
+  {
+   "id": "r2_kat",
+   "label": "R2: neardiji-katalog",
+   "type": "ext",
+   "desc": "catalog-media: görsel, en fazla 10 MB (KATALOG bağlama)."
+  },
+  {
+   "id": "r2_site",
+   "label": "R2: neardiji-site",
+   "type": "ext",
+   "desc": "site-media: görsel, en fazla 8 MB (SITE bağlama)."
+  },
+  {
+   "id": "r2",
+   "label": "R2: neardiji-media (eski)",
+   "type": "ext",
+   "desc": "Geçiş dönemi yalnız okuma yedeği (LEGACY). Doğrulanınca kaldırılacak."
   },
   {
    "id": "ai",
@@ -409,12 +427,28 @@
    "kind": "hub"
   },
   {
+   "id": "w_r2get",
+   "label": "r2get()",
+   "type": "fn",
+   "desc": "",
+   "file": "cloudflare/media-worker/src/index.js",
+   "line": 24
+  },
+  {
+   "id": "w_r2head",
+   "label": "r2head()",
+   "type": "fn",
+   "desc": "",
+   "file": "cloudflare/media-worker/src/index.js",
+   "line": 29
+  },
+  {
    "id": "w_cors",
    "label": "cors()",
    "type": "fn",
    "desc": "",
    "file": "cloudflare/media-worker/src/index.js",
-   "line": 23
+   "line": 41
   },
   {
    "id": "w_json",
@@ -422,7 +456,7 @@
    "type": "fn",
    "desc": "",
    "file": "cloudflare/media-worker/src/index.js",
-   "line": 35
+   "line": 53
   },
   {
    "id": "w_canWrite",
@@ -430,7 +464,7 @@
    "type": "fn",
    "desc": "",
    "file": "cloudflare/media-worker/src/index.js",
-   "line": 39
+   "line": 57
   },
   {
    "id": "w_sessionUser",
@@ -438,7 +472,7 @@
    "type": "fn",
    "desc": "",
    "file": "cloudflare/media-worker/src/index.js",
-   "line": 52
+   "line": 70
   },
   {
    "id": "w_trAllowed",
@@ -446,7 +480,7 @@
    "type": "fn",
    "desc": "",
    "file": "cloudflare/media-worker/src/index.js",
-   "line": 67
+   "line": 85
   },
   {
    "id": "w_translate",
@@ -454,7 +488,7 @@
    "type": "fn",
    "desc": "",
    "file": "cloudflare/media-worker/src/index.js",
-   "line": 73
+   "line": 91
   },
   {
    "id": "w_rangeFromCache",
@@ -462,7 +496,7 @@
    "type": "fn",
    "desc": "",
    "file": "cloudflare/media-worker/src/index.js",
-   "line": 110
+   "line": 128
   },
   {
    "id": "w_deleteFolder",
@@ -470,7 +504,7 @@
    "type": "fn",
    "desc": "",
    "file": "cloudflare/media-worker/src/index.js",
-   "line": 149
+   "line": 167
   },
   {
    "id": "wrangler",
@@ -483,7 +517,7 @@
    "id": "workercfg",
    "label": "wrangler.toml",
    "type": "cfg",
-   "desc": "media.neardiji.com, R2 ve AI bağlamaları.",
+   "desc": "media.neardiji.com; R2 MENU, KATALOG, SITE, LEGACY ve AI bağlamaları.",
    "file": "cloudflare/media-worker/wrangler.toml"
   },
   {
@@ -575,51 +609,101 @@
    "id": "pronto",
    "label": "PRONTO Teklif demo (/pronto/teklif)",
    "type": "page",
-   "desc": "Ana sayfada vitrinlenen teklif uygulaması demosu. Sunucuya istek gitmez; veri tarayıcıda (localStorage pl_*).",
+   "desc": "Teklif uygulamasının demosu. Ağa çıkmaz; veri ortak demo deposunda.",
    "file": "pronto/teklif/index.html",
    "kind": "hub"
+  },
+  {
+   "id": "pr_sip",
+   "label": "PRONTO Sipariş Takibi demo (/pronto/siparis)",
+   "type": "page",
+   "desc": "Sipariş takibi uygulamasının demosu (~11700 satır). Teklif demosuyla aynı veriyi paylaşır.",
+   "file": "pronto/siparis/index.html",
+   "kind": "hub"
+  },
+  {
+   "id": "pr_sunucu",
+   "label": "pronto/ortak/sunucu.js",
+   "type": "js",
+   "desc": "Ortak demo sunucusu (ProntoDemo): IndexedDB near_pronto_demo, sekmeler arası BroadcastChannel, ortak örnek senaryo.",
+   "file": "pronto/ortak/sunucu.js",
+   "kind": "hub"
+  },
+  {
+   "id": "pr_gorsel",
+   "label": "pronto/ortak/gorseller.js",
+   "type": "js",
+   "desc": "İki demonun ortak görselleri.",
+   "file": "pronto/ortak/gorseller.js"
   },
   {
    "id": "pr_demo",
    "label": "pronto/teklif/demo.js",
    "type": "js",
-   "desc": "NEAR demo katmanı: oturum, senkron ve sunucu fonksiyonlarını tarayıcıda taklit eder.",
+   "desc": "Teklif demo katmanı.",
    "file": "pronto/teklif/demo.js"
   },
   {
-   "id": "pr_gorsel",
-   "label": "pronto/teklif/gorseller.js",
+   "id": "pr_sdemo",
+   "label": "pronto/siparis/demo.js",
    "type": "js",
-   "desc": "Demo görselleri.",
-   "file": "pronto/teklif/gorseller.js"
+   "desc": "Sipariş Takibi demo katmanı.",
+   "file": "pronto/siparis/demo.js"
   },
   {
-   "id": "pr_manifest",
-   "label": "manifest.webmanifest (pronto)",
-   "type": "cfg",
-   "desc": "Demo PWA bildirimi.",
-   "file": "pronto/teklif/manifest.webmanifest"
+   "id": "pr_sbdemo",
+   "label": "supabase-demo.js",
+   "type": "js",
+   "desc": "Tarayıcı içi sahte Supabase: sorgu zinciri, sunucu fonksiyonları, fotoğraf deposu, oturum, canlı kanal.",
+   "file": "pronto/siparis/supabase-demo.js"
+  },
+  {
+   "id": "pr_lib",
+   "label": "pronto/siparis/lib",
+   "type": "js",
+   "desc": "Sabit sürümlü PDF/Excel kütüphaneleri: html2canvas, jsPDF, pdfmake, xlsx.",
+   "file": "pronto/siparis/lib"
   },
   {
    "id": "pr_adres",
    "label": "pronto/teklif/adres",
    "type": "data",
-   "desc": "81 il için il/ilçe/mahalle JSON; yalnızca seçilen il indirilir (TÜİK MEDAS).",
+   "desc": "81 il için il/ilçe/mahalle JSON; yalnızca seçilen il indirilir.",
    "file": "pronto/teklif/adres"
-  },
-  {
-   "id": "pr_uret",
-   "label": "adres/uret.py",
-   "type": "tool",
-   "desc": "İl/ilçe/mahalle JSON üretici.",
-   "file": "pronto/teklif/adres/uret.py"
   },
   {
    "id": "pr_build",
    "label": "pronto-demo/build.py",
    "type": "tool",
-   "desc": "Gerçek PRONTO teklif uygulamasını demoya dönüştürür: Supabase değerlerini demo yapar, CSP sunucu bağlantısını kapatır, NEAR ikonları, demo katmanı ekler.",
-   "file": "tools/pronto-demo/build.py"
+   "desc": "Gerçek PRONTO uygulamalarını demoya dönüştürür (teklif, siparis): Supabase değerlerini demo yapar, CSP sunucu bağlantısını kapatır, OFISCHI yerine NEAR logoları, ortak depo ve demo katmanı ekler. Beklenen metin yoksa durur.",
+   "file": "tools/pronto-demo/build.py",
+   "kind": "hub"
+  },
+  {
+   "id": "pr_wf",
+   "label": "pronto-demo.yml (GitHub Actions)",
+   "type": "tool",
+   "desc": "Her gün 06:17: PRONTO ve OF-SCH-PRONTO repolarını çeker, build.py çalıştırır, değiştiyse main'e yazar → otomatik yayın.",
+   "file": ".github/workflows/pronto-demo.yml",
+   "kind": "hub"
+  },
+  {
+   "id": "pr_src_t",
+   "label": "ofischi/PRONTO",
+   "type": "ext",
+   "desc": "Gerçek Teklif uygulaması (kaynak repo, değiştirilmez)."
+  },
+  {
+   "id": "pr_src_s",
+   "label": "ofischi/OF-SCH-PRONTO",
+   "type": "ext",
+   "desc": "Gerçek Sipariş Takibi uygulaması (kaynak repo, değiştirilmez)."
+  },
+  {
+   "id": "gh",
+   "label": "GitHub Actions",
+   "type": "ext",
+   "desc": "Zamanlanmış iş akışı."
   },
   {
    "id": "app821::toast",
@@ -2423,6 +2507,16 @@
   },
   {
    "from": "worker",
+   "to": "w_r2get",
+   "rel": "içerir"
+  },
+  {
+   "from": "worker",
+   "to": "w_r2head",
+   "rel": "içerir"
+  },
+  {
+   "from": "worker",
    "to": "w_cors",
    "rel": "içerir"
   },
@@ -2488,13 +2582,43 @@
   },
   {
    "from": "worker",
+   "to": "r2_menu",
+   "rel": "menu-media"
+  },
+  {
+   "from": "worker",
+   "to": "r2_kat",
+   "rel": "catalog-media"
+  },
+  {
+   "from": "worker",
+   "to": "r2_site",
+   "rel": "site-media"
+  },
+  {
+   "from": "worker",
    "to": "r2",
-   "rel": "nesne depolama"
+   "rel": "yedek okuma"
   },
   {
    "from": "w_deleteFolder",
-   "to": "r2",
+   "to": "r2_menu",
    "rel": "toplu silme"
+  },
+  {
+   "from": "appmenu",
+   "to": "r2_menu",
+   "rel": "görseller"
+  },
+  {
+   "from": "bulut",
+   "to": "r2_kat",
+   "rel": "görseller"
+  },
+  {
+   "from": "appayse",
+   "to": "r2_site",
+   "rel": "görseller"
   },
   {
    "from": "home",
@@ -2614,6 +2738,21 @@
   {
    "from": "workercfg",
    "to": "r2",
+   "rel": "bağlama"
+  },
+  {
+   "from": "workercfg",
+   "to": "r2_menu",
+   "rel": "bağlama"
+  },
+  {
+   "from": "workercfg",
+   "to": "r2_kat",
+   "rel": "bağlama"
+  },
+  {
+   "from": "workercfg",
+   "to": "r2_site",
    "rel": "bağlama"
   },
   {
@@ -2738,13 +2877,13 @@
   },
   {
    "from": "pronto",
-   "to": "pr_demo",
+   "to": "pr_sunucu",
    "rel": "yükler"
   },
   {
    "from": "pronto",
-   "to": "pr_manifest",
-   "rel": "bildirim"
+   "to": "pr_demo",
+   "rel": "yükler"
   },
   {
    "from": "pronto",
@@ -2762,9 +2901,59 @@
    "rel": "il seçince indirir"
   },
   {
-   "from": "pr_uret",
-   "to": "pr_adres",
-   "rel": "üretir"
+   "from": "pronto",
+   "to": "pr_sip",
+   "rel": "Sipariş Takibine geç"
+  },
+  {
+   "from": "pr_sip",
+   "to": "pr_gorsel",
+   "rel": "yükler"
+  },
+  {
+   "from": "pr_sip",
+   "to": "pr_sunucu",
+   "rel": "yükler"
+  },
+  {
+   "from": "pr_sip",
+   "to": "pr_sbdemo",
+   "rel": "yükler"
+  },
+  {
+   "from": "pr_sip",
+   "to": "pr_sdemo",
+   "rel": "yükler"
+  },
+  {
+   "from": "pr_sip",
+   "to": "pr_lib",
+   "rel": "PDF/Excel"
+  },
+  {
+   "from": "pr_sip",
+   "to": "icons",
+   "rel": "ikon"
+  },
+  {
+   "from": "pr_sip",
+   "to": "pronto",
+   "rel": "Teklife geç"
+  },
+  {
+   "from": "pr_sbdemo",
+   "to": "pr_sunucu",
+   "rel": "ProntoDemo"
+  },
+  {
+   "from": "pr_demo",
+   "to": "pr_sunucu",
+   "rel": "ProntoDemo"
+  },
+  {
+   "from": "pr_sdemo",
+   "to": "pr_sunucu",
+   "rel": "ProntoDemo"
   },
   {
    "from": "pr_build",
@@ -2773,13 +2962,73 @@
   },
   {
    "from": "pr_build",
-   "to": "pr_demo",
-   "rel": "teklif-demo.js kopyalar"
+   "to": "pr_sip",
+   "rel": "üretir"
+  },
+  {
+   "from": "pr_build",
+   "to": "pr_sunucu",
+   "rel": "üretir"
   },
   {
    "from": "pr_build",
    "to": "pr_gorsel",
-   "rel": "kopyalar"
+   "rel": "üretir"
+  },
+  {
+   "from": "pr_build",
+   "to": "pr_demo",
+   "rel": "üretir"
+  },
+  {
+   "from": "pr_build",
+   "to": "pr_sdemo",
+   "rel": "üretir"
+  },
+  {
+   "from": "pr_build",
+   "to": "pr_sbdemo",
+   "rel": "üretir"
+  },
+  {
+   "from": "pr_build",
+   "to": "pr_lib",
+   "rel": "üretir"
+  },
+  {
+   "from": "pr_build",
+   "to": "pr_src_t",
+   "rel": "okur"
+  },
+  {
+   "from": "pr_build",
+   "to": "pr_src_s",
+   "rel": "okur"
+  },
+  {
+   "from": "pr_wf",
+   "to": "pr_build",
+   "rel": "çalıştırır"
+  },
+  {
+   "from": "pr_wf",
+   "to": "pr_src_t",
+   "rel": "clone"
+  },
+  {
+   "from": "pr_wf",
+   "to": "pr_src_s",
+   "rel": "clone"
+  },
+  {
+   "from": "gh",
+   "to": "pr_wf",
+   "rel": "çalıştırır"
+  },
+  {
+   "from": "pr_wf",
+   "to": "cf",
+   "rel": "main push → yayın"
   },
   {
    "from": "home",
@@ -2789,7 +3038,22 @@
   {
    "from": "sitedata",
    "to": "pronto",
-   "rel": "ürün kartı linki"
+   "rel": "ürün kartı / alt bilgi"
+  },
+  {
+   "from": "sitedata",
+   "to": "pr_sip",
+   "rel": "alt bilgi linki"
+  },
+  {
+   "from": "headers",
+   "to": "pr_lib",
+   "rel": "önbellek"
+  },
+  {
+   "from": "headers",
+   "to": "pr_adres",
+   "rel": "önbellek"
   },
   {
    "from": "app821",

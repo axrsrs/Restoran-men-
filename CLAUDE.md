@@ -22,7 +22,10 @@ Her sayfa ince HTML + ayrı `app.js` yapısındadır; mantık `app.js` içindedi
 - `/ayse` site paneli: `ayse/tema.js`, `ayse/app.js`. Yetki `am_i_super`, içerik `site_content`.
 - `/katalog`: `katalog/app.js` (React, yerel `assets/vendor/react-18.3.1`), `katalog/bulut.js` (`window.SH21`), `katalog/pdf-font.js`. RPC: `get_catalog`, `get_catalog_access`, `tenant_state`, `track_catalog_visit`.
 - `/menu` NearMenu Premium: `menu/app.js`. RPC: `get_menu`, `menu_version`, `get_my_access`, `tenant_state`, `track_visit`; çeviri media-worker `/translate` ile.
-- `/pronto/teklif` PRONTO Teklif demosu (vitrin): gerçek PRONTO uygulamasının `tools/pronto-demo/build.py` ile üretilmiş demo kopyası. `demo.js` sunucuyu tarayıcıda taklit eder, Supabase'e istek gitmez; il/ilçe verisi `pronto/teklif/adres/*.json` (`uret.py`). Gerçek PRONTO reposu, anahtarları ve verisi buraya taşınmaz; demo yalnızca build.py ile yenilenir.
+- PRONTO demoları (vitrin): `/pronto/teklif` ve `/pronto/siparis`. Gerçek uygulamalardan (`ofischi/PRONTO`, `ofischi/OF-SCH-PRONTO`) `tools/pronto-demo/build.py` ile üretilir; elle düzenlenmez.
+  - Ortak demo deposu `pronto/ortak/sunucu.js` (IndexedDB `near_pronto_demo`, BroadcastChannel); iki demo aynı veriyi paylaşır. Sipariş Takibi için sahte Supabase `supabase-demo.js`, kütüphaneler `pronto/siparis/lib`.
+  - Ağa istek gitmez; gerçek PRONTO anahtarları ve verisi buraya taşınmaz.
+  - `.github/workflows/pronto-demo.yml` her gün 06:17'de kaynakları çekip demoları yeniden üretir ve `main`'e yazar (otomatik yayın). Kaynak beklenmedik değişirse build.py durur, canlı demo eski hâliyle kalır.
 - Görseller: `menu/demo/` (demo), `katalog/urunler/<seri>/` (aqua, atlantis, bien, eva, icon, lego, moon, part, royal).
 - `katalog/SPEC-vade.md`: TL vade özelliği (uygulandı).
 - Bağlantı haritası: `tools/graphify/graph.html` ve `graph.json`.
@@ -32,7 +35,8 @@ Her sayfa ince HTML + ayrı `app.js` yapısındadır; mantık `app.js` içindedi
 - Güvenlik modeli (`tools/sql/2026-10-28-guvenlik.sql`): anon tablolardan doğrudan okuyamaz, herkese açık veri `get_menu` / `get_catalog` RPC ile gelir; authenticated için sütun bazlı okuma izni. Yeni sütun eklenirse bu izinler güncellenir.
 - Anahtar yalnızca publishable olabilir. `service_role` veya gizli anahtar dosyaya yazılmaz.
 - Tüm yüklemeler `assets/media.js` (`NDMedia`: url, parse, put, del, delFolder) üzerinden → `media.neardiji.com`.
-- media-worker (`cloudflare/media-worker`): R2 `neardiji-media` okuma/yazma, klasör silme, yazma yetkisi `media_can_write`, `/translate` çevirisi Workers AI ile (oturum açmış kullanıcı).
+- R2 depoları bölüm bazlı: `menu-media` → `neardiji-menu` (görsel+video, 20 MB), `catalog-media` → `neardiji-katalog` (10 MB), `site-media` → `neardiji-site` (8 MB). `neardiji-media` (LEGACY) yalnız okuma yedeği; doğrulanınca kaldırılır.
+- media-worker (`cloudflare/media-worker`): R2 okuma/yazma, klasör silme, yazma yetkisi `media_can_write`, `/translate` çevirisi Workers AI ile (oturum açmış kullanıcı).
 - Geçiş notları: `cloudflare/GECIS.md`.
 - Cloudflare API'ye `api.cloudflare.com` üzerinden Authorization başlığı YAZMADAN istek atılır; anahtarı proxy ekler.
 
