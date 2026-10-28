@@ -1,6 +1,6 @@
 {
   "name": "PRONTO Teklif · Demo",
-  "short_name": "PRONTO Demo",
+  "short_name": "Teklif Demo",
   "id": "./", "start_url": "./", "scope": "./",
   "display": "standalone", "lang": "tr",
   "background_color": "#F2F1EE", "theme_color": "#F2F1EE",

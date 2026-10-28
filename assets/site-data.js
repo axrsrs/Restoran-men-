@@ -105,7 +105,8 @@ window.ND_DEFAULT = {
   demos: [
     { label: "NearMenu QR menü", href: "/menu" },
     { label: "Ürün kataloğu", href: "/katalog" },
-    { label: "PRONTO teklif", href: "/pronto/teklif" }
+    { label: "PRONTO teklif", href: "/pronto/teklif" },
+    { label: "PRONTO sipariş takibi", href: "/pronto/siparis" }
   ],
   privacy: {
     title: "KVKK ve Gizlilik",
