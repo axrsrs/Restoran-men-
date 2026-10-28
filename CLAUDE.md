@@ -19,11 +19,14 @@ Bağımsız proje. Ofischi, ASODA, NEAR, PRONTO ile dosya, repo, anahtar veya ku
 - `/821` süper yönetici: restoran ve katalog kayıtları, deneme/aktif/abonelik durumu (`paid_until`), müşteriye WhatsApp paylaşım metni.
 - `/ayse` site paneli: ana sayfa içeriğini düzenler.
 - `/katalog` ürün kataloğu (~7500 satır, React unpkg). Bulut katmanı `katalog/bulut.js`. `tools/sh21-bulut.py` bu sayfaya yama uygular (React sürüm sabitleme, CSP).
+- `/menu` NearMenu Premium: QR/NFC dijital menü (`menu/index.html`, ~10800 satır). Tablolar `restaurants`, `products`, `categories`, `events`; RPC çağrıları; görseller `NDMedia` ile.
 - `/menu/demo` demo ürün görselleri (.webp).
+- `katalog/urunler/<seri>/` katalog ürün görselleri (aqua, atlantis, bien, eva, icon, lego, moon, part, royal).
+- `katalog/SPEC-vade.md`: TL vade özelliği (uygulandı).
 - Bağlantı haritası: `tools/graphify/graph.html` ve `graph.json`.
 
 ## Supabase ve medya
-- Tek Supabase projesi (URL `assets/site-data.js` içinde). Tablolar: `restaurants`, `catalogs`, `site_content`. Yazma yetkisi RPC `media_can_write` ile denetlenir.
+- Tek Supabase projesi (URL `assets/site-data.js` içinde). Tablolar: `restaurants`, `catalogs`, `site_content`, `products`, `categories`, `events`. Yazma yetkisi RPC `media_can_write` ile denetlenir.
 - Anahtar yalnızca publishable olabilir. `service_role` veya gizli anahtar dosyaya yazılmaz.
 - Tüm yüklemeler `assets/media.js` (`NDMedia`) üzerinden. `BASE = https://media.neardiji.com` → Cloudflare R2 `neardiji-media`. Worker kodu `cloudflare/media-worker`.
 - Geçiş notları ve kalan işler: `cloudflare/GECIS.md` (Supabase Storage kovaları bir hafta sonra silinecek, GitHub Pages kapatılabilir).
@@ -31,6 +34,7 @@ Bağımsız proje. Ofischi, ASODA, NEAR, PRONTO ile dosya, repo, anahtar veya ku
 
 ## Kilitli kararlar
 - Abonelik durumları: `trial` (bitiş `trial_ends`) ve `active` (bitiş `paid_until`). Adlar ve alanlar değiştirilmez.
+- Katalog TL vade: tek oran, vade iskontodan sonra uygulanır, peşin etiketi "Peşin" (`katalog/SPEC-vade.md`).
 - Yeni CSP/`connect-src` ihtiyacı çıkarsa tüm sayfalardaki listeler birlikte güncellenir.
 
 ## Çalışma kuralları

@@ -77,6 +77,28 @@
    "kind": "hub"
   },
   {
+   "id": "menu",
+   "label": "NearMenu Premium (/menu)",
+   "type": "page",
+   "desc": "QR/NFC dijital menü: restoran, ürün, kategori, etkinlik; görsel yükleme NDMedia ile (~10800 satır).",
+   "file": "menu/index.html",
+   "kind": "hub"
+  },
+  {
+   "id": "urunler",
+   "label": "katalog/urunler",
+   "type": "data",
+   "desc": "Katalog ürün görselleri: aqua, atlantis, bien, eva, icon, lego, moon, part, royal serileri (46 dosya).",
+   "file": "katalog/urunler"
+  },
+  {
+   "id": "spec_vade",
+   "label": "SPEC-vade.md",
+   "type": "cfg",
+   "desc": "Katalog TL vade (vadeli/vadesiz fiyat) spesifikasyonu. Uygulandı: tek oran, vade iskontodan sonra, peşin etiketi \"Peşin\".",
+   "file": "katalog/SPEC-vade.md"
+  },
+  {
    "id": "menudemo",
    "label": "Demo menü görselleri",
    "type": "data",
@@ -170,7 +192,7 @@
    "id": "sb_rest",
    "label": "REST tabloları",
    "type": "data",
-   "desc": "restaurants, catalogs, site_content (+ paid_until alanları)."
+   "desc": "restaurants, catalogs, site_content, products, categories, events (+ paid_until alanları)."
   },
   {
    "id": "sb_rpc",
@@ -891,8 +913,68 @@
   },
   {
    "from": "home",
+   "to": "menu",
+   "rel": "/menu bağlantısı"
+  },
+  {
+   "from": "menu",
    "to": "menudemo",
-   "rel": "/menu demo"
+   "rel": "demo görseller"
+  },
+  {
+   "from": "menu",
+   "to": "media",
+   "rel": "yükler"
+  },
+  {
+   "from": "menu",
+   "to": "qr",
+   "rel": "yükler"
+  },
+  {
+   "from": "menu",
+   "to": "sb",
+   "rel": "REST/RPC"
+  },
+  {
+   "from": "menu",
+   "to": "sb_rest",
+   "rel": "restaurants, products, categories, events"
+  },
+  {
+   "from": "menu",
+   "to": "sb_rpc",
+   "rel": "rpc"
+  },
+  {
+   "from": "menu",
+   "to": "manifest",
+   "rel": "bildirim"
+  },
+  {
+   "from": "menu",
+   "to": "icons",
+   "rel": "ikon"
+  },
+  {
+   "from": "admin821",
+   "to": "menu",
+   "rel": "menuUrl()"
+  },
+  {
+   "from": "katalog",
+   "to": "urunler",
+   "rel": "ürün görselleri"
+  },
+  {
+   "from": "spec_vade",
+   "to": "katalog",
+   "rel": "tanımlar"
+  },
+  {
+   "from": "ayse",
+   "to": "sb_rpc",
+   "rel": "rpc"
   },
   {
    "from": "katalog",
