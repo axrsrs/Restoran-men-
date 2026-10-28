@@ -19,3 +19,13 @@
 /ayse/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
+
+# PRONTO demoları: sabit sürümlü kütüphaneler, görseller ve adres listeleri tarayıcıda kalır
+/pronto/siparis/lib/*
+  Cache-Control: public, max-age=2592000
+
+/pronto/ortak/gorseller.js
+  Cache-Control: public, max-age=604800
+
+/pronto/teklif/adres/*
+  Cache-Control: public, max-age=2592000
