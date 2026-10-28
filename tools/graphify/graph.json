@@ -1,0 +1,1733 @@
+{
+ "types": [
+  {
+   "id": "page",
+   "name": "Sayfa",
+   "color": "#d4af37"
+  },
+  {
+   "id": "js",
+   "name": "Betik",
+   "color": "#5ab0ff"
+  },
+  {
+   "id": "fn",
+   "name": "Fonksiyon",
+   "color": "#7d8aa8"
+  },
+  {
+   "id": "ext",
+   "name": "Dış servis",
+   "color": "#e0655a"
+  },
+  {
+   "id": "data",
+   "name": "Veri/Tablo",
+   "color": "#5fcf8f"
+  },
+  {
+   "id": "cfg",
+   "name": "Yapılandırma",
+   "color": "#b58cff"
+  },
+  {
+   "id": "tool",
+   "name": "Araç",
+   "color": "#ff9f43"
+  }
+ ],
+ "nodes": [
+  {
+   "id": "home",
+   "label": "Ana sayfa",
+   "type": "page",
+   "desc": "neardiji.com vitrini: ürünler, iletişim, WhatsApp/e-posta/Instagram bağlantıları.",
+   "file": "index.html",
+   "kind": "hub"
+  },
+  {
+   "id": "p404",
+   "label": "404 sayfası",
+   "type": "page",
+   "desc": "Bulunamayan adresler için (not_found_handling: 404-page).",
+   "file": "404.html"
+  },
+  {
+   "id": "admin821",
+   "label": "Süper yönetici (/821)",
+   "type": "page",
+   "desc": "Restoran ve katalog kayıtları, abonelik/deneme durumu, giriş ve paylaşım metni. noindex, no-store.",
+   "file": "821/index.html",
+   "kind": "hub"
+  },
+  {
+   "id": "ayse",
+   "label": "Site paneli (/ayse)",
+   "type": "page",
+   "desc": "Ana sayfa içeriğini (site_content) düzenleyen panel. noindex, no-store.",
+   "file": "ayse/index.html",
+   "kind": "hub"
+  },
+  {
+   "id": "katalog",
+   "label": "Ürün kataloğu (/katalog)",
+   "type": "page",
+   "desc": "Müşteri kataloğu düzenleyici/görüntüleyici, 7500+ satır.",
+   "file": "katalog/index.html",
+   "kind": "hub"
+  },
+  {
+   "id": "menudemo",
+   "label": "Demo menü görselleri",
+   "type": "data",
+   "desc": "menu/demo: 55 adet .webp ürün görseli (uzun süreli önbellek).",
+   "file": "menu/demo"
+  },
+  {
+   "id": "sitedata",
+   "label": "site-data.js",
+   "type": "js",
+   "desc": "ND_DEFAULT varsayılan içerik ve Supabase istemci ayarı.",
+   "file": "assets/site-data.js"
+  },
+  {
+   "id": "media",
+   "label": "media.js (NDMedia)",
+   "type": "js",
+   "desc": "Görsel yükleme/silme/URL: media.neardiji.com (R2) ya da Supabase Storage.",
+   "file": "assets/media.js"
+  },
+  {
+   "id": "qr",
+   "label": "qr.js",
+   "type": "js",
+   "desc": "QR kod üretici (2400 satır, yönetici ve katalogda).",
+   "file": "assets/qr.js"
+  },
+  {
+   "id": "liquid",
+   "label": "liquid-hero.js",
+   "type": "js",
+   "desc": "Ana sayfa hero animasyonu.",
+   "file": "assets/liquid-hero.js"
+  },
+  {
+   "id": "bulut",
+   "label": "katalog/bulut.js",
+   "type": "js",
+   "desc": "Katalog bulut katmanı: giriş, oturum yenileme, kaydet, görsel taşıma.",
+   "file": "katalog/bulut.js"
+  },
+  {
+   "id": "manifest",
+   "label": "site.webmanifest",
+   "type": "cfg",
+   "desc": "PWA bildirimi.",
+   "file": "site.webmanifest"
+  },
+  {
+   "id": "headers",
+   "label": "_headers",
+   "type": "cfg",
+   "desc": "Güvenlik başlıkları, önbellek, /821 ve /ayse için noindex.",
+   "file": "_headers"
+  },
+  {
+   "id": "wrangler",
+   "label": "wrangler.jsonc",
+   "type": "cfg",
+   "desc": "Cloudflare Workers statik site (neardiji).",
+   "file": "wrangler.jsonc"
+  },
+  {
+   "id": "assetsignore",
+   "label": ".assetsignore",
+   "type": "cfg",
+   "desc": "tools, cloudflare, *.md yayına girmez.",
+   "file": ".assetsignore"
+  },
+  {
+   "id": "cname",
+   "label": "CNAME",
+   "type": "cfg",
+   "desc": "neardiji.com",
+   "file": "CNAME"
+  },
+  {
+   "id": "icons",
+   "label": "assets/icons",
+   "type": "data",
+   "desc": "Favicon, apple-touch, 192/512 ve maskable ikonlar.",
+   "file": "assets/icons"
+  },
+  {
+   "id": "sb",
+   "label": "Supabase",
+   "type": "ext",
+   "desc": "Auth, REST (restaurants, catalogs, site_content), RPC, Storage."
+  },
+  {
+   "id": "sb_rest",
+   "label": "REST tabloları",
+   "type": "data",
+   "desc": "restaurants, catalogs, site_content (+ paid_until alanları)."
+  },
+  {
+   "id": "sb_rpc",
+   "label": "RPC fonksiyonları",
+   "type": "data",
+   "desc": "12 rpc çağrısı; media_can_write yazma yetkisini denetler."
+  },
+  {
+   "id": "r2",
+   "label": "Cloudflare R2: neardiji-media",
+   "type": "ext",
+   "desc": "Medya deposu (MEDIA bağlama)."
+  },
+  {
+   "id": "cf",
+   "label": "Cloudflare Workers",
+   "type": "ext",
+   "desc": "Statik site yayını, GitHub push ile otomatik."
+  },
+  {
+   "id": "fonts",
+   "label": "Google Fonts",
+   "type": "ext",
+   "desc": "Geist, Instrument Serif, Inter, Cormorant Garamond."
+  },
+  {
+   "id": "unpkg",
+   "label": "unpkg (React)",
+   "type": "ext",
+   "desc": "Katalog sayfası React yükler; sh21-bulut.py sürümü sabitler ve CSP ekler."
+  },
+  {
+   "id": "wa",
+   "label": "WhatsApp (wa.me)",
+   "type": "ext",
+   "desc": "Yöneticiden müşteriye paylaşım bağlantısı."
+  },
+  {
+   "id": "worker",
+   "label": "media-worker",
+   "type": "js",
+   "desc": "media.neardiji.com: GET/HEAD önbellekli okuma, PUT/DELETE yetkili yazma, CORS.",
+   "file": "cloudflare/media-worker/src/index.js",
+   "kind": "hub"
+  },
+  {
+   "id": "workercfg",
+   "label": "media-worker wrangler.toml",
+   "type": "cfg",
+   "desc": "Özel alan adı media.neardiji.com, R2 bağlaması.",
+   "file": "cloudflare/media-worker/wrangler.toml"
+  },
+  {
+   "id": "gecis",
+   "label": "GECIS.md",
+   "type": "cfg",
+   "desc": "Supabase Storage → R2 geçiş notları.",
+   "file": "cloudflare/GECIS.md"
+  },
+  {
+   "id": "sh21",
+   "label": "sh21-bulut.py",
+   "type": "tool",
+   "desc": "Katalog sayfasına bulut katmanını enjekte eden yama betiği (React sabitleme, CSP).",
+   "file": "tools/sh21-bulut.py"
+  },
+  {
+   "id": "sql",
+   "label": "abonelik.sql",
+   "type": "tool",
+   "desc": "restaurants ve catalogs tablolarına paid_until (date) ekler.",
+   "file": "tools/sql/abonelik.sql"
+  },
+  {
+   "id": "admin821::toast",
+   "label": "toast()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1681
+  },
+  {
+   "id": "admin821::safeGet",
+   "label": "safeGet()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1689
+  },
+  {
+   "id": "admin821::safeSet",
+   "label": "safeSet()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1690
+  },
+  {
+   "id": "admin821::safeDel",
+   "label": "safeDel()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1691
+  },
+  {
+   "id": "admin821::slugify",
+   "label": "slugify()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1693
+  },
+  {
+   "id": "admin821::menuUrl",
+   "label": "menuUrl()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1703
+  },
+  {
+   "id": "admin821::katalogUrl",
+   "label": "katalogUrl()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1709
+  },
+  {
+   "id": "admin821::fmtDate",
+   "label": "fmtDate()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1738
+  },
+  {
+   "id": "admin821::daysLeft",
+   "label": "daysLeft()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1744
+  },
+  {
+   "id": "admin821::isoPlus",
+   "label": "isoPlus()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1752
+  },
+  {
+   "id": "admin821::copyText",
+   "label": "copyText()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1757
+  },
+  {
+   "id": "admin821::storeSession",
+   "label": "storeSession()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1776
+  },
+  {
+   "id": "admin821::authReq",
+   "label": "authReq()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1781
+  },
+  {
+   "id": "admin821::toSession",
+   "label": "toSession()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1793
+  },
+  {
+   "id": "admin821::ensureFresh",
+   "label": "ensureFresh()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1798
+  },
+  {
+   "id": "admin821::sb",
+   "label": "sb()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1808
+  },
+  {
+   "id": "admin821::statusOf",
+   "label": "statusOf()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1834
+  },
+  {
+   "id": "admin821::endOf",
+   "label": "endOf()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1844
+  },
+  {
+   "id": "admin821::endingSoon",
+   "label": "endingSoon()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1845
+  },
+  {
+   "id": "admin821::render",
+   "label": "render()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1855
+  },
+  {
+   "id": "admin821::renderLogin",
+   "label": "renderLogin()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1875
+  },
+  {
+   "id": "admin821::themeBtn",
+   "label": "themeBtn()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1913
+  },
+  {
+   "id": "admin821::showErr",
+   "label": "showErr()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1926
+  },
+  {
+   "id": "admin821::renderApp",
+   "label": "renderApp()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 1931
+  },
+  {
+   "id": "admin821::renderCard",
+   "label": "renderCard()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2011
+  },
+  {
+   "id": "admin821::renderModal",
+   "label": "renderModal()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2060
+  },
+  {
+   "id": "admin821::shareText",
+   "label": "shareText()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2226
+  },
+  {
+   "id": "admin821::bindLogin",
+   "label": "bindLogin()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2256
+  },
+  {
+   "id": "admin821::afterLogin",
+   "label": "afterLogin()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2295
+  },
+  {
+   "id": "admin821::loadRestaurants",
+   "label": "loadRestaurants()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2325
+  },
+  {
+   "id": "admin821::reload",
+   "label": "reload()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2332
+  },
+  {
+   "id": "admin821::bindApp",
+   "label": "bindApp()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2341
+  },
+  {
+   "id": "admin821::openCreate",
+   "label": "openCreate()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2386
+  },
+  {
+   "id": "admin821::readForm",
+   "label": "readForm()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2392
+  },
+  {
+   "id": "admin821::closeModal",
+   "label": "closeModal()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2403
+  },
+  {
+   "id": "admin821::bindModal",
+   "label": "bindModal()",
+   "type": "fn",
+   "desc": "",
+   "file": "821/index.html",
+   "line": 2410
+  },
+  {
+   "id": "bulut::lsGet",
+   "label": "lsGet()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 20
+  },
+  {
+   "id": "bulut::lsSet",
+   "label": "lsSet()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 21
+  },
+  {
+   "id": "bulut::lsDel",
+   "label": "lsDel()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 22
+  },
+  {
+   "id": "bulut::storeSession",
+   "label": "storeSession()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 25
+  },
+  {
+   "id": "bulut::toSession",
+   "label": "toSession()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 26
+  },
+  {
+   "id": "bulut::esc",
+   "label": "esc()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 30
+  },
+  {
+   "id": "bulut::authReq",
+   "label": "authReq()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 32
+  },
+  {
+   "id": "bulut::ensureFresh",
+   "label": "ensureFresh()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 40
+  },
+  {
+   "id": "bulut::sb",
+   "label": "sb()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 48
+  },
+  {
+   "id": "bulut::fatal",
+   "label": "fatal()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 67
+  },
+  {
+   "id": "bulut::loadRecord",
+   "label": "loadRecord()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 100
+  },
+  {
+   "id": "bulut::dataUrlToBlob",
+   "label": "dataUrlToBlob()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 107
+  },
+  {
+   "id": "bulut::sha",
+   "label": "sha()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 115
+  },
+  {
+   "id": "bulut::uploadDataUrl",
+   "label": "uploadDataUrl()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 120
+  },
+  {
+   "id": "bulut::moveImages",
+   "label": "moveImages()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 131
+  },
+  {
+   "id": "bulut::canEdit",
+   "label": "canEdit()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 139
+  },
+  {
+   "id": "bulut::doSave",
+   "label": "doSave()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 140
+  },
+  {
+   "id": "bulut::save",
+   "label": "save()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 153
+  },
+  {
+   "id": "bulut::modal",
+   "label": "modal()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 178
+  },
+  {
+   "id": "bulut::loadAccess",
+   "label": "loadAccess()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 186
+  },
+  {
+   "id": "bulut::askNewPassword",
+   "label": "askNewPassword()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 192
+  },
+  {
+   "id": "bulut::login",
+   "label": "login()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 218
+  },
+  {
+   "id": "bulut::requireAdmin",
+   "label": "requireAdmin()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 253
+  },
+  {
+   "id": "bulut::logout",
+   "label": "logout()",
+   "type": "fn",
+   "desc": "",
+   "file": "katalog/bulut.js",
+   "line": 263
+  },
+  {
+   "id": "media::enc",
+   "label": "enc()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/media.js",
+   "line": 12
+  },
+  {
+   "id": "media::url",
+   "label": "url()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/media.js",
+   "line": 13
+  },
+  {
+   "id": "media::parse",
+   "label": "parse()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/media.js",
+   "line": 16
+  },
+  {
+   "id": "media::fail",
+   "label": "fail()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/media.js",
+   "line": 30
+  },
+  {
+   "id": "media::put",
+   "label": "put()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/media.js",
+   "line": 38
+  },
+  {
+   "id": "media::del",
+   "label": "del()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/media.js",
+   "line": 48
+  }
+ ],
+ "edges": [
+  {
+   "from": "home",
+   "to": "sitedata",
+   "rel": "yükler"
+  },
+  {
+   "from": "home",
+   "to": "liquid",
+   "rel": "yükler"
+  },
+  {
+   "from": "ayse",
+   "to": "sitedata",
+   "rel": "yükler"
+  },
+  {
+   "from": "ayse",
+   "to": "media",
+   "rel": "yükler"
+  },
+  {
+   "from": "katalog",
+   "to": "media",
+   "rel": "yükler"
+  },
+  {
+   "from": "katalog",
+   "to": "bulut",
+   "rel": "yükler"
+  },
+  {
+   "from": "katalog",
+   "to": "qr",
+   "rel": "yükler"
+  },
+  {
+   "from": "admin821",
+   "to": "qr",
+   "rel": "yükler"
+  },
+  {
+   "from": "home",
+   "to": "manifest",
+   "rel": "bildirim"
+  },
+  {
+   "from": "home",
+   "to": "icons",
+   "rel": "ikon"
+  },
+  {
+   "from": "admin821",
+   "to": "manifest",
+   "rel": "bildirim"
+  },
+  {
+   "from": "admin821",
+   "to": "icons",
+   "rel": "ikon"
+  },
+  {
+   "from": "ayse",
+   "to": "manifest",
+   "rel": "bildirim"
+  },
+  {
+   "from": "ayse",
+   "to": "icons",
+   "rel": "ikon"
+  },
+  {
+   "from": "katalog",
+   "to": "manifest",
+   "rel": "bildirim"
+  },
+  {
+   "from": "katalog",
+   "to": "icons",
+   "rel": "ikon"
+  },
+  {
+   "from": "p404",
+   "to": "manifest",
+   "rel": "bildirim"
+  },
+  {
+   "from": "p404",
+   "to": "icons",
+   "rel": "ikon"
+  },
+  {
+   "from": "home",
+   "to": "fonts",
+   "rel": "yazı tipi"
+  },
+  {
+   "from": "admin821",
+   "to": "fonts",
+   "rel": "yazı tipi"
+  },
+  {
+   "from": "ayse",
+   "to": "fonts",
+   "rel": "yazı tipi"
+  },
+  {
+   "from": "katalog",
+   "to": "fonts",
+   "rel": "yazı tipi"
+  },
+  {
+   "from": "katalog",
+   "to": "unpkg",
+   "rel": "React"
+  },
+  {
+   "from": "home",
+   "to": "menudemo",
+   "rel": "/menu demo"
+  },
+  {
+   "from": "katalog",
+   "to": "menudemo",
+   "rel": "örnek görsel"
+  },
+  {
+   "from": "admin821",
+   "to": "sb",
+   "rel": "REST/Auth"
+  },
+  {
+   "from": "ayse",
+   "to": "sb",
+   "rel": "REST/Auth"
+  },
+  {
+   "from": "katalog",
+   "to": "sb",
+   "rel": "REST/Auth"
+  },
+  {
+   "from": "home",
+   "to": "sb",
+   "rel": "site_content okur"
+  },
+  {
+   "from": "admin821",
+   "to": "sb_rest",
+   "rel": "restaurants, catalogs"
+  },
+  {
+   "from": "ayse",
+   "to": "sb_rest",
+   "rel": "site_content"
+  },
+  {
+   "from": "katalog",
+   "to": "sb_rest",
+   "rel": "catalogs"
+  },
+  {
+   "from": "home",
+   "to": "sb_rest",
+   "rel": "site_content"
+  },
+  {
+   "from": "bulut",
+   "to": "sb",
+   "rel": "auth/v1, REST"
+  },
+  {
+   "from": "sitedata",
+   "to": "sb",
+   "rel": "URL/anahtar"
+  },
+  {
+   "from": "media",
+   "to": "sb",
+   "rel": "Storage (yedek)"
+  },
+  {
+   "from": "media",
+   "to": "worker",
+   "rel": "PUT/DELETE/GET"
+  },
+  {
+   "from": "worker",
+   "to": "r2",
+   "rel": "nesne depolama"
+  },
+  {
+   "from": "worker",
+   "to": "sb_rpc",
+   "rel": "media_can_write"
+  },
+  {
+   "from": "sb_rpc",
+   "to": "sb",
+   "rel": "çalışır"
+  },
+  {
+   "from": "sb_rest",
+   "to": "sb",
+   "rel": "tablolar"
+  },
+  {
+   "from": "admin821",
+   "to": "wa",
+   "rel": "paylaşım"
+  },
+  {
+   "from": "workercfg",
+   "to": "worker",
+   "rel": "yapılandırır"
+  },
+  {
+   "from": "workercfg",
+   "to": "r2",
+   "rel": "bağlama"
+  },
+  {
+   "from": "gecis",
+   "to": "worker",
+   "rel": "anlatır"
+  },
+  {
+   "from": "gecis",
+   "to": "media",
+   "rel": "BASE değişimi"
+  },
+  {
+   "from": "sh21",
+   "to": "katalog",
+   "rel": "yamalar"
+  },
+  {
+   "from": "sh21",
+   "to": "unpkg",
+   "rel": "sürüm sabitler"
+  },
+  {
+   "from": "sql",
+   "to": "sb_rest",
+   "rel": "paid_until ekler"
+  },
+  {
+   "from": "admin821",
+   "to": "sql",
+   "rel": "paid_until kullanır"
+  },
+  {
+   "from": "headers",
+   "to": "admin821",
+   "rel": "noindex"
+  },
+  {
+   "from": "headers",
+   "to": "ayse",
+   "rel": "noindex"
+  },
+  {
+   "from": "headers",
+   "to": "menudemo",
+   "rel": "önbellek"
+  },
+  {
+   "from": "wrangler",
+   "to": "cf",
+   "rel": "yayın"
+  },
+  {
+   "from": "assetsignore",
+   "to": "cf",
+   "rel": "hariç tutar"
+  },
+  {
+   "from": "cname",
+   "to": "cf",
+   "rel": "alan adı"
+  },
+  {
+   "from": "cf",
+   "to": "p404",
+   "rel": "404 sayfası"
+  },
+  {
+   "from": "wrangler",
+   "to": "headers",
+   "rel": "başlıklar"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::toast",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::safeGet",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::safeSet",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::safeDel",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::slugify",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::menuUrl",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::katalogUrl",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::fmtDate",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::daysLeft",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::isoPlus",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::copyText",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::storeSession",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::authReq",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::toSession",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::ensureFresh",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::sb",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::statusOf",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::endOf",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::endingSoon",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::render",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::renderLogin",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::themeBtn",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::showErr",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::renderApp",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::renderCard",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::renderModal",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::shareText",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::bindLogin",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::afterLogin",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::loadRestaurants",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::reload",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::bindApp",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::openCreate",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::readForm",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::closeModal",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821",
+   "to": "admin821::bindModal",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::lsGet",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::lsSet",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::lsDel",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::storeSession",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::toSession",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::esc",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::authReq",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::ensureFresh",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::sb",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::fatal",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::loadRecord",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::dataUrlToBlob",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::sha",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::uploadDataUrl",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::moveImages",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::canEdit",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::doSave",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::save",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::modal",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::loadAccess",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::askNewPassword",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::login",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::requireAdmin",
+   "rel": "içerir"
+  },
+  {
+   "from": "bulut",
+   "to": "bulut::logout",
+   "rel": "içerir"
+  },
+  {
+   "from": "media",
+   "to": "media::enc",
+   "rel": "içerir"
+  },
+  {
+   "from": "media",
+   "to": "media::url",
+   "rel": "içerir"
+  },
+  {
+   "from": "media",
+   "to": "media::parse",
+   "rel": "içerir"
+  },
+  {
+   "from": "media",
+   "to": "media::fail",
+   "rel": "içerir"
+  },
+  {
+   "from": "media",
+   "to": "media::put",
+   "rel": "içerir"
+  },
+  {
+   "from": "media",
+   "to": "media::del",
+   "rel": "içerir"
+  },
+  {
+   "from": "admin821::katalogUrl",
+   "to": "admin821::safeGet",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::katalogUrl",
+   "to": "admin821::menuUrl",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::copyText",
+   "to": "admin821::toast",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::ensureFresh",
+   "to": "admin821::storeSession",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::ensureFresh",
+   "to": "admin821::authReq",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::ensureFresh",
+   "to": "admin821::toSession",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::sb",
+   "to": "admin821::ensureFresh",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::statusOf",
+   "to": "admin821::daysLeft",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::endingSoon",
+   "to": "admin821::daysLeft",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::endingSoon",
+   "to": "admin821::statusOf",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::endingSoon",
+   "to": "admin821::endOf",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::render",
+   "to": "admin821::renderLogin",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::render",
+   "to": "admin821::renderApp",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::render",
+   "to": "admin821::renderModal",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::render",
+   "to": "admin821::bindLogin",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::render",
+   "to": "admin821::bindApp",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::render",
+   "to": "admin821::bindModal",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::renderLogin",
+   "to": "admin821::safeGet",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::renderLogin",
+   "to": "admin821::themeBtn",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::themeBtn",
+   "to": "admin821::safeSet",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::renderApp",
+   "to": "admin821::statusOf",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::renderApp",
+   "to": "admin821::endingSoon",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::renderApp",
+   "to": "admin821::themeBtn",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::renderCard",
+   "to": "admin821::fmtDate",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::renderCard",
+   "to": "admin821::daysLeft",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::renderCard",
+   "to": "admin821::statusOf",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::renderModal",
+   "to": "admin821::shareText",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::shareText",
+   "to": "admin821::fmtDate",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindLogin",
+   "to": "admin821::toast",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindLogin",
+   "to": "admin821::safeSet",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindLogin",
+   "to": "admin821::storeSession",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindLogin",
+   "to": "admin821::authReq",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindLogin",
+   "to": "admin821::toSession",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindLogin",
+   "to": "admin821::ensureFresh",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindLogin",
+   "to": "admin821::showErr",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindLogin",
+   "to": "admin821::afterLogin",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::afterLogin",
+   "to": "admin821::storeSession",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::afterLogin",
+   "to": "admin821::render",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::afterLogin",
+   "to": "admin821::showErr",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::afterLogin",
+   "to": "admin821::loadRestaurants",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::reload",
+   "to": "admin821::toast",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::reload",
+   "to": "admin821::render",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::reload",
+   "to": "admin821::loadRestaurants",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindApp",
+   "to": "admin821::safeSet",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindApp",
+   "to": "admin821::storeSession",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindApp",
+   "to": "admin821::render",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindApp",
+   "to": "admin821::reload",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindApp",
+   "to": "admin821::openCreate",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::openCreate",
+   "to": "admin821::render",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::closeModal",
+   "to": "admin821::render",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::closeModal",
+   "to": "admin821::reload",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::toast",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::slugify",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::daysLeft",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::isoPlus",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::copyText",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::ensureFresh",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::sb",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::render",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::showErr",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::afterLogin",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::loadRestaurants",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::reload",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::readForm",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::bindModal",
+   "to": "admin821::closeModal",
+   "rel": "çağırır"
+  },
+  {
+   "from": "admin821::sb",
+   "to": "sb",
+   "rel": "REST"
+  },
+  {
+   "from": "admin821::authReq",
+   "to": "sb",
+   "rel": "auth/v1"
+  }
+ ]
+}
