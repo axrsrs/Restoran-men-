@@ -8015,6 +8015,9 @@ function newProduct(name,price){
 /* ---------- canlı önizleme ---------- */
 
 function previewUrl(){
+ /* Kısa adres (neardiji.com/firma) 404 yönlendirmesinde parametre kaybolur; doğrudan uygulamayı aç */
+ if(PRETTY_URLS)
+  return location.origin+"/menu/?r="+encodeURIComponent(RESTAURANT_SLUG)+"&onizleme=1";
  const u=new URL(location.href);
  u.hash="";
  u.searchParams.set("onizleme","1");
