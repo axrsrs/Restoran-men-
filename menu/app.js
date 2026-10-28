@@ -423,6 +423,47 @@ function loadSession(){
  }catch(e){cloud.session=null}
 }
 
+/* ---------- cihaz deposu (IndexedDB): oturum yedeği, menü önbelleği, cihazdaki görseller ---------- */
+
+let dbPromise=null;
+
+function openMediaDB(){
+ if(dbPromise)return dbPromise;
+ dbPromise=new Promise((resolve,reject)=>{
+  if(!("indexedDB" in window)){reject(new Error("IndexedDB yok."));return}
+  const req=indexedDB.open(DB_NAME,DB_VERSION);
+  req.onupgradeneeded=e=>{
+   const db=e.target.result;
+   if(!db.objectStoreNames.contains(MEDIA_STORE))db.createObjectStore(MEDIA_STORE);
+  };
+  req.onsuccess=()=>resolve(req.result);
+  req.onerror=()=>{dbPromise=null;reject(req.error)};
+ });
+ return dbPromise;
+}
+
+async function mediaPut(key,value){
+ const db=await openMediaDB();
+ return new Promise((resolve,reject)=>{
+  const req=db.transaction(MEDIA_STORE,"readwrite").objectStore(MEDIA_STORE).put(value,key);
+  req.onsuccess=()=>resolve(true);
+  req.onerror=()=>reject(req.error);
+ });
+}
+
+async function mediaGet(key){
+ try{
+  const db=await openMediaDB();
+  return await new Promise((resolve,reject)=>{
+   const req=db.transaction(MEDIA_STORE,"readonly").objectStore(MEDIA_STORE).get(key);
+   req.onsuccess=()=>resolve(req.result||null);
+   req.onerror=()=>reject(req.error);
+  });
+ }catch(e){
+  return null;
+ }
+}
+
 function storeSession(s){
  cloud.session=s;
  if(s)safeSet(SESSION_KEY,JSON.stringify(s));
@@ -1197,12 +1238,19 @@ function bindCloudLogin(){
 
    btn.disabled=false;btn.textContent="Giriş Yap";
 
+   /* yalnız gerçek bağlantı hatasında "internet" denir; diğer hatalar ayrı gösterilir */
+   const baglanti=e instanceof TypeError&&/fetch|network|load failed/i.test(e.message||"");
+   if(!baglanti&&!e.status)console.error("Giriş hatası:",e);
    showLoginError(
     e.status===400||e.code==="invalid_credentials"
     ?"E-posta veya şifre yanlış."
     :e.status===429
     ?"Çok fazla deneme yapıldı. Biraz bekleyip tekrar deneyin."
-    :"Giriş yapılamadı. İnternet bağlantısını kontrol edin."
+    :baglanti
+    ?"Giriş yapılamadı. İnternet bağlantısını kontrol edin."
+    :e.status
+    ?"Sunucu şu an yanıt vermiyor ("+e.status+"). Biraz sonra tekrar deneyin."
+    :"Giriş sırasında beklenmeyen bir hata oluştu. Sayfayı yenileyip tekrar deneyin."
    );
   }
  };
