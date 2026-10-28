@@ -1115,59 +1115,46 @@ async function enterAdmin(){
 
 let loginStep="login";
 
+/* Giriş ekranındaki tema seçimi yönetim panelinin modudur (nmPanelMode) */
+NDGiris.temaAyar({
+ oku:()=>panelMode(),
+ yaz:t=>{safeSet("nmPanelMode",t);applyTheme()}
+});
+
 function renderCloudLogin(){
 
  if(!adminOpen||adminAuthenticated)return "";
 
+ const G=NDGiris;
  const lastEmail=safeGet("nearMenuLastEmail")||"";
 
  let body="";
 
  if(loginStep==="checking"){
 
-  body=`
-   <div class="lg-loader">${LOADER_HTML}</div>
-   <p class="lg-sub">Oturum kontrol ediliyor...</p>`;
+  body=G.baslik("NearMenu")+G.yukleniyor("Oturum kontrol ediliyor...");
 
  }else if(loginStep==="newPassword"){
 
-  body=`
-   <div class="lg-logo" aria-hidden="true"></div>
-   <h2 class="lg-header">Yeni Şifre</h2>
-   <p class="lg-sub">İlk girişiniz. Geçici şifre yerine kendi şifrenizi belirleyin (en az 8 karakter).</p>
-   <input id="newPassword1" class="lg-input" type="password" autocomplete="new-password" placeholder="Yeni şifre">
-   <input id="newPassword2" class="lg-input" type="password" autocomplete="new-password" placeholder="Yeni şifre (tekrar)">
-   <button class="lg-button sign-in" id="setPasswordButton" type="button">Şifreyi Kaydet</button>
-   <div class="lg-error loginError" id="loginError"></div>`;
+  body=
+   G.baslik("Yeni Şifre","İlk girişiniz. Geçici şifre yerine kendi şifrenizi belirleyin (en az 8 karakter).")+
+   G.alan({id:"newPassword1",tur:"password",yer:"Yeni şifre",oto:"new-password"})+
+   G.alan({id:"newPassword2",tur:"password",yer:"Yeni şifre (tekrar)",oto:"new-password"})+
+   G.buton("setPasswordButton","Şifreyi Kaydet")+
+   G.hata("loginError","loginError");
 
  }else{
 
-  body=`
-   <div class="lg-logo" aria-hidden="true"></div>
-   <h2 class="lg-header">Hoş Geldiniz!</h2>
-   <p class="lg-sub">${esc(DATA.name||"Restoran")} menüsünü düzenlemek için giriş yapın.</p>
-   <input id="loginEmail" class="lg-input" type="email" inputmode="email" autocomplete="username" placeholder="E-posta" value="${esc(lastEmail)}">
-   <input id="loginPassword" class="lg-input" type="password" autocomplete="current-password" placeholder="Şifre">
-   <button class="lg-button sign-in" id="cloudLoginButton" type="button">Giriş Yap</button>
-   <div class="lg-error loginError" id="loginError"></div>
-   <p class="lg-footer">
-    Hesabınız yok mu? Hesaplar işletmenize özel olarak açılır.
-    <br>
-    <button class="lg-link" id="forgotPassword" type="button">Şifremi unuttum</button>
-   </p>`;
+  body=
+   G.baslik("Hoş Geldiniz",`${DATA.name||"Restoran"} menüsünü düzenlemek için giriş yapın.`)+
+   G.alan({id:"loginEmail",tur:"email",yer:"E-posta",deger:lastEmail})+
+   G.alan({id:"loginPassword",tur:"password",yer:"Şifre"})+
+   G.buton("cloudLoginButton","Giriş Yap")+
+   G.hata("loginError","loginError")+
+   `<p class="ndg-foot">Hesabınız yok mu? Hesaplar işletmenize özel olarak açılır.<br><button class="ndg-link" id="forgotPassword" type="button">Şifremi unuttum</button></p>`;
  }
 
- return `
- <div class="adminLoginOverlay">
-  <div class="lg-container">
-   <div class="lg-box">
-    <button class="lg-close" id="loginClose" type="button" aria-label="Kapat">×</button>
-    <div class="lg-form">
-     ${body}
-    </div>
-   </div>
-  </div>
- </div>`;
+ return `<div class="adminLoginOverlay">${G.sayfa(body,{kapat:"loginClose"})}</div>`;
 }
 
 function showLoginError(msg){
@@ -7071,6 +7058,7 @@ function bindAdminExtras(){
  $("themeToggle")?.addEventListener("click",e=>toggleColorMode(e.currentTarget));
 
  if(CLOUD){
+  NDGiris.bagla(document.querySelector(".adminLoginOverlay"));
   bindCloudLogin();
   bindAccountCard();
  }

@@ -201,6 +201,7 @@ function render(){
 
  if(view==="login"||view==="newPassword"){
   app.innerHTML=renderLogin();
+  NDGiris.bagla(app);
   bindLogin();
   return;
  }
@@ -210,40 +211,36 @@ function render(){
  if(modal)bindModal();
 }
 
+/* Giriş ekranındaki tema seçimi panelin kendi temasıdır */
+NDGiris.temaAyar({
+ oku:()=>document.documentElement.dataset.theme==="light"?"light":"dark",
+ yaz:t=>{
+  document.documentElement.dataset.theme=t;
+  safeSet("nd821Theme",t);
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==="light"?"#EBE9E5":"#111110";
+ }
+});
+
 function renderLogin(){
 
- let body;
+ const G=NDGiris;
 
  if(view==="newPassword"){
-  body=`
-   <div class="lg-logo" aria-hidden="true"><img class="nd-mark" src="/assets/icons/icon-192.png" alt=""></div>
-   <h1 class="lg-header">Yeni Şifre</h1>
-   <p class="lg-sub">İlk girişiniz. Geçici şifre yerine kendi şifrenizi belirleyin (en az 8 karakter).</p>
-   <input id="np1" class="lg-input" type="password" autocomplete="new-password" placeholder="Yeni şifre" aria-label="Yeni şifre">
-   <input id="np2" class="lg-input" type="password" autocomplete="new-password" placeholder="Yeni şifre (tekrar)" aria-label="Yeni şifre tekrar">
-   <button class="lg-button sign-in" id="npSave" type="button">Şifreyi Kaydet</button>
-   <div class="lg-error" id="err"></div>`;
- }else{
-  body=`
-   <div class="lg-logo" aria-hidden="true"><img class="nd-mark" src="/assets/icons/icon-192.png" alt=""></div>
-   <h1 class="lg-header">Hoş Geldiniz!</h1>
-   <p class="lg-sub">Süper yönetici paneli: tüm restoranlar, kataloglar ve demolar.</p>
-   <input id="em" class="lg-input" type="email" autocomplete="username" placeholder="E-posta" aria-label="E-posta" value="${esc(safeGet("nearMenuLastEmail")||"")}">
-   <input id="pw" class="lg-input" type="password" autocomplete="current-password" placeholder="Şifre" aria-label="Şifre">
-   <button class="lg-button sign-in" id="loginBtn" type="button">Giriş Yap</button>
-   <div class="lg-error" id="err"></div>
-   <p class="lg-footer">Bu panel sadece süper yönetici hesabıyla açılır. Restoran ve firma sahipleri kendi menü/kataloglarından (logoya basılı tutarak) giriş yapar.</p>`;
+  return G.sayfa(
+   G.baslik("Yeni Şifre","İlk girişiniz. Geçici şifre yerine kendi şifrenizi belirleyin (en az 8 karakter).")+
+   G.alan({id:"np1",tur:"password",yer:"Yeni şifre",oto:"new-password"})+
+   G.alan({id:"np2",tur:"password",yer:"Yeni şifre (tekrar)",oto:"new-password"})+
+   G.buton("npSave","Şifreyi Kaydet")+
+   G.hata("err"));
  }
 
- return `
- ${themeBtn("login-theme")}
- <div class="login-screen">
-  <div class="lg-container">
-   <div class="lg-box">
-    <div class="lg-form">${body}</div>
-   </div>
-  </div>
- </div>`;
+ return G.sayfa(
+  G.baslik("Hoş Geldiniz","Süper yönetici paneli: tüm restoranlar, kataloglar ve demolar.")+
+  G.alan({id:"em",tur:"email",yer:"E-posta",deger:safeGet("nearMenuLastEmail")||""})+
+  G.alan({id:"pw",tur:"password",yer:"Şifre"})+
+  G.buton("loginBtn","Giriş Yap")+
+  G.hata("err")+
+  `<p class="ndg-foot">Bu panel sadece süper yönetici hesabıyla açılır. Restoran ve firma sahipleri kendi menü ve kataloglarından (logoya basılı tutarak) giriş yapar.</p>`);
 }
 
 const ICON_SUN='<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="3.2" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M3.2 12.8l1.1-1.1M11.7 4.3l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';

@@ -174,30 +174,22 @@
     return p;
   }
 
-  /* ---------- giriş penceresi ---------- */
+  /* ---------- yetkisiz / bulunamadı ekranı ---------- */
   var css = document.createElement("style");
   css.textContent = [
-    ".sh21-ov{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}",
-    ".sh21-box{width:100%;max-width:360px;background:#0f0f10;border:1px solid #262628;border-radius:20px;padding:24px;color:#f4f4f5;box-shadow:0 30px 80px rgba(0,0,0,.6)}",
-    ".sh21-box h2{margin:0 0 4px;font-size:19px}.sh21-box p{margin:0 0 16px;color:#a1a1aa;font-size:13px;line-height:1.5}",
-    ".sh21-box label{display:block;font-size:12px;color:#a1a1aa;margin:10px 0 6px}",
-    ".sh21-box input{width:100%;box-sizing:border-box;padding:12px 13px;border-radius:12px;border:1px solid #2e2e31;background:#18181b;color:#fff;font-size:16px;outline:none}",
-    ".sh21-box input:focus{border-color:#f4f4f5}",
-    ".sh21-row{display:flex;gap:8px;margin-top:18px}.sh21-row button{flex:1;padding:12px;border-radius:12px;border:0;font-weight:700;font-size:14px;cursor:pointer}",
-    ".sh21-ghost{background:#232326;color:#d4d4d8}.sh21-main{background:#f4f4f5;color:#0f0f10}.sh21-main:disabled{opacity:.5}",
-    ".sh21-err{min-height:18px;margin-top:10px;color:#f87171;font-size:12.5px}",
-    ".sh21-link{background:none;border:0;color:#a1a1aa;font-size:12.5px;margin-top:12px;cursor:pointer;text-decoration:underline;padding:0}",
     ".sh21-state{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#0b0b0c;color:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;text-align:center}",
     ".sh21-state-box{max-width:380px}.sh21-state-icon{width:52px;height:52px;margin:0 auto 16px;border-radius:50%;border:1px solid #3f3f46;display:grid;place-items:center;font:600 22px Georgia,serif;color:#a1a1aa}",
     ".sh21-state h1{font-size:22px;margin:0 0 8px}.sh21-state p{color:#a1a1aa;font-size:14px;line-height:1.6;margin:0 0 18px}.sh21-state a{color:#f4f4f5;font-size:13px}"
   ].join("\n");
   document.head.appendChild(css);
 
-  function modal(html) {
-    var ov = document.createElement("div");
-    ov.className = "sh21-ov"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
-    ov.innerHTML = '<form class="sh21-box" novalidate>' + html + "</form>";
+  /* Giriş ve şifre pencereleri: ortak NEAR giriş kartı (assets/giris.js) */
+  function girisModal(html) {
+    var w = document.createElement("div");
+    w.innerHTML = NDGiris.sayfa(html, { form: true });
+    var ov = w.firstElementChild;
     document.body.appendChild(ov);
+    NDGiris.bagla(ov);
     return ov;
   }
 
@@ -209,12 +201,14 @@
 
   function askNewPassword(force) {
     return new Promise(function (resolve) {
-      var ov = modal('<h2>' + (force ? "Yeni şifre belirleyin" : "Şifreyi değiştir") + '</h2><p>' +
-        (force ? "İlk girişte geçici şifrenizi kendi şifrenizle değiştirmeniz gerekiyor." : "En az 8 karakterli yeni bir şifre girin.") + '</p>' +
-        '<label for="sh21p1">Yeni şifre</label><input id="sh21p1" type="password" autocomplete="new-password" minlength="8" maxlength="72">' +
-        '<label for="sh21p2">Yeni şifre (tekrar)</label><input id="sh21p2" type="password" autocomplete="new-password" minlength="8" maxlength="72">' +
-        '<div class="sh21-err" id="sh21e"></div><div class="sh21-row">' + (force ? "" : '<button type="button" class="sh21-ghost" id="sh21c">Vazgeç</button>') +
-        '<button type="submit" class="sh21-main" id="sh21s">Kaydet</button></div>');
+      var G = NDGiris;
+      var ov = girisModal(G.baslik(force ? "Yeni Şifre" : "Şifreyi Değiştir",
+          force ? "İlk girişte geçici şifrenizi kendi şifrenizle değiştirmeniz gerekiyor (en az 8 karakter)." : "En az 8 karakterli yeni bir şifre girin.") +
+        G.alan({ id: "sh21p1", tur: "password", yer: "Yeni şifre", oto: "new-password", enCok: 72 }) +
+        G.alan({ id: "sh21p2", tur: "password", yer: "Yeni şifre (tekrar)", oto: "new-password", enCok: 72 }) +
+        G.hata("sh21e") +
+        (force ? G.buton("sh21s", "Kaydet", { tur: "submit" }) :
+          '<div class="ndg-row">' + G.buton("sh21c", "Vazgeç", { ikincil: true }) + G.buton("sh21s", "Kaydet", { tur: "submit" }) + '</div>'));
       var f = ov.querySelector("form"), err = ov.querySelector("#sh21e");
       setTimeout(function () { ov.querySelector("#sh21p1").focus(); }, 30);
       var c = ov.querySelector("#sh21c"); if (c) c.onclick = function () { ov.remove(); resolve(false); };
@@ -235,12 +229,13 @@
 
   function login() {
     return new Promise(function (resolve) {
-      var ov = modal('<h2>Yönetim girişi</h2><p>' + esc((catalog && catalog.name) || "Katalog") + ' kataloğunu düzenlemek için giriş yapın.</p>' +
-        '<label for="sh21em">E-posta</label><input id="sh21em" type="email" autocomplete="username" inputmode="email" maxlength="120" value="' + esc(lsGet("sh21LastEmail") || "") + '">' +
-        '<label for="sh21pw">Şifre</label><input id="sh21pw" type="password" autocomplete="current-password" maxlength="72">' +
-        '<div class="sh21-err" id="sh21e"></div><div class="sh21-row"><button type="button" class="sh21-ghost" id="sh21c">Vazgeç</button>' +
-        '<button type="submit" class="sh21-main" id="sh21s">Giriş yap</button></div>' +
-        '<button type="button" class="sh21-link" id="sh21f">Şifremi unuttum</button>');
+      var G = NDGiris;
+      var ov = girisModal(G.baslik("Hoş Geldiniz", ((catalog && catalog.name) || "Katalog") + " kataloğunu düzenlemek için giriş yapın.") +
+        G.alan({ id: "sh21em", tur: "email", yer: "E-posta", deger: lsGet("sh21LastEmail") || "", enCok: 120 }) +
+        G.alan({ id: "sh21pw", tur: "password", yer: "Şifre", enCok: 72 }) +
+        G.hata("sh21e") +
+        '<div class="ndg-row">' + G.buton("sh21c", "Vazgeç", { ikincil: true }) + G.buton("sh21s", "Giriş Yap", { tur: "submit" }) + '</div>' +
+        '<p class="ndg-foot"><button type="button" class="ndg-link" id="sh21f">Şifremi unuttum</button></p>');
       var f = ov.querySelector("form"), err = ov.querySelector("#sh21e");
       setTimeout(function () { (lsGet("sh21LastEmail") ? ov.querySelector("#sh21pw") : ov.querySelector("#sh21em")).focus(); }, 30);
       ov.querySelector("#sh21c").onclick = function () { ov.remove(); resolve(false); };
