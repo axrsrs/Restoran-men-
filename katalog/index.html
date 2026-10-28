@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-ifX5XGo9w8nLaayh9vM9poC/o5UAFtjZG2ws667T/J4=' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: data: blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-z0BZ5aQFMus3/E/DBRtP2ti8H0cY9wE6goLH1UNrmX8=' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: data: blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -289,6 +289,8 @@ header{animation:luxuryEnter 1s cubic-bezier(.2,.75,.2,1) both}
 .adm-logi label{display:flex;flex-direction:column;gap:4px;min-width:0}
 .adm-logi small{font-size:11px;font-weight:600;opacity:.7}
 .adm-logi .adm-input{min-width:0;width:100%}
+.adm-part .adm-logi{flex-basis:100%}
+.adm-part .adm-logi .adm-input{height:38px;font-size:13px}
 .adm-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid #3A3A40;background:transparent;font-weight:700;white-space:nowrap}
 .adm-btn:hover{background:#1D1D22}
 .adm-btn-gold{background:var(--adm-accent,#C9A227);border-color:transparent;color:#141414!important;font-weight:800}
@@ -1095,7 +1097,8 @@ function sanitizeCatalogData(data) {
                         dims: safeText(part.dims, 200), dims_en: safeText(part.dims_en, 200),
                         amount: priceNumber(part.amount), contactOnly: !!part.contactOnly,
                         prices: cleanCurMap(part.prices),
-                        image: safeAssetSource(part.image) || null
+                        image: safeAssetSource(part.image) || null,
+                        pkg: logiNumber(part.pkg, 0), m3: logiNumber(part.m3, 3), kg: logiNumber(part.kg, 2)
                     })) };
             }
         }
@@ -1459,7 +1462,8 @@ function normalizePrice(price) {
         amount: priceNumber(p.amount),
         contactOnly: !!p.contactOnly,
         prices: p.prices && typeof p.prices === "object" ? p.prices : {},
-        image: typeof p.image === "string" && p.image ? p.image : null
+        image: typeof p.image === "string" && p.image ? p.image : null,
+        pkg: p.pkg ?? null, m3: p.m3 ?? null, kg: p.kg ?? null
     })) : [];
     const legacyAmount = priceNumber(price.amount);
     const manualTotal = priceNumber(price.manualTotal !== undefined ? price.manualTotal : price.amount);
@@ -1486,8 +1490,18 @@ function normalizeItem(item) {
         desc_en: typeof item.desc_en === "string" ? item.desc_en : "",
         dims: typeof item.dims === "string" ? item.dims : "",
         dims_en: typeof item.dims_en === "string" ? item.dims_en : "",
-        image: item.image || null, images: Array.isArray(item.images) ? item.images.filter(Boolean) : (item.image ? [item.image] : []), price: normalizePrice(item.price),
-        m3: logiNumber(item.m3, 3), pkg: logiNumber(item.pkg, 0), kg: logiNumber(item.kg, 2) };
+        image: item.image || null, images: Array.isArray(item.images) ? item.images.filter(Boolean) : (item.image ? [item.image] : []), ...normalizeItemLogi(item) };
+}
+/* Paket/m³/kg parça (modül/ölçü/model) bazında girilir. Fiyat kalemi olmayan üründe ürünün kendisinde durur.
+   Tek parçalı üründe ürün düzeyinde kalmış eski değerler o parçaya taşınır. */
+function normalizeItemLogi(item) {
+    const price = normalizePrice(item.price);
+    let m3 = logiNumber(item.m3, 3), pkg = logiNumber(item.pkg, 0), kg = logiNumber(item.kg, 2);
+    if ((m3 || pkg || kg) && price.parts.length === 1 && !logiHas(price.parts[0])) {
+        price.parts[0] = { ...price.parts[0], m3, pkg, kg };
+        m3 = pkg = kg = null;
+    }
+    return { price, m3, pkg, kg };
 }
 /* Lojistik bilgisi (isteğe bağlı): hacim m³, paket sayısı, ağırlık kg. Boşsa null; PDF'lerde yalnızca doluysa basılır. */
 function logiNumber(v, digits) {
@@ -1499,10 +1513,18 @@ function logiNumber(v, digits) {
     const f = Math.pow(10, digits);
     return Math.round(n * f) / f || null;
 }
+function logiOf(o) { return { pkg: logiNumber(o?.pkg, 0), m3: logiNumber(o?.m3, 3), kg: logiNumber(o?.kg, 2) }; }
+function logiHas(o) { const l = logiOf(o); return !!(l.pkg || l.m3 || l.kg); }
+/* Takım (toplanan modüller) için toplam; en az iki parçada bilgi varsa anlamlıdır. */
+function logiSum(list) {
+    const t = { pkg: 0, m3: 0, kg: 0 };
+    for (const o of list) { const l = logiOf(o); t.pkg += l.pkg || 0; t.m3 += l.m3 || 0; t.kg += l.kg || 0; }
+    return { pkg: t.pkg || null, m3: t.m3 ? Math.round(t.m3 * 1000) / 1000 : null, kg: t.kg ? Math.round(t.kg * 100) / 100 : null };
+}
 function logiText(item, lang) {
     const loc = lang === "EN" ? "en-US" : "tr-TR", num = (v, d) => Number(v).toLocaleString(loc, { maximumFractionDigits: d });
     const out = [];
-    item = { pkg: logiNumber(item?.pkg, 0), m3: logiNumber(item?.m3, 3), kg: logiNumber(item?.kg, 2) };
+    item = logiOf(item);
     if (item?.pkg)
         out.push(lang === "EN" ? `${num(item.pkg, 0)} ${item.pkg === 1 ? "package" : "packages"}` : `${num(item.pkg, 0)} paket`);
     if (item?.m3)
@@ -2692,7 +2714,7 @@ function pdfRowsForItem(item) {
     const p = normalizePrice(item?.price);
     if (p.parts.length)
         return p.parts;
-    return [{ name: item?.name || "", name_en: item?.name_en || "", dims: item?.dims || "", dims_en: item?.dims_en || "", amount: p.amount, contactOnly: p.contactOnly }];
+    return [{ name: item?.name || "", name_en: item?.name_en || "", dims: item?.dims || "", dims_en: item?.dims_en || "", amount: p.amount, contactOnly: p.contactOnly, ...logiOf(item) }];
 }
 /* -------------------- STRICT PDF DATA / IMAGE BOUNDARIES -------------------- */
 function pdfImageSource(value) {
@@ -3170,12 +3192,14 @@ PDF_LAYOUT.c3 = PDF_LAYOUT.c2 + PDF_LAYOUT.unitW;
 const PDF_ROW_MIN_H = 12.4;
 /* Takım tablosu kartı (A1 tasarım diliyle): görsel paneli, ad + altın çizgi, satır alanı başlangıcı */
 const PDF_TBL = { imgW: 178, headTop: 35, pad: 6, setW: 104 };
-function pdfMaxRowsPerCard() {
+/* Satırlarda paket/m³/kg varsa modül adının altına ikinci satır gelir; satır uzar (yalnızca fiyat listesi). */
+function pdfRowMinH(item) { return (!pdfNoPrice && pdfRowsForItem(item).some(logiHas)) ? 19 : PDF_ROW_MIN_H; }
+function pdfMaxRowsPerCard(item) {
     const L = PDF_LAYOUT;
-    return Math.floor((L.H - L.top - L.bottom - L.categoryH - L.gap - PDF_TBL.headTop - PDF_TBL.pad) / PDF_ROW_MIN_H);
+    return Math.floor((L.H - L.top - L.bottom - L.categoryH - L.gap - PDF_TBL.headTop - PDF_TBL.pad) / (item ? pdfRowMinH(item) : PDF_ROW_MIN_H));
 }
 function pdfVisibleRows(item, lang) {
-    const rows = pdfRowsForItem(item), max = pdfMaxRowsPerCard();
+    const rows = pdfRowsForItem(item), max = pdfMaxRowsPerCard(item);
     if (rows.length <= max)
         return rows;
     const hidden = rows.length - (max - 1);
@@ -3183,7 +3207,7 @@ function pdfVisibleRows(item, lang) {
 }
 function pdfCardHeight(item) {
     const L = PDF_LAYOUT, rows = pdfVisibleRows(item, "TR").length;
-    const need = PDF_TBL.headTop + rows * PDF_ROW_MIN_H + PDF_TBL.pad;
+    const need = PDF_TBL.headTop + rows * pdfRowMinH(item) + PDF_TBL.pad;
     return Math.max(L.cardH, Math.ceil(need));
 }
 function pdfCategoryHeight() { return PDF_LAYOUT.categoryH; }
@@ -3233,11 +3257,10 @@ function pdfProductBlock(data, category, item, lang, x, y, w, h, asset, id) {
     const setX = x + w - 8 - T.setW, right = setX - 10;
     /* TL vade açıksa: görsel paneli biraz daralır, fiyat sütunu PEŞİN + VADELİ olarak ikiye ayrılır. */
     const V = !!pdfVade, imgW = V ? 150 : T.imgW;
-    /* Paket / m³ / kg girildiyse ürün adının sağında küçük gri yazı; ad için yer daralır. */
-    const logi = logiText(item, lang), logiW = logi ? Math.min(pdfFontWidth(logi, 7.4) + 2, 170) : 0;
-    let { c, tx, top } = pdfTblFrame(item, lang, x, y, w, h, asset, id, acc, logi ? right - logiW - 10 : right, imgW);
-    if (logi)
-        c += pdfTextOp(logi, right, top - 15.5, 7.4, { align: "right", maxWidth: logiW, maxLines: 1, color: [0.42, 0.42, 0.42] });
+    /* Takımda birden çok modülde paket/m³/kg varsa toplamı ürün adının sağında; ad için yer daralır. */
+    const withLogi = rows.filter(r => !r.__more && logiHas(r)), sumTxt = withLogi.length > 1 ? logiText(logiSum(pdfRowsForItem(item)), lang) : "";
+    const rowLogi = withLogi.length > 0;
+    let { c, tx, top } = pdfTblFrame(item, lang, x, y, w, h, asset, id, acc, right, imgW);
     /* Sütunlar: Modül · G/D/Y · Birim fiyat (sağa yaslı) [· Vadeli] */
     const vadeW = V ? 60 : 0, unitW = V ? 60 : 74, dimW = V ? 66 : 78, third = dimW / 3, vx = right, ux = right - vadeW, dx = ux - unitW - dimW, modW = dx - tx - 6;
     const capY = top - 31;
@@ -3246,18 +3269,21 @@ function pdfProductBlock(data, category, item, lang, x, y, w, h, asset, id) {
     c += pdfTblCaption(V ? (lang === "EN" ? "CASH" : "PEŞİN") : (lang === "EN" ? "UNIT PRICE" : "BİRİM FİYAT"), ux, capY, "right");
     if (V)
         c += pdfTblCaption(pdfVade.label.toLocaleUpperCase(lang === "EN" ? "en-US" : "tr-TR"), vx, capY, "right");
-    const rowsTop = top - T.headTop, rowH = Math.min(15.5, (rowsTop - (y + T.pad)) / Math.max(rows.length, 1));
+    const rowsTop = top - T.headTop, rowH = Math.min(rowLogi ? 21 : 15.5, (rowsTop - (y + T.pad)) / Math.max(rows.length, 1));
     for (let i = 0; i < rows.length; i++) {
         const rt = rowsTop - i * rowH, rb = rt - rowH, part = rows[i] || {};
         if (i % 2 === 0)
             c += pdfRoundRect(tx - 4, rb + .8, right - tx + 8, rowH - 1.6, 3, [0.972, 0.969, 0.962]);
-        const fs = Math.min(8.8, Math.max(7, rowH * 0.6)), cy = rb + rowH / 2 - fs * 0.34;
+        const fs = Math.min(8.8, Math.max(7, (rowLogi ? 14.5 : rowH) * 0.6)), cy = rb + rowH / 2 - fs * 0.34;
         const mod = pdfText(lang, part.name, part.name_en, part.name) || "—";
         if (part.__more) {
             c += pdfTextOp(mod, tx, cy, fs, { bold: true, maxWidth: right - tx, maxLines: 1, color: [0.45, 0.45, 0.45] });
             continue;
         }
-        c += pdfTextOp(mod, tx, cy, fs, { bold: true, maxWidth: modW, maxLines: 1, color: [0.1, 0.1, 0.1] });
+        const pl = logiText(part, lang);
+        c += pdfTextOp(mod, tx, pl ? cy + 3.6 : cy, fs, { bold: true, maxWidth: modW, maxLines: 1, color: [0.1, 0.1, 0.1] });
+        if (pl)
+            c += pdfTextOp(pl, tx, cy - 4.6, 6.4, { maxWidth: modW, maxLines: 1, color: [0.45, 0.45, 0.45] });
         pdfDimsParts(part.dims).forEach((v, j) => { c += pdfTextOp(v, dx + third * (j + .5), cy, fs - .3, { align: "center", maxWidth: third - 2, maxLines: 1, color: [0.3, 0.3, 0.3] }); });
         const muted = part.contactOnly || part.amount === null || part.amount === undefined;
         const price = muted ? (lang === "EN" ? "Contact us" : "İletişime geçin") : pdfMoney(data, part.amount);
@@ -3278,6 +3304,9 @@ function pdfProductBlock(data, category, item, lang, x, y, w, h, asset, id) {
         c += pdfTextOp(pdfVade.label.toLocaleUpperCase(lang === "EN" ? "en-US" : "tr-TR"), setX + T.setW / 2, mid - 15, 5.8, { align: "center", bold: true, color: [0.6, 0.57, 0.5], maxWidth: T.setW - 8, maxLines: 1 });
         c += pdfTextOp(vTotal, setX + T.setW / 2, mid - 25, 9.4, { align: "center", bold: true, maxWidth: T.setW - 8, maxLines: 1, color: [0.42, 0.35, 0.15] });
     }
+    /* Modüllerde paket/m³/kg varsa takımın toplamı panelin altında. */
+    if (sumTxt)
+        c += pdfTextOp(sumTxt, setX + T.setW / 2, py + 6, 5.8, { align: "center", maxWidth: T.setW - 8, maxLines: 1, color: [0.45, 0.43, 0.38] });
     return c;
 }
 async function renderPdfCoverPage(data, lang, titleOverride) {
@@ -3557,9 +3586,9 @@ const PDF_MODEL = { maxCols: 5, minCols: 4, headH: 36, imgH: 88, cellH: 144 };
 function pdfVariantRows(item, lang) {
     const p = normalizePrice(item?.price);
     if (p.parts.length)
-        return p.parts.map(part => ({ name: pdfText(lang, part.name, part.name_en, part.name) || "", dims: part.dims || "", amount: part.amount, contactOnly: !!part.contactOnly || part.amount === null, image: part.image || null }));
+        return p.parts.map(part => ({ name: pdfText(lang, part.name, part.name_en, part.name) || "", dims: part.dims || "", amount: part.amount, contactOnly: !!part.contactOnly || part.amount === null, image: part.image || null, ...logiOf(part) }));
     const amt = p.manualTotal !== null && p.manualTotal !== undefined ? p.manualTotal : priceTotal(p);
-    return [{ name: "", dims: item?.dims || "", amount: amt, contactOnly: amt === null, image: null }];
+    return [{ name: "", dims: item?.dims || "", amount: amt, contactOnly: amt === null, image: null, ...logiOf(item) }];
 }
 /* Fiyatsız katalogda ölçü kartları / model sıraları fiyat göstermez. */
 let pdfNoPrice = false;
@@ -3572,13 +3601,11 @@ function pdfVadeMoney(data, amount) {
 }
 /* Fiyatsız katalogda açıklamadaki fiyatla ilgili cümleler ("… dahil fiyatlar", "130.200 TL" vb.) gösterilmez. */
 const PDF_PRICE_TEXT = /fiyat|price|₺|\bTL\b|\bUSD\b|\bEUR\b|[$€]|\d{1,3}(?:\.\d{3})+(?:,\d+)?/i;
-function pdfDescText(lang, item, withLogi = true) {
+function pdfDescText(lang, item) {
     let t = pdfText(lang, item?.desc, item?.desc_en, item?.desc) || "";
     if (pdfNoPrice && t)
         t = t.split(/\n+/).map(line => line.split(/(?<=[.!?;])\s+(?=\S)/).filter(seg => !PDF_PRICE_TEXT.test(seg)).join(" ")).filter(x => x.trim()).join("\n").trim();
-    /* Paket / m³ / kg girildiyse açıklamanın başında gösterilir (kesilmesin diye önce gelir). */
-    const logi = withLogi ? logiText(item, lang) : "";
-    return logi ? (t ? logi + "  |  " + t : logi) : t;
+    return t;
 }
 function pdfVariantPrice(data, r, lang) {
     if (pdfNoPrice)
@@ -3587,12 +3614,12 @@ function pdfVariantPrice(data, r, lang) {
         return { text: lang === "EN" ? "Ask for price" : "Fiyat sorunuz", muted: true };
     return { text: pdfMoney(data, r.amount), muted: false };
 }
-function pdfSizeRowH() { return PDF_SIZE.rowH + (pdfVade ? 9 : 0); }
+function pdfSizeRowH(item, lang) { return PDF_SIZE.rowH + ((pdfVade || (!pdfNoPrice && pdfVariantRows(item, lang).some(logiHas))) ? 9 : 0); }
 function pdfSizeColW() { const L = PDF_LAYOUT; return (L.cardW - PDF_SIZE.gap * (PDF_SIZE.cols - 1)) / PDF_SIZE.cols; }
 function pdfSizeCardHeight(item, lang) {
     const w = pdfSizeColW(), name = pdfText(lang, item.name, item.name_en, item.name) || "—";
     const nl = pdfWrapText(name, w - 18, 10.2, 2).length, rows = pdfVariantRows(item, lang).length;
-    return Math.ceil(PDF_SIZE.imgH + 15 + (nl - 1) * 12.4 + 13 + (logiText(item, lang) ? 11 : 0) + PDF_SIZE.headH + rows * pdfSizeRowH() + 8);
+    return Math.ceil(PDF_SIZE.imgH + 15 + (nl - 1) * 12.4 + 13 + PDF_SIZE.headH + rows * pdfSizeRowH(item, lang) + 8);
 }
 function pdfSizeRowBlocks(items, lang) {
     const out = [];
@@ -3632,21 +3659,17 @@ function pdfSizeCard(data, item, lang, x, y, w, h, asset, acc) {
     const name = pdfText(lang, item.name, item.name_en, item.name) || "—", nl = pdfWrapText(name, w - 2 * pad, 10.2, 2).length;
     c += pdfTextOp(name, x + pad, ty, 10.2, { bold: true, maxWidth: w - 2 * pad, maxLines: 2, leading: 12.4, color: [0.06, 0.06, 0.06] });
     ty -= (nl - 1) * 12.4 + 8;
-    const logi = logiText(item, lang);
-    if (logi) {
-        c += pdfTextOp(logi, x + pad, ty - 3, 7.2, { maxWidth: w - 2 * pad, maxLines: 1, color: [0.42, 0.42, 0.42] });
-        ty -= 11;
-    }
     c += pdfRect(x + pad, ty, 18, 1.5, acc);
     ty -= 5;
     c += pdfTextOp(lang === "EN" ? "SIZE (cm)" : "ÖLÇÜ (cm)", x + pad, ty - 8, 6.4, { bold: true, color: [0.55, 0.55, 0.55] });
     if (!pdfNoPrice)
         c += pdfTextOp(pdfVade ? (lang === "EN" ? "CASH / " : "PEŞİN / ") + pdfVade.label.toLocaleUpperCase(lang === "EN" ? "en-US" : "tr-TR") : (lang === "EN" ? "PRICE" : "FİYAT"), x + w - pad, ty - 8, 6.4, { align: "right", bold: true, color: [0.55, 0.55, 0.55], maxWidth: w * .6, maxLines: 1 });
     ty -= PDF_SIZE.headH;
-    const rowH = pdfSizeRowH();
+    const rowH = pdfSizeRowH(item, lang), tall = rowH > PDF_SIZE.rowH;
     pdfVariantRows(item, lang).forEach((r, i) => {
-        /* Vade açıksa satır uzar: peşin üstte, vadeli altında; model adı ortada kalır. */
-        const rowTop = ty - i * rowH, cy = pdfVade ? rowTop - rowH / 2 - 3 : rowTop - rowH + 5;
+        /* Uzun satır (vade veya paket bilgisi): peşin üstte, vadeli altında; paket bilgisi ölçünün altında. */
+        const rl = pdfNoPrice ? "" : logiText(r, lang);
+        const rowTop = ty - i * rowH, cy = rl ? rowTop - 10.5 : tall ? rowTop - rowH / 2 - 3 : rowTop - rowH + 5;
         if (i % 2 === 0)
             c += pdfRoundRect(x + pad - 4, rowTop - rowH + 1, w - 2 * pad + 8, rowH - 2, 3, [0.972, 0.969, 0.962]);
         const pr = pdfVariantPrice(data, r, lang), prSize = pr.muted ? 7.2 : 9.2, prW = pr.none ? 0 : pdfFontWidth(pr.text, prSize) + 4;
@@ -3659,25 +3682,27 @@ function pdfSizeCard(data, item, lang, x, y, w, h, asset, acc) {
                 c += pdfTextOp(sub, x + pad + mainW + 3, cy, 7.2, { maxWidth: subMax, maxLines: 1, color: [0.48, 0.48, 0.48] });
         }
         const vp = (pr.none || pr.muted) ? "" : pdfVadeMoney(data, r.amount);
+        if (rl)
+            c += pdfTextOp(rl, x + pad, rowTop - 19.5, 6.6, { maxWidth: Math.max(30, w - 2 * pad - prW - 6), maxLines: 1, color: [0.45, 0.45, 0.45] });
         if (!pr.none)
-            c += pdfTextOp(pr.text, x + w - pad, vp ? rowTop - 10.5 : cy, prSize, { align: "right", bold: !pr.muted, maxWidth: prW + 2, maxLines: 1, color: pr.muted ? [0.5, 0.5, 0.5] : [0.06, 0.06, 0.06] });
+            c += pdfTextOp(pr.text, x + w - pad, (vp || rl) ? rowTop - 10.5 : cy, prSize, { align: "right", bold: !pr.muted, maxWidth: prW + 2, maxLines: 1, color: pr.muted ? [0.5, 0.5, 0.5] : [0.06, 0.06, 0.06] });
         if (vp)
             c += pdfTextOp(vp, x + w - pad, rowTop - 19.5, 7.6, { align: "right", maxWidth: prW + 2, maxLines: 1, color: [0.42, 0.35, 0.15] });
     });
     return c;
 }
-function pdfModelCellH() { return PDF_MODEL.cellH - (pdfNoPrice ? 14 : 0) + (pdfVade ? 11 : 0); }
+function pdfModelCellH(item, lang) { return PDF_MODEL.cellH - (pdfNoPrice ? 14 : 0) + (pdfVade ? 11 : 0) + ((!pdfNoPrice && item && pdfVariantRows(item, lang).some(logiHas)) ? 10 : 0); }
 function pdfModelCols(n) { return Math.min(PDF_MODEL.maxCols, Math.max(PDF_MODEL.minCols, n)); }
 function pdfModelRowHeight(item, lang) {
     const n = Math.max(1, pdfVariantRows(item, lang).length), cols = pdfModelCols(n);
-    return Math.ceil(PDF_MODEL.headH + Math.ceil(n / cols) * pdfModelCellH() + 6);
+    return Math.ceil(PDF_MODEL.headH + Math.ceil(n / cols) * pdfModelCellH(item, lang) + 6);
 }
 /* B1 — MODEL SIRASI: seri adı + açıklama, altında her model ayrı panelde (resim · model · ölçü · fiyat).
    Model fotoğrafı: önce modelin kendi fotoğrafı, yoksa ürün fotoğrafları sırayla (1. foto → 1. model…), o da yoksa ana fotoğraf. */
 function pdfModelRow(data, item, lang, x, y, w, h, useImg, acc) {
     const top = y + h;
     let c = pdfSoftCard(x, y, w, h, 8);
-    const name = pdfText(lang, item.name, item.name_en, item.name) || "—", desc = pdfDescText(lang, item, true) || "";
+    const name = pdfText(lang, item.name, item.name_en, item.name) || "—", desc = pdfDescText(lang, item) || "";
     const nameW = Math.min(pdfFontWidth(name, 12.5) + 6, w * 0.55);
     c += pdfTextOp(name, x + 14, top - 20, 12.5, { bold: true, maxWidth: w * 0.55, maxLines: 1, color: [0.06, 0.06, 0.06] });
     if (desc)
@@ -3687,8 +3712,8 @@ function pdfModelRow(data, item, lang, x, y, w, h, useImg, acc) {
     const rows = pdfVariantRows(item, lang), n = rows.length, cols = pdfModelCols(n), gap = 8, inner = w - 20, cellW = (inner - gap * (cols - 1)) / cols;
     const mainSrc = pdfProductImageSource(item, data), gallery = (Array.isArray(item.images) ? item.images : []).map(pdfImageSource).filter(Boolean);
     rows.forEach((r, i) => {
-        const col = i % cols, row = Math.floor(i / cols), cx = x + 10 + col * (cellW + gap), cTop = top - PDF_MODEL.headH - row * pdfModelCellH();
-        const panelH = pdfModelCellH() - 8;
+        const col = i % cols, row = Math.floor(i / cols), cx = x + 10 + col * (cellW + gap), cTop = top - PDF_MODEL.headH - row * pdfModelCellH(item, lang);
+        const panelH = pdfModelCellH(item, lang) - 8;
         c += pdfRoundRect(cx, cTop - panelH, cellW, panelH, 6, [0.975, 0.972, 0.966]);
         const ih = PDF_MODEL.imgH, boxY = cTop - 4 - ih;
         const a = useImg(pdfImageSource(r.image)) || useImg(gallery[i]) || useImg(mainSrc);
@@ -3701,7 +3726,10 @@ function pdfModelRow(data, item, lang, x, y, w, h, useImg, acc) {
         ly -= 13;
         if (String(r.dims || "").trim())
             c += pdfTextOp(pdfDimsLabel(r.dims) + " cm", cx + cellW / 2, ly, 6.6, { align: "center", maxWidth: cellW - 10, maxLines: 1, color: [0.5, 0.5, 0.5] });
-        ly -= 13.5;
+        const rl = pdfNoPrice ? "" : logiText(r, lang);
+        if (rl)
+            c += pdfTextOp(rl, cx + cellW / 2, ly - 10, 6.4, { align: "center", maxWidth: cellW - 10, maxLines: 1, color: [0.45, 0.45, 0.45] });
+        ly -= 13.5 + (rows.some(logiHas) ? 10 : 0);
         const pr = pdfVariantPrice(data, r, lang);
         if (!pr.none)
             c += pdfTextOp(pr.text, cx + cellW / 2, ly, pr.muted ? 7.4 : 10.8, { align: "center", bold: !pr.muted, maxWidth: cellW - 10, maxLines: 1, color: pr.muted ? [0.5, 0.5, 0.5] : [0.06, 0.06, 0.06] });
@@ -3812,9 +3840,9 @@ function pdfItemImages(item) {
 function pdfCatalogRows(item, lang) {
     const p = normalizePrice(item?.price);
     if (p.parts.length)
-        return p.parts.map(part => ({ name: pdfText(lang, part.name, part.name_en, part.name) || "—", dims: part.dims || "" }));
-    const d = String(item?.dims || "").trim();
-    return d ? [{ name: pdfText(lang, item.name, item.name_en, item.name) || "—", dims: d }] : [];
+        return p.parts.map(part => ({ name: pdfText(lang, part.name, part.name_en, part.name) || "—", dims: part.dims || "", logi: logiText(part, lang) }));
+    const d = String(item?.dims || "").trim(), logi = logiText(item, lang);
+    return (d || logi) ? [{ name: pdfText(lang, item.name, item.name_en, item.name) || "—", dims: d, logi }] : [];
 }
 function pdfDimsLabel(v) {
     const s = pdfCleanDims(v);
@@ -3862,11 +3890,15 @@ function pdfDimsTable(rows, lang, x, yTop, w, maxH, acc, { rowH = 15, fs = 8.6, 
         const hidden = rows.length - (maxRows - 1);
         list = [...rows.slice(0, maxRows - 1), { name: lang === "EN" ? `+${hidden} more items` : `+${hidden} kalem daha`, more: true }];
     }
-    const nameW = w * nameRatio;
+    /* Paket/m³/kg girilmiş satır varsa ad ile ölçü arasına "SEVKİYAT" sütunu eklenir. */
+    const hasLogi = list.some(r => !r.more && r.logi), logiW = hasLogi ? w * .3 : 0;
+    const nameW = w * nameRatio - logiW;
     let c = "";
     const top = yTop - headH;
     c += pdfRect(x, top, w, headH, [0.08, 0.08, 0.08]);
     c += pdfTextOp(lang === "EN" ? "MODULE" : "MODÜL", x + 6, top + 5.2, 7.4, { bold: true, color: [1, 1, 1], maxWidth: nameW - 8, maxLines: 1 });
+    if (hasLogi)
+        c += pdfTextOp(lang === "EN" ? "SHIPPING" : "SEVKİYAT", x + nameW, top + 5.2, 7.4, { bold: true, color: [1, 1, 1], maxWidth: logiW - 6, maxLines: 1 });
     c += pdfTextOp(lang === "EN" ? "W × D × H (cm)" : "G × D × Y (cm)", x + w - 6, top + 5.2, 7.4, { align: "right", bold: true, color: [1, 1, 1], maxWidth: w - nameW - 8, maxLines: 1 });
     list.forEach((r, i) => {
         const ry = top - (i + 1) * rowH;
@@ -3874,8 +3906,10 @@ function pdfDimsTable(rows, lang, x, yTop, w, maxH, acc, { rowH = 15, fs = 8.6, 
             c += pdfRect(x, ry, w, rowH, [0.965, 0.963, 0.958]);
         const cy = ry + rowH / 2 - fs * 0.34;
         c += pdfTextOp(r.name, x + 6, cy, fs, { bold: !r.more, maxWidth: r.more ? w - 12 : nameW - 10, maxLines: 1, color: r.more ? [0.42, 0.42, 0.42] : [0.1, 0.1, 0.1] });
-        if (!r.more)
-            c += pdfTextOp(pdfDimsLabel(r.dims), x + w - 6, cy, fs, { align: "right", maxWidth: w - nameW - 8, maxLines: 1, color: [0.18, 0.18, 0.18] });
+        if (!r.more && r.logi)
+            c += pdfTextOp(r.logi, x + nameW, cy, fs - .8, { maxWidth: logiW - 6, maxLines: 1, color: [0.38, 0.38, 0.38] });
+        if (!r.more && String(r.dims || "").trim())
+            c += pdfTextOp(pdfDimsLabel(r.dims), x + w - 6, cy, fs, { align: "right", maxWidth: w - nameW - logiW - 8, maxLines: 1, color: [0.18, 0.18, 0.18] });
     });
     const h = headH + list.length * rowH;
     c += pdfLine(x, yTop - h, x + w, yTop - h, acc, .9);
@@ -3890,11 +3924,14 @@ function pdfCatalogCardHeight(item) {
 function pdfCatalogListBlock(data, category, item, lang, x, y, w, h, asset, id) {
     const T = PDF_TBL, acc = pdfCatalogAccent(data), right = x + w - 12;
     let { c, tx, top } = pdfTblFrame(item, lang, x, y, w, h, asset, id, acc, right);
-    const dimW = 132, third = dimW / 3, dx = right - dimW, modW = dx - tx - 6, capY = top - 31;
+    const rows = pdfVisibleRows(item, lang), hasLogi = rows.some(r => !r.__more && logiHas(r)), logiW = hasLogi ? 120 : 0;
+    const dimW = 132, third = dimW / 3, dx = right - dimW, lx = dx - logiW, modW = lx - tx - 6, capY = top - 31;
     c += pdfTblCaption(lang === "EN" ? "MODULE" : "MODÜL", tx, capY, "left");
+    if (hasLogi)
+        c += pdfTblCaption(lang === "EN" ? "SHIPPING" : "SEVKİYAT", lx, capY, "left");
     ["G/W", "D/D", "Y/H"].forEach((t, j) => { c += pdfTblCaption(t, dx + third * (j + .5), capY, "center"); });
     const desc = pdfDescText(lang, item), descH = desc ? 24 : 0;
-    const rows = pdfVisibleRows(item, lang), rowsTop = top - T.headTop, rowH = Math.min(15.5, (rowsTop - (y + T.pad + descH)) / Math.max(rows.length, 1));
+    const rowsTop = top - T.headTop, rowH = Math.min(15.5, (rowsTop - (y + T.pad + descH)) / Math.max(rows.length, 1));
     for (let i = 0; i < rows.length; i++) {
         const rt = rowsTop - i * rowH, rb = rt - rowH, part = rows[i] || {};
         if (i % 2 === 0)
@@ -3906,6 +3943,8 @@ function pdfCatalogListBlock(data, category, item, lang, x, y, w, h, asset, id) 
             continue;
         }
         c += pdfTextOp(mod, tx, cy, fs, { bold: true, maxWidth: modW, maxLines: 1, color: [0.1, 0.1, 0.1] });
+        if (hasLogi && logiHas(part))
+            c += pdfTextOp(logiText(part, lang), lx, cy, fs - .8, { maxWidth: logiW - 6, maxLines: 1, color: [0.38, 0.38, 0.38] });
         pdfDimsParts(part.dims).forEach((v, j) => { c += pdfTextOp(v, dx + third * (j + .5), cy, fs, { align: "center", bold: true, maxWidth: third - 2, maxLines: 1, color: [0.2, 0.2, 0.2] }); });
     }
     if (desc)
@@ -4009,6 +4048,13 @@ function pdfRenderIzgaraPage(data, lang, category, items, pageNo, assets, cont) 
         if (info) {
             c += pdfTextOp(info, x + 10, ty, 8.2, { bold: true, maxWidth: cardW - 20, maxLines: 1, color: [0.25, 0.25, 0.25] });
             ty -= 13;
+        }
+        /* Paket/m³/kg: tek satırda kendisi; takımda (modüller toplanır) toplamı. Ölçü/model seçeneklerinde toplam anlamsız, gösterilmez. */
+        const lr = rows.filter(r => r.logi);
+        const logiLine = lr.length === 1 && rows.length === 1 ? lr[0].logi : (lr.length && !isVariantLayout(categoryLayoutOf(data, category.id)) ? (lang === "EN" ? "Total: " : "Toplam: ") + logiText(logiSum(pdfRowsForItem(item)), lang) : "");
+        if (logiLine) {
+            c += pdfTextOp(logiLine, x + 10, ty, 7.8, { maxWidth: cardW - 20, maxLines: 1, color: [0.38, 0.38, 0.38] });
+            ty -= 12;
         }
         const desc = pdfDescText(lang, item);
         const room = Math.floor((ty - (y + 8)) / 10.5) + 1;
@@ -5483,6 +5529,12 @@ function App() {
         setVadeRateText(txt);
         setPath(["vade", "rate"], vadeRateValue(txt));
     }
+    /* Paket/m³/kg kutuları: hem ürün (parçasız) hem parça satırında aynı biçim. */
+    function admLogiInputs(obj, onSet, keyPrefix) {
+        return React.createElement("div", { className: "adm-logi" }, [["pkg", "Paket", "Örn. 2", "numeric"], ["m3", "Hacim m³", "Örn. 0,85", "decimal"], ["kg", "Ağırlık kg", "Örn. 45", "decimal"]].map(([k, label, ph, mode]) => React.createElement("label", { key: keyPrefix + k },
+            React.createElement("small", null, label),
+            React.createElement("input", { className: "adm-input", type: "text", inputMode: mode, autoComplete: "off", maxLength: 10, value: obj?.[k] === null || obj?.[k] === undefined ? "" : String(obj[k]).replace(".", ","), placeholder: ph, onChange: e => { const v = String(e.target.value).replace(k === "pkg" ? /[^\d]/g : /[^\d.,]/g, "").replace(/([.,].*)[.,]/g, "$1").slice(0, 10); onSet(k, v === "" ? null : v); } }))));
+    }
     function setPath(path, value) { updateData(copy => { let target = copy; for (let i = 0; i < path.length - 1; i++) {
         const key = path[i];
         target[key] = { ...(target[key] || {}) };
@@ -6923,13 +6975,10 @@ function App() {
                         p.parts.length === 0 && React.createElement("label", { className: "adm-field" },
                             React.createElement("span", null, "\u00D6l\u00E7\u00FCler"),
                             React.createElement("input", { className: "adm-input", value: it.dims, onChange: e => { const v = e.target.value; updateItem(c.id, it.id, "dims", v); updateItem(c.id, it.id, "dims_en", v); }, placeholder: "\u00D6r. 200\u00D790\u00D775 cm" })),
-                        React.createElement("div", { className: "adm-field" },
+                        (p.parts.length === 0 || logiHas(it)) && React.createElement("div", { className: "adm-field" },
                             React.createElement("span", null, "Paket ve sevkiyat bilgisi (isteğe bağlı)"),
-                            React.createElement("div", { className: "adm-logi" },
-                                [["pkg", "Paket sayısı", "Örn. 3", "numeric"], ["m3", "Hacim (m³)", "Örn. 1,85", "decimal"], ["kg", "Ağırlık (kg)", "Örn. 120", "decimal"]].map(([k, label, ph, mode]) => React.createElement("label", { key: k },
-                                    React.createElement("small", null, label),
-                                    React.createElement("input", { className: "adm-input", type: "text", inputMode: mode, autoComplete: "off", maxLength: 10, value: it[k] === null || it[k] === undefined ? "" : String(it[k]).replace(".", ","), placeholder: ph, onChange: e => { let v = String(e.target.value).replace(k === "pkg" ? /[^\d]/g : /[^\d.,]/g, "").replace(/([.,].*)[.,]/g, "$1").slice(0, 10); updateItem(c.id, it.id, k, v === "" ? null : v); } })))),
-                            React.createElement("div", { className: "adm-muted", style: { fontSize: 12 } }, "Doldurulan bilgiler fiyat listesi ve katalog PDF'lerinde ürün adının yanında görünür (örn. \u201C3 paket · 1,85 m³ · 120 kg\u201D). Boş bırakılanlar hiçbir yerde çıkmaz.")),
+                            admLogiInputs(it, (k, v) => updateItem(c.id, it.id, k, v), "it-"),
+                            React.createElement("div", { className: "adm-muted", style: { fontSize: 12 } }, p.parts.length ? "Bu değerler ürün geneline girilmiş. Fiyat kalemlerinde parça parça girmeniz önerilir; buradakileri silebilirsiniz." : "Doldurulanlar PDF'lerde görünür (örn. \u201C2 paket · 0,85 m³ · 45 kg\u201D). Boş bırakılanlar hiçbir yerde çıkmaz.")),
                         React.createElement("div", { className: "adm-info" }, "\u0130ngilizce kar\u015F\u0131l\u0131klar yazmay\u0131 b\u0131rakt\u0131\u011F\u0131n\u0131zda otomatik \u00E7evrilir; ayr\u0131ca bir \u015Fey yapman\u0131z gerekmez."),
                         React.createElement("div", { className: "adm-field" },
                             React.createElement("span", null, "S\u0131radaki yeri"),
@@ -6959,7 +7008,8 @@ function App() {
                     admTab === "fiyat" && React.createElement("div", { className: "adm-form" },
                         React.createElement("div", { className: "adm-info" },
                             lay === "models" ? "Her satır bir model (Müdür, Şef, Misafir…) ve kendi fotoğrafı. Sitede en düşük fiyat “başlayan fiyat” olarak görünür." : lay === "sizes" ? "Her satır bir ölçü seçeneği. Fiyatlar toplanmaz; sitede en düşük fiyat “başlayan fiyat” olarak görünür." : "Her satır bir modül. Takım fiyatı otomatik toplanabilir ya da elle girilebilir.",
-                            curEnabled(data) ? " Fiyatlar TL, KDV hari\u00E7." : " Fiyatlar\u0131 TL, USD ve EUR olarak ayr\u0131 girin (KDV hari\u00E7)."),
+                            curEnabled(data) ? " Fiyatlar TL, KDV hari\u00E7." : " Fiyatlar\u0131 TL, USD ve EUR olarak ayr\u0131 girin (KDV hari\u00E7).",
+                            " Paket / m³ / kg isteğe bağlıdır; doldurulanlar PDF'lerde o satırda görünür."),
                         p.parts.map((part, pi) => {
                             var _a;
                             return React.createElement("div", { key: part.id, className: "adm-part" },
@@ -6976,6 +7026,7 @@ function App() {
                                     React.createElement(NumField, { className: "adm-input adm-num", inputMode: "decimal", min: 0, value: (_a = part.amount) !== null && _a !== void 0 ? _a : "", disabled: part.contactOnly, placeholder: part.contactOnly ? "Sorunuz" : "—", onValue: v => updatePricePart(c.id, it.id, part.id, "amount", v) })) : React.createElement("div", { className: "adm-curgrid", role: "group", "aria-label": "Fiyatlar (TL, USD, EUR)" }, [["TRY", "\u20BA TL"], ["USD", "$ USD"], ["EUR", "\u20AC EUR"]].map(([cur, label]) => { const val = cur === "TRY" ? part.amount : (part.prices || {})[cur]; const miss = !part.contactOnly && priceNumber(val) === null; return React.createElement("label", { key: cur, className: "adm-field adm-curfield" + (miss ? " is-missing" : "") },
                                     React.createElement("span", null, label, ""),
                                     React.createElement(NumField, { className: "adm-input adm-num", inputMode: "decimal", min: 0, "aria-label": (part.name || "Kalem") + " " + label + " fiyatı", "aria-invalid": miss, value: val ?? "", disabled: part.contactOnly, placeholder: part.contactOnly ? "Sorunuz" : "\u2014", onValue: v => cur === "TRY" ? updatePricePart(c.id, it.id, part.id, "amount", v) : updatePricePart(c.id, it.id, part.id, "prices", { ...(part.prices || {}), [cur]: v }) })); })),
+                                admLogiInputs(part, (k, v) => updatePricePart(c.id, it.id, part.id, k, v), part.id + "-"),
                                 React.createElement("div", { className: "adm-part-tools" },
                                     React.createElement("label", { className: "adm-mini" },
                                         React.createElement("input", { type: "checkbox", checked: !!part.contactOnly, onChange: e => updatePricePart(c.id, it.id, part.id, "contactOnly", e.target.checked) }),
