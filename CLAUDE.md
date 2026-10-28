@@ -14,22 +14,25 @@ Bağımsız proje. Ofischi, ASODA, NEAR, PRONTO ile dosya, repo, anahtar veya ku
 - `_headers`: güvenlik başlıkları, önbellek; `/821/*` ve `/ayse/*` noindex ve no-store. Yeni yönetici sayfası eklenirse buraya eklenir.
 - Alan adları: `neardiji.com`, `www.neardiji.com`. Medya: `media.neardiji.com`.
 
-## Sayfalar
-- `/` ana sayfa (`index.html`, içerik `site_content` tablosundan, varsayılan `assets/site-data.js` içindeki `ND_DEFAULT`).
-- `/821` süper yönetici: restoran ve katalog kayıtları, deneme/aktif/abonelik durumu (`paid_until`), müşteriye WhatsApp paylaşım metni.
-- `/ayse` site paneli: ana sayfa içeriğini düzenler.
-- `/katalog` ürün kataloğu (~7500 satır, React unpkg). Bulut katmanı `katalog/bulut.js`. `tools/sh21-bulut.py` bu sayfaya yama uygular (React sürüm sabitleme, CSP).
-- `/menu` NearMenu Premium: QR/NFC dijital menü (`menu/index.html`, ~10800 satır). Tablolar `restaurants`, `products`, `categories`, `events`; RPC çağrıları; görseller `NDMedia` ile.
-- `/menu/demo` demo ürün görselleri (.webp).
-- `katalog/urunler/<seri>/` katalog ürün görselleri (aqua, atlantis, bien, eva, icon, lego, moon, part, royal).
+## Sayfalar ve betikler
+Her sayfa ince HTML + ayrı `app.js` yapısındadır; mantık `app.js` içindedir.
+- `/` ana sayfa: `index.html` → `assets/eski-link.js` (eski `?r=firma` linkleri), `assets/site-data.js` (`ND_DEFAULT`), `assets/liquid-hero.js`, `assets/site.js` (`site_content` okur).
+- `404.html` → `assets/yonlendir.js`: `neardiji.com/firma` adresini firmanın menüsüne yönlendirir.
+- `/821` süper yönetici: `821/tema.js`, `assets/qr.js`, `821/app.js`. RPC: `admin_list_restaurants`, `admin_create_restaurant`, `admin_add_owner`, `catalog_admin_list`, `catalog_admin_create`, `catalog_admin_add_owner`, `admin_reset_password`.
+- `/ayse` site paneli: `ayse/tema.js`, `ayse/app.js`. Yetki `am_i_super`, içerik `site_content`.
+- `/katalog`: `katalog/app.js` (React, yerel `assets/vendor/react-18.3.1`), `katalog/bulut.js` (`window.SH21`), `katalog/pdf-font.js`. RPC: `get_catalog`, `get_catalog_access`, `tenant_state`, `track_catalog_visit`.
+- `/menu` NearMenu Premium: `menu/app.js`. RPC: `get_menu`, `menu_version`, `get_my_access`, `tenant_state`, `track_visit`; çeviri media-worker `/translate` ile.
+- Görseller: `menu/demo/` (demo), `katalog/urunler/<seri>/` (aqua, atlantis, bien, eva, icon, lego, moon, part, royal).
 - `katalog/SPEC-vade.md`: TL vade özelliği (uygulandı).
 - Bağlantı haritası: `tools/graphify/graph.html` ve `graph.json`.
 
 ## Supabase ve medya
-- Tek Supabase projesi (URL `assets/site-data.js` içinde). Tablolar: `restaurants`, `catalogs`, `site_content`, `products`, `categories`, `events`. Yazma yetkisi RPC `media_can_write` ile denetlenir.
+- Tek Supabase projesi (URL `assets/site-data.js` içinde). Tablolar: `restaurants`, `catalogs`, `site_content`, `products`, `categories`, `events`; `private.visit_seen`, `private.app_salt`.
+- Güvenlik modeli (`tools/sql/2026-10-28-guvenlik.sql`): anon tablolardan doğrudan okuyamaz, herkese açık veri `get_menu` / `get_catalog` RPC ile gelir; authenticated için sütun bazlı okuma izni. Yeni sütun eklenirse bu izinler güncellenir.
 - Anahtar yalnızca publishable olabilir. `service_role` veya gizli anahtar dosyaya yazılmaz.
-- Tüm yüklemeler `assets/media.js` (`NDMedia`) üzerinden. `BASE = https://media.neardiji.com` → Cloudflare R2 `neardiji-media`. Worker kodu `cloudflare/media-worker`.
-- Geçiş notları ve kalan işler: `cloudflare/GECIS.md` (Supabase Storage kovaları bir hafta sonra silinecek, GitHub Pages kapatılabilir).
+- Tüm yüklemeler `assets/media.js` (`NDMedia`: url, parse, put, del, delFolder) üzerinden → `media.neardiji.com`.
+- media-worker (`cloudflare/media-worker`): R2 `neardiji-media` okuma/yazma, klasör silme, yazma yetkisi `media_can_write`, `/translate` çevirisi Workers AI ile (oturum açmış kullanıcı).
+- Geçiş notları: `cloudflare/GECIS.md`.
 - Cloudflare API'ye `api.cloudflare.com` üzerinden Authorization başlığı YAZMADAN istek atılır; anahtarı proxy ekler.
 
 ## Kilitli kararlar
