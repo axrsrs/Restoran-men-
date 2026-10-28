@@ -211,6 +211,16 @@ function render(){
  if(modal)bindModal();
 }
 
+/* Giriş ekranındaki tema seçimi panelin kendi temasıdır */
+NDGiris.temaAyar({
+ oku:()=>document.documentElement.dataset.theme==="light"?"light":"dark",
+ yaz:t=>{
+  document.documentElement.dataset.theme=t;
+  safeSet("nd821Theme",t);
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==="light"?"#EBE9E5":"#111110";
+ }
+});
+
 function renderLogin(){
 
  const G=NDGiris;

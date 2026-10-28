@@ -3,7 +3,9 @@
              icerik: NDGiris.baslik(...) + NDGiris.alan(...) + NDGiris.buton(...) + NDGiris.hata(id) ...
              ekrana koyduktan sonra NDGiris.bagla(kok) — arka plan, 3D eğilme, şifre göster/gizle.
    Arka plan: kenarlardan merkeze akan noktalı eğriler ve üzerlerinde ilerleyen parçacıklar;
-   tıklanan yerden dalga yayılır. Tek canvas sayfa boyunca yaşar; ekran yeniden çizilince taşınır. */
+   tıklanan yerden dalga yayılır. Tek canvas sayfa boyunca yaşar; ekran yeniden çizilince taşınır.
+   Tema: açık / koyu. Her panel kendi tema ayarını NDGiris.temaAyar({ oku, yaz }) ile bağlar; giriş ekranında
+   yapılan seçim panelin kendisine de geçer. Geçiş menüdeki gibi: düğmeden kare açılarak. */
 (function () {
   "use strict";
   var esc = function (v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); };
@@ -15,8 +17,44 @@
     lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
     eye: '<svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>' +
       '<svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 10s3.5 5 10 5 10-5 10-5"/><path d="m4 13-1.5 2M20 13l1.5 2M9 15l-.8 2.4M15 15l.8 2.4"/></svg>',
+    gunes: '<svg class="gunes" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="3.2" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M3.2 12.8l1.1-1.1M11.7 4.3l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',
+    ay: '<svg class="ay" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.6 10.1A5.9 5.9 0 0 1 5.9 2.4a5.9 5.9 0 1 0 7.7 7.7Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>',
     ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
   };
+
+  /* ---------- tema ---------- */
+  var ayar = {
+    oku: function () {
+      var h = document.documentElement, t = h.dataset.theme || h.dataset.mode;
+      if (t === "light" || t === "dark") return t;
+      try { t = localStorage.getItem("ndg-tema"); } catch (e) { t = null; }
+      if (t === "light" || t === "dark") return t;
+      return matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    },
+    yaz: function (t) { try { localStorage.setItem("ndg-tema", t); } catch (e) { } }
+  };
+  function temaAyar(o) { if (o && o.oku) ayar.oku = o.oku; if (o && o.yaz) ayar.yaz = o.yaz; }
+  var temaSimdi = function () { return ayar.oku() === "light" ? "light" : "dark"; };
+  function temaEtiket(t) { return t === "light" ? "Koyu moda geç" : "Açık moda geç"; }
+  function temaUygula(t) {
+    document.querySelectorAll("[data-ndg]").forEach(function (k) {
+      k.setAttribute("data-ndg-tema", t);
+      var b = k.querySelector(".ndg-tema"); if (b) { b.setAttribute("aria-label", temaEtiket(t)); b.title = temaEtiket(t); }
+    });
+    if (tuval && tuval.isConnected) ciz(false);   /* yeni renkler geçişin ilk karesinde görünsün */
+  }
+  function temaDegistir(btn) {
+    var next = temaSimdi() === "light" ? "dark" : "light";
+    var uygula = function () { ayar.yaz(next); temaUygula(next); };
+    if (!document.startViewTransition || AZ.matches || !btn) { uygula(); return; }
+    var r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+    var max = Math.max(x, innerWidth - x, y, innerHeight - y) * 1.05;
+    var gecis = document.startViewTransition(uygula);
+    gecis.ready.then(function () {
+      var kare = function (d) { return "polygon(" + (x - d) + "px " + (y - d) + "px, " + (x + d) + "px " + (y - d) + "px, " + (x + d) + "px " + (y + d) + "px, " + (x - d) + "px " + (y + d) + "px)"; };
+      document.documentElement.animate({ clipPath: [kare(0), kare(max)] }, { duration: 400, easing: "ease-in-out", pseudoElement: "::view-transition-new(root)" });
+    }).catch(function () { });
+  }
 
   /* ---------- kart parçaları ---------- */
   function baslik(metin, alt) {
@@ -46,7 +84,9 @@
     o = o || {};
     var kap = o.form ? 'form class="ndg-glass ndg-form-wrap"' + (o.formId ? ' id="' + esc(o.formId) + '"' : "") + ' novalidate autocomplete="on"' : 'div class="ndg-glass"';
     var kapEnd = o.form ? "form" : "div";
-    return '<div class="ndg" data-ndg role="dialog" aria-modal="true" aria-label="Giriş">' +
+    var t = temaSimdi();
+    return '<div class="ndg" data-ndg data-ndg-tema="' + t + '" role="dialog" aria-modal="true" aria-label="Giriş">' +
+      '<button type="button" class="ndg-tema" data-ndg-tema-btn aria-label="' + temaEtiket(t) + '" title="' + temaEtiket(t) + '">' + IKON.gunes + IKON.ay + '</button>' +
       '<div class="ndg-glow" aria-hidden="true"></div><div class="ndg-dither" aria-hidden="true"></div>' +
       '<div class="ndg-wrap"><div class="ndg-card"><div class="ndg-beams" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b><b></b><b></b><b></b></div>' +
       '<' + kap + '>' + (o.kapat ? '<button type="button" class="ndg-close" id="' + esc(o.kapat) + '" aria-label="Kapat">×</button>' : "") +
@@ -77,7 +117,8 @@
     cx.clearRect(0, 0, G, Y);
     var mx = G / 2, my = Y / 2;
     if (ilerle) { patlamalar.forEach(function (p) { p.r += 15; p.can -= 0.015; }); patlamalar = patlamalar.filter(function (p) { return p.can > 0; }); }
-    cx.lineWidth = 1.2; cx.strokeStyle = "rgba(255,255,255,0.3)"; cx.setLineDash([1, 4]);
+    var acik = tuval.parentNode && tuval.parentNode.getAttribute && tuval.parentNode.getAttribute("data-ndg-tema") === "light";
+    cx.lineWidth = 1.2; cx.strokeStyle = acik ? "rgba(21,21,20,0.28)" : "rgba(255,255,255,0.3)"; cx.setLineDash([1, 4]);
     var noktalar = [];
     for (var i = 0; i < yollar.length; i++) {
       var y = yollar[i];
@@ -92,7 +133,7 @@
       noktalar.push(q.x + dx, q.y + dy);
     }
     cx.setLineDash([]);
-    cx.fillStyle = "rgba(255,255,255,0.7)";
+    cx.fillStyle = acik ? "rgba(21,21,20,0.7)" : "rgba(255,255,255,0.7)";
     for (var j = 0; j < noktalar.length; j += 2) cx.fillRect(noktalar[j] - 1.5, noktalar[j + 1] - 1.5, 3, 3);
   }
   function kare() {
@@ -114,7 +155,7 @@
       document.addEventListener("visibilitychange", function () { if (!document.hidden && tuval && tuval.isConnected) baslat(); });
       document.addEventListener("pointerdown", function (e) {
         if (!tuval || !tuval.isConnected || AZ.matches) return;
-        if (e.target.closest && e.target.closest(".ndg-card")) return;   /* kartın içindeki tıklamalar dalga yapmaz */
+        if (e.target.closest && e.target.closest(".ndg-card,.ndg-tema")) return;   /* kartın içindeki tıklamalar dalga yapmaz */
         patlamalar.push({ x: e.clientX, y: e.clientY, r: 0, can: 1 });
       }, { passive: true });
       boyutla();
@@ -148,6 +189,9 @@
     arkaPlan(kok);
     egilme(kok.querySelector(".ndg-card"));
     baslikAnim(kok.querySelector("[data-ndg-title]"));
+    kok.setAttribute("data-ndg-tema", temaSimdi());
+    var tb = kok.querySelector("[data-ndg-tema-btn]");
+    if (tb && !tb.__ndg) { tb.__ndg = true; tb.addEventListener("click", function () { temaDegistir(tb); }); }
     kok.querySelectorAll("[data-ndg-eye]").forEach(function (b) {
       if (b.__ndg) return; b.__ndg = true;
       b.addEventListener("click", function () {
@@ -159,5 +203,5 @@
     });
   }
 
-  window.NDGiris = { sayfa: sayfa, baslik: baslik, alan: alan, buton: buton, hata: hata, yukleniyor: yukleniyor, bagla: bagla, esc: esc };
+  window.NDGiris = { temaAyar: temaAyar, sayfa: sayfa, baslik: baslik, alan: alan, buton: buton, hata: hata, yukleniyor: yukleniyor, bagla: bagla, esc: esc };
 })();

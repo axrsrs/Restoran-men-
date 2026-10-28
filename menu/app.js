@@ -1115,6 +1115,12 @@ async function enterAdmin(){
 
 let loginStep="login";
 
+/* Giriş ekranındaki tema seçimi yönetim panelinin modudur (nmPanelMode) */
+NDGiris.temaAyar({
+ oku:()=>panelMode(),
+ yaz:t=>{safeSet("nmPanelMode",t);applyTheme()}
+});
+
 function renderCloudLogin(){
 
  if(!adminOpen||adminAuthenticated)return "";

@@ -63,6 +63,11 @@ function render(){
  app.innerHTML=appHTML();bindApp();updateStatus();
 }
 
+/* Giriş ekranındaki tema seçimi panelin (ve sitenin) tema tercihidir */
+NDGiris.temaAyar({
+ oku:function(){return document.documentElement.dataset.theme==="light"?"light":"dark"},
+ yaz:function(t){document.documentElement.dataset.theme=t;lsSet("nd-theme",t)}
+});
 function loginHTML(){
  var G=NDGiris;
  return G.sayfa(
