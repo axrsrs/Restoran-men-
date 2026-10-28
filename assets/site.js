@@ -118,8 +118,10 @@ function cta(c,cls){
  var h=safeHref(c.href)||"#";
  return '<a class="'+cls+'" href="'+esc(h)+'"'+linkAttrs(h)+'>'+esc(c.label)+ARROW+'</a>';
 }
-function renderBrand(){
- var dark=theme()==="dark", logo=logoSrc(dark), b=$("brand");
+function renderBrand(){fillLogo($("brand"));fillLogo($("ftLogo"))}
+function fillLogo(b){
+ if(!b)return;
+ var dark=theme()==="dark", logo=logoSrc(dark);
  var sz=Math.min(90,Math.max(18,+C.logoSize||34));
  b.style.setProperty("--logo-h",sz+"px");
  if(!logo){b.textContent=C.brand||"NearDiji";return}
@@ -130,8 +132,34 @@ function renderBrand(){
  }
  b.innerHTML='<img src="'+esc(logo)+'" alt="'+esc(C.brand)+'"'+(logoInvert(dark)?' class="inv"':"")+'>';
 }
-function waLink(n){var d=String(n||"").replace(/\D/g,"");if(!d)return "";if(d.indexOf("0")===0)d="90"+d.slice(1);return "https://wa.me/"+d}
+function waLink(n,text){
+ var d=String(n||"").replace(/\D/g,"");if(!d)return "";
+ if(d.indexOf("0")===0)d="90"+d.slice(1);else if(d.length===10&&d.charAt(0)==="5")d="90"+d;
+ var t=String(text||"").trim();
+ return "https://wa.me/"+d+(t?"?text="+encodeURIComponent(t):"");
+}
 function igLink(v){v=String(v||"").trim();if(!v)return "";if(/^https?:/i.test(v))return v;return "https://instagram.com/"+v.replace(/^@/,"")}
+/* sosyal medya: tam adres ya da kullanıcı adı kabul edilir */
+var SOCIAL=[
+ ["instagram","Instagram","https://instagram.com/",'<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.3" stroke="currentColor" stroke-width="1.8"/><circle cx="17.6" cy="6.4" r="1.2" fill="currentColor"/></svg>'],
+ ["linkedin","LinkedIn","https://linkedin.com/in/",'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>'],
+ ["x","X","https://x.com/",'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.59-6.64 7.59H.47l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93zm-1.29 19.5h2.04L6.49 3.24H4.3l13.31 17.41z"/></svg>'],
+ ["youtube","YouTube","https://youtube.com/@",'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>'],
+ ["tiktok","TikTok","https://tiktok.com/@",'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>'],
+ ["facebook","Facebook","https://facebook.com/",'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.45 18.63.07 12 .07S0 5.45 0 12.07c0 5.99 4.39 10.95 10.13 11.85v-8.38H7.08v-3.47h3.05V9.43c0-3.01 1.79-4.67 4.53-4.67 1.31 0 2.69.24 2.69.24v2.95h-1.51c-1.49 0-1.96.93-1.96 1.87v2.25h3.33l-.53 3.47h-2.8v8.38C19.61 23.03 24 18.06 24 12.07z"/></svg>']
+];
+function socialLink(v,base){
+ v=String(v||"").trim();if(!v)return "";
+ if(/^https?:\/\//i.test(v))return safeHref(v);
+ if(/^(www\.)?[\w-]+\.[a-z]{2,}\//i.test(v))return "https://"+v.replace(/^https?:\/\//i,"");
+ return base+encodeURIComponent(v.replace(/^@/,""));
+}
+var IC={
+ phone:'<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 3.5h3.2l1.6 4.2-2.1 1.4a11.5 11.5 0 0 0 7.2 7.2l1.4-2.1 4.2 1.6V19a1.5 1.5 0 0 1-1.6 1.5C10.6 20 4 13.4 3.5 5.1A1.5 1.5 0 0 1 5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+ wa:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35zm-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88zm8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.48-8.41z"/></svg>',
+ mail:'<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+ pin:'<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.5" stroke="currentColor" stroke-width="1.5"/></svg>'
+};
 
 function render(){
  var h=C.hero||{};
@@ -171,7 +199,7 @@ function render(){
  $("langs").textContent=C.languages||"";
  $("hakkinda").hidden=!C.about;
 
- var ct=C.contact||{}, wa=waLink(ct.whatsapp);
+ var ct=C.contact||{}, wa=waLink(ct.whatsapp,ct.waText);
  $("contactTitle").innerHTML=headlineHTML(C.contactTitle,"");
  $("contactText").textContent=C.contactText||"";
  var main="";
@@ -186,10 +214,77 @@ function render(){
  if(ct.address)chips.push('<span class="chip">'+esc(ct.address)+'</span>');
  $("chips").innerHTML=chips.join("");
 
- $("footText").textContent=(C.footer||"© "+C.brand)+" "+new Date().getFullYear();
- $("footPlace").textContent=ct.address||"";
+ renderFooter(ct,wa,list,refs);
  observeReveal();
 }
+
+/* ── alt bilgi ── */
+function mapLink(ct){
+ var m=safeHref(ct.mapUrl);if(m&&/^https?:/i.test(m))return m;
+ return ct.address?"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(ct.address):"";
+}
+function ftCol(id,cfg,items){
+ var el=$(id), show=cfg&&cfg.show!==false&&items.length;
+ el.hidden=!show;if(!show)return;
+ el.querySelector("h2").textContent=cfg.title||"";
+ el.querySelector("ul").innerHTML=items.map(function(x){
+  return '<li><a href="'+esc(x[1])+'"'+linkAttrs(x[1])+'>'+esc(x[0])+'</a></li>';
+ }).join("");
+}
+function renderFooter(ct,wa,projects,refs){
+ var cols=C.footerCols||{};
+ $("ftText").textContent=C.footerText||"";$("ftText").hidden=!C.footerText;
+
+ var li=[];
+ if(ct.phone)li.push('<li><a href="tel:'+esc(String(ct.phone).replace(/[^\d+]/g,""))+'">'+IC.phone+'<span>'+esc(ct.phone)+'</span></a></li>');
+ if(wa)li.push('<li><a href="'+esc(wa)+'" target="_blank" rel="noopener">'+IC.wa+'<span>'+esc(ct.whatsapp)+'<small>WhatsApp</small></span></a></li>');
+ if(ct.email)li.push('<li><a href="mailto:'+esc(ct.email)+'">'+IC.mail+'<span>'+esc(ct.email)+'</span></a></li>');
+ if(ct.address){var ml=mapLink(ct);
+  li.push('<li><a href="'+esc(ml)+'" target="_blank" rel="noopener">'+IC.pin+'<span>'+esc(ct.address)+'<small>Haritada aç</small></span></a></li>')}
+ $("ftContact").innerHTML=li.join("");$("ftContact").hidden=!li.length;
+
+ $("ftSocial").innerHTML=SOCIAL.map(function(s){
+  var h=socialLink(ct[s[0]],s[2]);
+  return h?'<a href="'+esc(h)+'" target="_blank" rel="noopener" aria-label="'+s[1]+'" title="'+s[1]+'">'+s[3]+'</a>':"";
+ }).join("");
+
+ var corp=[];
+ if(projects.length)corp.push(["Projeler","#projeler"]);
+ if(refs.length)corp.push(["Referanslar","#referanslar"]);
+ if((C.steps||[]).some(function(x){return x&&x.title}))corp.push(["Süreç","#surec"]);
+ if(C.about)corp.push([C.aboutTitle||"Hakkında","#hakkinda"]);
+ corp.push(["İletişim","#iletisim"]);
+ ftCol("ftCorp",cols.corporate,corp);
+ ftCol("ftSvc",cols.services,(C.services||[]).filter(function(x){return x&&x.title}).map(function(x){return [x.title,"#hizmetler"]}));
+ ftCol("ftDemo",cols.demos,(C.demos||[]).map(function(x){return x&&x.label&&safeHref(x.href)?[x.label,safeHref(x.href)]:null}).filter(Boolean));
+
+ var pv=C.privacy||{};
+ $("ftPrivacy").textContent=pv.title||"KVKK ve Gizlilik";
+ $("ftPrivacy").hidden=!String(pv.text||"").trim();
+ var name=String(C.footer||C.brand||"NearDiji").replace(/^\s*©\s*/,"").replace(/\s*©?\s*\d{4}\s*$/,"").trim()||C.brand;
+ $("ftCopy").textContent="© "+new Date().getFullYear()+" "+name+". Tüm hakları saklıdır.";
+
+ var fl=$("waFloat"), side=C.waFloat||"right", on=!!wa&&side!=="off";
+ fl.hidden=!on;document.body.classList.toggle("has-wa",on);document.body.classList.toggle("wa-left",on&&side==="left");
+ if(on){fl.href=wa;fl.className="wa-float"+(side==="left"?" left":"");if(!fl.firstChild)fl.innerHTML=IC.wa}
+}
+function openPrivacy(){
+ var pv=C.privacy||{}, d=$("legal");
+ $("legalTitle").textContent=pv.title||"KVKK ve Gizlilik";
+ /* boş satırla ayrılan her blok paragraf; kısa ilk satır başlık olur */
+ $("legalBody").innerHTML=String(pv.text||"").split(/\n\s*\n/).map(function(b){
+  b=b.trim();if(!b)return "";
+  var ls=b.split("\n");
+  if(ls.length>1&&ls[0].length<=70&&!/[.,:;!]$/.test(ls[0].trim()))return '<p><b>'+esc(ls[0].trim())+'</b>'+esc(ls.slice(1).join("\n"))+'</p>';
+  return '<p>'+esc(b)+'</p>';
+ }).join("");
+ if(typeof d.showModal==="function"){d.showModal()}else d.setAttribute("open","");
+ $("legalBody").scrollTop=0;
+}
+$("ftPrivacy").addEventListener("click",openPrivacy);
+$("legalClose").addEventListener("click",function(){var d=$("legal");if(d.close)d.close();else d.removeAttribute("open")});
+$("legal").addEventListener("click",function(e){if(e.target===this&&this.close)this.close()});
+if(location.hash==="#kvkk")setTimeout(openPrivacy,300);
 
 /* ── projeler: dairesel karusel ── */
 var STOCK={

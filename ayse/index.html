@@ -141,6 +141,11 @@ textarea.in{resize:vertical;min-height:84px;line-height:1.5}
 .mini textarea.in{min-height:42px}
 @media (max-width:620px){.mini{grid-template-columns:34px minmax(0,1fr) 36px}.mini textarea{grid-column:2/3}}
 .add{margin-top:12px}
+.sub-h{margin:28px 0 4px;padding-top:22px;border-top:1px solid var(--line);font-weight:500;font-size:17px;letter-spacing:-.01em}
+.card>.sub-h+.sub{margin-bottom:16px}
+.f>.check{padding:6px 0;color:var(--fg)}
+.demo-row{grid-template-columns:34px minmax(0,1fr) minmax(0,1.2fr) 36px}
+@media (max-width:620px){.demo-row{grid-template-columns:34px minmax(0,1fr) 36px}.demo-row input+input{grid-column:2/3}}
 
 .toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,30px);opacity:0;pointer-events:none;z-index:50;
  background:var(--fg);color:var(--bg);padding:12px 18px;border-radius:999px;font-size:14px;transition:all .3s;max-width:calc(100vw - 32px);text-align:center}

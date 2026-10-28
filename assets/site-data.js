@@ -52,7 +52,7 @@ window.ND_DEFAULT = {
       link: "https://axrsrs.github.io/asoda/", linkLabel: "Siteyi aç", image: "", featured: false, hidden: false },
     { id: "p5", name: "PRONTO", tag: "Sipariş & Teklif", year: "2026", status: "live",
       desc: "Mobilya siparişlerini üretimden teslime kadar izleyen 10 kullanıcılı takip sistemi; web ve masaüstü. Ürünler, müşteriler, tedarikçiler, raporlar ve teklif/satış modülü.",
-      link: "", linkLabel: "", image: "", featured: false, hidden: false },
+      link: "/pronto/teklif", linkLabel: "Demoyu aç", image: "", featured: false, hidden: false },
     { id: "p6", name: "Bizim Ekmekçi", tag: "QR Menü", year: "2026", status: "live",
       desc: "Fırın ve kafe için cam görünümlü QR menü. Kategori kartları, otomatik çeviri, logoya basılı tutarak açılan PIN korumalı yönetim paneli.",
       link: "", linkLabel: "", image: "", featured: false, hidden: false },
@@ -89,6 +89,26 @@ window.ND_DEFAULT = {
   languages: "Türkçe · English · العربية",
   contactTitle: "Bir proje mi düşünüyorsunuz?",
   contactText: "Kısa bir mesaj yeterli; en kısa sürede dönüş yapıyorum.",
-  contact: { whatsapp: "", phone: "", email: "", instagram: "", address: "İnegöl, Bursa" },
-  footer: "© NearDiji"
+  contact: {
+    whatsapp: "", waText: "Merhaba, neardiji.com üzerinden yazıyorum.",
+    phone: "", email: "", address: "İnegöl, Bursa", mapUrl: "",
+    instagram: "", linkedin: "", x: "", youtube: "", tiktok: "", facebook: ""
+  },
+  waFloat: "right",                /* right | left | off — numara boşsa hiç görünmez */
+  footer: "NearDiji",              /* telif satırı: “© yıl NearDiji. Tüm hakları saklıdır.” */
+  footerText: "İşletmeler için QR menü, katalog, teklif ve sipariş sistemleri.",
+  footerCols: {
+    corporate: { show: true, title: "Kurumsal" },
+    services: { show: true, title: "Hizmetler" },
+    demos: { show: true, title: "Demolar" }
+  },
+  demos: [
+    { label: "NearMenu QR menü", href: "/menu" },
+    { label: "Ürün kataloğu", href: "/katalog" },
+    { label: "PRONTO teklif", href: "/pronto/teklif" }
+  ],
+  privacy: {
+    title: "KVKK ve Gizlilik",
+    text: "Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında neardiji.com ziyaretçilerini bilgilendirmek amacıyla hazırlanmıştır.\n\nVeri sorumlusu\nNearDiji, İnegöl / Bursa.\n\nHangi veriler işlenir?\nBu sitede üyelik veya form bulunmaz. Bizimle WhatsApp, telefon ya da e-posta üzerinden iletişime geçtiğinizde paylaştığınız ad, telefon numarası, e-posta adresi ve mesaj içeriği yalnızca talebinize yanıt vermek ve teklif hazırlamak amacıyla işlenir.\n\nÇerezler ve tarayıcı kaydı\nSite reklam veya takip çerezi kullanmaz. Tema tercihiniz ve sitenin hızlı açılması için gereken içerik yalnızca kendi tarayıcınızda saklanır. Ziyaret istatistikleri kişisel veri içermeyen, çerezsiz bir ölçüm hizmetiyle tutulur.\n\nAktarım\nKişisel verileriniz satılmaz ve pazarlama amacıyla üçüncü kişilerle paylaşılmaz; yalnızca yasal zorunluluk hâlinde yetkili kurumlara aktarılabilir.\n\nHaklarınız\nKVKK'nın 11. maddesi uyarınca verilerinizin işlenip işlenmediğini öğrenme, düzeltilmesini veya silinmesini isteme ve işlemeye itiraz etme haklarına sahipsiniz. Taleplerinizi sitedeki iletişim kanallarından bize iletebilirsiniz."
+  }
 };
