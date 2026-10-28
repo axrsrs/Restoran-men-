@@ -2796,6 +2796,85 @@ html[data-mode="light"] .setupTasks span{color:#2e7d32}
  .tourEmblem path{animation:none;opacity:1;transform:none}
 }
 
+
+/* ── menü altı bilgi kartı ── */
+.menuInfo{display:flex;flex-direction:column;gap:12px;margin-top:38px}
+.infoCard{display:flex;align-items:center;gap:13px;padding:15px 14px;border-radius:var(--cardRadius);color:var(--text);text-decoration:none;
+ border:1px solid rgba(255,255,255,.075);
+ background:linear-gradient(145deg,rgba(30,30,32,var(--cardOpacity)),rgba(16,16,18,var(--cardOpacity)));
+ box-shadow:0 14px 42px rgba(0,0,0,.24),0 1px 0 rgba(255,255,255,.025) inset;min-width:0}
+.infoIcon{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:var(--accent);
+ background:color-mix(in srgb,var(--accent) 12%,transparent);border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
+.infoIcon svg{width:21px;height:21px}
+.infoIcon.g{background:#fff;border-color:rgba(0,0,0,.06)}
+.infoMain{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.infoMain small{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.infoMain b{font-size:15px;font-weight:750;overflow-wrap:anywhere}
+.infoSub{font-size:12px;color:var(--muted);line-height:1.4}
+.openBadge{display:inline-flex;align-items:center;gap:7px}
+.openBadge i,.heroStatus i{width:8px;height:8px;border-radius:50%;background:#e5484d;box-shadow:0 0 0 3px rgba(229,72,77,.18);flex:none}
+.openBadge.on i,.heroStatus.on i{background:#30a46c;box-shadow:0 0 0 3px rgba(48,164,108,.2)}
+.heroStatus{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font-size:11.5px;font-weight:700;color:var(--muted)}
+.hoursCard{display:block;padding:0}
+.hoursCard summary{display:flex;align-items:center;gap:13px;padding:15px 14px;cursor:pointer;list-style:none;min-height:56px}
+.hoursCard summary::-webkit-details-marker{display:none}
+.infoChev{flex:none;width:36px;height:36px;display:grid;place-items:center;color:var(--muted);transition:transform .25s}
+.infoChev svg{width:18px;height:18px}
+.hoursCard[open] .infoChev{transform:rotate(180deg)}
+.weekList{list-style:none;margin:0;padding:4px 14px 12px;border-top:1px solid rgba(255,255,255,.07)}
+.weekList li{display:flex;justify-content:space-between;gap:12px;padding:10px 2px;font-size:13px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.05)}
+.weekList li:last-child{border-bottom:0}
+.weekList li.today{color:var(--text);font-weight:750}
+.weekList em{font-style:normal;font-size:9.5px;font-weight:850;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-inline-start:6px}
+.wifiRow{display:flex;gap:8px;align-items:baseline;min-width:0;font-size:13px}
+.wifiRow span{flex:none;color:var(--muted);font-size:12px;min-width:46px}
+.wifiRow b{font-size:14px;font-weight:750;overflow-wrap:anywhere}
+.copyBtn{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border-radius:999px;cursor:pointer;
+ border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);background:transparent;color:var(--accent);font:inherit;font-size:12px;font-weight:800}
+.copyBtn svg{width:16px;height:16px}
+.copyBtn.done{background:var(--accent);color:var(--onAccent)}
+.reviewCard{transition:transform .2s,border-color .2s}
+.reviewCard:active{transform:scale(.99)}
+.stars{flex:none;display:flex;color:#FBBC05}
+.stars svg{width:13px;height:13px}
+.infoBlock{padding:6px 2px 0}
+.infoBlock.center{text-align:center}
+.infoLabel{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.deliveryList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.deliveryBtn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 12px;border-radius:14px;text-decoration:none;
+ color:var(--text);font-size:13px;font-weight:750;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);text-align:center}
+.deliveryBtn i{width:9px;height:9px;border-radius:50%;background:var(--dc);flex:none}
+.socialList{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+.socialBtn{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:var(--text);
+ border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04)}
+.socialBtn svg{width:19px;height:19px}
+.vatNote{margin:6px 0 0;text-align:center;font-size:11px;color:var(--muted)}
+.signature{display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border-radius:999px;text-decoration:none;color:var(--pMuted);
+ font-size:11px;letter-spacing:.02em;transition:color .2s,background .2s}
+.signature:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.sigBrand{display:inline-flex;align-items:center;gap:6px;color:var(--text);opacity:.85}
+.sigBrand b{font-family:"Geist",system-ui,sans-serif;font-weight:600;font-size:12.5px;letter-spacing:-.01em}
+.sigMark{width:15px;height:15px}
+@media(max-width:360px){.deliveryList{grid-template-columns:1fr}.copyBtn span{display:none}.copyBtn{width:44px;padding:0;justify-content:center}}
+html[data-mode="light"] .infoCard{background:linear-gradient(145deg,rgba(255,255,255,var(--cardOpacity)),rgba(250,248,244,var(--cardOpacity)));
+ border-color:rgba(0,0,0,.06);box-shadow:0 10px 28px rgba(0,0,0,.06)}
+html[data-mode="light"] .infoIcon:not(.g){color:var(--accentInk);background:color-mix(in srgb,var(--accentInk) 9%,transparent);border-color:color-mix(in srgb,var(--accentInk) 16%,transparent)}
+html[data-mode="light"] .weekList{border-top-color:rgba(0,0,0,.07)}
+html[data-mode="light"] .weekList li{border-bottom-color:rgba(0,0,0,.05)}
+html[data-mode="light"] .weekList em,html[data-mode="light"] .copyBtn{color:var(--accentInk)}
+html[data-mode="light"] .copyBtn{border-color:color-mix(in srgb,var(--accentInk) 30%,transparent)}
+html[data-mode="light"] .copyBtn.done{background:var(--accentInk);color:#fff}
+html[data-mode="light"] .deliveryBtn,html[data-mode="light"] .socialBtn{background:#fff;border-color:rgba(0,0,0,.08)}
+html[data-mode="light"] .signature:hover{background:rgba(0,0,0,.04)}
+
+/* panel: haftalık saat düzenleyici */
+.weekEdit{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.weekEditRow{display:grid;grid-template-columns:minmax(64px,1fr) minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:center}
+.weekEditRow>span{font-size:13px;font-weight:700}
+.weekEditRow input[type="time"]{width:100%;min-width:0;min-height:44px;padding:8px;border-radius:12px;border:1px solid var(--pLine2);background:var(--pField);color:var(--pText);font:inherit;font-size:14px}
+.weekOff{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--pMuted);min-height:44px;cursor:pointer}
+.weekOff input{width:18px;height:18px;accent-color:var(--accent)}
+@media(max-width:420px){.weekEditRow{grid-template-columns:1fr 1fr auto}.weekEditRow>span{grid-column:1/-1;margin-top:4px}}
 </style>
 </head>
 
