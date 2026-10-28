@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https://rfwgjzkewtjpdcvrhepg.supabase.co https://cloudflareinsights.com https://media.neardiji.com https://translate.googleapis.com https://api.mymemory.translated.net https://open.er-api.com https://api.frankfurter.app https://api.frankfurter.dev; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https://rfwgjzkewtjpdcvrhepg.supabase.co https://cloudflareinsights.com https://media.neardiji.com https://translate.googleapis.com https://api.mymemory.translated.net https://open.er-api.com https://api.frankfurter.app https://api.frankfurter.dev; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
@@ -2505,6 +2505,297 @@ a.adminButton{
   }
 }
 
+
+/* =========================================================
+   STÜDYO PANELİ: yan çubuk (bilgisayar), alt çubuk (telefon),
+   canlı önizleme, akordeon menü, hızlı ekleme, tur
+========================================================= */
+.adminNav{
+ position:absolute;left:0;top:0;bottom:0;z-index:70;width:84px;
+ display:flex;flex-direction:column;align-items:center;gap:6px;
+ padding:16px 0 calc(16px + env(safe-area-inset-bottom));
+ background:var(--pBar);border-right:1px solid var(--pLine)
+}
+.adminNavBrand{
+ width:42px;height:42px;border-radius:13px;margin-bottom:12px;
+ display:flex;align-items:center;justify-content:center;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:var(--onAccent);font-size:18px;font-weight:1000
+}
+.navBtn{
+ width:66px;min-height:58px;padding:8px 0;border:0;border-radius:14px;
+ display:grid;justify-items:center;align-content:center;gap:4px;
+ background:transparent;color:var(--pMuted);font-size:10.5px;font-weight:800
+}
+.navBtn svg{width:21px;height:21px}
+.navBtn.active{
+ background:color-mix(in srgb,var(--accent) 14%,transparent);
+ color:var(--accent2)
+}
+.navAdd{
+ width:46px;height:46px;margin:6px 0;border:0;border-radius:50%;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:var(--onAccent);font-size:26px;font-weight:600;line-height:1;
+ box-shadow:0 8px 22px color-mix(in srgb,var(--accent) 35%,transparent)
+}
+.navSpacer{flex:1}
+.navHelp{
+ width:42px;height:42px;border-radius:13px;border:1px solid var(--pLine);
+ background:var(--pSurface);color:var(--pText2);font-size:16px;font-weight:900
+}
+.adminOverlay .admin{flex:1;width:auto;margin-left:84px;animation:none}
+.adminHeader,.adminBody{width:100%}
+.adminBody{max-width:900px;margin:0 auto}
+.adminTopActions{display:flex;gap:8px;align-items:center}
+.adminTopActions .iconBtn{width:42px;height:42px}
+#tourBtnTop{display:none}
+
+@media(max-width:759px){
+ .adminNav{
+  top:auto;right:0;width:auto;height:auto;flex-direction:row;
+  justify-content:space-around;gap:0;padding:6px 6px calc(8px + env(safe-area-inset-bottom));
+  border-right:0;border-top:1px solid var(--pLine);backdrop-filter:blur(20px)
+ }
+ .adminNavBrand,.navSpacer,.navHelp{display:none}
+ .navBtn{width:auto;flex:1;min-height:54px}
+ .navAdd{width:54px;height:54px;flex:0 0 54px;margin:-24px 4px 0}
+ .adminOverlay .admin{margin-left:0}
+ .adminOverlay .saveBar{display:none}
+ .adminBody{padding-bottom:130px}
+ #tourBtnTop{display:inline-flex}
+}
+
+/* canlı önizleme */
+#nmPreviewDock{
+ position:fixed;top:0;right:0;bottom:0;z-index:260;width:420px;
+ display:none;flex-direction:column;align-items:center;gap:12px;
+ padding:16px 16px 20px;
+ background:var(--pBg);border-left:1px solid var(--pLine);color:var(--pText)
+}
+#nmPreviewDock.show{display:flex}
+.pvBar{width:100%;display:flex;align-items:center;gap:10px}
+.pvBar div{flex:1;min-width:0}
+.pvBar b{display:block;font-size:13px}
+.pvBar small{display:block;margin-top:2px;color:var(--pMuted);font-size:10px}
+.pvClose{display:none;width:42px;height:42px;border-radius:12px;border:1px solid var(--pLine);background:var(--pSurface);color:var(--pText);font-size:20px}
+.pvPhone{
+ flex:1;width:100%;max-width:375px;max-height:812px;min-height:0;
+ border:10px solid #050505;border-radius:40px;overflow:hidden;background:#000;
+ box-shadow:0 24px 60px -24px rgba(0,0,0,.6)
+}
+.pvPhone iframe{display:block;width:100%;height:100%;border:0;background:#111}
+#nmPreviewDock.full{left:0;width:auto;padding:12px 12px calc(12px + env(safe-area-inset-bottom));z-index:270}
+#nmPreviewDock.full .pvClose{display:inline-flex;align-items:center;justify-content:center}
+#nmPreviewDock.full .pvPhone{max-width:none;max-height:none;border-width:0;border-radius:18px}
+html.adminDocked .adminOverlay{right:420px;background:var(--pBg)}
+html.adminDocked #openPreview{display:none}
+
+/* menü sekmesi */
+.menuHead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.menuHead .adminButton{min-height:44px;font-size:12px;flex:none}
+.menuToolbar{display:flex;gap:8px;align-items:flex-start;margin-bottom:14px}
+.menuToolbar .adminSearch{flex:1;margin-bottom:0}
+.toolsWrap{position:relative}
+.toolsBtn{
+ width:48px;height:48px;border-radius:14px;border:1px solid var(--pLine);
+ background:var(--pField);color:var(--accent2);font-size:20px;font-weight:900
+}
+.toolsBtn[aria-expanded="true"]{border-color:var(--accent)}
+.toolsMenu{
+ position:absolute;right:0;top:54px;z-index:80;width:250px;padding:6px;
+ display:grid;gap:2px;border:1px solid var(--pLine);border-radius:14px;
+ background:var(--pBg);box-shadow:0 18px 40px rgba(0,0,0,.35)
+}
+.toolsMenu button{
+ min-height:46px;padding:10px 12px;border:0;border-radius:10px;text-align:left;
+ background:transparent;color:var(--pText);font-size:13px;font-weight:700
+}
+.toolsMenu button:hover,.toolsMenu button:focus-visible{background:var(--pSurface)}
+
+.catAccordion{gap:10px}
+.catBlock{
+ flex:1;min-width:0;border:1px solid var(--pLine);border-radius:16px;
+ background:var(--pField);overflow:hidden
+}
+.catRow.open .catBlock{border-color:color-mix(in srgb,var(--accent) 35%,transparent)}
+.catHead{display:flex;align-items:stretch}
+.catToggle{
+ flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:10px 12px;
+ border:0;background:transparent;color:var(--pText);text-align:left
+}
+.catToggle .adminCategoryThumb{width:48px;height:48px;flex-basis:48px}
+.catChevron{color:var(--pMuted);font-size:14px;transition:transform .25s}
+.catRow.open .catChevron{transform:rotate(180deg)}
+.catEdit{
+ flex:0 0 52px;border:0;border-left:1px solid var(--pLine);
+ background:transparent;color:var(--pMuted);font-size:16px
+}
+.catItems{padding:4px 10px 12px;border-top:1px solid var(--pLine)}
+.catItems .adminProductList{gap:7px;padding-top:8px}
+.catItems .adminProductItem{padding:8px;background:var(--pSurface)}
+.catItems .adminProductThumb{width:44px;height:44px;flex-basis:44px}
+.catEmpty{padding:12px 4px 2px;color:var(--pMuted);font-size:12px}
+.soldDot{
+ flex:0 0 34px;border:0;border-radius:10px;background:transparent;
+ display:flex;align-items:center;justify-content:center
+}
+.soldDot::before{
+ content:"";width:11px;height:11px;border-radius:50%;
+ background:#43a047;box-shadow:0 0 0 4px rgba(67,160,71,.15)
+}
+.soldDot.off::before{background:#e5534b;box-shadow:0 0 0 4px rgba(229,83,75,.16)}
+.quickAdd{display:flex;gap:7px;margin-top:10px}
+.quickAdd input{
+ flex:1;min-width:0;height:46px;padding:0 12px;
+ border:1px dashed color-mix(in srgb,var(--accent) 45%,transparent);
+ border-radius:12px;background:var(--pBg);color:var(--pText);font-size:14px;outline:none
+}
+.quickAdd input:focus{border-style:solid;border-color:var(--accent)}
+.quickAdd input.qaPriceIn{flex:0 0 92px}
+.quickAdd .adminButton{flex:none;min-height:46px;font-size:12px}
+.catAdd{margin-top:14px}
+.adminRow.dragging .catBlock{border-color:var(--accent)}
+.catHead .dragHandle{flex:0 0 36px;border-radius:0;background:transparent}
+@media(max-width:759px){
+ .catItems{padding:4px 8px 10px}
+ .catItems .adminRow{gap:4px}
+ .catItems .dragHandle{flex-basis:22px}
+ .soldDot{flex-basis:28px}
+ .catItems .adminProductItem{gap:8px;padding:7px}
+ .catItems .adminProductThumb{width:36px;height:36px;flex-basis:36px}
+ .catItems .quickPrice{flex-basis:78px}
+ .catToggle{padding:10px 8px}
+ .catEdit{flex-basis:46px}
+}
+
+/* hızlı ekleme penceresi */
+.qaLayer{position:absolute;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:20px}
+.qaBackdrop{position:absolute;inset:0;background:var(--pOverlay);backdrop-filter:blur(6px)}
+.qaSheet{
+ position:relative;width:min(100%,480px);max-height:calc(100% - 20px);overflow:auto;
+ padding:18px;border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);
+ border-radius:22px;background:var(--pBg);box-shadow:0 30px 70px rgba(0,0,0,.5);
+ animation:qaIn .3s cubic-bezier(.2,.8,.2,1)
+}
+@keyframes qaIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+.qaGrab{display:none;width:40px;height:4px;border-radius:9px;background:var(--pLine2);margin:0 auto 10px}
+.qaHead{display:flex;align-items:center;justify-content:space-between}
+.qaHead b{font-size:18px}
+.qaPhoto{position:relative;min-height:47px;overflow:hidden}
+.qaPhoto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.chipRow{display:flex;flex-wrap:wrap;gap:7px}
+.chip{
+ min-height:38px;padding:8px 13px;border:1px solid var(--pLine);border-radius:999px;
+ background:var(--pSurface);color:var(--pText2);font-size:12px;font-weight:800
+}
+.chip.on{
+ border-color:color-mix(in srgb,var(--accent) 50%,transparent);
+ background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent2)
+}
+.qaActions{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:16px}
+.qaActions .adminButton{min-height:48px;font-size:12px}
+@media(max-width:759px){
+ .qaLayer{align-items:flex-end;padding:0}
+ .qaSheet{width:100%;max-height:92%;border-radius:22px 22px 0 0;padding-bottom:calc(18px + env(safe-area-inset-bottom));animation-name:qaUp}
+ .qaGrab{display:block}
+ @keyframes qaUp{from{transform:translateY(40%)}to{transform:none}}
+}
+
+/* ürün durumu çipleri */
+.chipToggle{position:relative;display:inline-flex}
+.chipToggle input{position:absolute;opacity:0;width:1px;height:1px}
+.chipToggle span{
+ display:inline-flex;align-items:center;min-height:40px;padding:8px 14px;
+ border:1px solid var(--pLine);border-radius:999px;background:var(--pSurface);
+ color:var(--pText2);font-size:12px;font-weight:800;cursor:pointer
+}
+.chipToggle input:checked+span{
+ border-color:color-mix(in srgb,var(--accent) 50%,transparent);
+ background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent2)
+}
+.chipToggle input:focus-visible+span{outline:2px solid var(--accent2);outline-offset:2px}
+.adminDetails{margin-bottom:12px;border:1px solid var(--pLine);border-radius:17px;background:var(--pSurface)}
+.adminDetails>summary{padding:15px 17px;cursor:pointer;font-size:13px;font-weight:850;color:var(--pText2);list-style:none}
+.adminDetails>summary::-webkit-details-marker{display:none}
+.adminDetails>summary::after{content:"⌄";float:right;color:var(--pMuted)}
+.adminDetails[open]>summary::after{content:"⌃"}
+.adminDetails>.adminCard{margin:0;border:0;border-top:1px solid var(--pLine);border-radius:0 0 17px 17px}
+
+/* kurulum kartı */
+.setupCard{
+ padding:16px;margin-bottom:16px;border-radius:18px;
+ border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);
+ background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 13%,transparent),rgba(255,255,255,.01))
+}
+.setupTop{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.setupTop b{font-size:16px}
+.setupTop span{color:var(--pMuted);font-size:11px;white-space:nowrap}
+.setupMeter{height:7px;margin:12px 0;border-radius:9px;background:var(--pSurface2);overflow:hidden}
+.setupMeter i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .6s}
+.setupTasks{display:flex;flex-wrap:wrap;gap:7px}
+.setupTasks span,.setupTasks button{
+ min-height:36px;padding:8px 12px;border-radius:999px;font-size:11px;font-weight:800;
+ display:inline-flex;align-items:center
+}
+.setupTasks span{background:rgba(67,160,71,.12);color:#6fcf83}
+html[data-mode="light"] .setupTasks span{color:#2e7d32}
+.setupTasks button{border:1px dashed color-mix(in srgb,var(--accent) 50%,transparent);background:transparent;color:var(--accent2)}
+
+/* rehberlik turu */
+#nmTour{position:fixed;inset:0;z-index:600}
+.tourSpot{
+ position:fixed;border-radius:16px;pointer-events:none;
+ box-shadow:0 0 0 2px var(--accent),0 0 0 9999px rgba(4,4,4,.72);
+ transition:top .5s cubic-bezier(.65,0,.35,1),left .5s cubic-bezier(.65,0,.35,1),width .5s cubic-bezier(.65,0,.35,1),height .5s cubic-bezier(.65,0,.35,1)
+}
+.tourSpot::after{
+ content:"";position:absolute;inset:-2px;border-radius:inherit;
+ border:2px solid var(--accent2);animation:tourPulse 1.8s ease-out infinite
+}
+@keyframes tourPulse{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.1)}}
+.tourTip{
+ position:fixed;width:min(320px,calc(100vw - 24px));padding:17px;
+ border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:18px;
+ background:#1b1a18;color:#f1ece2;box-shadow:0 22px 55px rgba(0,0,0,.6);
+ transition:top .5s cubic-bezier(.65,0,.35,1),left .5s cubic-bezier(.65,0,.35,1);
+ animation:qaIn .35s cubic-bezier(.2,.8,.2,1)
+}
+.tourStep{color:var(--accent2);font-size:11px;font-weight:800}
+.tourTip h3{margin:4px 0 6px;font-size:19px;line-height:1.2}
+.tourTip p{margin:0;color:#cfc8ba;font-size:13px;line-height:1.55}
+.tourDots{display:flex;gap:5px;margin:14px 0}
+.tourDots i{width:6px;height:6px;border-radius:9px;background:#3b3a37;transition:width .3s,background .3s}
+.tourDots i.on{width:20px;background:var(--accent)}
+.tourNav{display:flex;align-items:center;gap:8px}
+.tourNav .tourSkip{margin-right:auto;border:0;background:none;color:#9b9486;font-size:12px;font-weight:800;padding:10px 0}
+.tourNav .adminButton{min-height:42px;font-size:12px}
+.tourNav .adminButton:not(.gold){background:#272624;border-color:#34332f;color:#f1ece2}
+.tourWelcome{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,4,4,.78);backdrop-filter:blur(8px)}
+.tourCard{
+ width:min(400px,100%);padding:30px 22px 20px;text-align:center;border-radius:24px;
+ border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);background:#1b1a18;color:#f1ece2;
+ display:grid;justify-items:center;gap:10px;animation:tourCardIn .5s cubic-bezier(.2,.9,.3,1.25)
+}
+@keyframes tourCardIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+.tourCard h3{margin:4px 0 0;font-size:26px}
+.tourCard p{margin:0;color:#c9c1b2;font-size:14px;line-height:1.55}
+.tourCard .adminButton{width:100%;min-height:50px;font-size:14px;margin-top:8px}
+.tourLater{border:0;background:none;color:#9b9486;font-size:12px;font-weight:800;padding:8px}
+.tourEmblem{width:86px;height:86px}
+.tourEmblem circle{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:240;stroke-dashoffset:240;animation:tourDraw 1.1s .15s ease forwards}
+.tourEmblem path{fill:var(--accent2);opacity:0;transform-origin:43px 43px;transform:scale(.4) rotate(-25deg);animation:tourPop .55s cubic-bezier(.2,.9,.3,1.4) forwards}
+.tourEmblem path:nth-of-type(1){animation-delay:.55s}
+.tourEmblem path:nth-of-type(2){animation-delay:.7s}
+.tourEmblem path:nth-of-type(3){animation-delay:.85s}
+@keyframes tourDraw{to{stroke-dashoffset:0}}
+@keyframes tourPop{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+ .tourSpot,.tourTip{transition:none}
+ .tourSpot::after,.tourTip,.tourCard,.qaSheet{animation:none}
+ .tourEmblem circle{animation:none;stroke-dashoffset:0}
+ .tourEmblem path{animation:none;opacity:1;transform:none}
+}
+
 </style>
 </head>
 
@@ -3500,6 +3791,16 @@ function mergeData(saved){
 
 const LOADER_HTML=`<div class="orbital-loader" role="img" aria-label="Yükleniyor"><div class="core-system"><div class="core-halo"></div><div class="core-outer-ring"></div><div class="core-secondary-ring"></div><div class="core-thin-ring"></div><div class="core-inner-glow"></div><div class="core-micro-center"></div></div><div class="pulse-system"><div class="pulse-ring pulse-ring-1"></div><div class="pulse-ring pulse-ring-2"></div><div class="pulse-ring pulse-ring-3"></div></div><div class="orbit-system orbit-1"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-circle"></div><div class="object-trail"></div></div></div><div class="orbit-system orbit-2"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-ring"></div></div></div><div class="orbit-system orbit-3"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-bright-point"></div></div></div><div class="orbit-system orbit-4"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-diamond"></div></div></div><div class="orbit-system orbit-5"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-line"></div></div></div><div class="orbit-system orbit-6"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-square"></div></div></div><div class="orbit-system orbit-7"><div class="orbit-path"></div><div class="orbit-object-wrapper"><div class="orbit-object obj-fragment"></div></div></div><div class="particle-system"><div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div><div class="particle p4"></div><div class="particle p5"></div><div class="particle p6"></div><div class="particle p7"></div><div class="particle p8"></div><div class="particle p9"></div><div class="particle p10"></div><div class="particle p11"></div><div class="particle p12"></div><div class="particle p13"></div><div class="particle p14"></div><div class="particle p15"></div></div><div class="energy-fragments"><div class="energy-fragment ef1"></div><div class="energy-fragment ef2"></div><div class="energy-fragment ef3"></div></div></div>`;
 const CLOUD=true;
+
+/* Panel önizlemesi: menü, panelin içindeki çerçevede ?onizleme=1 ile açılır.
+   Veriyi sunucudan değil panelden alır; hiçbir şey kaydetmez, ziyaret saymaz. */
+const PREVIEW=(()=>{
+ try{
+  return window.parent!==window&&
+   new URLSearchParams(location.search).has("onizleme")&&
+   window.parent.location.origin===location.origin;
+ }catch(e){return false}
+})();
 const SB_URL="https://rfwgjzkewtjpdcvrhepg.supabase.co";
 const SB_KEY="sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
 const MEDIA_BUCKET="menu-media";
@@ -4199,6 +4500,8 @@ async function loadAccess(){
 /* Logoya 3 sn basınca: oturum geçerliyse doğrudan panel, değilse giriş ekranı */
 async function openAdminFlow(){
 
+ if(PREVIEW)return;
+
  adminOpen=true;
  adminAuthenticated=false;
  adminTab="general";
@@ -4242,6 +4545,7 @@ async function enterAdmin(){
  loginStep="login";
  render();
  setSyncStatus("saved");
+ maybeWelcome();
 }
 
 let loginStep="login";
@@ -4615,6 +4919,10 @@ let pinCache=null;
 let saveWarned=false;
 
 function saveData(){
+
+ if(PREVIEW)return true;
+
+ postPreview();
 
  if(CLOUD){
   if(canWrite())scheduleSync();
@@ -6379,6 +6687,8 @@ function renderAdminGeneral(){
   <p>NearMenu işletme panelini buradan yönetebilirsin.</p>
  </div>
 
+ ${renderSetupCard()}
+
  ${
   !CLOUD&&getAdminPin()===DEFAULT_ADMIN_PIN
   ?
@@ -6551,6 +6861,12 @@ function adminProductRow(item,category,draggable){
 
   ${draggable?`<div class="dragHandle" aria-label="Sürükle">⋮⋮</div>`:""}
 
+  <button class="soldDot${item.sold?" off":""}"
+   data-quick-sold="${esc(item.id)}"
+   aria-pressed="${!!item.sold}"
+   aria-label="${item.sold?"Tükendi. Satışa açmak için dokun.":"Satışta. Tükendi yapmak için dokun."}"
+   title="${item.sold?"Tükendi. Satışa açmak için dokun.":"Satışta. Tükendi yapmak için dokun."}"></button>
+
   <button class="adminProductItem"
    data-admin-product="${esc(item.id)}">
 
@@ -6685,23 +7001,46 @@ function renderBulkPrice(){
 
 function renderAdminCategories(){
 
+ const total=allProducts().length;
+
  return `
 
- <div class="adminSectionHeader">
-  <h2>Menü Yönetimi</h2>
-  <p>Tüm kategori ve ürünlerini yönet.</p>
+ <div class="adminSectionHeader menuHead">
+  <div>
+   <h2>Menü</h2>
+   <p>${DATA.categories.length} kategori • ${total} ürün</p>
+  </div>
+  <button class="adminButton gold" id="qaOpen">+ Ürün ekle</button>
  </div>
 
- <div class="adminSearch">
-  <span>⌕</span>
-  <input id="adminSearchInput" type="text" enterkeyhint="search"
-   placeholder="Ürün ara (ad veya açıklama)..."
-   value="${esc(adminSearch)}"
-   autocomplete="off">
-  ${adminSearch?`<button id="adminSearchClear" aria-label="Temizle">×</button>`:""}
+ <div class="menuToolbar">
+
+  <div class="adminSearch">
+   <span>⌕</span>
+   <input id="adminSearchInput" type="text" enterkeyhint="search"
+    placeholder="Ürün ara (ad veya açıklama)..."
+    value="${esc(adminSearch)}"
+    autocomplete="off">
+   ${adminSearch?`<button id="adminSearchClear" aria-label="Temizle">×</button>`:""}
+  </div>
+
+  <div class="toolsWrap">
+   <button class="toolsBtn" id="menuToolsBtn" aria-haspopup="true" aria-expanded="${menuToolsOpen}" aria-label="Araçlar" title="Araçlar">⋯</button>
+   ${
+    menuToolsOpen
+    ?
+    `<div class="toolsMenu" id="toolsMenu" role="menu">
+     <button role="menuitem" id="toolBulk">💸 Toplu fiyat güncelle</button>
+     <button role="menuitem" id="translateAll">🌐 Eksik çevirileri tamamla</button>
+     <button role="menuitem" data-open-pdf="1">📄 PDF menü oluştur</button>
+    </div>`
+    :""
+   }
+  </div>
+
  </div>
 
- ${renderBulkPrice()}
+ ${bulkOpen?renderBulkPrice():""}
 
  <div id="adminMenuBody">
   ${adminSearch.trim()?adminSearchResults():renderAdminCategoryList()}
@@ -6711,72 +7050,104 @@ function renderAdminCategories(){
 
 function renderAdminCategoryList(){
 
+ const cats=DATA.categories;
+
  return `
 
- <div class="adminCard">
+ ${
+  cats.length
+  ?""
+  :`<div class="adminCard">
+    <div class="adminCardTitle">Henüz kategori yok</div>
+    <div class="adminCardDescription">İlk kategorinin adını aşağıya yaz ve Enter'a bas. Örn. Kahvaltı, Izgaralar, İçecekler.</div>
+   </div>`
+ }
 
-  <div class="adminCardTitle">Kategori Yönetimi</div>
+ <div class="adminCategoryList catAccordion" data-sortable="categories">
 
-  <div class="adminCardDescription">
-   Sırayı değiştirmek için soldaki ⋮⋮ tutamacından tutup sürükle.
-  </div>
+ ${
+  cats.map(category=>{
 
-  <button class="adminButton gold full"
-   id="addCategory"
-   style="margin-top:14px">
-   ${t("addCategory")}
-  </button>
+   const items=category.items||[];
+   const open=adminOpenCats.has(category.id);
+   const sold=items.filter(p=>p.sold).length;
 
-  <button class="adminButton full"
-   id="translateAll"
-   style="margin-top:8px">
-   🌐 Tüm Menünün Eksik Çevirilerini Tamamla
-  </button>
+   return `
 
-  <button class="adminButton full"
-   data-open-pdf="1"
-   style="margin-top:8px">
-   📄 PDF Menü Oluştur
-  </button>
+   <div class="adminRow catRow${open?" open":""}" data-row-id="${esc(category.id)}">
+
+    <div class="catBlock">
+
+     <div class="catHead">
+
+      <div class="dragHandle" aria-label="Sürükle">⋮⋮</div>
+
+      <button class="catToggle"
+       data-cat-toggle="${esc(category.id)}"
+       aria-expanded="${open}">
+
+       <div class="adminCategoryThumb">
+        ${
+         category.image
+         ?
+         `<img loading="lazy" decoding="async" ${mediaAttr(category.image)} alt="">`
+         :
+         `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#555">N</div>`
+        }
+       </div>
+
+       <div class="adminCategoryInfo">
+        <strong>${esc(localizedCategoryName(category))}</strong>
+        <span>${items.length} ürün${sold?" • "+sold+" tükendi":""}</span>
+       </div>
+
+       <span class="catChevron" aria-hidden="true">⌄</span>
+
+      </button>
+
+      <button class="catEdit"
+       data-admin-category="${esc(category.id)}"
+       aria-label="${esc(category.name)} kategorisini düzenle"
+       title="Kategori adı, fotoğrafı, çevirileri">✎</button>
+
+     </div>
+
+     ${
+      open
+      ?
+      `<div class="catItems">
+
+       <div class="adminProductList" data-sortable="${esc(category.id)}">
+        ${items.map(item=>adminProductRow(item,category,true)).join("")}
+       </div>
+
+       ${items.length?"":`<div class="catEmpty">Bu kategoride ürün yok. İlk ürünü aşağıdan ekle.</div>`}
+
+       <div class="quickAdd" data-qa-row="${esc(category.id)}">
+        <input data-qa-name maxlength="80" autocomplete="off" enterkeyhint="next"
+         placeholder="Ürün adı" aria-label="${esc(category.name)} için yeni ürün adı">
+        <input class="qaPriceIn" data-qa-price inputmode="decimal" autocomplete="off" enterkeyhint="done"
+         placeholder="Fiyat ₺" aria-label="Fiyat">
+        <button class="adminButton gold" data-qa-add>Ekle</button>
+       </div>
+
+      </div>`
+      :""
+     }
+
+    </div>
+
+   </div>`;
+
+  }).join("")
+ }
 
  </div>
 
- <div class="adminCategoryList" data-sortable="categories">
-
- ${
-  DATA.categories.map(category=>`
-
-   <div class="adminRow" data-row-id="${esc(category.id)}">
-
-    <div class="dragHandle" aria-label="Sürükle">⋮⋮</div>
-
-    <button class="adminCategoryItem"
-     data-admin-category="${esc(category.id)}">
-
-     <div class="adminCategoryThumb">
-      ${
-       category.image
-       ?
-       `<img loading="lazy" decoding="async" ${mediaAttr(category.image)} alt="">`
-       :
-       `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#555">N</div>`
-      }
-     </div>
-
-     <div class="adminCategoryInfo">
-      <strong>${esc(localizedCategoryName(category))}</strong>
-      <span>${(category.items||[]).length} ürün</span>
-     </div>
-
-     <div class="adminArrow">›</div>
-
-    </button>
-
-   </div>
-
-  `).join("")
- }
-
+ <div class="quickAdd catAdd">
+  <input id="qaCatName" maxlength="60" autocomplete="off" enterkeyhint="done"
+   placeholder="Yeni kategori adı" aria-label="Yeni kategori adı">
+  <button class="adminButton" id="qaCatAdd">+ Kategori</button>
  </div>
  `;
 }
@@ -6843,7 +7214,10 @@ function renderAdminCategory(){
 
  </div>
 
- ${translationCard("category|"+category.id,category,false,"translateCategory")}
+ <details class="adminDetails">
+  <summary>🌐 Çeviriler (İngilizce, Arapça)</summary>
+  ${translationCard("category|"+category.id,category,false,"translateCategory")}
+ </details>
 
  <div class="adminCard">
 
@@ -6971,6 +7345,15 @@ function renderAdminProduct(){
    "image/*"
   )}
 
+  <div class="field">
+   <label>Durum</label>
+   <div class="chipRow">
+    <label class="chipToggle"><input type="checkbox" data-sold="${esc(item.id)}" ${item.sold?"checked":""}><span>Tükendi</span></label>
+    <label class="chipToggle"><input type="checkbox" data-featured="${esc(item.id)}" ${item.featured?"checked":""}><span>Çok Satan</span></label>
+    <label class="chipToggle"><input type="checkbox" data-dish="${esc(item.id)}" ${item.dish?"checked":""}><span>Günün Ürünü</span></label>
+   </div>
+  </div>
+
  </div>
 
  <div class="adminCard">
@@ -7013,37 +7396,16 @@ function renderAdminProduct(){
      "number"
     )}
 
-    <label class="toggle">
-     Tükendi
-     <input
-      type="checkbox"
-      data-sold="${esc(item.id)}"
-      ${item.sold?"checked":""}>
-    </label>
-
-    <label class="toggle">
-     Çok Satan
-     <input
-      type="checkbox"
-      data-featured="${esc(item.id)}"
-      ${item.featured?"checked":""}>
-    </label>
-
-    <label class="toggle">
-     Günün Ürünü
-     <input
-      type="checkbox"
-      data-dish="${esc(item.id)}"
-      ${item.dish?"checked":""}>
-    </label>
-
    </div>`
    :""
   }
 
  </div>
 
- ${translationCard("product|"+item.id,item,true,"translateProduct")}
+ <details class="adminDetails">
+  <summary>🌐 Çeviriler (İngilizce, Arapça)</summary>
+  ${translationCard("product|"+item.id,item,true,"translateProduct")}
+ </details>
 
  <div class="adminCard">
 
@@ -7539,6 +7901,17 @@ function renderAdmin(){
  return `
  <div class="adminOverlay">
 
+  <nav class="adminNav" aria-label="Panel bölümleri">
+   <div class="adminNavBrand" aria-hidden="true">N</div>
+   ${navBtn("general","Genel")}
+   ${navBtn("products","Menü")}
+   <button class="navAdd" id="navAdd" aria-label="Ürün ekle" title="Ürün ekle">+</button>
+   ${navBtn("events","Etkinlik")}
+   ${navBtn("settings","Tasarım")}
+   <div class="navSpacer"></div>
+   <button class="navHelp" id="tourBtn" aria-label="Rehberlik turu" title="Rehberlik turu">?</button>
+  </nav>
+
   <aside class="admin">
 
    <div class="adminHeader">
@@ -7556,35 +7929,11 @@ function renderAdmin(){
 
      </div>
 
-     <button class="iconBtn" id="closeAdmin">×</button>
-
-    </div>
-
-    <div class="adminTabs">
-
-     <button
-      class="${adminTab==="general"?"active":""}"
-      data-admin-tab="general">
-      ◉ Genel
-     </button>
-
-     <button
-      class="${adminTab==="products"?"active":""}"
-      data-admin-tab="products">
-      ◫ Menü
-     </button>
-
-     <button
-      class="${adminTab==="events"?"active":""}"
-      data-admin-tab="events">
-      ✨ Etkinlik
-     </button>
-
-     <button
-      class="${adminTab==="settings"?"active":""}"
-      data-admin-tab="settings">
-      ✦ Tasarım
-     </button>
+     <div class="adminTopActions">
+      ${adminTab!=="pdf"?`<button class="iconBtn" id="openPreview" aria-label="Menüyü önizle" title="Menüyü önizle">◱</button>`:""}
+      <button class="iconBtn" id="tourBtnTop" aria-label="Rehberlik turu" title="Rehberlik turu">?</button>
+      <button class="iconBtn" id="closeAdmin" aria-label="Kaydet ve kapat" title="Kaydet ve kapat">×</button>
+     </div>
 
     </div>
 
@@ -7604,9 +7953,859 @@ function renderAdmin(){
 
   </aside>
 
+  ${renderQuickAdd()}
+
  </div>
  `;
 }
+
+/* =========================================================
+   STÜDYO PANELİ
+   Canlı önizleme, akordeon menü, hızlı ekleme, kurulum kartı
+   ve rehberlik turu. Müşterinin gördüğü menüye dokunmaz.
+========================================================= */
+
+let adminOpenCats=new Set();
+let menuToolsOpen=false;
+let quickAdd=null;
+let previewOpen=false;
+let previewReady=false;
+let previewTimer=null;
+let tourState=null;
+
+const PREVIEW_DOCK_MIN=1100;
+
+const NAV_ICONS={
+ general:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10l8-6 8 6v10z"/><path d="M10 20v-6h4v6"/></svg>',
+ products:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
+ events:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+ settings:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor"/></svg>'
+};
+
+function navBtn(tab,label){
+ const on=adminTab===tab||(tab==="general"&&adminTab==="pdf");
+ return `<button class="navBtn${on?" active":""}" data-admin-tab="${tab}" ${on?'aria-current="page"':""}>${NAV_ICONS[tab]}<span>${label}</span></button>`;
+}
+
+function parsePrice(v){
+ const n=Number(String(v??"").replace(/\s/g,"").replace(",","."));
+ return isFinite(n)&&n>0?Math.round(n*100)/100:0;
+}
+
+function newProduct(name,price){
+ return {
+  id:newId(),
+  name,
+  names:{tr:name},
+  description:"",
+  descriptions:{tr:""},
+  portion:"",
+  calories:"",
+  allergens:[],
+  spicy:0,
+  price,
+  image:"",
+  video:"",
+  featured:false,
+  dish:false,
+  sold:false
+ };
+}
+
+/* ---------- canlı önizleme ---------- */
+
+function previewUrl(){
+ const u=new URL(location.href);
+ u.hash="";
+ u.searchParams.set("onizleme","1");
+ return u.href;
+}
+
+function syncPreviewDock(){
+
+ const wide=window.innerWidth>=PREVIEW_DOCK_MIN;
+ const active=adminOpen&&adminAuthenticated;
+ const show=active&&adminTab!=="pdf"&&(wide||previewOpen);
+ let dock=$("nmPreviewDock");
+
+ if(!active){
+  if(tourState)endTour(false);
+  quickAdd=null;
+  menuToolsOpen=false;
+  previewOpen=false;
+  previewReady=false;
+  dock?.remove();
+  document.documentElement.classList.remove("adminDocked");
+  return;
+ }
+
+ if(!dock&&show){
+  dock=document.createElement("div");
+  dock.id="nmPreviewDock";
+  dock.innerHTML=`
+   <div class="pvBar">
+    <div><b>Müşterinin gördüğü menü</b><small>Canlı • ürüne dokun, düzenle</small></div>
+    <button class="pvClose" id="pvClose" aria-label="Önizlemeyi kapat">×</button>
+   </div>
+   <div class="pvPhone"><iframe title="Menü önizlemesi" src="${esc(previewUrl())}"></iframe></div>`;
+  document.body.appendChild(dock);
+  $("pvClose").onclick=()=>{previewOpen=false;syncPreviewDock()};
+ }
+
+ if(dock){
+  dock.classList.toggle("show",show);
+  dock.classList.toggle("full",show&&!wide);
+ }
+
+ document.documentElement.classList.toggle("adminDocked",show&&wide);
+
+ if(show)postPreview();
+}
+
+function postPreview(){
+
+ if(!previewReady)return;
+
+ clearTimeout(previewTimer);
+
+ previewTimer=setTimeout(()=>{
+  const frame=document.querySelector("#nmPreviewDock iframe");
+  if(!frame||!frame.contentWindow)return;
+  try{
+   frame.contentWindow.postMessage({type:"nmPreview",data:JSON.parse(JSON.stringify(DATA))},location.origin);
+  }catch(e){}
+ },120);
+}
+
+window.addEventListener("message",e=>{
+
+ if(PREVIEW||e.origin!==location.origin||!e.data)return;
+
+ const frame=document.querySelector("#nmPreviewDock iframe");
+ if(!frame||e.source!==frame.contentWindow)return;
+
+ if(e.data.type==="nmPreviewReady"){
+  previewReady=true;
+  postPreview();
+ }
+
+ if(e.data.type==="nmPreviewEdit"&&adminOpen&&adminAuthenticated){
+  const item=findProduct(String(e.data.id||""));
+  if(!item)return;
+  const cat=DATA.categories.find(c=>(c.items||[]).some(p=>p.id===item.id));
+  collectAdmin();
+  closeQuickAdd(false);
+  adminTab="products";
+  adminCategoryView=cat?cat.id:null;
+  adminProductView=item.id;
+  adminEventView=null;
+  advancedProduct=false;
+  previewOpen=false;
+  render();
+  document.querySelector(".admin")?.scrollTo(0,0);
+ }
+});
+
+let previewResizeTimer=null;
+window.addEventListener("resize",()=>{
+ if(PREVIEW)return;
+ clearTimeout(previewResizeTimer);
+ previewResizeTimer=setTimeout(()=>{
+  syncPreviewDock();
+  if(tourState&&!tourState.welcome)placeTour();
+ },150);
+});
+
+/* ---------- hızlı ekleme ---------- */
+
+function openQuickAdd(catId){
+
+ collectAdmin();
+
+ if(!DATA.categories.length){
+  adminTab="products";
+  adminCategoryView=null;
+  adminProductView=null;
+  render();
+  showToast("Önce bir kategori ekle");
+  setTimeout(()=>$("qaCatName")?.focus(),60);
+  return;
+ }
+
+ const id=findCategory(catId)?catId:(findCategory(adminCategoryView)?adminCategoryView:DATA.categories[0].id);
+
+ adminTab="products";
+ adminProductView=null;
+ adminEventView=null;
+ menuToolsOpen=false;
+ quickAdd={catId:id,name:"",price:"",flags:{},file:null,fileUrl:""};
+
+ render({preserveAdminScroll:true});
+ setTimeout(()=>$("qaName")?.focus(),80);
+}
+
+function captureQuickAdd(){
+ if(!quickAdd)return;
+ const n=$("qaName"),p=$("qaPrice");
+ if(n)quickAdd.name=n.value;
+ if(p)quickAdd.price=p.value;
+}
+
+function closeQuickAdd(rerender=true){
+ if(!quickAdd)return;
+ if(quickAdd.fileUrl)URL.revokeObjectURL(quickAdd.fileUrl);
+ quickAdd=null;
+ if(rerender)render({preserveAdminScroll:true});
+}
+
+function renderQuickAdd(){
+
+ if(!quickAdd)return "";
+
+ const q=quickAdd;
+ const flag=(key,label)=>`<button type="button" class="chip${q.flags[key]?" on":""}" data-qa-flag="${key}" aria-pressed="${!!q.flags[key]}">${label}</button>`;
+
+ return `
+ <div class="qaLayer">
+  <div class="qaBackdrop" id="qaBackdrop"></div>
+  <section class="qaSheet" role="dialog" aria-modal="true" aria-labelledby="qaTitle">
+   <div class="qaGrab"></div>
+   <div class="qaHead">
+    <b id="qaTitle">Yeni ürün</b>
+    <button class="iconBtn" id="qaClose" aria-label="Kapat">×</button>
+   </div>
+
+   <div class="field">
+    <label for="qaName">Ürün adı</label>
+    <input id="qaName" maxlength="80" autocomplete="off" enterkeyhint="next" value="${esc(q.name)}" placeholder="Örn. Adana Kebap">
+   </div>
+
+   <div class="row">
+    <div class="field">
+     <label for="qaPrice">Fiyat (₺)</label>
+     <input id="qaPrice" inputmode="decimal" autocomplete="off" enterkeyhint="done" value="${esc(q.price)}" placeholder="0">
+    </div>
+    <div class="field">
+     <label for="qaFile">Fotoğraf</label>
+     <label class="fileBtn qaPhoto">
+      ${q.fileUrl?`<img src="${esc(q.fileUrl)}" alt="">`:"📷 Fotoğraf seç"}
+      <input id="qaFile" hidden type="file" accept="image/*">
+     </label>
+    </div>
+   </div>
+
+   <div class="field">
+    <label>Kategori</label>
+    <div class="chipRow">
+     ${DATA.categories.map(c=>`<button type="button" class="chip${c.id===q.catId?" on":""}" data-qa-cat="${esc(c.id)}" aria-pressed="${c.id===q.catId}">${esc(c.name)}</button>`).join("")}
+    </div>
+   </div>
+
+   <div class="field">
+    <label>Durum</label>
+    <div class="chipRow">
+     ${flag("sold","Tükendi")}
+     ${flag("featured","Çok Satan")}
+     ${flag("dish","Günün Ürünü")}
+    </div>
+   </div>
+
+   <div class="qaActions">
+    <button class="adminButton" id="qaSave">✓ Kaydet</button>
+    <button class="adminButton gold" id="qaSaveNext">Kaydet ve yenisini ekle</button>
+   </div>
+
+   <button class="loginLink" id="qaDetail">Açıklama, porsiyon, alerjen için detaylı düzenle</button>
+  </section>
+ </div>`;
+}
+
+async function saveQuickAdd(mode){
+
+ captureQuickAdd();
+
+ const q=quickAdd;
+ if(!q)return;
+
+ const name=q.name.trim().slice(0,80);
+ const cat=findCategory(q.catId);
+
+ if(!name){
+  $("qaName")?.focus();
+  showToast("Ürün adını yaz");
+  return;
+ }
+
+ if(!cat){
+  showToast("Bir kategori seç");
+  return;
+ }
+
+ const item=newProduct(name,parsePrice(q.price));
+ item.sold=!!q.flags.sold;
+ item.featured=!!q.flags.featured;
+ item.dish=!!q.flags.dish;
+
+ cat.items=cat.items||[];
+ cat.items.push(item);
+ adminOpenCats.add(cat.id);
+
+ const file=q.file;
+ if(q.fileUrl)URL.revokeObjectURL(q.fileUrl);
+
+ quickAdd=mode==="next"
+  ?{catId:cat.id,name:"",price:"",flags:{},file:null,fileUrl:""}
+  :null;
+
+ if(mode==="detail"){
+  adminCategoryView=cat.id;
+  adminProductView=item.id;
+  advancedProduct=true;
+ }
+
+ if(!saveData())return;
+
+ translateInBackground(item,true);
+ showToast("✓ "+item.name+" eklendi");
+
+ if(file)await handleFile("productImage",item.id,file);
+ else render({preserveAdminScroll:mode!=="detail"});
+
+ if(mode==="next")setTimeout(()=>$("qaName")?.focus(),60);
+ if(mode==="detail")document.querySelector(".admin")?.scrollTo(0,0);
+}
+
+function quickAddInline(catId){
+
+ const cat=findCategory(catId);
+ const row=[...document.querySelectorAll("[data-qa-row]")].find(r=>r.dataset.qaRow===catId);
+
+ if(!cat||!row)return;
+
+ const nameEl=row.querySelector("[data-qa-name]");
+ const priceEl=row.querySelector("[data-qa-price]");
+ const name=nameEl.value.trim().slice(0,80);
+
+ if(!name){
+  nameEl.focus();
+  showToast("Ürün adını yaz");
+  return;
+ }
+
+ const item=newProduct(name,parsePrice(priceEl.value));
+
+ cat.items=cat.items||[];
+ cat.items.push(item);
+
+ if(!saveData())return;
+
+ translateInBackground(item,true);
+ refreshAdminMenuBody();
+ showToast("✓ "+name+" eklendi");
+
+ const again=[...document.querySelectorAll("[data-qa-row]")].find(r=>r.dataset.qaRow===catId);
+ again?.querySelector("[data-qa-name]")?.focus();
+}
+
+function quickAddCategory(){
+
+ const input=$("qaCatName");
+ if(!input)return;
+
+ const name=input.value.trim().slice(0,60);
+
+ if(!name){
+  input.focus();
+  showToast("Kategori adını yaz");
+  return;
+ }
+
+ const cat={id:newId(),name,names:{tr:name},image:"",items:[]};
+
+ DATA.categories.push(cat);
+ adminOpenCats.add(cat.id);
+
+ if(!saveData())return;
+
+ translateInBackground(cat,false);
+ refreshAdminMenuBody();
+ showToast("✓ "+name+" kategorisi eklendi");
+
+ const row=[...document.querySelectorAll("[data-qa-row]")].find(r=>r.dataset.qaRow===cat.id);
+ row?.scrollIntoView({block:"center",behavior:"smooth"});
+ row?.querySelector("[data-qa-name]")?.focus({preventScroll:true});
+}
+
+/* ---------- kurulum kartı ---------- */
+
+function setupTasks(){
+
+ const products=allProducts();
+ const photos=products.filter(p=>p.image).length;
+
+ return [
+  {done:!!DATA.logo,label:"Logo yüklendi",todo:"Logonu yükle",go:"logo"},
+  {done:DATA.categories.length>0,label:"İlk kategori",todo:"İlk kategoriyi ekle",go:"menu"},
+  {done:products.length>=5,label:"En az 5 ürün",todo:"Ürün ekle ("+products.length+"/5)",go:"menu"},
+  {done:products.length>0&&photos/products.length>=.5,label:"Ürün fotoğrafları",todo:"Fotoğraf ekle ("+photos+"/"+products.length+")",go:"menu"},
+  {done:!!DATA.settings.tourDone,label:"Panel turu",todo:"Panel turunu izle",go:"tour"}
+ ];
+}
+
+function renderSetupCard(){
+
+ const tasks=setupTasks();
+ const done=tasks.filter(x=>x.done).length;
+
+ if(done===tasks.length)return "";
+
+ return `
+ <div class="setupCard">
+  <div class="setupTop"><b>Menün yayına hazır mı?</b><span>${done} / ${tasks.length} tamam</span></div>
+  <div class="setupMeter"><i style="width:${Math.round(done/tasks.length*100)}%"></i></div>
+  <div class="setupTasks">
+   ${tasks.map(x=>x.done
+    ?`<span>✓ ${esc(x.label)}</span>`
+    :`<button type="button" data-setup-go="${x.go}">${esc(x.todo)}</button>`).join("")}
+  </div>
+ </div>`;
+}
+
+/* ---------- olaylar ---------- */
+
+function bindStudio(){
+
+ $("navAdd")?.addEventListener("click",()=>openQuickAdd());
+ $("qaOpen")?.addEventListener("click",()=>openQuickAdd());
+
+ $("openPreview")?.addEventListener("click",()=>{
+  collectAdmin();
+  previewOpen=true;
+  syncPreviewDock();
+ });
+
+ $("tourBtn")?.addEventListener("click",()=>startTour());
+ $("tourBtnTop")?.addEventListener("click",()=>startTour());
+
+ document.querySelectorAll("[data-setup-go]").forEach(btn=>{
+  btn.onclick=()=>{
+   const go=btn.dataset.setupGo;
+   if(go==="tour"){startTour();return}
+   if(go==="logo"){
+    const f=document.querySelector('[data-file-type="logo"]');
+    f?.closest(".field")?.scrollIntoView({block:"center",behavior:"smooth"});
+    return;
+   }
+   collectAdmin();
+   adminTab="products";
+   adminCategoryView=null;
+   adminProductView=null;
+   render();
+   document.querySelector(".admin")?.scrollTo(0,0);
+  };
+ });
+
+ /* araçlar menüsü */
+ $("menuToolsBtn")?.addEventListener("click",e=>{
+  e.stopPropagation();
+  collectAdmin();
+  menuToolsOpen=!menuToolsOpen;
+  render({preserveAdminScroll:true});
+ });
+
+ $("toolBulk")?.addEventListener("click",()=>{
+  collectAdmin();
+  menuToolsOpen=false;
+  bulkOpen=true;
+  render({preserveAdminScroll:true});
+ });
+
+ /* hızlı ekleme penceresi */
+ if(quickAdd){
+
+  $("qaClose")?.addEventListener("click",()=>closeQuickAdd());
+  $("qaBackdrop")?.addEventListener("click",()=>closeQuickAdd());
+  $("qaSave")?.addEventListener("click",()=>saveQuickAdd("close"));
+  $("qaSaveNext")?.addEventListener("click",()=>saveQuickAdd("next"));
+  $("qaDetail")?.addEventListener("click",()=>saveQuickAdd("detail"));
+
+  $("qaName")?.addEventListener("keydown",e=>{
+   if(e.key==="Enter"){e.preventDefault();$("qaPrice")?.focus()}
+  });
+
+  $("qaPrice")?.addEventListener("keydown",e=>{
+   if(e.key==="Enter"){e.preventDefault();saveQuickAdd("next")}
+  });
+
+  document.querySelectorAll("[data-qa-cat]").forEach(btn=>{
+   btn.onclick=()=>{
+    quickAdd.catId=btn.dataset.qaCat;
+    document.querySelectorAll("[data-qa-cat]").forEach(b=>{
+     b.classList.toggle("on",b===btn);
+     b.setAttribute("aria-pressed",String(b===btn));
+    });
+   };
+  });
+
+  document.querySelectorAll("[data-qa-flag]").forEach(btn=>{
+   btn.onclick=()=>{
+    const k=btn.dataset.qaFlag;
+    quickAdd.flags[k]=!quickAdd.flags[k];
+    btn.classList.toggle("on",quickAdd.flags[k]);
+    btn.setAttribute("aria-pressed",String(quickAdd.flags[k]));
+   };
+  });
+
+  $("qaFile")?.addEventListener("change",e=>{
+   const file=e.target.files&&e.target.files[0];
+   if(!file)return;
+   if(!file.type.startsWith("image/")){showToast("Sadece fotoğraf seçebilirsin");return}
+   if(file.size>30*1024*1024){showToast("Fotoğraf en fazla 30 MB olabilir");return}
+   if(quickAdd.fileUrl)URL.revokeObjectURL(quickAdd.fileUrl);
+   quickAdd.file=file;
+   quickAdd.fileUrl=URL.createObjectURL(file);
+   const box=e.target.closest(".qaPhoto");
+   if(box){
+    let img=box.querySelector("img");
+    if(!img){
+     [...box.childNodes].forEach(n=>{if(n.nodeType===3)n.remove()});
+     img=document.createElement("img");
+     img.alt="";
+     box.prepend(img);
+    }
+    img.src=quickAdd.fileUrl;
+   }
+  });
+ }
+}
+
+function bindMenuAccordion(){
+
+ document.querySelectorAll("[data-cat-toggle]").forEach(btn=>{
+  btn.onclick=()=>{
+   const id=btn.dataset.catToggle;
+   if(adminOpenCats.has(id))adminOpenCats.delete(id);
+   else adminOpenCats.add(id);
+   refreshAdminMenuBody();
+  };
+ });
+
+ document.querySelectorAll("[data-quick-sold]").forEach(btn=>{
+  btn.onclick=()=>{
+   const p=findProduct(btn.dataset.quickSold);
+   if(!p)return;
+   p.sold=!p.sold;
+   saveData();
+   btn.classList.toggle("off",p.sold);
+   btn.setAttribute("aria-pressed",String(p.sold));
+   const lbl=p.sold?"Tükendi. Satışa açmak için dokun.":"Satışta. Tükendi yapmak için dokun.";
+   btn.title=lbl;
+   btn.setAttribute("aria-label",lbl);
+   const info=btn.closest(".adminRow")?.querySelector(".adminProductInfo span");
+   if(info&&btn.closest(".catItems"))info.textContent=p.sold?"Tükendi":"Düzenle ›";
+   showToast(p.sold?"⛔ "+p.name+" tükendi":"✓ "+p.name+" tekrar satışta");
+  };
+ });
+
+ document.querySelectorAll("[data-qa-row]").forEach(row=>{
+  const id=row.dataset.qaRow;
+  const nameEl=row.querySelector("[data-qa-name]");
+  const priceEl=row.querySelector("[data-qa-price]");
+  nameEl.onkeydown=e=>{
+   if(e.key!=="Enter")return;
+   e.preventDefault();
+   if(priceEl.value.trim())quickAddInline(id);
+   else priceEl.focus();
+  };
+  priceEl.onkeydown=e=>{
+   if(e.key!=="Enter")return;
+   e.preventDefault();
+   quickAddInline(id);
+  };
+  row.querySelector("[data-qa-add]").onclick=()=>quickAddInline(id);
+ });
+
+ const catName=$("qaCatName");
+ if(catName){
+  catName.onkeydown=e=>{
+   if(e.key!=="Enter")return;
+   e.preventDefault();
+   quickAddCategory();
+  };
+ }
+ $("qaCatAdd")&&($("qaCatAdd").onclick=quickAddCategory);
+}
+
+document.addEventListener("click",e=>{
+ if(!menuToolsOpen)return;
+ if(e.target.closest(".toolsWrap"))return;
+ menuToolsOpen=false;
+ const menu=$("toolsMenu");
+ if(menu){
+  menu.remove();
+  $("menuToolsBtn")?.setAttribute("aria-expanded","false");
+ }
+});
+
+document.addEventListener("keydown",e=>{
+ if(e.key!=="Escape"||PREVIEW||tourState)return;
+ if(quickAdd){
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  closeQuickAdd();
+  return;
+ }
+ if(menuToolsOpen){
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  menuToolsOpen=false;
+  render({preserveAdminScroll:true});
+  return;
+ }
+ if(previewOpen&&window.innerWidth<PREVIEW_DOCK_MIN){
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  previewOpen=false;
+  syncPreviewDock();
+ }
+},true);
+
+/* ---------- rehberlik turu ---------- */
+
+function tourSteps(){
+
+ const narrow=window.innerWidth<760;
+ const docked=window.innerWidth>=PREVIEW_DOCK_MIN;
+
+ return [
+  {sel:".adminNav",t:"Bölümler",p:narrow
+   ?"Alttaki çubukla Genel, Menü, Etkinlik ve Tasarım arasında geçersin. Ortadaki + ile her yerden ürün eklersin."
+   :"Soldaki çubukla Genel, Menü, Etkinlik ve Tasarım arasında geçersin. + ile her yerden ürün eklersin."},
+  {tab:"products",sel:".catRow.open .catHead",t:"Kategoriler",p:"Kategoriye dokununca ürünleri açılır. ⋮⋮ tutamacından sürükleyerek sırasını değiştirirsin. ✎ ile adını ve fotoğrafını düzenlersin."},
+  {tab:"products",sel:".catRow.open .quickPrice",t:"Fiyatı yaz, bitti",p:"Kutuya yeni fiyatı yaz. Ayrıca kaydetmene gerek yok, kendiliğinden kaydedilir."},
+  {tab:"products",sel:".catRow.open .soldDot",t:"Tek dokunuşla tükendi",p:"Yeşil nokta satışta, kırmızı tükendi demek. Dokununca değişir ve menüde hemen görünür."},
+  {tab:"products",sel:".catRow.open .quickAdd",t:"Hızlı ürün ekleme",p:"Ürün adını ve fiyatını yaz, Enter'a bas. Ürün hemen bu kategoriye eklenir."},
+  {tab:"products",sel:narrow?"#navAdd":"#qaOpen",t:"Fotoğraflı ürün",p:"Fotoğraf, kategori ve durumla birlikte eklemek için bunu kullan. Art arda ürün girebilirsin."},
+  {tab:"products",sel:"#menuToolsBtn",t:"Araçlar",p:"Toplu fiyat güncelleme, eksik çeviriler ve PDF menü burada."},
+  {tab:"products",sel:docked?"#nmPreviewDock .pvPhone":"#openPreview",t:"Müşterinin gördüğü menü",p:docked
+   ?"Yaptığın her değişiklik burada anında görünür. Bir ürüne dokunursan düzenleme açılır."
+   :"Buradan menünün müşteriye nasıl göründüğüne bakarsın. Bir ürüne dokunursan düzenleme açılır."},
+  {tab:"settings",sel:'.adminNav [data-admin-tab="settings"]',t:"Tasarım",p:"Renkler, yazı tipi, logo boyutu ve arka plan burada."},
+  {tab:"general",sel:narrow?"#tourBtnTop":"#tourBtn",t:"Yardım",p:"Bu turu istediğin zaman buradan tekrar başlatabilirsin."}
+ ];
+}
+
+function tourLayer(){
+ let layer=$("nmTour");
+ if(!layer){
+  layer=document.createElement("div");
+  layer.id="nmTour";
+  document.body.appendChild(layer);
+ }
+ return layer;
+}
+
+function maybeWelcome(){
+
+ if(PREVIEW||tourState||DATA.settings.tourDone)return;
+
+ try{if(sessionStorage.getItem("nmTourLater"))return}catch(e){}
+
+ tourState={welcome:true};
+
+ tourLayer().innerHTML=`
+ <div class="tourWelcome" role="dialog" aria-modal="true" aria-labelledby="tourHello">
+  <div class="tourCard">
+   <svg class="tourEmblem" viewBox="0 0 86 86" aria-hidden="true">
+    <circle cx="43" cy="43" r="39"/>
+    <path d="M43 18c8 8 8 20 0 27c-8-7-8-19 0-27z"/>
+    <path d="M24 35c11 0 19 8 19 10c-9 4-19-2-19-10z"/>
+    <path d="M62 35c-11 0-19 8-19 10c9 4 19-2 19-10z"/>
+   </svg>
+   <h3 id="tourHello">Hoş geldin</h3>
+   <p>Panelin nasıl çalıştığını 1 dakikada gösterelim. İstediğin an çıkabilirsin.</p>
+   <button class="adminButton gold" id="tourGo">Turu başlat</button>
+   <button class="tourLater" id="tourLater">Sonra</button>
+  </div>
+ </div>`;
+
+ $("tourGo").onclick=()=>startTour();
+ $("tourLater").onclick=()=>{
+  try{sessionStorage.setItem("nmTourLater","1")}catch(e){}
+  endTour(false);
+ };
+ setTimeout(()=>$("tourGo")?.focus(),60);
+}
+
+function startTour(){
+
+ if(!adminOpen||!adminAuthenticated)return;
+
+ collectAdmin();
+ closeQuickAdd(false);
+ menuToolsOpen=false;
+ previewOpen=false;
+
+ /* Ürün adımları için ürünü olan bir kategori açık olsun */
+ const hasOpen=DATA.categories.some(c=>adminOpenCats.has(c.id)&&(c.items||[]).length);
+ if(!hasOpen){
+  const c=DATA.categories.find(c=>(c.items||[]).length);
+  if(c)adminOpenCats.add(c.id);
+ }
+
+ tourState={i:0,steps:tourSteps()};
+
+ tourLayer().innerHTML=`
+  <div class="tourSpot" id="tourSpot"></div>
+  <div class="tourTip" id="tourTip" role="dialog" aria-modal="true" aria-labelledby="tourTitle" aria-live="polite">
+   <div class="tourStep" id="tourStepNo"></div>
+   <h3 id="tourTitle"></h3>
+   <p id="tourText"></p>
+   <div class="tourDots">${tourState.steps.map(()=>"<i></i>").join("")}</div>
+   <div class="tourNav">
+    <button class="tourSkip" id="tourSkip">Turu bitir</button>
+    <button class="adminButton" id="tourBack">Geri</button>
+    <button class="adminButton gold" id="tourNext">İleri</button>
+   </div>
+  </div>`;
+
+ $("tourSkip").onclick=()=>endTour(true);
+ $("tourBack").onclick=()=>goTour(tourState.i-1,-1);
+ $("tourNext").onclick=()=>{
+  if(tourState.i>=tourState.steps.length-1)endTour(true);
+  else goTour(tourState.i+1,1);
+ };
+
+ goTour(0,1);
+ setTimeout(()=>$("tourNext")?.focus({preventScroll:true}),80);
+}
+
+function tourTarget(step){
+ const el=[...document.querySelectorAll(step.sel)].find(x=>x.getClientRects().length);
+ return el||null;
+}
+
+function goTour(i,dir){
+
+ if(!tourState||tourState.welcome)return;
+
+ const steps=tourState.steps;
+
+ while(i>=0&&i<steps.length){
+
+  const step=steps[i];
+
+  if(step.tab&&adminTab!==step.tab){
+   collectAdmin();
+   adminTab=step.tab;
+   adminCategoryView=null;
+   adminProductView=null;
+   adminEventView=null;
+   render();
+  }
+
+  if(tourTarget(step))break;
+
+  i+=dir;
+ }
+
+ if(i<0)i=0;
+
+ if(i>=steps.length){
+  endTour(true);
+  return;
+ }
+
+ tourState.i=i;
+
+ const el=tourTarget(steps[i]);
+
+ if(el&&el.closest(".admin"))el.scrollIntoView({block:"center",behavior:"auto"});
+
+ $("tourStepNo").textContent="Adım "+(i+1)+" / "+steps.length;
+ $("tourTitle").textContent=steps[i].t;
+ $("tourText").textContent=steps[i].p;
+ $("tourBack").style.visibility=i?"visible":"hidden";
+ $("tourNext").textContent=i===steps.length-1?"Bitir":"İleri";
+ document.querySelectorAll(".tourDots i").forEach((d,k)=>d.classList.toggle("on",k===i));
+
+ requestAnimationFrame(placeTour);
+}
+
+function placeTour(){
+
+ if(!tourState||tourState.welcome)return;
+
+ const spot=$("tourSpot"),tip=$("tourTip");
+ const el=tourTarget(tourState.steps[tourState.i]);
+
+ if(!spot||!tip)return;
+
+ if(!el){
+  spot.style.cssText="top:50%;left:50%;width:0;height:0";
+  return;
+ }
+
+ const r=el.getBoundingClientRect();
+ const W=window.innerWidth,H=window.innerHeight;
+ const pad=6;
+ const top=Math.max(4,r.top-pad),left=Math.max(4,r.left-pad);
+ const width=Math.min(W-8,r.right+pad)-left;
+ const height=Math.min(H-8,r.bottom+pad)-top;
+
+ spot.style.top=top+"px";
+ spot.style.left=left+"px";
+ spot.style.width=width+"px";
+ spot.style.height=height+"px";
+
+ const tw=tip.offsetWidth,th=tip.offsetHeight;
+ let tTop,tLeft;
+
+ if(height>H*.55){
+  /* uzun öğe (yan çubuk, önizleme): yanına koy */
+  tTop=Math.max(12,Math.min(H-th-12,top+20));
+  tLeft=left+width+14+tw<=W-12?left+width+14:left-tw-14;
+  if(tLeft<12){tLeft=Math.max(12,(W-tw)/2);tTop=Math.max(12,(H-th)/2)}
+ }else{
+  tTop=top+height+12;
+  if(tTop+th>H-12)tTop=top-th-12;
+  if(tTop<12)tTop=Math.max(12,H-th-12);
+  tLeft=Math.max(12,Math.min(W-tw-12,left+width/2-tw/2));
+ }
+
+ tip.style.top=tTop+"px";
+ tip.style.left=tLeft+"px";
+}
+
+function endTour(markDone){
+
+ tourState=null;
+ $("nmTour")?.remove();
+
+ if(markDone&&!DATA.settings.tourDone){
+  DATA.settings.tourDone=true;
+  saveData();
+  if(adminOpen&&adminAuthenticated){
+   render({preserveAdminScroll:true});
+   showToast("✓ Tur tamamlandı");
+  }
+ }
+}
+
+document.addEventListener("keydown",e=>{
+ if(!tourState)return;
+ if(e.key==="Escape"){
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  endTour(!tourState.welcome);
+  return;
+ }
+ if(tourState.welcome)return;
+ if(e.key==="ArrowRight"){e.preventDefault();e.stopImmediatePropagation();$("tourNext")?.click()}
+ if(e.key==="ArrowLeft"&&tourState.i>0){e.preventDefault();e.stopImmediatePropagation();$("tourBack")?.click()}
+},true);
+
+window.addEventListener("scroll",()=>{if(tourState&&!tourState.welcome)placeTour()},true);
 
 /* =========================================================
    LOGIN
@@ -8126,6 +9325,8 @@ let lastPageKey="";
 
 function render(options={}){
 
+ if(quickAdd)captureQuickAdd();
+
  if(options.preserveAdminScroll)
   rememberAdminScroll();
 
@@ -8291,6 +9492,8 @@ function render(options={}){
  bindEvents();
 
  resolveMediaElements();
+
+ if(!PREVIEW)syncPreviewDock();
 
  if(options.preserveAdminScroll)
   restoreAdminScroll();
@@ -9315,9 +10518,12 @@ function bindAdminExtras(){
 
  bindAdminPdf();
 
+ bindStudio();
+
  document.querySelectorAll("[data-open-pdf]").forEach(btn=>{
   btn.onclick=()=>{
    collectAdmin();
+   menuToolsOpen=false;
    adminTab="pdf";
    adminCategoryView=null;
    adminProductView=null;
@@ -10487,6 +11693,8 @@ function bindMenuTools(bodyOnly){
  document.querySelectorAll("[data-sortable]")
  .forEach(enableDragSort);
 
+ bindMenuAccordion();
+
  if(bodyOnly){
   /* Liste yenilenince kategori/çeviri butonları da yeniden bağlanır */
   bindAdminButtonsInBody();
@@ -10661,16 +11869,6 @@ function bindAdminButtonsInBody(){
   };
  }
 
- const all=$("translateAll");
-
- if(all&&!all.dataset.bound){
-  all.dataset.bound="1";
-  all.onclick=()=>{
-   adminSearch="";
-   render();
-   setTimeout(()=>$("translateAll")?.click(),0);
-  };
- }
 }
 
 /* Tutamaçtan sürükleyerek sıralama (dokunmatik + fare) */
@@ -10688,7 +11886,8 @@ function enableDragSort(list){
 
   const row=handle.closest(".adminRow");
 
-  if(!row)return;
+  /* İç içe listelerde (kategori > ürün) sadece kendi satırları */
+  if(!row||row.parentElement!==list)return;
 
   e.preventDefault();
 
@@ -10833,6 +12032,11 @@ function closeTopLayer(){
    return true;
   }
 
+  if(quickAdd){
+   closeQuickAdd();
+   return true;
+  }
+
   collectAdmin();
 
   if(adminProductView){
@@ -10943,7 +12147,33 @@ render({
  resetScroll:true
 });
 
-if(CLOUD){
+if(PREVIEW){
+
+ /* Önizleme: veri panelden gelir. Ürüne dokunmak paneli o ürüne götürür. */
+ window.addEventListener("message",e=>{
+  if(e.origin!==location.origin||e.source!==window.parent||!e.data||e.data.type!=="nmPreview")return;
+  const d=e.data.data;
+  if(!d||!Array.isArray(d.categories))return;
+  DATA.categories=[];
+  DATA.events=[];
+  Object.assign(DATA,d);
+  cloud.ready=true;
+  cloud.state="ok";
+  if(selectedCategory&&!findCategory(selectedCategory))selectedCategory=null;
+  render({preserveWindowScroll:true});
+ });
+
+ document.addEventListener("click",e=>{
+  const card=e.target.closest("[data-product]");
+  if(!card)return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  window.parent.postMessage({type:"nmPreviewEdit",id:card.dataset.product},location.origin);
+ },true);
+
+ window.parent.postMessage({type:"nmPreviewReady"},location.origin);
+
+}else if(CLOUD){
  startCloud();
 }else{
  loadSavedFromIndexedDB().then(changed=>{
@@ -10951,7 +12181,7 @@ if(CLOUD){
  });
 }
 
-if(DATA.rates.auto&&Date.now()-(DATA.rates.updated||0)>12*60*60*1000){
+if(!PREVIEW&&DATA.rates.auto&&Date.now()-(DATA.rates.updated||0)>12*60*60*1000){
 
  updateRates(false).then(ok=>{
   if(ok&&currency!=="TRY"&&!adminOpen)
