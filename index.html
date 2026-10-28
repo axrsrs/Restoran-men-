@@ -212,9 +212,74 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--fg);outline-offset:
 .chip{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid var(--line);text-decoration:none;font-size:14px;
  transition:background .25s,color .25s;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 a.chip:hover{background:var(--fg);color:var(--bg)}
-footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:26px var(--gut) calc(26px + env(safe-area-inset-bottom));
- border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
-footer a{text-decoration:none}
+/* alt bilgi */
+.ft{border-top:1px solid var(--line);padding:clamp(56px,7vw,96px) var(--gut) 0;font-size:14.5px}
+.ft[hidden]{display:none}
+.ft-grid{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr));gap:clamp(28px,4vw,64px)}
+.ft-grid>[hidden]{display:none}
+.ft-logo{display:inline-flex;align-items:center;text-decoration:none;font-weight:600;font-size:20px;letter-spacing:-.02em;max-width:100%}
+.ft-logo img,.ft-logo .logo-mono{height:calc(var(--logo-h,34px)*1.1);width:auto;max-width:min(240px,70vw);object-fit:contain;display:block}
+.ft-logo img.inv{filter:invert(1) hue-rotate(180deg)}
+.ft-logo .logo-mono{background:currentColor;-webkit-mask:var(--logo-url) left center/contain no-repeat;mask:var(--logo-url) left center/contain no-repeat}
+.ft-text{margin:18px 0 0;color:var(--muted);line-height:1.55;max-width:34ch;text-wrap:pretty}
+.ft-contact{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+.ft-contact[hidden]{display:none}
+.ft-contact a{display:inline-flex;align-items:flex-start;gap:12px;min-height:40px;padding:9px 0;text-decoration:none;color:var(--muted);
+ line-height:1.4;overflow-wrap:anywhere;transition:color .2s}
+.ft-contact a:hover{color:var(--fg)}
+.ft-contact svg{flex:none;width:18px;height:18px;margin-top:1px;color:var(--fg)}
+.ft-contact a>span{min-width:0}
+.ft-contact small{display:block;font-size:12px;opacity:.75;margin-top:2px}
+.ft-social{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+.ft-social:empty{display:none}
+.ft-social a{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);color:var(--fg);
+ transition:background .25s,color .25s,border-color .25s}
+.ft-social a:hover{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.ft-social svg{width:18px;height:18px}
+.ft-col h2{margin:6px 0 18px;font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.ft-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.ft-col a{display:inline-block;padding:8px 0;text-decoration:none;color:var(--muted);line-height:1.35;overflow-wrap:anywhere;transition:color .2s}
+.ft-col a:hover{color:var(--fg)}
+.ft-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 24px;margin-top:clamp(48px,6vw,80px);
+ padding:20px 0 calc(22px + env(safe-area-inset-bottom));border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.ft-legal{background:none;border:0;padding:10px 0;margin:-10px 0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+ text-decoration-color:color-mix(in srgb,var(--fg) 30%,transparent)}
+.ft-legal:hover{color:var(--fg)}
+.ft-legal[hidden]{display:none}
+body.has-wa .ft-bar{padding-right:84px}
+body.has-wa.wa-left .ft-bar{padding-right:0;padding-left:84px}
+@media (max-width:1000px){.ft-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.ft-brand{grid-column:1/-1}}
+@media (max-width:640px){
+ .ft-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 20px}
+ .ft-col h2{margin-bottom:10px}
+ .ft-bar{flex-direction:column;align-items:flex-start}
+ body.has-wa .ft-bar,body.has-wa.wa-left .ft-bar{padding-left:0;padding-right:0;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+}
+
+/* sabit WhatsApp butonu */
+.wa-float{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));right:calc(20px + env(safe-area-inset-right));z-index:40;width:56px;height:56px;
+ border-radius:50%;display:grid;place-items:center;background:#25D366;color:#fff;box-shadow:0 12px 30px -8px rgba(0,0,0,.45);
+ transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s;animation:waIn .5s .8s both cubic-bezier(.2,.7,.2,1)}
+.wa-float.left{right:auto;left:calc(20px + env(safe-area-inset-left))}
+.wa-float:hover{transform:scale(1.07)}
+.wa-float svg{width:28px;height:28px}
+.wa-float[hidden]{display:none}
+@keyframes waIn{from{opacity:0;transform:translateY(16px) scale(.8)}to{opacity:1;transform:none}}
+@media (max-width:640px){.wa-float{width:52px;height:52px;bottom:calc(16px + env(safe-area-inset-bottom))}.wa-float:not(.left){right:calc(16px + env(safe-area-inset-right))}.wa-float.left{left:calc(16px + env(safe-area-inset-left))}}
+@media (prefers-reduced-motion:reduce){.wa-float{animation:none}}
+
+/* KVKK penceresi */
+.legal{width:min(680px,calc(100vw - 32px));max-height:min(80svh,760px);padding:0;border:1px solid var(--line);border-radius:22px;
+ background:var(--bg);color:var(--fg);box-shadow:0 30px 80px -20px rgba(0,0,0,.5);overflow:hidden}
+.legal[open]{display:flex;flex-direction:column}
+.legal::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.legal-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 18px 16px 24px;border-bottom:1px solid var(--line)}
+.legal-head h2{margin:0;font-weight:500;font-size:22px;letter-spacing:-.02em}
+.legal-x{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:transparent;color:inherit;cursor:pointer}
+.legal-x:hover{background:var(--fg);color:var(--bg)}
+.legal-body{padding:20px 24px 28px;overflow-y:auto;overscroll-behavior:contain;font-size:15px;line-height:1.65;color:var(--muted)}
+.legal-body p{margin:0 0 14px;white-space:pre-line;overflow-wrap:anywhere}
+.legal-body p b{display:block;color:var(--fg);font-weight:600;margin-bottom:2px}
 
 /* görünür olunca yumuşak giriş */
 .rv{opacity:0;transform:translateY(18px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
@@ -291,7 +356,30 @@ footer a{text-decoration:none}
  </section>
 </main>
 
-<footer><span id="footText"></span><span id="footPlace"></span></footer>
+<footer class="ft" id="footer">
+ <div class="ft-grid">
+  <div class="ft-brand">
+   <a class="ft-logo" href="/" id="ftLogo"></a>
+   <p class="ft-text" id="ftText"></p>
+   <ul class="ft-contact" id="ftContact"></ul>
+   <div class="ft-social" id="ftSocial"></div>
+  </div>
+  <nav class="ft-col" id="ftCorp" aria-labelledby="ftCorpT"><h2 id="ftCorpT"></h2><ul></ul></nav>
+  <nav class="ft-col" id="ftSvc" aria-labelledby="ftSvcT"><h2 id="ftSvcT"></h2><ul></ul></nav>
+  <nav class="ft-col" id="ftDemo" aria-labelledby="ftDemoT"><h2 id="ftDemoT"></h2><ul></ul></nav>
+ </div>
+ <div class="ft-bar">
+  <button type="button" class="ft-legal" id="ftPrivacy"></button>
+  <span id="ftCopy"></span>
+ </div>
+</footer>
+
+<a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="WhatsApp'tan yazın" hidden></a>
+
+<dialog class="legal" id="legal" aria-labelledby="legalTitle">
+ <div class="legal-head"><h2 id="legalTitle"></h2><button type="button" class="legal-x" id="legalClose" aria-label="Kapat"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
+ <div class="legal-body" id="legalBody"></div>
+</dialog>
 
 <script src="/assets/site.js"></script>
 </body>
