@@ -7,8 +7,22 @@ routes = [
   { pattern = "media.neardiji.com", custom_domain = true }
 ]
 
+# Her bölümün kendi deposu (Doğu Avrupa)
 [[r2_buckets]]
-binding = "MEDIA"
+binding = "MENU"
+bucket_name = "neardiji-menu"
+
+[[r2_buckets]]
+binding = "KATALOG"
+bucket_name = "neardiji-katalog"
+
+[[r2_buckets]]
+binding = "SITE"
+bucket_name = "neardiji-site"
+
+# Geçiş dönemi: eski ortak depo yalnız okuma yedeği. Her şey doğrulanınca bu blok ve depo kaldırılır.
+[[r2_buckets]]
+binding = "LEGACY"
 bucket_name = "neardiji-media"
 
 [vars]
