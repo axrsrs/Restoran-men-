@@ -1,6 +1,6 @@
 # Spec: Katalog — TL Vade (Vadeli / Vadesiz Fiyat)
 
-Durum: **Taslak — onay bekliyor** ("yap" denmeden kod yazılmaz)
+Durum: **Uygulandı** — kararlar: tek oran, vade iskontodan sonra, peşin etiketi "Peşin"
 Kapsam: `katalog/index.html` (tüm firmalar için ortak motor; ayar her firmanın kendi verisinde)
 
 ## Amaç
@@ -62,7 +62,7 @@ vadeli = peşin × (1 + rate/100)
 ## Test
 Proje build/test aracı yok (tek HTML). Doğrulama: Playwright ile yerel sunucu → panelde aç/kapa, kart/detay ekran görüntüsü (360 px + masaüstü), TL fiyat listesi PDF'i üretip sayfaları görsel kontrol; hesap fonksiyonları için Node ile küçük birim kontrolü.
 
-## Açık sorular
-1. **Tek oran mı, kademeli mi?** Öneri: tek oran (+ opsiyonel etiket). Alternatif: en fazla 3 kademe (örn. 3 Ay %10 / 6 Ay %40 / 12 Ay %60) — kartta yer sorunu çıkar, detay ve PDF'te sütun sayısı artar.
-2. **Vade iskontodan sonra mı?** Öneri: evet (yukarıdaki kural).
-3. **Kartta etiket:** "Peşin / Vadeli" mi, "Vadesiz / Vadeli" mi?
+## Kilitli kararlar
+1. Tek oran (+ isteğe bağlı etiket).
+2. Vadeli = iskontolu peşin × (1 + oran/100).
+3. Peşin fiyat etiketi: "Peşin" (EN: "Cash"); vadeli varsayılan "Vadeli" (EN: "Installment").
