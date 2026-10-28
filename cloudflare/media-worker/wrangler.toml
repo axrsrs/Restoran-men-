@@ -14,3 +14,6 @@ bucket_name = "neardiji-media"
 [vars]
 SUPABASE_URL = "https://rfwgjzkewtjpdcvrhepg.supabase.co"
 SUPABASE_KEY = "sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2"
+
+[ai]
+binding = "AI"

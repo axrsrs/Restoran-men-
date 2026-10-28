@@ -1,30 +1,21 @@
 /* NearDiji — yüklenen dosyalar (görsel / video) için tek ortak katman.
-   BASE boşsa Supabase Storage kullanılır; "https://media.neardiji.com" olunca
-   Cloudflare R2 + Worker kullanılır (cloudflare/media-worker). Menü, site paneli
-   ve katalog bu dosyadan okur; geçiş için sadece BASE değişir. */
+   Dosyalar Cloudflare R2'de, https://media.neardiji.com üzerinden (cloudflare/media-worker).
+   Menü, site paneli, katalog ve süper panel bu dosyayı kullanır. */
 (function () {
   "use strict";
-  var SB = "https://rfwgjzkewtjpdcvrhepg.supabase.co";
-  var KEY = "sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
-  var BASE = "https://media.neardiji.com"; /* boş bırakılırsa Supabase Storage */
-  var SB_PUBLIC = SB + "/storage/v1/object/public/";
+  var BASE = "https://media.neardiji.com";
 
   function enc(p) { return String(p).split("/").map(encodeURIComponent).join("/"); }
-  function url(bucket, path) { return (BASE ? BASE + "/" : SB_PUBLIC) + bucket + "/" + enc(path); }
+  function url(bucket, path) { return BASE + "/" + bucket + "/" + enc(path); }
 
-  /* Bizim depolardan birine ait linki {bucket, path, provider} olarak çözer; değilse null. */
+  /* Bizim depoya ait linki {bucket, path} olarak çözer; değilse null. */
   function parse(u) {
     u = String(u || "");
-    var pre = [[SB_PUBLIC, "supabase"]];
-    if (BASE) pre.push([BASE + "/", "r2"]);
-    for (var i = 0; i < pre.length; i++) {
-      if (u.indexOf(pre[i][0]) !== 0) continue;
-      var rest = u.slice(pre[i][0].length).split("?")[0].split("/");
-      var bucket = rest.shift();
-      var path = rest.map(function (s) { try { return decodeURIComponent(s); } catch (e) { return s; } }).join("/");
-      if (bucket && path) return { bucket: bucket, path: path, provider: pre[i][1] };
-    }
-    return null;
+    if (u.indexOf(BASE + "/") !== 0) return null;
+    var rest = u.slice(BASE.length + 1).split("?")[0].split("/");
+    var bucket = rest.shift();
+    var path = rest.map(function (s) { try { return decodeURIComponent(s); } catch (e) { return s; } }).join("/");
+    return bucket && path ? { bucket: bucket, path: path } : null;
   }
 
   async function fail(r) {
@@ -36,11 +27,8 @@
   }
 
   async function put(bucket, path, blob, token) {
-    var type = blob.type || "application/octet-stream";
-    var r = BASE
-      ? await fetch(BASE + "/" + bucket + "/" + enc(path), { method: "PUT", headers: { Authorization: "Bearer " + token, "Content-Type": type }, body: blob })
-      : await fetch(SB + "/storage/v1/object/" + bucket + "/" + enc(path), { method: "POST",
-          headers: { apikey: KEY, Authorization: "Bearer " + token, "Content-Type": type, "x-upsert": "true", "cache-control": "31536000" }, body: blob });
+    var r = await fetch(BASE + "/" + bucket + "/" + enc(path), { method: "PUT",
+      headers: { Authorization: "Bearer " + token, "Content-Type": blob.type || "application/octet-stream" }, body: blob });
     if (!r.ok) await fail(r);
     return url(bucket, path);
   }
@@ -48,11 +36,16 @@
   async function del(u, token) {
     var x = parse(u);
     if (!x) return;
-    var r = x.provider === "r2"
-      ? await fetch(BASE + "/" + x.bucket + "/" + enc(x.path), { method: "DELETE", headers: { Authorization: "Bearer " + token } })
-      : await fetch(SB + "/storage/v1/object/" + x.bucket + "/" + enc(x.path), { method: "DELETE", headers: { apikey: KEY, Authorization: "Bearer " + token } });
+    var r = await fetch(BASE + "/" + x.bucket + "/" + enc(x.path), { method: "DELETE", headers: { Authorization: "Bearer " + token } });
     if (!r.ok && r.status !== 404) await fail(r);
   }
 
-  window.NDMedia = { base: BASE, url: url, parse: parse, put: put, del: del };
+  /* Firma silinince klasörünün tamamı (bucket/<uuid>/) */
+  async function delFolder(bucket, id, token) {
+    if (!/^[0-9a-f-]{36}$/.test(String(id))) return;
+    var r = await fetch(BASE + "/" + bucket + "/" + id + "/", { method: "DELETE", headers: { Authorization: "Bearer " + token } });
+    if (!r.ok && r.status !== 404) await fail(r);
+  }
+
+  window.NDMedia = { base: BASE, url: url, parse: parse, put: put, del: del, delFolder: delFolder };
 })();

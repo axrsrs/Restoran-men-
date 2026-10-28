@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https://rfwgjzkewtjpdcvrhepg.supabase.co https://cloudflareinsights.com https://media.neardiji.com https://translate.googleapis.com https://api.mymemory.translated.net https://open.er-api.com https://api.frankfurter.app https://api.frankfurter.dev; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https://rfwgjzkewtjpdcvrhepg.supabase.co https://cloudflareinsights.com https://media.neardiji.com https://api.mymemory.translated.net https://open.er-api.com https://api.frankfurter.app https://api.frankfurter.dev; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
@@ -14,21 +14,7 @@
 <meta name="robots" content="noindex">
 <title>NearDiji</title>
 <style>html,body{margin:0;height:100%;background:#171719}</style>
-<script>
-/* GitHub Pages bilinmeyen yolları bu sayfaya gönderir:
-   neardiji.com/xfirma → xfirma'nın menüsü (menu/ uygulaması açılır, adres kısa kalır) */
-(function(){
- var parts=location.pathname.split("/").filter(Boolean);
- if(/github\.io$/i.test(location.hostname))parts.shift();
- var a=(parts[0]||"").toLowerCase(), b=(parts[1]||"").toLowerCase();
- try{a=decodeURIComponent(a);b=decodeURIComponent(b)}catch(e){}
- var slug=/^[a-z0-9]+(-[a-z0-9]+)*$/;
- if(a==="katalog"&&slug.test(b)){location.replace("/katalog/?f="+encodeURIComponent(b)+location.hash);return}
- if(a==="menu"&&slug.test(b)){location.replace("/menu/?r="+encodeURIComponent(b)+location.hash);return}
- if(slug.test(a)&&["menu","821","ammar","ayse","assets","site","katalog","tools"].indexOf(a)<0){location.replace("/menu/?r="+encodeURIComponent(a)+location.hash);return}
- location.replace("/");
-})();
-</script>
+<script src="/assets/yonlendir.js"></script>
 </head>
 <body></body>
 </html>
