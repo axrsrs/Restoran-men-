@@ -5750,15 +5750,25 @@ const THEME_ICONS=`<svg class="icoMoon" viewBox="0 0 24 24" fill="none" stroke="
 
 /* Magic UI "AnimatedThemeToggler" (variant: square) davranışı:
    yeni tema, düğmenin ortasından büyüyen bir kare ile açılır. */
-function toggleColorMode(btn){
+/* Yönetim paneli kendi açık/koyu modunu tutar; müşterinin gördüğü menü etkilenmez */
+function panelMode(){
+ const saved=safeGet("nmPanelMode");
+ return saved==="light"||saved==="dark"?saved:currentMode();
+}
 
- const next=currentMode()==="light"?"dark":"light";
+function activeMode(){
+ return !PREVIEW&&adminOpen&&adminAuthenticated?panelMode():currentMode();
+}
+
+function toggleColorMode(btn,panel){
+
+ const next=(panel?panelMode():currentMode())==="light"?"dark":"light";
 
  const apply=()=>{
-  safeSet("nearMenuMode",next);
+  safeSet(panel?"nmPanelMode":"nearMenuMode",next);
   applyTheme();
   const label=next==="light"?"Koyu moda geç":"Açık moda geç";
-  document.querySelectorAll(".themeToggle").forEach(b=>{b.setAttribute("aria-label",label);b.title=label});
+  document.querySelectorAll(panel?"#panelModeBtn":".themeToggle:not(#panelModeBtn)").forEach(b=>{b.setAttribute("aria-label",label);b.title=label});
  };
 
  const reduce=(()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}})();
@@ -5795,7 +5805,7 @@ function applyTheme(){
  const th=DATA.theme;
  const root=document.documentElement;
 
- const light=currentMode()==="light";
+ const light=activeMode()==="light";
 
  root.dataset.mode=light?"light":"dark";
 
@@ -7931,6 +7941,9 @@ function renderAdmin(){
 
      <div class="adminTopActions">
       ${adminTab!=="pdf"?`<button class="iconBtn" id="openPreview" aria-label="Menüyü önizle" title="Menüyü önizle">◱</button>`:""}
+      <button class="iconBtn themeToggle" id="panelModeBtn" type="button"
+       aria-label="${panelMode()==="light"?"Koyu moda geç":"Açık moda geç"}"
+       title="${panelMode()==="light"?"Koyu moda geç":"Açık moda geç"}">${THEME_ICONS}</button>
       <button class="iconBtn" id="tourBtnTop" aria-label="Rehberlik turu" title="Rehberlik turu">?</button>
       <button class="iconBtn" id="closeAdmin" aria-label="Kaydet ve kapat" title="Kaydet ve kapat">×</button>
      </div>
@@ -8379,6 +8392,7 @@ function renderSetupCard(){
 function bindStudio(){
 
  $("navAdd")?.addEventListener("click",()=>openQuickAdd());
+ $("panelModeBtn")?.addEventListener("click",e=>toggleColorMode(e.currentTarget,true));
  $("qaOpen")?.addEventListener("click",()=>openQuickAdd());
 
  $("openPreview")?.addEventListener("click",()=>{
