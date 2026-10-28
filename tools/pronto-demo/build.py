@@ -62,6 +62,7 @@ def ortak():
     ORTAK.mkdir(parents=True, exist_ok=True)
     shutil.copy(BURASI / 'gorseller.js', ORTAK / 'gorseller.js')
     shutil.copy(BURASI / 'ortak.js', ORTAK / 'sunucu.js')
+    shutil.copy(BURASI / 'rehber.js', ORTAK / 'rehber.js')
 
 
 def ikonlar_ve_baslik(s, baslik, aciklama):
@@ -98,7 +99,7 @@ def teklif(kaynak: Path):
     # demo katmanı: tanımlar bitti, açılıştan hemen önce
     s = degistir(s, '\nboot();\n</script>',
                  '\n</script>\n<script src="../ortak/gorseller.js"></script>\n<script src="../ortak/sunucu.js"></script>\n'
-                 '<script src="demo.js"></script>\n<script>boot();</script>')
+                 '<script src="../ortak/rehber.js"></script>\n<script src="demo.js"></script>\n<script>boot();</script>')
 
     cikti = temiz_klasor('teklif')
     ortak()
@@ -145,7 +146,7 @@ def siparis(kaynak: Path):
     # Supabase kütüphanesi yerine ortak demo deposu + tarayıcı içi istemci
     s = degistir(s, '<script src="lib/supabase.min.js"></script>',
                  '<script src="../ortak/gorseller.js"></script><script src="../ortak/sunucu.js"></script><script src="supabase-demo.js"></script>')
-    s = degistir(s, '</body>', '<script src="demo.js"></script>\n</body>')
+    s = degistir(s, '</body>', '<script src="../ortak/rehber.js"></script>\n<script src="demo.js"></script>\n</body>')
 
     # marka: NEAR logosu, OFISCHI adları genel ifadeler
     s = degistir_re(s, r'src="data:image/png;base64,[A-Za-z0-9+/=]+" alt="Ofischi Premium" class="lock-logo"',

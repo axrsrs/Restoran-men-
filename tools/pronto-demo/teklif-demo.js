@@ -32,7 +32,7 @@
   RT.connect = function () {};
   RT.broadcast = function () {};
   RT.setToken = function () {};
-  Sync.last = 'demo'; Local.set('last_sync', 'demo');
+  Sync.last = new Date().toISOString(); Local.set('last_sync', Sync.last);
   Sync.online = true;
   Sync.flush = async function () {
     /* satırlar kuyruğa girerken cihaz önbelleğine zaten yazıldı; "gönderildi" say */
@@ -267,4 +267,55 @@
   bar.querySelector('[data-near-sifirla]').addEventListener('click', sifirla);
   bar.querySelector('[data-near-ayar]').addEventListener('click', () => { if (!$('#main')) return; if (state.view === 'ayarlar') go('teklifler'); else openSettings(); });
   document.body.prepend(bar);
+
+  /* ---------- rehberlik turu ---------- */
+  let ornekId = null;
+  const sayfa = v => ({ sayfa: v, git: () => { if (state.view !== v) go(v); } });
+  const liste = sayfa('teklifler');
+  const detay = { sayfa: 'teklifDetay', git: () => {
+    if (state.view === 'teklifDetay') return;
+    const r = document.querySelector('#tw .gonder-yok[data-id]') || document.querySelector('#tw [data-act=openTeklif][data-id]');
+    ornekId = r ? r.dataset.id : ornekId;
+    if (ornekId) go('teklifDetay', { id: ornekId });
+  } };
+  const dar = () => window.innerWidth <= 900;
+  NearRehber.kur({
+    anahtar: 'teklif',
+    ad: 'PRONTO Teklif’e hoş geldiniz',
+    metin: 'Teklif, proforma, müşteri ve tahsilat tek ekranda. 2 dakikalık turla her bölümü gösterelim.',
+    maddeler: ['Proforma hazırla, müşteri onaylayınca tek tuşla siparişe çevir.', 'Ödemeleri, kalan tutarı ve IBAN mesajını buradan takip et.', 'Siparişi Sipariş Takibi’ne gönder, üretim durumu buraya geri gelsin.'],
+    hazir: () => !!document.querySelector('#main #offerKpis, #main .page'),
+    temizle: () => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })),
+    son: () => { if (state.view !== 'teklifler') go('teklifler'); },
+    adimlar: () => [
+      { bolum: 'Genel', ...liste, sel: dar() ? '#cb' : '#nav', t: 'Bölümler', p: dar()
+        ? 'Alttaki çubukla Siparişler, Müşteriler ve Ürünler arasında geçersiniz. Proformalar, Personeller ve Raporlar “Daha” menüsünde.'
+        : 'Siparişler, Proformalar, Müşteriler, Personeller, Ürünler ve Raporlar burada. Sarı rozet cevap bekleyen proforma sayısıdır.' },
+      { bolum: 'Siparişler', ...liste, sel: dar() ? '[data-act=cbYeni]' : '[data-act=newTeklif]', t: 'Yeni kayıt', p: 'Önce ne hazırladığınızı seçersiniz: müşteri henüz karar vermediyse Proforma, onayladıysa doğrudan Sipariş. Ürün, adet, iskonto, KDV ve döviz aynı formda.' },
+      { bolum: 'Siparişler', ...liste, sel: '#pfBanner', t: 'Proformalar ayrı durur', p: 'Açık proformalar sipariş listesine ve toplamlara karışmaz. Bu şerit kaç proformanın cevap beklediğini gösterir; tek tuşla oraya geçersiniz.' },
+      { bolum: 'Siparişler', ...liste, sel: '#offerKpis', t: 'Özet kartları', p: 'Toplam sipariş, bekleyen, üretimdeki ve toplam tutar. Kırmızı uyarı, Sipariş Takibi’ne henüz gönderilmemiş siparişleri sayar. Farklı dövizler ayrı ayrı toplanır.' },
+      { bolum: 'Siparişler', ...liste, sel: '#q', t: 'Her alanda arama', p: 'Müşteri, sipariş no, ürün, personel veya tutar yazın; liste anında süzülür.' },
+      { bolum: 'Siparişler', ...liste, sel: '#tahBtn', t: 'Tahsilat bekleyenler', p: 'Teslim tarihi geçmiş ya da teslim edilmiş ama ödemesi tamamlanmamış siparişleri tek dokunuşla listeler.' },
+      { bolum: 'Siparişler', ...liste, sel: '[data-act=openFilter]', t: 'Filtre ve sıralama', p: 'Listeyi duruma ve diğer alanlara göre süzün; yanındaki düğmeyle sıralamayı değiştirin.' },
+      { bolum: 'Siparişler', ...liste, sel: '#tw tr.gonder-yok, #tw .lcard.gonder-yok, #tw tbody tr, #tw .lcard', t: 'Sipariş satırı', p: 'Satıra dokununca detay açılır. Solda kırmızı çizgi olan siparişler henüz Sipariş Takibi’ne gönderilmemiştir. Sağdaki renkli etiket üretim durumudur.' },
+      { bolum: 'Siparişler', ...liste, sel: '#tw [data-act=ibanWa]', t: 'WhatsApp ile ödeme hatırlatma', p: 'Kalan tutarı ve IBAN bilgisini hazır mesajla müşteriye WhatsApp’tan gönderir.' },
+      { bolum: 'Siparişler', ...liste, sel: '#tw [data-act=rowMenu]', t: 'Hızlı işlemler', p: '⋯ menüsünden PDF, kopyalama, düzenleme, Sipariş Takibi’ne gönderme ve silme işlemlerine ulaşırsınız.' },
+      { bolum: 'Sipariş detayı', ...detay, sel: '#main .card', t: 'Sipariş detayı', p: 'Müşteri bilgisi, sipariş ve teslim tarihleri, ödeme özeti tek sayfada. Ürünler ve Ödemeler sekmeleri aşağıda.' },
+      { bolum: 'Sipariş detayı', ...detay, sel: '#main [data-act=addPay]', t: 'Ödeme ekle', p: 'Peşinat veya ara ödemeyi tutar, tarih ve yöntemle kaydedin. Kalan tutar ve tahsilat durumu kendiliğinden güncellenir.' },
+      { bolum: 'Sipariş detayı', ...detay, sel: '#main [data-act=pdf]', t: 'PDF', p: 'Logolu, banka bilgili sipariş formunu PDF olarak indirir veya paylaşırsınız.' },
+      { bolum: 'Sipariş detayı', ...detay, sel: '#main [data-act=sipGonder]', t: 'Sipariş Takibi’ne gönder', p: 'Sipariş, fotoğraflarıyla birlikte Sipariş Takibi’nin “Gelen Siparişler” kutusuna düşer. Orada onaylanınca durum buraya geri gelir: Onay Bekliyor → Beklemede → Üretimde → Teslim Edildi.' },
+      { bolum: 'Proformalar', ...sayfa('proformalar'), sel: '#pfKpi', t: 'Proforma takibi', p: 'Açık, süresi dolan ve bu ay sonuçlanan proformalar ile olası tutar. Proformalar 15 gün geçerlidir; süresi yaklaşanlar öne çıkar.' },
+      { bolum: 'Proformalar', ...sayfa('proformalar'), sel: '[data-act=pfKarar]', t: 'Müşteri cevabı', p: 'Müşteri onaylarsa tek tuşla siparişe dönüşür; vazgeçerse kaybedildi olarak işaretlenir. Hiçbir bilgiyi yeniden girmezsiniz.' },
+      { bolum: 'Kayıtlar', ...sayfa('musteriler'), sel: '[data-act=newCari]', t: 'Müşteriler', p: 'Cari kartta ünvan, vergi bilgisi, telefon ve adres durur. Sipariş hazırlarken müşteriyi buradan seçersiniz, bilgileri yeniden yazmazsınız.' },
+      { bolum: 'Kayıtlar', ...sayfa('personeller'), sel: '[data-act=newPers]', t: 'Personeller', p: 'Satış yapan personeli ekleyin; her siparişin kimden geldiği ve personel bazlı ciro raporlarda görünür.' },
+      { bolum: 'Kayıtlar', ...sayfa('urunler'), sel: '[data-act=newUrun]', t: 'Ürünler', p: 'Kod, model, renk, fotoğraf ve fiyatla ürün kataloğu. Siparişe ürün eklerken buradan seçersiniz.' },
+      { bolum: 'Kayıtlar', ...sayfa('urunler'), sel: '[data-act=katYonet]', t: 'Kategoriler', p: 'Ürünleri kategorilere ayırın; arama ve raporlar kategoriye göre de çalışır.' },
+      { bolum: 'Raporlar', ...sayfa('raporlar'), sel: '#main .chip[data-act=repP]', t: 'Dönem seçimi', p: 'Bugün, bu hafta, bu ay, bu yıl ya da özel bir tarih aralığı seçin; tüm rapor buna göre hesaplanır.' },
+      { bolum: 'Raporlar', ...sayfa('raporlar'), sel: '#main [data-act=repTab][data-k=genel]', t: 'Rapor sekmeleri', p: 'Sipariş, müşteri, personel, ürün, finansal özet ve tahsilat raporları. Excel ve PDF olarak dışa aktarılır.' },
+      { bolum: 'Raporlar', ...sayfa('raporlar'), sel: '#main .card.graf', t: 'Ciro grafiği', p: 'Son 12 ayın sipariş ve tahsilat grafiği; en iyi ay ve geçen yılla karşılaştırma. TRY, USD ve EUR ayrı, resmi / gayri resmi ayrımıyla.' },
+      { bolum: 'Ayarlar', ...liste, sel: '[data-near-ayar]', t: 'Firma ayarları', p: 'Firma bilgileri, logo, varsayılan döviz ve KDV, banka hesapları, ödeme yöntemleri ve PDF ayarları burada.' },
+      { bolum: 'Bağlantı', ...liste, sel: '.near-demo a[href*="siparis"]', t: 'Sipariş Takibi', p: 'İki program birbirine bağlı. Sipariş Takibi’ni yeni sekmede açıp gönderdiğiniz siparişi orada onaylayın; durum değişikliği buraya anında yansır.' },
+      { bolum: 'Bağlantı', ...liste, sel: '[data-near-rehber]', t: 'Rehber her zaman burada', p: 'Bu turu istediğiniz an buradan yeniden başlatırsınız. “Sıfırla” iki demoyu birlikte ilk hâline döndürür.' }
+    ]
+  });
 })();
