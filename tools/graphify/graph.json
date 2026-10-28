@@ -46,7 +46,7 @@
    "id": "home",
    "label": "Ana sayfa (/)",
    "type": "page",
-   "desc": "neardiji.com vitrini. Mantık assets/site.js içinde.",
+   "desc": "neardiji.com vitrini: ürün kartları, kapsamlı alt bilgi, sabit WhatsApp butonu, KVKK penceresi. Mantık assets/site.js içinde.",
    "file": "index.html",
    "kind": "hub"
   },
@@ -85,7 +85,7 @@
    "id": "menu",
    "label": "NearMenu Premium (/menu)",
    "type": "page",
-   "desc": "QR/NFC dijital menü: menü, kategori, ürün, etkinlik, ziyaret sayacı, çeviri.",
+   "desc": "QR/NFC dijital menü: menü, kategori, ürün, etkinlik, ziyaret sayacı, çeviri, menü altı bilgi kartı ve NearMenu imzası.",
    "file": "menu/index.html",
    "kind": "hub"
   },
@@ -93,14 +93,14 @@
    "id": "site",
    "label": "site.js",
    "type": "js",
-   "desc": "Ana sayfa uygulaması (site_content okur). 426 satır, 34 fonksiyon.",
+   "desc": "Ana sayfa uygulaması (site_content okur). 521 satır, 40 fonksiyon.",
    "file": "assets/site.js"
   },
   {
    "id": "sitedata",
    "label": "site-data.js",
    "type": "js",
-   "desc": "ND_DEFAULT varsayılan içerik ve Supabase istemci ayarı. 94 satır, 0 fonksiyon.",
+   "desc": "ND_DEFAULT varsayılan içerik ve Supabase istemci ayarı. 114 satır, 0 fonksiyon.",
    "file": "assets/site-data.js"
   },
   {
@@ -170,7 +170,7 @@
    "id": "appayse",
    "label": "ayse/app.js",
    "type": "js",
-   "desc": "Site paneli uygulaması. 627 satır, 55 fonksiyon.",
+   "desc": "Site paneli uygulaması. 670 satır, 56 fonksiyon.",
    "file": "ayse/app.js"
   },
   {
@@ -205,7 +205,7 @@
    "id": "appmenu",
    "label": "menu/app.js",
    "type": "js",
-   "desc": "Menü uygulaması. 8379 satır, 217 fonksiyon.",
+   "desc": "Menü uygulaması. 8737 satır, 228 fonksiyon.",
    "file": "menu/app.js"
   },
   {
@@ -570,6 +570,56 @@
    "desc": "get_menu/menu_version/get_catalog RPC, anon okuma iptali, sütun bazlı izinler, ziyaret sayacı, tablo kısıtları.",
    "file": "tools/sql/2026-10-28-guvenlik.sql",
    "kind": "hub"
+  },
+  {
+   "id": "pronto",
+   "label": "PRONTO Teklif demo (/pronto/teklif)",
+   "type": "page",
+   "desc": "Ana sayfada vitrinlenen teklif uygulaması demosu. Sunucuya istek gitmez; veri tarayıcıda (localStorage pl_*).",
+   "file": "pronto/teklif/index.html",
+   "kind": "hub"
+  },
+  {
+   "id": "pr_demo",
+   "label": "pronto/teklif/demo.js",
+   "type": "js",
+   "desc": "NEAR demo katmanı: oturum, senkron ve sunucu fonksiyonlarını tarayıcıda taklit eder.",
+   "file": "pronto/teklif/demo.js"
+  },
+  {
+   "id": "pr_gorsel",
+   "label": "pronto/teklif/gorseller.js",
+   "type": "js",
+   "desc": "Demo görselleri.",
+   "file": "pronto/teklif/gorseller.js"
+  },
+  {
+   "id": "pr_manifest",
+   "label": "manifest.webmanifest (pronto)",
+   "type": "cfg",
+   "desc": "Demo PWA bildirimi.",
+   "file": "pronto/teklif/manifest.webmanifest"
+  },
+  {
+   "id": "pr_adres",
+   "label": "pronto/teklif/adres",
+   "type": "data",
+   "desc": "81 il için il/ilçe/mahalle JSON; yalnızca seçilen il indirilir (TÜİK MEDAS).",
+   "file": "pronto/teklif/adres"
+  },
+  {
+   "id": "pr_uret",
+   "label": "adres/uret.py",
+   "type": "tool",
+   "desc": "İl/ilçe/mahalle JSON üretici.",
+   "file": "pronto/teklif/adres/uret.py"
+  },
+  {
+   "id": "pr_build",
+   "label": "pronto-demo/build.py",
+   "type": "tool",
+   "desc": "Gerçek PRONTO teklif uygulamasını demoya dönüştürür: Supabase değerlerini demo yapar, CSP sunucu bağlantısını kapatır, NEAR ikonları, demo katmanı ekler.",
+   "file": "tools/pronto-demo/build.py"
   },
   {
    "id": "app821::toast",
@@ -1004,12 +1054,20 @@
    "line": 112
   },
   {
+   "id": "appayse::fixFooter",
+   "label": "fixFooter()",
+   "type": "fn",
+   "desc": "",
+   "file": "ayse/app.js",
+   "line": 134
+  },
+  {
    "id": "appayse::getP",
    "label": "getP()",
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 133
+   "line": 140
   },
   {
    "id": "appayse::setP",
@@ -1017,7 +1075,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 134
+   "line": 141
   },
   {
    "id": "appayse::inp",
@@ -1025,7 +1083,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 136
+   "line": 143
   },
   {
    "id": "appayse::imgField",
@@ -1033,7 +1091,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 144
+   "line": 151
   },
   {
    "id": "appayse::appHTML",
@@ -1041,7 +1099,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 159
+   "line": 166
   },
   {
    "id": "appayse::logoSrc",
@@ -1049,7 +1107,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 240
+   "line": 280
   },
   {
    "id": "appayse::logoInvert",
@@ -1057,7 +1115,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 241
+   "line": 281
   },
   {
    "id": "appayse::logoPrevItem",
@@ -1065,7 +1123,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 245
+   "line": 285
   },
   {
    "id": "appayse::logoField",
@@ -1073,7 +1131,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 251
+   "line": 291
   },
   {
    "id": "appayse::rangeF",
@@ -1081,7 +1139,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 265
+   "line": 305
   },
   {
    "id": "appayse::clientHTML",
@@ -1089,7 +1147,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 269
+   "line": 309
   },
   {
    "id": "appayse::statusPill",
@@ -1097,7 +1155,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 279
+   "line": 319
   },
   {
    "id": "appayse::projHTML",
@@ -1105,7 +1163,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 285
+   "line": 325
   },
   {
    "id": "appayse::miniSection",
@@ -1113,7 +1171,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 307
+   "line": 347
   },
   {
    "id": "appayse::dirty",
@@ -1121,7 +1179,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 319
+   "line": 359
   },
   {
    "id": "appayse::updateStatus",
@@ -1129,7 +1187,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 320
+   "line": 360
   },
   {
    "id": "appayse::rerender",
@@ -1137,7 +1195,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 329
+   "line": 369
   },
   {
    "id": "appayse::bindApp",
@@ -1145,7 +1203,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 334
+   "line": 374
   },
   {
    "id": "appayse::backupDown",
@@ -1153,7 +1211,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 387
+   "line": 429
   },
   {
    "id": "appayse::backupUp",
@@ -1161,7 +1219,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 394
+   "line": 436
   },
   {
    "id": "appayse::observeSections",
@@ -1169,7 +1227,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 416
+   "line": 459
   },
   {
    "id": "appayse::enableDrag",
@@ -1177,7 +1235,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 427
+   "line": 470
   },
   {
    "id": "appayse::move",
@@ -1185,7 +1243,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 436
+   "line": 479
   },
   {
    "id": "appayse::onScroll",
@@ -1193,7 +1251,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 447
+   "line": 490
   },
   {
    "id": "appayse::up",
@@ -1201,7 +1259,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 449
+   "line": 492
   },
   {
    "id": "appayse::clientName",
@@ -1209,7 +1267,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 459
+   "line": 502
   },
   {
    "id": "appayse::uploadSiteMedia",
@@ -1217,7 +1275,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 463
+   "line": 506
   },
   {
    "id": "appayse::pickClientLogos",
@@ -1225,7 +1283,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 470
+   "line": 513
   },
   {
    "id": "appayse::pickImage",
@@ -1233,7 +1291,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 492
+   "line": 535
   },
   {
    "id": "appayse::prepLogo",
@@ -1241,7 +1299,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 508
+   "line": 551
   },
   {
    "id": "appayse::px",
@@ -1249,7 +1307,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 519
+   "line": 562
   },
   {
    "id": "appayse::dist",
@@ -1257,7 +1315,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 522
+   "line": 565
   },
   {
    "id": "appayse::prepImage",
@@ -1265,7 +1323,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 559
+   "line": 602
   },
   {
    "id": "appayse::siteMediaUrls",
@@ -1273,7 +1331,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 582
+   "line": 625
   },
   {
    "id": "appayse::removeUnusedMedia",
@@ -1281,7 +1339,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 587
+   "line": 630
   },
   {
    "id": "appayse::save",
@@ -1289,7 +1347,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 596
+   "line": 639
   },
   {
    "id": "appayse::logout",
@@ -1297,7 +1355,7 @@
    "type": "fn",
    "desc": "",
    "file": "ayse/app.js",
-   "line": 612
+   "line": 655
   },
   {
    "id": "site::safeHref",
@@ -1412,12 +1470,20 @@
    "line": 121
   },
   {
+   "id": "site::fillLogo",
+   "label": "fillLogo()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/site.js",
+   "line": 122
+  },
+  {
    "id": "site::waLink",
    "label": "waLink()",
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 133
+   "line": 135
   },
   {
    "id": "site::igLink",
@@ -1425,7 +1491,15 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 134
+   "line": 141
+  },
+  {
+   "id": "site::socialLink",
+   "label": "socialLink()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/site.js",
+   "line": 151
   },
   {
    "id": "site::render",
@@ -1433,7 +1507,39 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 136
+   "line": 164
+  },
+  {
+   "id": "site::mapLink",
+   "label": "mapLink()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/site.js",
+   "line": 222
+  },
+  {
+   "id": "site::ftCol",
+   "label": "ftCol()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/site.js",
+   "line": 226
+  },
+  {
+   "id": "site::renderFooter",
+   "label": "renderFooter()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/site.js",
+   "line": 234
+  },
+  {
+   "id": "site::openPrivacy",
+   "label": "openPrivacy()",
+   "type": "fn",
+   "desc": "",
+   "file": "assets/site.js",
+   "line": 271
   },
   {
    "id": "site::stockFor",
@@ -1441,7 +1547,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 201
+   "line": 296
   },
   {
    "id": "site::renderProjects",
@@ -1449,7 +1555,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 211
+   "line": 306
   },
   {
    "id": "site::ccGo",
@@ -1457,7 +1563,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 238
+   "line": 333
   },
   {
    "id": "site::ccLayout",
@@ -1465,7 +1571,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 243
+   "line": 338
   },
   {
    "id": "site::ccInfo",
@@ -1473,7 +1579,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 267
+   "line": 362
   },
   {
    "id": "site::ccStop",
@@ -1481,7 +1587,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 276
+   "line": 371
   },
   {
    "id": "site::ccStart",
@@ -1489,7 +1595,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 277
+   "line": 372
   },
   {
    "id": "site::ccBind",
@@ -1497,7 +1603,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 282
+   "line": 377
   },
   {
    "id": "site::renderClients",
@@ -1505,7 +1611,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 319
+   "line": 414
   },
   {
    "id": "site::cfLayout",
@@ -1513,7 +1619,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 332
+   "line": 427
   },
   {
    "id": "site::cfGo",
@@ -1521,7 +1627,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 351
+   "line": 446
   },
   {
    "id": "site::cfStop",
@@ -1529,7 +1635,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 352
+   "line": 447
   },
   {
    "id": "site::cfStart",
@@ -1537,7 +1643,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 353
+   "line": 448
   },
   {
    "id": "site::cfBind",
@@ -1545,7 +1651,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 358
+   "line": 453
   },
   {
    "id": "site::end",
@@ -1553,7 +1659,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 379
+   "line": 474
   },
   {
    "id": "site::observeReveal",
@@ -1561,7 +1667,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 394
+   "line": 489
   },
   {
    "id": "site::fetchContent",
@@ -1569,7 +1675,7 @@
    "type": "fn",
    "desc": "",
    "file": "assets/site.js",
-   "line": 399
+   "line": 494
   },
   {
    "id": "bulut::lsGet",
@@ -2626,6 +2732,66 @@
    "rel": "izin/kısıt"
   },
   {
+   "from": "pronto",
+   "to": "pr_gorsel",
+   "rel": "yükler"
+  },
+  {
+   "from": "pronto",
+   "to": "pr_demo",
+   "rel": "yükler"
+  },
+  {
+   "from": "pronto",
+   "to": "pr_manifest",
+   "rel": "bildirim"
+  },
+  {
+   "from": "pronto",
+   "to": "icons",
+   "rel": "ikon"
+  },
+  {
+   "from": "pronto",
+   "to": "fonts",
+   "rel": "yazı tipi"
+  },
+  {
+   "from": "pronto",
+   "to": "pr_adres",
+   "rel": "il seçince indirir"
+  },
+  {
+   "from": "pr_uret",
+   "to": "pr_adres",
+   "rel": "üretir"
+  },
+  {
+   "from": "pr_build",
+   "to": "pronto",
+   "rel": "üretir"
+  },
+  {
+   "from": "pr_build",
+   "to": "pr_demo",
+   "rel": "teklif-demo.js kopyalar"
+  },
+  {
+   "from": "pr_build",
+   "to": "pr_gorsel",
+   "rel": "kopyalar"
+  },
+  {
+   "from": "home",
+   "to": "pronto",
+   "rel": "Demoyu aç"
+  },
+  {
+   "from": "sitedata",
+   "to": "pronto",
+   "rel": "ürün kartı linki"
+  },
+  {
    "from": "app821",
    "to": "app821::toast",
    "rel": "içerir"
@@ -3222,6 +3388,11 @@
   },
   {
    "from": "appayse",
+   "to": "appayse::fixFooter",
+   "rel": "içerir"
+  },
+  {
+   "from": "appayse",
    "to": "appayse::getP",
    "rel": "içerir"
   },
@@ -3561,6 +3732,16 @@
    "rel": "çağırır"
   },
   {
+   "from": "appayse::afterLogin",
+   "to": "appayse::fixFooter",
+   "rel": "çağırır"
+  },
+  {
+   "from": "appayse::fixFooter",
+   "to": "appayse::clone",
+   "rel": "çağırır"
+  },
+  {
    "from": "appayse::inp",
    "to": "appayse::getP",
    "rel": "çağırır"
@@ -3728,6 +3909,11 @@
   {
    "from": "appayse::backupUp",
    "to": "appayse::merge",
+   "rel": "çağırır"
+  },
+  {
+   "from": "appayse::backupUp",
+   "to": "appayse::fixFooter",
    "rel": "çağırır"
   },
   {
@@ -3952,6 +4138,11 @@
   },
   {
    "from": "site",
+   "to": "site::fillLogo",
+   "rel": "içerir"
+  },
+  {
+   "from": "site",
    "to": "site::waLink",
    "rel": "içerir"
   },
@@ -3962,7 +4153,32 @@
   },
   {
    "from": "site",
+   "to": "site::socialLink",
+   "rel": "içerir"
+  },
+  {
+   "from": "site",
    "to": "site::render",
+   "rel": "içerir"
+  },
+  {
+   "from": "site",
+   "to": "site::mapLink",
+   "rel": "içerir"
+  },
+  {
+   "from": "site",
+   "to": "site::ftCol",
+   "rel": "içerir"
+  },
+  {
+   "from": "site",
+   "to": "site::renderFooter",
+   "rel": "içerir"
+  },
+  {
+   "from": "site",
+   "to": "site::openPrivacy",
    "rel": "içerir"
   },
   {
@@ -4122,17 +4338,27 @@
   },
   {
    "from": "site::renderBrand",
+   "to": "site::fillLogo",
+   "rel": "çağırır"
+  },
+  {
+   "from": "site::fillLogo",
    "to": "site::theme",
    "rel": "çağırır"
   },
   {
-   "from": "site::renderBrand",
+   "from": "site::fillLogo",
    "to": "site::logoSrc",
    "rel": "çağırır"
   },
   {
-   "from": "site::renderBrand",
+   "from": "site::fillLogo",
    "to": "site::logoInvert",
+   "rel": "çağırır"
+  },
+  {
+   "from": "site::socialLink",
+   "to": "site::safeHref",
    "rel": "çağırır"
   },
   {
@@ -4162,6 +4388,11 @@
   },
   {
    "from": "site::render",
+   "to": "site::renderFooter",
+   "rel": "çağırır"
+  },
+  {
+   "from": "site::render",
    "to": "site::renderProjects",
    "rel": "çağırır"
   },
@@ -4173,6 +4404,36 @@
   {
    "from": "site::render",
    "to": "site::observeReveal",
+   "rel": "çağırır"
+  },
+  {
+   "from": "site::mapLink",
+   "to": "site::safeHref",
+   "rel": "çağırır"
+  },
+  {
+   "from": "site::ftCol",
+   "to": "site::linkAttrs",
+   "rel": "çağırır"
+  },
+  {
+   "from": "site::renderFooter",
+   "to": "site::safeHref",
+   "rel": "çağırır"
+  },
+  {
+   "from": "site::renderFooter",
+   "to": "site::socialLink",
+   "rel": "çağırır"
+  },
+  {
+   "from": "site::renderFooter",
+   "to": "site::mapLink",
+   "rel": "çağırır"
+  },
+  {
+   "from": "site::renderFooter",
+   "to": "site::ftCol",
    "rel": "çağırır"
   },
   {

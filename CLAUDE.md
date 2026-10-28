@@ -22,6 +22,7 @@ Her sayfa ince HTML + ayrı `app.js` yapısındadır; mantık `app.js` içindedi
 - `/ayse` site paneli: `ayse/tema.js`, `ayse/app.js`. Yetki `am_i_super`, içerik `site_content`.
 - `/katalog`: `katalog/app.js` (React, yerel `assets/vendor/react-18.3.1`), `katalog/bulut.js` (`window.SH21`), `katalog/pdf-font.js`. RPC: `get_catalog`, `get_catalog_access`, `tenant_state`, `track_catalog_visit`.
 - `/menu` NearMenu Premium: `menu/app.js`. RPC: `get_menu`, `menu_version`, `get_my_access`, `tenant_state`, `track_visit`; çeviri media-worker `/translate` ile.
+- `/pronto/teklif` PRONTO Teklif demosu (vitrin): gerçek PRONTO uygulamasının `tools/pronto-demo/build.py` ile üretilmiş demo kopyası. `demo.js` sunucuyu tarayıcıda taklit eder, Supabase'e istek gitmez; il/ilçe verisi `pronto/teklif/adres/*.json` (`uret.py`). Gerçek PRONTO reposu, anahtarları ve verisi buraya taşınmaz; demo yalnızca build.py ile yenilenir.
 - Görseller: `menu/demo/` (demo), `katalog/urunler/<seri>/` (aqua, atlantis, bien, eva, icon, lego, moon, part, royal).
 - `katalog/SPEC-vade.md`: TL vade özelliği (uygulandı).
 - Bağlantı haritası: `tools/graphify/graph.html` ve `graph.json`.
