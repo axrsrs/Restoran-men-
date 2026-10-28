@@ -120,6 +120,7 @@ async function afterLogin(){
   S.hero=merge(clone(DEF.hero),S.hero||{});
   S.contact=merge(clone(DEF.contact),S.contact||{});
   S.seo=merge(clone(DEF.seo),S.seo||{});
+  fixFooter(S);
   savedJSON=data?JSON.stringify(S):"";
   view="app";render();
   if(!data)toast("Henüz kayıt yok — varsayılan içerik yüklendi. Kaydedince yayına alınır.");
@@ -127,6 +128,12 @@ async function afterLogin(){
   if(er.status===401){storeSession(null);view="login";render();return}
   view="login";render();$("err").textContent="Bağlantı hatası: "+er.message;
  }
+}
+
+/* eski kayıtta telif “© NearDiji” biçimindeydi; © ve yıl artık otomatik */
+function fixFooter(o){
+ o.footer=String(o.footer||"").replace(/^\s*©\s*/,"").trim()||o.brand||"NearDiji";
+ if(!Array.isArray(o.demos))o.demos=clone(DEF.demos);
 }
 
 /* ── yol ile değer okuma/yazma ── */
@@ -154,7 +161,7 @@ var GRIP='<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" ar
 var CHEV='<svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var TRASH='<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-var SECTIONS=[["marka","Marka & logo"],["giris","Giriş bölümü"],["projeler","Projeler"],["referanslar","Referanslar"],["hizmetler","Hizmetler"],["surec","Süreç"],["hakkinda","Hakkında"],["iletisim","İletişim"],["seo","Tema & SEO"],["yedek","Yedek"]];
+var SECTIONS=[["marka","Marka & logo"],["giris","Giriş bölümü"],["projeler","Projeler"],["referanslar","Referanslar"],["hizmetler","Hizmetler"],["surec","Süreç"],["hakkinda","Hakkında"],["iletisim","İletişim"],["altbilgi","Alt bilgi"],["seo","Tema & SEO"],["yedek","Yedek"]];
 
 function appHTML(){
  var h=S.hero;
@@ -213,11 +220,44 @@ function appHTML(){
  o+='<section class="card" id="s-iletisim"><h2>İletişim</h2><p class="sub">Doldurduğunuz bilgiler sitenin sonunda buton ve etiket olarak görünür.</p><div class="grid">'
   +inp("Başlık","contactTitle")+inp("Alt metin","contactText")
   +inp("WhatsApp numarası","contact.whatsapp",{type:"tel",mode:"tel",ph:"0555 555 55 55"})
+  +inp("WhatsApp hazır mesajı","contact.waText",{hint:"Ziyaretçi WhatsApp'ı açınca mesaj kutusunda hazır gelir."})
   +inp("Telefon","contact.phone",{type:"tel",mode:"tel"})
   +inp("E-posta","contact.email",{type:"email"})
+  +inp("Adres / konum","contact.address")
+  +inp("Harita bağlantısı","contact.mapUrl",{type:"url",ph:"https://maps.app.goo.gl/…",hint:"İsteğe bağlı. Boş bırakılırsa adres Google Haritalar'da aranır."})
+  +'<div class="f full"><label class="f">Sabit WhatsApp butonu</label><div class="seg" data-seg="waFloat">'
+  +[["right","Sağ alt"],["left","Sol alt"],["off","Kapalı"]].map(function(x){return '<button type="button" data-v="'+x[0]+'"'+((S.waFloat||"right")===x[0]?' class="on"':"")+'>'+x[1]+'</button>'}).join("")
+  +'</div><span class="hint">'+(S.contact.whatsapp?"Sayfanın köşesinde sürekli görünür.":"Görünmesi için önce WhatsApp numarasını girin.")+'</span></div>'
+  +'</div><h3 class="sub-h">Sosyal medya</h3><p class="sub">Kullanıcı adı ya da tam bağlantı girebilirsiniz. Sadece doldurulan hesapların simgesi alt bilgide görünür.</p><div class="grid">'
   +inp("Instagram","contact.instagram",{ph:"@kullaniciadi"})
-  +inp("Adres / konum","contact.address",{full:true})
-  +inp("Alt bilgi","footer",{full:true,hint:"Yanına otomatik olarak yıl eklenir."})
+  +inp("LinkedIn","contact.linkedin",{ph:"https://linkedin.com/in/…"})
+  +inp("X","contact.x",{ph:"@kullaniciadi"})
+  +inp("YouTube","contact.youtube",{ph:"@kanal"})
+  +inp("TikTok","contact.tiktok",{ph:"@kullaniciadi"})
+  +inp("Facebook","contact.facebook",{ph:"sayfaadi"})
+  +'</div></section>';
+
+ var fc=S.footerCols;
+ o+='<section class="card" id="s-altbilgi"><h2>Alt bilgi</h2><p class="sub">Sayfanın en altındaki bölüm. İletişim bilgileri ve sosyal medya simgeleri “İletişim” bölümünden gelir; Kurumsal ve Hizmetler sütunları sitedeki bölümlerden otomatik oluşur.</p><div class="grid">'
+  +inp("Kısa tanıtım","footerText",{area:true,full:true,rows:2,hint:"Logonun altında görünür. Boş bırakılırsa gösterilmez."})
+  +inp("Telif adı","footer",{full:true,hint:"Sitede “© "+new Date().getFullYear()+" "+(S.footer||"NearDiji")+". Tüm hakları saklıdır.” olarak görünür; yıl her yıl kendiliğinden güncellenir."})
+  +'</div><h3 class="sub-h">Sütunlar</h3><div class="grid">'
+  +[["corporate","Kurumsal","Projeler, Referanslar, Süreç, Hakkında, İletişim"],["services","Hizmetler","Hizmetler bölümündeki başlıklar"],["demos","Demolar","Aşağıdaki demo listesi"]].map(function(c){
+   var on=fc[c[0]].show!==false;
+   return '<div class="f"><label class="check"><input type="checkbox" data-p="footerCols.'+c[0]+'.show" data-bool="1"'+(on?" checked":"")+'> '+c[1]+' sütununu göster</label>'
+    +(on?'<input class="in" data-p="footerCols.'+c[0]+'.title" value="'+esc(fc[c[0]].title||"")+'" placeholder="Sütun başlığı" aria-label="'+c[1]+' sütun başlığı">':"")
+    +'<span class="hint">'+c[2]+'</span></div>';
+  }).join("")
+  +'</div><h3 class="sub-h">Demolar</h3><p class="sub">Canlı demo bağlantıları. Site içi adres (/menu) ya da tam bağlantı girebilirsiniz. Sürükleyerek sıralayın.</p>'
+  +'<div class="list" data-list="demos">'+S.demos.map(function(d,i){
+   return '<div class="mini item demo-row" data-i="'+i+'"><span class="drag" title="Sürükle">'+GRIP+'</span>'
+    +'<input class="in" data-p="demos.'+i+'.label" value="'+esc(d.label)+'" placeholder="Görünen ad">'
+    +'<input class="in" data-p="demos.'+i+'.href" value="'+esc(d.href)+'" placeholder="/menu">'
+    +'<button class="btn icon sm danger" type="button" data-del="demos" data-i="'+i+'" aria-label="Sil">'+TRASH+'</button></div>';
+  }).join("")+'</div><button class="btn add" type="button" id="addDemo">+ Demo ekle</button>'
+  +'<h3 class="sub-h">KVKK ve gizlilik metni</h3><p class="sub">Alt bilgideki bağlantıdan açılan pencerede gösterilir. Paragrafları boş satırla ayırın; bir paragrafın kısa ilk satırı başlık olarak yazılır. Metin boşsa bağlantı gizlenir.</p><div class="grid">'
+  +inp("Başlık","privacy.title",{full:true})
+  +inp("Metin","privacy.text",{area:true,full:true,rows:14})
   +'</div></section>';
 
  o+='<section class="card" id="s-seo"><h2>Tema & SEO</h2><p class="sub">Ziyaretçi temayı kendisi değiştirmediyse açılışta bu tema kullanılır.</p><div class="grid">'
@@ -369,7 +409,7 @@ function bindApp(){
   if(t.dataset.addmini){S[t.dataset.addmini].push({title:"",desc:""});rerender();
    var l=document.querySelector('[data-list="'+t.dataset.addmini+'"]');var ins=l&&l.querySelectorAll(".item");if(ins&&ins.length)ins[ins.length-1].querySelector("input").focus();return}
   if(t.dataset.del){
-   var arr=S[t.dataset.del],i=+t.dataset.i,nm=arr[i]&&(arr[i].name||arr[i].title);
+   var arr=S[t.dataset.del],i=+t.dataset.i,nm=arr[i]&&(arr[i].name||arr[i].title||arr[i].label);
    if(!confirm((nm?"“"+nm+"” ":"Bu öğe ")+"silinsin mi?"))return;
    arr.splice(i,1);rerender();return;
   }
@@ -377,6 +417,8 @@ function bindApp(){
    setP(t.parentElement.dataset.seg,t.dataset.v);rerender();return;
   }
   if(t.id==="addClients"){pickClientLogos();return}
+  if(t.id==="addDemo"){S.demos.push({label:"",href:""});rerender();
+   var dl=document.querySelectorAll('[data-list="demos"] .item');if(dl.length)dl[dl.length-1].querySelector("input").focus();return}
   if(t.dataset.up){pickImage(t.dataset.up,t.dataset.kind);return}
   if(t.dataset.clear){setP(t.dataset.clear,"");if(t.dataset.clear==="logo"){S.logoDark="";S.logoTone="";S.logoRatio=0}rerender();return}
   if(t.dataset.toggle!==undefined&&!e.target.closest(".drag")){openItem=openItem===t.dataset.toggle?null:t.dataset.toggle;rerender();return}
@@ -407,6 +449,7 @@ function backupUp(inp){
   n.hero=merge(clone(DEF.hero),n.hero||{});
   n.contact=merge(clone(DEF.contact),n.contact||{});
   n.seo=merge(clone(DEF.seo),n.seo||{});
+  fixFooter(n);
   S=n;openItem=null;rerender();
   toast("✓ Yedek yüklendi. Yayına almak için Kaydet'e basın.");
  };
