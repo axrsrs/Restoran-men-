@@ -1,0 +1,40 @@
+# PRONTO demosunu gerçek uygulamayla güncel tutar.
+# Her gün ofischi/PRONTO reposuna bakar; index.html değiştiyse demoyu yeniden üretip main'e yazar
+# (main'e push → Cloudflare otomatik yayınlar). Kaynak beklenmedik şekilde değiştiyse build.py
+# hata verir, görev kırmızı olur ve canlı demo eski hâliyle kalır.
+name: PRONTO demo güncelle
+
+on:
+  schedule:
+    - cron: "17 3 * * *"   # her gün 06:17 (Türkiye)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pronto-demo
+  cancel-in-progress: false
+
+jobs:
+  guncelle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PRONTO Teklif kaynağını indir
+        run: git clone --depth 1 https://github.com/ofischi/PRONTO.git /tmp/pronto-teklif
+
+      - name: Demoyu üret
+        run: python3 tools/pronto-demo/build.py teklif /tmp/pronto-teklif
+
+      - name: Değiştiyse kaydet
+        run: |
+          if [ -z "$(git status --porcelain pronto)" ]; then echo "Demo zaten güncel."; exit 0; fi
+          kaynak=$(git -C /tmp/pronto-teklif log -1 --format='%h %s')
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pronto
+          git commit -m "PRONTO Teklif demosu güncellendi (kaynak: $kaynak)"
+          git push
