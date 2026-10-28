@@ -52,7 +52,7 @@ window.ND_DEFAULT = {
       link: "https://axrsrs.github.io/asoda/", linkLabel: "Siteyi aç", image: "", featured: false, hidden: false },
     { id: "p5", name: "PRONTO", tag: "Sipariş & Teklif", year: "2026", status: "live",
       desc: "Mobilya siparişlerini üretimden teslime kadar izleyen 10 kullanıcılı takip sistemi; web ve masaüstü. Ürünler, müşteriler, tedarikçiler, raporlar ve teklif/satış modülü.",
-      link: "", linkLabel: "", image: "", featured: false, hidden: false },
+      link: "/pronto/teklif", linkLabel: "Demoyu aç", image: "", featured: false, hidden: false },
     { id: "p6", name: "Bizim Ekmekçi", tag: "QR Menü", year: "2026", status: "live",
       desc: "Fırın ve kafe için cam görünümlü QR menü. Kategori kartları, otomatik çeviri, logoya basılı tutarak açılan PIN korumalı yönetim paneli.",
       link: "", linkLabel: "", image: "", featured: false, hidden: false },
@@ -104,7 +104,8 @@ window.ND_DEFAULT = {
   },
   demos: [
     { label: "NearMenu QR menü", href: "/menu" },
-    { label: "Ürün kataloğu", href: "/katalog" }
+    { label: "Ürün kataloğu", href: "/katalog" },
+    { label: "PRONTO teklif", href: "/pronto/teklif" }
   ],
   privacy: {
     title: "KVKK ve Gizlilik",
