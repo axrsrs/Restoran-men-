@@ -144,7 +144,7 @@
     var json = JSON.stringify(moved);
     if (json === lastSavedJSON) return { savedAt: Date.now(), data: moved, storage: "cloud" };
     if (json.length > 2900000) throw new Error("Katalog verisi çok büyük. Lütfen bazı görselleri küçültün.");
-    var rows = await sb("/rest/v1/catalogs?id=eq." + encodeURIComponent(catalog.id), { method: "PATCH", body: { data: moved },
+    var rows = await sb("/rest/v1/catalogs?id=eq." + encodeURIComponent(catalog.id) + "&select=id", { method: "PATCH", body: { data: moved },
       headers: { Prefer: "return=representation" } });
     if (!Array.isArray(rows) || !rows.length) throw new Error("Kaydetme yetkiniz yok veya oturum süresi doldu. Lütfen tekrar giriş yapın.");
     lastSavedJSON = json;
