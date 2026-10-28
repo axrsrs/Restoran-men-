@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-z0BZ5aQFMus3/E/DBRtP2ti8H0cY9wE6goLH1UNrmX8=' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: data: blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-fJOZaO8YXGjQbCj07f3jBWxAcUzoHfCHZuhQIeX1iUw=' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: data: blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -5533,7 +5533,8 @@ function App() {
     function admLogiInputs(obj, onSet, keyPrefix) {
         return React.createElement("div", { className: "adm-logi" }, [["pkg", "Paket", "Örn. 2", "numeric"], ["m3", "Hacim m³", "Örn. 0,85", "decimal"], ["kg", "Ağırlık kg", "Örn. 45", "decimal"]].map(([k, label, ph, mode]) => React.createElement("label", { key: keyPrefix + k },
             React.createElement("small", null, label),
-            React.createElement("input", { className: "adm-input", type: "text", inputMode: mode, autoComplete: "off", maxLength: 10, value: obj?.[k] === null || obj?.[k] === undefined ? "" : String(obj[k]).replace(".", ","), placeholder: ph, onChange: e => { const v = String(e.target.value).replace(k === "pkg" ? /[^\d]/g : /[^\d.,]/g, "").replace(/([.,].*)[.,]/g, "$1").slice(0, 10); onSet(k, v === "" ? null : v); } }))));
+            /* NumField yazılan metni (örn. "0," → "0,85") korur; yalnızca geçerli sayıyı kaydeder. */
+            React.createElement(NumField, { className: "adm-input", inputMode: mode, maxLength: 10, "aria-label": label, value: logiNumber(obj?.[k], k === "pkg" ? 0 : k === "m3" ? 3 : 2), placeholder: ph, parse: v => k === "pkg" ? (/^\s*\d+\s*$/.test(v) ? logiNumber(v, 0) : null) : logiNumber(v, k === "m3" ? 3 : 2), format: v => String(v).replace(".", ","), onValue: v => onSet(k, v) }))));
     }
     function setPath(path, value) { updateData(copy => { let target = copy; for (let i = 0; i < path.length - 1; i++) {
         const key = path[i];
