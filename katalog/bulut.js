@@ -135,6 +135,22 @@
     return node;
   }
 
+  /* Kayıttan sonra artık kullanılmayan görseller R2'den silinir (sadece bu kataloğun klasörü) */
+  function mediaUrls(json) {
+    var out = new Set(), re = /https:\/\/media\.neardiji\.com\/catalog-media\/[^"\\\s]+/g, m;
+    while ((m = re.exec(json || ""))) out.add(m[0]);
+    return out;
+  }
+  function removeUnusedImages(beforeJSON, afterJSON) {
+    if (!beforeJSON || !session) return;
+    var now = mediaUrls(afterJSON), own = "https://media.neardiji.com/catalog-media/" + catalog.id + "/";
+    mediaUrls(beforeJSON).forEach(function (u) {
+      if (now.has(u) || u.indexOf(own) !== 0) return;
+      uploaded.forEach(function (v, k) { if (v === u) uploaded.delete(k); });
+      NDMedia.del(u, session.access_token).catch(function () { });
+    });
+  }
+
   /* ---------- kayıt (sırayla, değişmediyse atla) ---------- */
   function canEdit() { return !!(session && access && access.role); }
   async function doSave(clean) {
@@ -147,7 +163,9 @@
     var rows = await sb("/rest/v1/catalogs?id=eq." + encodeURIComponent(catalog.id) + "&select=id", { method: "PATCH", body: { data: moved },
       headers: { Prefer: "return=representation" } });
     if (!Array.isArray(rows) || !rows.length) throw new Error("Kaydetme yetkiniz yok veya oturum süresi doldu. Lütfen tekrar giriş yapın.");
+    var before = lastSavedJSON;
     lastSavedJSON = json;
+    removeUnusedImages(before, json);
     return { savedAt: Date.now(), data: moved, storage: "cloud" };
   }
   function save(clean) {
@@ -266,8 +284,24 @@
     location.reload();
   }
 
+  /* Panel çevirisi: Cloudflare yapay zekâ çevirisi (medya sunucusu). Giriş yoksa ya da hata olursa null. */
+  async function translate(text, target) {
+    text = String(text || "").trim();
+    if (!text || text.length > 600 || !session) return null;
+    try {
+      await ensureFresh();
+      if (!session) return null;
+      var r = await fetch(NDMedia.base + "/translate", { method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + session.access_token },
+        body: JSON.stringify({ text: text, target: target === "ar" ? "ar" : "en" }) });
+      if (!r.ok) return null;
+      var j = await r.json();
+      return j && j.text ? String(j.text) : null;
+    } catch (e) { return null; }
+  }
+
   window.SH21 = {
-    slug: slug, ready: ready, loadRecord: loadRecord, save: save, requireAdmin: requireAdmin,
+    slug: slug, ready: ready, loadRecord: loadRecord, save: save, requireAdmin: requireAdmin, translate: translate,
     changePassword: function () { return askNewPassword(false); }, logout: logout,
     email: function () { return (session && session.user && session.user.email) || ""; },
     isSuper: function () { return !!(access && access.super); },
