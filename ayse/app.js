@@ -58,19 +58,19 @@ var view="checking", S=null, savedJSON="", saving=false, openItem=null, section=
 function render(){
  var app=$("app");
  if(view==="checking"){app.innerHTML='<div class="loading"><div class="spin"></div></div>';return}
- if(view==="login"){app.innerHTML=loginHTML();bindLogin();return}
- if(view==="newPassword"){app.innerHTML=newPwHTML();bindNewPw();return}
+ if(view==="login"){app.innerHTML=loginHTML();NDGiris.bagla(app);bindLogin();return}
+ if(view==="newPassword"){app.innerHTML=newPwHTML();NDGiris.bagla(app);bindNewPw();return}
  app.innerHTML=appHTML();bindApp();updateStatus();
 }
 
 function loginHTML(){
- return '<div class="auth"><form class="auth-card" id="lf" autocomplete="on">'
-  +'<h1>NearDiji <em>panel</em></h1><p>Ana site içeriğini yönetmek için giriş yapın.</p>'
-  +'<div class="grid" style="grid-template-columns:1fr">'
-  +'<label class="f">E-posta<input class="in" id="em" type="email" autocomplete="username" value="'+esc(lsGet("nearMenuLastEmail")||"")+'"></label>'
-  +'<label class="f">Şifre<input class="in" id="pw" type="password" autocomplete="current-password"></label>'
-  +'<button class="btn primary block" id="lb" type="submit">Giriş yap</button></div>'
-  +'<div class="err" id="err"></div></form></div>';
+ var G=NDGiris;
+ return G.sayfa(
+  G.baslik("NearDiji Panel","Ana site içeriğini yönetmek için giriş yapın.")+
+  G.alan({id:"em",tur:"email",yer:"E-posta",deger:lsGet("nearMenuLastEmail")||""})+
+  G.alan({id:"pw",tur:"password",yer:"Şifre"})+
+  G.buton("lb","Giriş Yap",{tur:"submit"})+
+  G.hata("err"),{form:true,formId:"lf"});
 }
 function bindLogin(){
  var f=$("lf");
@@ -85,17 +85,19 @@ function bindLogin(){
    lsSet("nearMenuLastEmail",em);
    await afterLogin();
   }catch(er){
-   b.disabled=false;b.textContent="Giriş yap";
+   b.disabled=false;b.textContent="Giriş Yap";
    var el=$("err");if(el)el.textContent=er.status===400?"E-posta veya şifre yanlış.":er.status===429?"Çok fazla deneme. Biraz bekleyin.":(er.message||"Giriş yapılamadı.");
   }
  });
 }
 function newPwHTML(){
- return '<div class="auth"><form class="auth-card" id="nf"><h1>Yeni <em>şifre</em></h1><p>İlk girişte kendi şifrenizi belirleyin.</p>'
-  +'<div class="grid" style="grid-template-columns:1fr">'
-  +'<label class="f">Yeni şifre<input class="in" id="n1" type="password" autocomplete="new-password"></label>'
-  +'<label class="f">Tekrar<input class="in" id="n2" type="password" autocomplete="new-password"></label>'
-  +'<button class="btn primary block" id="nb" type="submit">Kaydet</button></div><div class="err" id="err"></div></form></div>';
+ var G=NDGiris;
+ return G.sayfa(
+  G.baslik("Yeni Şifre","İlk girişte kendi şifrenizi belirleyin (en az 8 karakter).")+
+  G.alan({id:"n1",tur:"password",yer:"Yeni şifre",oto:"new-password"})+
+  G.alan({id:"n2",tur:"password",yer:"Yeni şifre (tekrar)",oto:"new-password"})+
+  G.buton("nb","Kaydet",{tur:"submit"})+
+  G.hata("err"),{form:true,formId:"nf"});
 }
 function bindNewPw(){
  $("nf").addEventListener("submit",async function(e){
