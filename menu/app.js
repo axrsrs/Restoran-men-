@@ -378,6 +378,13 @@ try{
   history.replaceState(history.state,"","/"+RESTAURANT_SLUG+location.hash);
 }catch(e){}
 
+/* Arama motorları için tek adres: müşteri menüsü her zaman neardiji.com/xfirma */
+if(RESTAURANT_SLUG!=="nearmenu-demo")try{
+ const canon="https://neardiji.com/"+RESTAURANT_SLUG;
+ document.querySelector('link[rel="canonical"]')?.setAttribute("href",canon);
+ document.querySelector('meta[property="og:url"]')?.setAttribute("content",canon);
+}catch(e){}
+
 function publicMenuUrl(slug){
  return PRETTY_URLS
   ?location.origin+"/"+slug
