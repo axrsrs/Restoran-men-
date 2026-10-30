@@ -91,7 +91,7 @@
       '<div class="ndg-wrap"><div class="ndg-card"><div class="ndg-beams" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b><b></b><b></b><b></b></div>' +
       '<' + kap + '>' + (o.kapat ? '<button type="button" class="ndg-close" id="' + esc(o.kapat) + '" aria-label="Kapat">×</button>' : "") +
       '<div class="ndg-form">' + icerik + '</div></' + kapEnd + '>' +
-      '<a class="ndg-kvkk" href="https://neardiji.com/#kvkk" target="_blank" rel="noopener">KVKK ve Gizlilik</a></div></div></div>';
+      '</div></div></div>';
   }
 
   /* ---------- arka plan: akış çizgileri ---------- */

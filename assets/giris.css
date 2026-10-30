@@ -99,9 +99,6 @@
 .ndg-link{display:inline-flex;align-items:center;min-height:36px;padding:0 6px;margin-top:2px;border:0;background:none;color:var(--ndg-fg);font:inherit;font-size:12.5px;font-weight:500;cursor:pointer;
  text-decoration:underline;text-decoration-color:rgba(var(--ndg-rgb),.3);text-underline-offset:3px}
 .ndg-link:hover{text-decoration-color:var(--ndg-fg)}
-.ndg-kvkk{display:block;width:max-content;max-width:100%;margin:10px auto 0;padding:10px 12px;font-size:11.5px;color:var(--ndg-dim);text-decoration:underline;text-underline-offset:3px;position:relative;z-index:2}
-.ndg-kvkk:hover{color:var(--ndg-fg)}
-.ndg-kvkk:focus-visible{outline:2px solid var(--ndg-fg);outline-offset:3px;border-radius:6px}
 .ndg-close{position:absolute;top:10px;right:10px;width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(var(--ndg-rgb),.06);
  color:rgba(var(--ndg-rgb),.7);cursor:pointer;font-size:20px;line-height:1;z-index:2}
 .ndg-close:hover{background:rgba(var(--ndg-rgb),.12);color:var(--ndg-fg)}
