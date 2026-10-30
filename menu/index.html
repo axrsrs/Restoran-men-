@@ -2854,7 +2854,8 @@ html[data-mode="light"] .setupTasks span{color:#2e7d32}
 .sigBrand{display:inline-flex;align-items:center;gap:6px;color:var(--text);opacity:.85}
 .sigBrand b{font-family:"Geist",system-ui,sans-serif;font-weight:600;font-size:12.5px;letter-spacing:-.01em}
 .sigMark{width:15px;height:15px}
-.privacyLink{display:block;width:max-content;max-width:100%;margin:0 auto;padding:10px 12px;font-size:11px;color:var(--pMuted);text-decoration:underline;text-underline-offset:3px;opacity:.8}
+.footLinks{display:flex;justify-content:center;flex-wrap:wrap;gap:0 4px}
+.privacyLink{display:block;width:max-content;max-width:100%;margin:0;background:none;border:0;font-family:inherit;cursor:pointer;padding:10px 12px;font-size:11px;color:var(--pMuted);text-decoration:underline;text-underline-offset:3px;opacity:.8}
 .privacyLink:hover{opacity:1;color:var(--text)}
 @media(max-width:360px){.deliveryList{grid-template-columns:1fr}.copyBtn span{display:none}.copyBtn{width:44px;padding:0;justify-content:center}}
 html[data-mode="light"] .infoCard{background:linear-gradient(145deg,rgba(255,255,255,var(--cardOpacity)),rgba(250,248,244,var(--cardOpacity)));
@@ -2882,6 +2883,7 @@ html[data-mode="light"] .signature:hover{background:rgba(0,0,0,.04)}
 <body>
 <div id="app"></div>
 
+<script src="/assets/cerez.js" defer></script>
 <script src="/assets/media.js"></script>
 <script src="/assets/qr.js"></script>
 <script src="/assets/giris.js"></script>

@@ -45,7 +45,7 @@ const TEXT={
   wifiNet:"Ağ",wifiPass:"Şifre",copy:"Kopyala",copied:"Kopyalandı",
   review:"Google'da yorum yapın",reviewSub:"Deneyiminizi paylaşın, bizim için çok değerli.",
   order:"Paket servis",follow:"Bizi takip edin",
-  vat:"Fiyatlarımıza KDV dahildir.",madeWith:"ile hazırlandı",privacy:"KVKK ve Gizlilik"
+  vat:"Fiyatlarımıza KDV dahildir.",madeWith:"ile hazırlandı",privacy:"KVKK ve Gizlilik",cookies:"Çerez ayarları"
  },
  en:{
   welcome:"WELCOME",best:"Best Sellers",events:"Events",
@@ -81,7 +81,7 @@ const TEXT={
   wifiNet:"Network",wifiPass:"Password",copy:"Copy",copied:"Copied",
   review:"Review us on Google",reviewSub:"Share your experience, it means a lot to us.",
   order:"Order delivery",follow:"Follow us",
-  vat:"All prices include VAT.",madeWith:"Made with",privacy:"Privacy"
+  vat:"All prices include VAT.",madeWith:"Made with",privacy:"Privacy",cookies:"Cookie settings"
  },
  ar:{
   welcome:"مرحباً بكم",best:"الأكثر مبيعاً",
@@ -119,7 +119,7 @@ const TEXT={
   wifiNet:"الشبكة",wifiPass:"كلمة المرور",copy:"نسخ",copied:"تم النسخ",
   review:"قيّمنا على Google",reviewSub:"شاركنا تجربتك، رأيك يهمنا.",
   order:"اطلب توصيل",follow:"تابعونا",
-  vat:"جميع الأسعار تشمل ضريبة القيمة المضافة.",madeWith:"صُنع بواسطة",privacy:"الخصوصية"
+  vat:"جميع الأسعار تشمل ضريبة القيمة المضافة.",madeWith:"صُنع بواسطة",privacy:"الخصوصية",cookies:"إعدادات ملفات تعريف الارتباط"
  }
 };
 
@@ -2912,7 +2912,7 @@ function renderSignature(){
   <a class="signature" href="${href}" target="_blank" rel="noopener" aria-label="NearMenu — neardiji.com">
    ${language==="tr"?mark+`<span>${t("madeWith")}</span>`:`<span>${t("madeWith")}</span>`+mark}
   </a>
-  <a class="privacyLink" href="https://neardiji.com/#kvkk" target="_blank" rel="noopener">${t("privacy")}</a>
+  <div class="footLinks"><a class="privacyLink" href="https://neardiji.com/#kvkk" target="_blank" rel="noopener">${t("privacy")}</a><button type="button" class="privacyLink" data-cerez-ayar>${t("cookies")}</button></div>
  </div>`;
 }
 

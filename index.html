@@ -19,6 +19,7 @@
 <meta property="og:type" content="website">
 <script src="/assets/eski-link.js"></script>
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
+<script src="/assets/cerez.js" defer></script>
 <script src="/assets/site-data.js"></script>
 <script src="/assets/liquid-hero.js"></script>
 <style>
@@ -243,6 +244,7 @@ a.chip:hover{background:var(--fg);color:var(--bg)}
 .ft-legal{background:none;border:0;padding:10px 0;margin:-10px 0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px;
  text-decoration-color:color-mix(in srgb,var(--fg) 30%,transparent)}
 .ft-legal:hover{color:var(--fg)}
+.ft-legals{display:flex;flex-wrap:wrap;gap:8px 20px}
 .ft-legal[hidden]{display:none}
 body.has-wa .ft-bar{padding-right:84px}
 body.has-wa.wa-left .ft-bar{padding-right:0;padding-left:84px}
@@ -367,7 +369,7 @@ body.has-wa.wa-left .ft-bar{padding-right:0;padding-left:84px}
   <nav class="ft-col" id="ftDemo" aria-labelledby="ftDemoT"><h2 id="ftDemoT"></h2><ul></ul></nav>
  </div>
  <div class="ft-bar">
-  <button type="button" class="ft-legal" id="ftPrivacy"></button>
+  <span class="ft-legals"><button type="button" class="ft-legal" id="ftPrivacy"></button><button type="button" class="ft-legal" data-cerez-ayar>Çerez ayarları</button></span>
   <span id="ftCopy"></span>
  </div>
 </footer>

@@ -46,7 +46,9 @@ Tarayıcınızın yerel depolama alanında yalnızca sitenin çalışması için
 • Sayfanın hızlı açılması için içerik ve döviz kuru kopyası
 • Aynı gün içinde iki kez sayılmamanız için ziyaret işareti (tarayıcı kapanınca silinir)
 • Yönetim paneline giriş yaptıysanız oturum bilginiz
-Bu bilgiler sunucularımıza gönderilmez; tarayıcı ayarlarınızdan istediğiniz zaman silebilirsiniz. Ziyaret istatistikleri, çerez kullanmayan ve sizi tanımlamayan Cloudflare Web Analytics ile tutulur.
+• Çerez tercihiniz
+Bu bilgiler sunucularımıza gönderilmez; tarayıcı ayarlarınızdan istediğiniz zaman silebilirsiniz.
+Ziyaret istatistikleri yalnızca izin verirseniz, çerez kullanmayan ve sizi tanımlamayan Cloudflare Web Analytics ile tutulur. Tercihiniz tarayıcınızda 12 ay saklanır; sayfaların altındaki "Çerez ayarları" bağlantısından istediğiniz zaman değiştirebilirsiniz.
 
 Haklarınız
 KVKK'nın 11. maddesi uyarınca;
