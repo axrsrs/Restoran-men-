@@ -300,6 +300,8 @@
     changePassword: function () { return askNewPassword(false); }, logout: logout,
     email: function () { return (session && session.user && session.user.email) || ""; },
     isSuper: function () { return !!(access && access.super); },
+    subscription: function () { return (access && access.subscription) || null; },
+    support: function () { return (access && access.support) || null; },
     url: function () { return location.origin + "/katalog" + (slug === "sh21-demo" ? "" : "/" + slug); }
   };
 })();

@@ -298,7 +298,8 @@ function stockFor(p){
  var k=/ekmek|fırın|kafe/.test(t)?"firin":/qr|menü/.test(t)?"menu":/sipariş takip|restaurant|restoran/.test(t)?(/menü/.test(t)?"menu":"restoran")
   :/e-ticaret|ticaret|mağaza/.test(t)?"ticaret":/ofis/.test(t)?"ofis":/fiyat/.test(t)?"fiyat":/sipariş|teklif/.test(t)?"siparis"
   :/mobilya/.test(t)?"mobilya":/katalog|şablon/.test(t)?"katalog":"yazilim";
- return "https://images.unsplash.com/photo-"+STOCK[k]+"?auto=format&fit=crop&w=800&q=72";
+ /* Görseller sitenin kendi sunucusunda (Unsplash lisansı); ziyaretçi dış sunucuya bağlanmaz */
+ return "/assets/stok/"+k+".webp";
 }
 var CC={i:0,timer:null,list:[],hover:false,focus:false,bound:false,vis:false};
 var CHEV_L='<svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';

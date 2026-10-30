@@ -178,6 +178,11 @@ function statusOf(r){
  const p=daysLeft(r.paid_until);
  return p!==null&&p<0?"expired":"active";
 }
+function fmtPrice(r){
+ if(r.price_amount==null)return "";
+ const cur=r.price_currency==="USD"?"$":r.price_currency==="EUR"?"€":"₺";
+ return cur+Number(r.price_amount).toLocaleString("tr-TR",{maximumFractionDigits:2})+(r.price_period==="yil"?" / yıl":" / ay");
+}
 /* Biten tarih: denemede deneme sonu, aktifte abonelik sonu */
 function endOf(r){return r.status==="trial"?r.trial_ends:r.status==="active"?r.paid_until:null}
 function endingSoon(r){
@@ -360,6 +365,7 @@ function renderCard(r){
    ?`<div class="trialline warn">Abonelik ${fmtDate(r.paid_until)} tarihinde bitti. ${K().closed}</div>`
    :`<div class="trialline ${p<=7?"warn":""}">Abonelik ${fmtDate(r.paid_until)} tarihine kadar · <b>${p===0?"bugün son gün":p+" gün kaldı"}</b></div>`;
  }
+ if(r.price_amount!=null)trial+=`<div class="trialline">Ücret: <b>${esc(fmtPrice(r))}</b></div>`;
 
  const members=(r.members||[]).map(m=>`
   <div class="member"><span>👤 ${esc(m.email)}</span>${m.must_change?`<span class="tag">ilk giriş bekleniyor</span>`:""}</div>`).join("");
@@ -508,6 +514,25 @@ function renderModal(){
        <option value="basic" ${r.plan==="basic"?"selected":""}>Temel</option>
        <option value="premium" ${r.plan==="premium"?"selected":""}>Premium</option>
       </select>
+     </div>
+    </div>
+
+    <div class="row2">
+     <div class="field">
+      <label for="ePrice">Ücret (müşteri panelinde görünür)</label>
+      <input id="ePrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="örn. 750" value="${r.price_amount!=null?esc(String(r.price_amount)):""}">
+     </div>
+     <div class="field">
+      <label for="ePeriod">Dönem ve para birimi</label>
+      <div class="row2" style="gap:8px">
+       <select id="ePeriod">
+        <option value="ay" ${r.price_period!=="yil"?"selected":""}>Aylık</option>
+        <option value="yil" ${r.price_period==="yil"?"selected":""}>Yıllık</option>
+       </select>
+       <select id="eCurrency">
+        ${["TRY","USD","EUR"].map(c=>`<option value="${c}" ${(r.price_currency||"TRY")===c?"selected":""}>${c==="TRY"?"TL":c}</option>`).join("")}
+       </select>
+      </div>
      </div>
     </div>
 
@@ -851,8 +876,17 @@ function bindModal(){
    status,
    plan:$("ePlan").value,
    trial_ends:status==="trial"?($("eTrial").value||isoPlus(14)):null,
-   paid_until:status==="active"?($("ePaid").value||null):null
+   paid_until:status==="active"?($("ePaid").value||null):null,
+   price_period:$("ePeriod").value==="yil"?"yil":"ay",
+   price_currency:["TRY","USD","EUR"].includes($("eCurrency").value)?$("eCurrency").value:"TRY"
   };
+  const priceRaw=($("ePrice").value||"").trim().replace(",",".");
+  if(priceRaw===""){body.price_amount=null}
+  else{
+   const n=Number(priceRaw);
+   if(!(n>=0&&n<10000000)){showErr("Ücret geçerli bir sayı olmalı.");return}
+   body.price_amount=Math.round(n*100)/100;
+  }
   try{
    await sb("/rest/v1/"+K().table+"?id=eq."+r.id,{method:"PATCH",headers:{"Prefer":"return=minimal"},body});
    Object.assign(r,body);

@@ -23,7 +23,7 @@ def rep(old, new, count=1):
 
 # 1) bulut katmanı uygulamadan önce yüklenir
 rep('<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>',
-    '<script src="/assets/media.js"></script>\n<script src="/assets/qr.js"></script>\n<script src="/katalog/bulut.js"></script>\n'
+    '<script src="/assets/media.js"></script>\n<script src="/assets/qr.js"></script>\n<script src="/assets/abonelik.js"></script>\n<script src="/katalog/bulut.js"></script>\n'
     '<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>')
 
 # 2) yerel kayıt fonksiyonları bulutta Supabase'e gider
@@ -75,6 +75,15 @@ rep('<meta name="apple-mobile-web-app-capable" content="yes">',
 # 6b) panel alt bilgisi: bulutta "bu cihaza" değil, yayına kaydedilir
 rep('React.createElement("small", null, "De\\u011Fi\\u015Fiklikler \\u201CKaydet ve yay\\u0131nla\\u201D ile bu cihaza kaydedilir.")',
     'React.createElement("small", null, window.SH21 ? "De\\u011Fi\\u015Fiklikler \\u201CKaydet ve yay\\u0131nla\\u201D ile hemen yay\\u0131na al\\u0131n\\u0131r." : "De\\u011Fi\\u015Fiklikler \\u201CKaydet ve yay\\u0131nla\\u201D ile bu cihaza kaydedilir.")')
+
+# 6b) Yazı tipleri sitenin kendi sunucusundan (/assets/fonts/fonts.css); Google Fonts'a istek gitmez
+s = re.sub(r'<link rel="preconnect" href="https://fonts\.(googleapis|gstatic)\.com"( crossorigin)?>\n', "", s)
+s, n = re.subn(r'<link (?:rel="stylesheet" )?href="https://fonts\.googleapis\.com/css2\?[^"]+"(?: rel="stylesheet")?>',
+               '<link rel="stylesheet" href="/assets/fonts/fonts.css">', s)
+if n != 1:
+    sys.exit(f"YAMA BULUNAMADI ({n}≠1): Google Fonts bağlantısı")
+s = s.replace(" https://fonts.googleapis.com", "").replace(" https://fonts.gstatic.com", "")
+s = s.replace("font-src data:", "font-src 'self' data:")
 
 # 7) CSP: bulut.js ('self') + yeni satır içi betik özeti + Supabase bağlantısı
 m = re.search(r"<script>([\s\S]*?)</script>", s)

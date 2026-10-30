@@ -4,6 +4,7 @@
    DELETE    /<bucket>/<yol>  → silme      (aynı yetki)
    DELETE    /<bucket>/<id>/  → klasörü silme (firma silinince; aynı yetki)
    POST      /translate       → çeviri (Workers AI; sadece giriş yapmış panel kullanıcıları)
+   GET       /kur             → güncel USD/EUR → TRY kuru (6 saat kenar önbellekli; ziyaretçi dış servise bağlanmaz)
    Yetki Supabase'te public.media_can_write(bucket, yol) ile kullanıcının kendi oturumuyla denetlenir;
    Worker'da gizli anahtar yoktur.
    Her bölümün kendi R2 deposu var (adresler değişmedi, /<bucket>/ öneki depoyu seçer):
@@ -179,10 +180,39 @@ async function deleteFolder(env, bucket, folder) {
   return n;
 }
 
+/* Kur: ziyaretçinin tarayıcısı yerine Worker çeker; tüm menüler aynı önbelleği paylaşır */
+const RATE_TTL = 6 * 60 * 60;
+const RATE_SOURCES = [
+  ["https://open.er-api.com/v6/latest/USD", j => [j?.rates?.TRY, j?.rates?.EUR]],
+  ["https://api.frankfurter.dev/v1/latest?from=USD&to=TRY,EUR", j => [j?.rates?.TRY, j?.rates?.EUR]],
+];
+async function rates(req, ctx) {
+  const pub = { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json; charset=utf-8" };
+  if (req.method !== "GET") return new Response(JSON.stringify({ error: "Yöntem desteklenmiyor" }), { status: 405, headers: pub });
+  const cacheKey = new Request("https://media.neardiji.com/kur", { method: "GET" });
+  const hit = await caches.default.match(cacheKey);
+  if (hit) return new Response(hit.body, { headers: { ...pub, "Cache-Control": "public, max-age=1800" } });
+  for (const [src, pick] of RATE_SOURCES) {
+    try {
+      const r = await fetch(src, { cf: { cacheTtl: 600 } });
+      if (!r.ok) continue;
+      const [tryRate, eurRate] = pick(await r.json()).map(Number);
+      if (!(tryRate > 0 && eurRate > 0)) continue;
+      const body = JSON.stringify({ USD: +tryRate.toFixed(2), EUR: +(tryRate / eurRate).toFixed(2), t: Date.now() });
+      ctx.waitUntil(caches.default.put(cacheKey, new Response(body, { headers: { ...pub, "Cache-Control": "public, max-age=" + RATE_TTL } })));
+      return new Response(body, { headers: { ...pub, "Cache-Control": "public, max-age=1800" } });
+    } catch (e) {
+      console.error("kur kaynağı yanıt vermedi", src, String(e));
+    }
+  }
+  return new Response(JSON.stringify({ error: "Kur şu an alınamadı" }), { status: 503, headers: { ...pub, "Cache-Control": "no-store" } });
+}
+
 export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(req) });
+    if (url.pathname === "/kur") return rates(req, ctx);
     if (url.pathname === "/translate") {
       return req.method === "POST" ? translate(req, env) : json(req, 405, { error: "Yöntem desteklenmiyor" });
     }

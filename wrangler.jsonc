@@ -2,6 +2,8 @@
 {
   "name": "neardiji",
   "compatibility_date": "2025-01-01",
+  // İstek ve hata kayıtları (Cloudflare → Workers → neardiji → Logs)
+  "observability": { "enabled": true },
   "assets": {
     "directory": "./",
     "not_found_handling": "404-page",

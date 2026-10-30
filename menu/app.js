@@ -45,7 +45,7 @@ const TEXT={
   wifiNet:"Ağ",wifiPass:"Şifre",copy:"Kopyala",copied:"Kopyalandı",
   review:"Google'da yorum yapın",reviewSub:"Deneyiminizi paylaşın, bizim için çok değerli.",
   order:"Paket servis",follow:"Bizi takip edin",
-  vat:"Fiyatlarımıza KDV dahildir.",madeWith:"ile hazırlandı"
+  vat:"Fiyatlarımıza KDV dahildir.",madeWith:"ile hazırlandı",privacy:"KVKK ve Gizlilik"
  },
  en:{
   welcome:"WELCOME",best:"Best Sellers",events:"Events",
@@ -81,7 +81,7 @@ const TEXT={
   wifiNet:"Network",wifiPass:"Password",copy:"Copy",copied:"Copied",
   review:"Review us on Google",reviewSub:"Share your experience, it means a lot to us.",
   order:"Order delivery",follow:"Follow us",
-  vat:"All prices include VAT.",madeWith:"Made with"
+  vat:"All prices include VAT.",madeWith:"Made with",privacy:"Privacy"
  },
  ar:{
   welcome:"مرحباً بكم",best:"الأكثر مبيعاً",
@@ -119,7 +119,7 @@ const TEXT={
   wifiNet:"الشبكة",wifiPass:"كلمة المرور",copy:"نسخ",copied:"تم النسخ",
   review:"قيّمنا على Google",reviewSub:"شاركنا تجربتك، رأيك يهمنا.",
   order:"اطلب توصيل",follow:"تابعونا",
-  vat:"جميع الأسعار تشمل ضريبة القيمة المضافة.",madeWith:"صُنع بواسطة"
+  vat:"جميع الأسعار تشمل ضريبة القيمة المضافة.",madeWith:"صُنع بواسطة",privacy:"الخصوصية"
  }
 };
 
@@ -1838,36 +1838,19 @@ async function fillSubtitleTranslations(){
    GÜNCEL KUR
 ========================================================= */
 
+/* Kur NearDiji Worker'ından gelir; ziyaretçinin tarayıcısı dış kur servislerine bağlanmaz */
 async function fetchRates(){
 
  try{
 
-  const r=await fetch("https://open.er-api.com/v6/latest/USD");
+  const r=await fetch("https://media.neardiji.com/kur");
 
   if(r.ok){
 
    const j=await r.json();
-   const tryRate=Number(j?.rates?.TRY);
-   const eurRate=Number(j?.rates?.EUR);
+   const usd=Number(j?.USD),eur=Number(j?.EUR);
 
-   if(tryRate>0&&eurRate>0)
-    return {USD:+tryRate.toFixed(2),EUR:+(tryRate/eurRate).toFixed(2)};
-  }
-
- }catch(e){}
-
- try{
-
-  const r=await fetch("https://api.frankfurter.dev/v1/latest?from=USD&to=TRY,EUR");
-
-  if(r.ok){
-
-   const j=await r.json();
-   const tryRate=Number(j?.rates?.TRY);
-   const eurRate=Number(j?.rates?.EUR);
-
-   if(tryRate>0&&eurRate>0)
-    return {USD:+tryRate.toFixed(2),EUR:+(tryRate/eurRate).toFixed(2)};
+   if(usd>0&&eur>0)return {USD:usd,EUR:eur};
   }
 
  }catch(e){}
@@ -2929,6 +2912,7 @@ function renderSignature(){
   <a class="signature" href="${href}" target="_blank" rel="noopener" aria-label="NearMenu — neardiji.com">
    ${language==="tr"?mark+`<span>${t("madeWith")}</span>`:`<span>${t("madeWith")}</span>`+mark}
   </a>
+  <a class="privacyLink" href="https://neardiji.com/#kvkk" target="_blank" rel="noopener">${t("privacy")}</a>
  </div>`;
 }
 
@@ -3337,6 +3321,8 @@ function renderAdminGeneral(){
   <h2>Kontrol Merkezi</h2>
   <p>NearMenu işletme panelini buradan yönetebilirsin.</p>
  </div>
+
+ ${window.NDAbonelik&&cloud.access?NDAbonelik.html(cloud.access.subscription,cloud.access.support):""}
 
  ${renderSetupCard()}
 

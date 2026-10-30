@@ -31,3 +31,7 @@ SUPABASE_KEY = "sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2"
 
 [ai]
 binding = "AI"
+
+# Hata ve istek kayıtları (Cloudflare → Workers → neardiji-media → Logs)
+[observability]
+enabled = true

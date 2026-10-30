@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https://rfwgjzkewtjpdcvrhepg.supabase.co https://cloudflareinsights.com https://media.neardiji.com https://api.mymemory.translated.net https://open.er-api.com https://api.frankfurter.app https://api.frankfurter.dev; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https://rfwgjzkewtjpdcvrhepg.supabase.co https://cloudflareinsights.com https://media.neardiji.com https://api.mymemory.translated.net; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
@@ -17,9 +17,7 @@
 <meta property="og:description" content="Menümüzü inceleyin: ürünler, fiyatlar ve etkinlikler.">
 <meta property="og:type" content="website">
 <title>NearMenu Premium</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
 <link rel="stylesheet" href="/assets/giris.css">
 
 <style>
@@ -2856,6 +2854,8 @@ html[data-mode="light"] .setupTasks span{color:#2e7d32}
 .sigBrand{display:inline-flex;align-items:center;gap:6px;color:var(--text);opacity:.85}
 .sigBrand b{font-family:"Geist",system-ui,sans-serif;font-weight:600;font-size:12.5px;letter-spacing:-.01em}
 .sigMark{width:15px;height:15px}
+.privacyLink{display:block;width:max-content;max-width:100%;margin:0 auto;padding:10px 12px;font-size:11px;color:var(--pMuted);text-decoration:underline;text-underline-offset:3px;opacity:.8}
+.privacyLink:hover{opacity:1;color:var(--text)}
 @media(max-width:360px){.deliveryList{grid-template-columns:1fr}.copyBtn span{display:none}.copyBtn{width:44px;padding:0;justify-content:center}}
 html[data-mode="light"] .infoCard{background:linear-gradient(145deg,rgba(255,255,255,var(--cardOpacity)),rgba(250,248,244,var(--cardOpacity)));
  border-color:rgba(0,0,0,.06);box-shadow:0 10px 28px rgba(0,0,0,.06)}
@@ -2885,6 +2885,7 @@ html[data-mode="light"] .signature:hover{background:rgba(0,0,0,.04)}
 <script src="/assets/media.js"></script>
 <script src="/assets/qr.js"></script>
 <script src="/assets/giris.js"></script>
+<script src="/assets/abonelik.js"></script>
 <script src="/menu/app.js"></script>
 
 </body>

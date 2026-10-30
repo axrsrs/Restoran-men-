@@ -75,6 +75,14 @@ def ikonlar_ve_baslik(s, baslik, aciklama):
     return s
 
 
+def yerel_fontlar(s):
+    """Google Fonts yerine sitenin kendi yazı tipleri (/assets/fonts/fonts.css); ziyaretçiden Google'a istek gitmez."""
+    s = re.sub(r'<link rel="preconnect" href="https://fonts\.(googleapis|gstatic)\.com"( crossorigin)?>\n', '', s)
+    s = degistir_re(s, r'<link (?:rel="stylesheet" )?href="https://fonts\.googleapis\.com/css2\?[^"]+"(?: rel="stylesheet")?>',
+                    '<link rel="stylesheet" href="/assets/fonts/fonts.css">')
+    return s.replace(' https://fonts.googleapis.com', '').replace(' https://fonts.gstatic.com', '')
+
+
 def temiz_klasor(ad):
     cikti = KOK / 'pronto' / ad
     lib = cikti / 'lib'
@@ -95,6 +103,7 @@ def teklif(kaynak: Path):
     s = degistir(s, "connect-src 'self' https://*.supabase.co wss://*.supabase.co;", "connect-src 'self';")
     s = degistir(s, '<script src="config.js"></script>',
                  "<script>window.PRONTO_CONFIG={url:'https://demo.invalid',anonKey:'near-demo-anahtari',email:'demo@neardiji.com'};</script>")
+    s = yerel_fontlar(s)
     s = ikonlar_ve_baslik(s, 'PRONTO Teklif · Demo — NearDiji', 'PRONTO teklif, proforma, müşteri ve ödeme takibi — örnek verilerle canlı demo.')
     # demo katmanı: tanımlar bitti, açılıştan hemen önce
     s = degistir(s, '\nboot();\n</script>',
@@ -160,6 +169,7 @@ def siparis(kaynak: Path):
     if kalan:
         print('Uyarı: kaynakta hâlâ "ofischi" geçen yerler var:', *kalan[:8], sep='\n  ')
 
+    s = yerel_fontlar(s)
     s = ikonlar_ve_baslik(s, 'PRONTO Sipariş Takibi · Demo — NearDiji', 'PRONTO sipariş, tedarikçi, sevkiyat ve stok takibi — örnek verilerle canlı demo.')
 
     cikti = temiz_klasor('siparis')
