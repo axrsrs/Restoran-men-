@@ -13,36 +13,36 @@
   var METIN = {
     tr: {
       baslik: "Gizliliğinize önem veriyoruz",
-      metin: "Sitemizin çalışması için yalnızca gerekli tarayıcı kayıtlarını kullanıyoruz. Ziyaret istatistikleri ise tercihinize bağlıdır.",
+      metin: "NearDiji olarak kişisel verilerinizin güvenliğini ciddiye alıyoruz. Sitemizin sorunsuz çalışması için yalnızca gerekli tarayıcı kayıtlarını kullanıyor, ziyaret istatistiklerini ise sizin onayınızla tutuyoruz. Ayrıntılı bilgiye Çerez Politikası'ndan ulaşabilir, tercihlerinizi dilediğiniz zaman değiştirebilirsiniz.",
       kabul: "Tümünü kabul et", reddet: "Reddet", yonet: "Tercihleri yönet",
-      tBaslik: "Çerez tercihleri",
+      tBaslik: "Çerez tercihleriniz",
       zorunlu: "Zorunlu", zorunluAcik: "Her zaman açık",
-      zorunluMetin: "Tema tercihi, sayfanın hızlı açılması için içerik kopyası ve yönetim paneli oturumu. Site bunlar olmadan çalışmaz.",
-      analitik: "Ziyaret istatistiği",
-      analitikMetin: "Hangi sayfaların ne kadar ziyaret edildiğini görmemizi sağlar (Cloudflare Web Analytics). Çerez kullanmaz, sizi tanımlamaz.",
-      kaydet: "Seçimi kaydet", geri: "Geri", kvkk: "KVKK ve Gizlilik"
+      zorunluMetin: "Sitenin düzgün açılması, tema tercihinizin ve oturumunuzun hatırlanması için gereklidir; kapatılamaz.",
+      analitik: "Ziyaret istatistikleri",
+      analitikMetin: "Sayfalarımızın ne kadar ziyaret edildiğini anlamamıza ve sitemizi geliştirmemize yardımcı olur. Kimliğinizi belirlemez.",
+      kaydet: "Seçimi kaydet", geri: "Geri", kvkk: "Çerez Politikası"
     },
     en: {
-      baslik: "We respect your privacy",
-      metin: "We only use the browser storage this site needs to work. Visit statistics are up to you.",
+      baslik: "We value your privacy",
+      metin: "At NearDiji, we take the protection of your personal data seriously. We only use the browser storage our site needs to work properly, and we collect visit statistics only with your consent. You can find more details in our Cookie Policy and change your preferences at any time.",
       kabul: "Accept all", reddet: "Reject", yonet: "Manage preferences",
-      tBaslik: "Cookie preferences",
+      tBaslik: "Your cookie preferences",
       zorunlu: "Essential", zorunluAcik: "Always on",
-      zorunluMetin: "Theme preference, a cached copy of the page for faster loading and the admin session. The site cannot work without these.",
+      zorunluMetin: "Needed for the site to load properly and to remember your theme and session. These cannot be turned off.",
       analitik: "Visit statistics",
-      analitikMetin: "Shows us how often pages are visited (Cloudflare Web Analytics). Uses no cookies and does not identify you.",
-      kaydet: "Save choice", geri: "Back", kvkk: "Privacy"
+      analitikMetin: "Helps us understand how often our pages are visited so we can improve the site. It does not identify you.",
+      kaydet: "Save choice", geri: "Back", kvkk: "Cookie Policy"
     },
     ar: {
-      baslik: "نحن نحترم خصوصيتك",
-      metin: "نستخدم فقط بيانات المتصفح اللازمة لعمل الموقع. إحصاءات الزيارة حسب اختيارك.",
+      baslik: "نحن نهتم بخصوصيتك",
+      metin: "في NearDiji نأخذ حماية بياناتك الشخصية على محمل الجد. نستخدم فقط بيانات المتصفح اللازمة لعمل موقعنا بشكل سليم، ولا نجمع إحصاءات الزيارة إلا بموافقتك. يمكنك الاطلاع على التفاصيل في سياسة ملفات تعريف الارتباط وتغيير تفضيلاتك في أي وقت.",
       kabul: "قبول الكل", reddet: "رفض", yonet: "إدارة التفضيلات",
       tBaslik: "تفضيلات ملفات تعريف الارتباط",
       zorunlu: "ضرورية", zorunluAcik: "مفعّلة دائمًا",
-      zorunluMetin: "تفضيل المظهر ونسخة من الصفحة لتحميل أسرع وجلسة لوحة الإدارة. لا يعمل الموقع بدونها.",
+      zorunluMetin: "لازمة لتحميل الموقع بشكل صحيح وتذكر المظهر والجلسة. لا يمكن إيقافها.",
       analitik: "إحصاءات الزيارة",
-      analitikMetin: "تُظهر لنا عدد زيارات الصفحات (Cloudflare Web Analytics). لا تستخدم ملفات تعريف الارتباط ولا تحدد هويتك.",
-      kaydet: "حفظ الاختيار", geri: "رجوع", kvkk: "الخصوصية"
+      analitikMetin: "تساعدنا على فهم عدد زيارات صفحاتنا لتحسين الموقع. لا تحدد هويتك.",
+      kaydet: "حفظ الاختيار", geri: "رجوع", kvkk: "سياسة ملفات تعريف الارتباط"
     }
   };
 
