@@ -348,8 +348,8 @@ const PREVIEW=(()=>{
    window.parent.location.origin===location.origin;
  }catch(e){return false}
 })();
-const SB_URL="https://rfwgjzkewtjpdcvrhepg.supabase.co";
-const SB_KEY="sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
+const SB_URL=window.ND_SB_URL;   /* assets/sb-config.js */
+const SB_KEY=window.ND_SB_KEY;
 const MEDIA_BUCKET="menu-media";
 const SESSION_KEY="ndMenuSession"; /* menü paneli kendi oturumunu tutar */
 try{localStorage.removeItem("nearMenuSession")}catch(e){}

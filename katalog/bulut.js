@@ -4,8 +4,8 @@
    Yönetim girişi e-posta + şifre (Supabase Auth); yetki get_catalog_access ile sunucuda denetlenir. */
 (function () {
   "use strict";
-  var SB_URL = "https://rfwgjzkewtjpdcvrhepg.supabase.co";
-  var SB_KEY = "sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
+  var SB_URL = window.ND_SB_URL;   /* assets/sb-config.js */
+  var SB_KEY = window.ND_SB_KEY;
   var SESSION_KEY = "sh21Session"; /* katalog paneli kendi oturumunu tutar; süper panel (/821) ayrı giriş ister */
   var BUCKET = "catalog-media";
   var SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;

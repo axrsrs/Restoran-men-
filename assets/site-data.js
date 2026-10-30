@@ -1,8 +1,6 @@
 /* NearDiji — ana sitenin varsayılan içeriği.
    Gerçek içerik Supabase'teki site_content (key = "main") tablosundan gelir;
    /ayse paneli oraya yazar. Bu dosya ilk açılış ve bağlantı yoksa kullanılır. */
-window.ND_SB_URL = "https://rfwgjzkewtjpdcvrhepg.supabase.co";
-window.ND_SB_KEY = "sb_publishable_ohHiomyazD8qr_mQXX9G-Q_DCEeD8j2";
 
 window.ND_DEFAULT = {
   brand: "NearDiji",

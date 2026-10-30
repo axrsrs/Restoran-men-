@@ -1255,6 +1255,12 @@ const AI_KEY_SESSION = "katalog_ai_key_session";
 function ssGet(k) { try { return sessionStorage.getItem(k); } catch (_) { return null; } }
 function ssSet(k, v) { try { if (v) sessionStorage.setItem(k, v); else sessionStorage.removeItem(k); } catch (_) { } }
 function aiCfgLoad() {
+    /* neardiji.com (bulut): çeviri sunucudan yapılır; tarayıcıda API anahtarı tutulmaz, eski kayıt silinir */
+    if (window.SH21) {
+        lsRemove(AI_CFG_KEY);
+        ssSet(AI_KEY_SESSION, "");
+        return { provider: "off", key: "", remember: false, model: AI_MODELS[0][0] };
+    }
     try {
         const c = JSON.parse(lsGet(AI_CFG_KEY) || "null") || {};
         const remember = c.remember === true;
@@ -6654,8 +6660,8 @@ function App() {
                             data.cardImgSize,
                             "px"),
                         React.createElement("input", { type: "range", min: "100", max: "320", value: data.cardImgSize, onChange: e => setPath(["cardImgSize"], Number(e.target.value)), className: "w-full mb-5" }),
-                        React.createElement("div", { className: "text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-3" }, "AI \u00C7eviri (\u0130ngilizce)"),
-                        React.createElement("div", { className: "bg-neutral-900 rounded-xl p-4 mb-5" },
+                        !window.SH21 && React.createElement("div", { className: "text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-3" }, "AI \u00C7eviri (\u0130ngilizce)"),
+                        !window.SH21 && React.createElement("div", { className: "bg-neutral-900 rounded-xl p-4 mb-5" },
                             React.createElement("label", { className: "flex items-center justify-between gap-3 mb-3 cursor-pointer" },
                                 React.createElement("span", null,
                                     React.createElement("span", { className: "block text-sm font-bold" }, "Claude ile AI \u00E7eviri"),

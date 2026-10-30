@@ -27,7 +27,7 @@ Ziyaretçilerden form ile kişisel veri toplanmaz. Ziyaret sayımı IP adresini 
 
 | Süre | Adım |
 |---|---|
-| T + 1 saat | **Erişimi kes.** Şüpheli hesabı Authentication → Users'tan devre dışı bırak, `members` / `catalog_members` / `super_admins` kaydını sil. Açık bir politika varsa kapat. Anahtar sızdıysa Supabase publishable anahtarını döndür (`assets/site-data.js`, `katalog/bulut.js`, `cloudflare/media-worker/wrangler.toml`). Cloudflare veya GitHub token'ı sızdıysa iptal et. |
+| T + 1 saat | **Erişimi kes.** Şüpheli hesabı Authentication → Users'tan devre dışı bırak, `members` / `catalog_members` / `super_admins` kaydını sil. Açık bir politika varsa kapat. Anahtar sızdıysa Supabase publishable anahtarını döndür ve iki yeri güncelle: `assets/sb-config.js` (tüm sayfalar) ve `cloudflare/media-worker/wrangler.toml` (medya worker'ı, ardından worker'ı yeniden yayınla). Cloudflare veya GitHub token'ı sızdıysa iptal et. |
 | T + 4 saat | **Kanıtı al.** Supabase → Logs (API, Auth, Postgres) dışa aktar; Free planda kayıtlar yaklaşık 1 gün tutulur, bu yüzden ilk iş budur. `select * from audit_log order by at desc` sonucunu kaydet. Cloudflare Worker loglarını ve git geçmişini sakla. |
 | T + 24 saat | **Kapsamı yaz.** Hangi tablo veya depo, kaç kayıt, hangi kişiler (işletme sahibi, ziyaretçi), hangi tarih aralığı. |
 | T + 48 saat | **Bildirimi hazırla.** Kurul bildirim formunu doldur; etkilenen işletmelerin listesini çıkar (`admin_list_restaurants`, `catalog_admin_list`). |
