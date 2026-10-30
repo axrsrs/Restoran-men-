@@ -1,6 +1,8 @@
 /* Çerez onay penceresi — neardiji.com herkese açık sayfaları.
    Zorunlu tarayıcı kayıtları her zaman açık. Ziyaret istatistiği (Cloudflare Web Analytics, çerezsiz)
    yalnızca ziyaretçi izin verirse yüklenir. Tercih 12 ay saklanır; [data-cerez-ayar] öğeleri pencereyi yeniden açar.
+   Pencere sadece <script data-pencere> ile yüklenen sayfada (ana site) çıkar; menü ve kataloglarda pencere çıkmaz,
+   ziyaretçi ana sitede izin verdiyse istatistik orada da yüklenir.
    NDCerez.ac() → pencereyi aç, NDCerez.tercih() → {analitik: bool} | null */
 (function () {
   "use strict";
@@ -9,6 +11,7 @@
   var SURUM = 1;
   var GECERLILIK = 365 * 24 * 60 * 60 * 1000;
   var CF_TOKEN = "96904ebcb6284131b17bf6722257b5a9";
+  var PENCERE = !!(document.currentScript && document.currentScript.hasAttribute("data-pencere"));
 
   var METIN = {
     tr: {
@@ -188,7 +191,7 @@
     if (window.self !== window.top) return;
     var t = oku();
     if (t) { if (t.analitik) analitikYukle(); return; }
-    ac();
+    if (PENCERE) ac();
   }
 
   window.NDCerez = { ac: function () { oncekiOdak = document.activeElement; ciz("tercih"); }, tercih: oku };
