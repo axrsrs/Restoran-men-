@@ -71,6 +71,7 @@ function logoVariant(dark){
  im.src=src;
  return "";
 }
+/* Varsayılan heykel görselleri: assets/sc-light.webp, sc-dark.webp, sc-m-light.webp, sc-m-dark.webp (adlar aşağıda parça parça kurulur; silmeyin) */
 function heroSrc(){
  var h=C.hero||{}, mob=window.innerWidth<640, dark=theme()==="dark";
  if(h.sculpture==="logo"&&logoSrc(dark)){var l=logoVariant(dark);if(l)return l;return "/assets/sc-"+(mob?"m-":"")+(dark?"dark":"light")+".webp"}
