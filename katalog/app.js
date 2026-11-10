@@ -242,7 +242,8 @@ function sanitizeCatalogData(data) {
     if (clean.pdf) {
         for (const k of ["title", "footer", "website", "catalogTitle"])
             clean.pdf[k] = safeText(clean.pdf[k], 200);
-        clean.pdf.catalogTemplate = ["akilli", "klasik", "vitrin", "izgara", "dergi"].includes(clean.pdf.catalogTemplate) ? clean.pdf.catalogTemplate : "akilli";
+        clean.pdf.catalogTemplate = ["akilli", "klasik", "vitrin", "izgara", "dergi", "modis"].includes(clean.pdf.catalogTemplate) ? clean.pdf.catalogTemplate : "akilli";
+        clean.pdf.priceTemplate = clean.pdf.priceTemplate === "modis" ? "modis" : "standart";
         const lay = {}, srcLay = (clean.pdf.categoryLayouts && typeof clean.pdf.categoryLayouts === "object") ? clean.pdf.categoryLayouts : {};
         const vit = {}, srcVit = (clean.pdf.vitrinModes && typeof clean.pdf.vitrinModes === "object") ? clean.pdf.vitrinModes : {};
         for (const fc of (clean.categories || [])) {
@@ -3018,6 +3019,266 @@ async function pdfFlowPages(data, lang, preparedImages, pages, opts = {}) {
     }
     await flush();
 }
+/* ==================== "MODIS ORİJİNAL" ŞABLONU (fiyat listesi + fiyatsız katalog) ====================
+   Her ürün (seri / takım) kendi sayfasında başlar: büyük seri adı + ince alt başlık ve sağda belge adı,
+   takım görseli, altında modüller 4'lü ızgarada (görsel · ad · ikonlu G/D/Y/m³/kg tablosu · fiyat).
+   Altta logo + vurgu çizgisi + alt bilgi; sayfa numarası tek/çift sayfada dış kenarda.
+   Modül çok ise ürün sonraki sayfalarda görselsiz devam eder. Kapak: siyah zemin, logo, logonun ilk harfi silik dev iz. */
+const PDF_SERIES = { M: 36, cols: 4, gap: 10, imgH: 58, heroH: 200, headY: 52, footY: 40 };
+const PDF_SERIES_TEMPLATES = Object.freeze([
+    { id: "standart", name: "Standart", desc: "Kategori düzenlerine göre akış: takım tablosu, ölçü kartları veya model sırası." },
+    { id: "modis", name: "Modis Orijinal", desc: "Her seri kendi sayfasında: takım görseli, modüller 4'lü ızgarada ikonlu ölçü tablosu ve fiyatla." }
+]);
+function pdfPriceTemplateId(v) { return v === "modis" ? "modis" : "standart"; }
+function pdfSeriesUpper(s, lang) { try { return String(s || "").toLocaleUpperCase(lang === "EN" ? "en-US" : "tr-TR"); } catch (_) { return String(s || "").toUpperCase(); } }
+/* Seri adı + alt başlık: "Colosseum Köşe Takımı" → COLOSSEUM / KÖŞE TAKIMI (koleksiyon adı varsa ondan ayrılır) */
+function pdfSeriesTitle(item, lang) {
+    const name = String(pdfText(lang, item?.name, item?.name_en, item?.name) || "").trim();
+    const col = String(item?.collection || "").trim();
+    if (col && name.toLocaleLowerCase("tr-TR").startsWith(col.toLocaleLowerCase("tr-TR")) && name.length > col.length)
+        return { main: pdfSeriesUpper(col, lang), sub: pdfSeriesUpper(name.slice(col.length).trim(), lang) };
+    return { main: pdfSeriesUpper(name || "—", lang), sub: "" };
+}
+/* "280 × 120 × 75 cm" → ["280","120","75"]; "190 × 40 cm (yükseklik projeye göre)" → ["190","40","PRJ"] */
+function pdfSeriesDims(dims) {
+    const raw = String(dims || ""), prj = /proje|project/i.test(raw);
+    const s = raw.replace(/\(.*?\)/g, "").replace(/\bcm\b/gi, "").trim();
+    const p = s ? s.split(/\s*×\s*|\s+[xX]\s+/).map(x => x.trim()) : [];
+    const out = [p[0] || "", p[1] || "", p[2] || (prj ? "PRJ" : "")];
+    return out.map(v => (v === "—" ? "" : v));
+}
+function pdfSeriesNum(v, lang) {
+    if (v === null || v === undefined || v === "" || !Number.isFinite(Number(v)))
+        return "";
+    const s = String(Math.round(Number(v) * 1000) / 1000);
+    return lang === "EN" ? s : s.replace(".", ",");
+}
+function pdfSeriesArrow(x1, y1, x2, y2, col) {
+    const a = Math.atan2(y2 - y1, x2 - x1), hl = 1.7, sp = 0.6;
+    let c = pdfLine(x1, y1, x2, y2, col, .45);
+    for (const [px, py, dir] of [[x2, y2, a + Math.PI], [x1, y1, a]])
+        c += pdfLine(px, py, px + hl * Math.cos(dir - sp), py + hl * Math.sin(dir - sp), col, .45) + pdfLine(px, py, px + hl * Math.cos(dir + sp), py + hl * Math.sin(dir + sp), col, .45);
+    return c;
+}
+function pdfSeriesIcon(i, cx, cy, col) {
+    if (i === 0)
+        return pdfSeriesArrow(cx - 5, cy, cx + 5, cy, col);
+    if (i === 1)
+        return pdfSeriesArrow(cx - 3.6, cy - 2.6, cx + 3.6, cy + 2.6, col);
+    if (i === 2)
+        return pdfSeriesArrow(cx, cy - 3.3, cx, cy + 3.3, col);
+    return pdfTextOp(i === 3 ? "m³" : "kg", cx, cy - 2.1, 6, { align: "center", bold: true, color: col });
+}
+/* Hücredeki değeri sığdırır: gerekirse küçültür, "220 / 260" gibi seçenekleri alt alta yazar. */
+function pdfSeriesCellText(v, cx, yTop, h, w, lang) {
+    if (!v)
+        return "";
+    if (v === "PRJ")
+        v = lang === "EN" ? "Proj." : "Proje";
+    let lines = [v], size = 6.2;
+    if (pdfFontWidth(v, size) > w - 2.5 && v.includes("/"))
+        lines = v.split(/\s*\/\s*/);
+    for (const ln of lines)
+        size = Math.min(size, (w - 2.5) / Math.max(1, pdfFontWidth(ln, 1)));
+    size = Math.max(3.4, Math.min(size, (h - 1.5) / (lines.length * 1.1)));
+    const lead = size * 1.08, total = lines.length * lead;
+    let c = "";
+    lines.forEach((ln, i) => { c += pdfTextOp(ln, cx, yTop - (h - total) / 2 - size * .8 - i * lead, size, { align: "center", color: [0.12, 0.12, 0.12] }); });
+    return c;
+}
+function pdfSeriesCellH() { return PDF_SERIES.imgH + 6 + 17 + 4 + 21 + (pdfNoPrice ? 8 : (pdfVade ? 26 : 18)); }
+function pdfSeriesCell(data, row, lang, x, yTop, w, asset) {
+    const S = PDF_SERIES, dark = [0.1, 0.1, 0.1];
+    let c = "";
+    if (asset)
+        c += pdfDrawImage(`Im${asset.id}`, asset, x + 4, yTop - S.imgH, w - 8, S.imgH, true);
+    const nameY = yTop - S.imgH - 6 - 6;
+    const nm = pdfSeriesUpper(row.name || "—", lang), nl = pdfWrapText(nm, w - 4, 6.4, 2).length;
+    c += pdfTextOp(nm, x + w / 2, nameY + (nl === 1 ? -3.6 : 0), 6.4, { align: "center", maxWidth: w - 4, maxLines: 2, leading: 7.4, color: dark });
+    const tTop = yTop - S.imgH - 6 - 17 - 4, rh = 10.5, cw = w / 5;
+    c += pdfRect(x, tTop - 2 * rh, w, 2 * rh, null, [0.15, 0.15, 0.15], .5);
+    c += pdfLine(x, tTop - rh, x + w, tTop - rh, [0.15, 0.15, 0.15], .5);
+    for (let i = 1; i < 5; i++)
+        c += pdfLine(x + i * cw, tTop, x + i * cw, tTop - 2 * rh, [0.15, 0.15, 0.15], .5);
+    const d = pdfSeriesDims(row.dims), vals = [d[0], d[1], d[2], pdfSeriesNum(row.m3, lang), pdfSeriesNum(row.kg, lang)];
+    for (let i = 0; i < 5; i++) {
+        c += pdfSeriesIcon(i, x + i * cw + cw / 2, tTop - rh / 2, dark);
+        c += pdfSeriesCellText(vals[i], x + i * cw + cw / 2, tTop - rh, rh, cw, lang);
+    }
+    if (!pdfNoPrice) {
+        const pr = pdfVariantPrice(data, row, lang), py = tTop - 2 * rh - 10.5;
+        c += pdfTextOp(pr.text, x + w / 2, py, pr.muted ? 6.8 : 8.2, { align: "center", bold: !pr.muted, maxWidth: w, maxLines: 1, color: pr.muted ? [0.5, 0.5, 0.5] : [0, 0, 0] });
+        const vd = pr.muted ? "" : pdfVadeMoney(data, row.amount);
+        if (vd)
+            c += pdfTextOp(`${pdfVade.label}: ${vd}`, x + w / 2, py - 9, 6.2, { align: "center", maxWidth: w, maxLines: 1, color: [0.35, 0.35, 0.35] });
+    }
+    return c;
+}
+function pdfSeriesFooter(data, lang, pageNo, logo) {
+    const S = PDF_SERIES, L = PDF_LAYOUT, W = L.W, acc = pdfAccentCurrent, odd = pageNo % 2 === 1, y = S.footY;
+    const text = pdfSeriesUpper(data.pdf?.footer || data.pdf?.website || "", lang), grey = [0.55, 0.55, 0.55];
+    let c = "", logoW = 0;
+    const box = logo ? pdfFitRect(logo.width || 1, logo.height || 1, 0, 0, 74, 17) : null;
+    if (box)
+        logoW = box.w;
+    const num = data.pdf?.showPageNumbers !== false ? String(pageNo) : "";
+    const textW = Math.min(200, text ? pdfFontWidth(text, 7) : 0);
+    if (!odd) {
+        let xx = S.M;
+        if (num) { c += pdfTextOp(num, xx, y - 3, 7.5, { color: [0.2, 0.2, 0.2] }); xx += 16; }
+        if (box) { c += pdfDrawImage(`Im${logo.id}`, logo, xx, y - 6, box.w, box.h, false); xx += logoW + 10; }
+        const lx2 = W - S.M - (text ? textW + 12 : 0);
+        if (lx2 > xx) c += pdfLine(xx, y, lx2, y, acc, .7);
+        if (text) c += pdfTextOp(text, W - S.M, y - 2.5, 7, { align: "right", maxWidth: 200, maxLines: 1, color: grey });
+    }
+    else {
+        let xr = W - S.M;
+        if (num) { c += pdfTextOp(num, xr, y - 3, 7.5, { align: "right", color: [0.2, 0.2, 0.2] }); xr -= 16; }
+        if (box) { c += pdfDrawImage(`Im${logo.id}`, logo, xr - box.w, y - 6, box.w, box.h, false); xr -= logoW + 10; }
+        const lx1 = S.M + (text ? textW + 12 : 0);
+        if (xr > lx1) c += pdfLine(lx1, y, xr, y, acc, .7);
+        if (text) c += pdfTextOp(text, S.M, y - 2.5, 7, { maxWidth: 200, maxLines: 1, color: grey });
+    }
+    return c;
+}
+function pdfSeriesPage(data, lang, item, rows, withHero, pageNo, imageMap, logoAsset) {
+    const S = PDF_SERIES, L = PDF_LAYOUT, W = L.W, H = L.H, images = new Map();
+    let nextId = 1;
+    const reg = (key, prep) => { if (!prep) return null; let a = images.get(key); if (!a) { a = { ...prep, id: nextId++ }; images.set(key, a); } return a; };
+    let c = pdfRect(0, 0, W, H, [1, 1, 1]);
+    /* Başlık: SERİ alt başlık ......... FİYAT LİSTESİ */
+    const t = pdfSeriesTitle(item, lang), hy = H - S.headY, fsM = 17;
+    const docTitle = pdfNoPrice ? (lang === "EN" ? "PRODUCT CATALOG" : "ÜRÜN KATALOĞU") : (lang === "EN" ? "PRICE LIST" : "FİYAT LİSTESİ");
+    const mainW = Math.min(300, pdfFontWidth(t.main, fsM));
+    c += pdfTextOp(t.main, S.M, hy, fsM, { bold: true, maxWidth: 300, maxLines: 1, color: [0, 0, 0] });
+    let lx = S.M + mainW + 6;
+    if (t.sub) {
+        c += pdfTextOp(t.sub, lx, hy, 9, { maxWidth: 170, maxLines: 1, color: [0.15, 0.15, 0.15] });
+        lx += Math.min(170, pdfFontWidth(t.sub, 9)) + 6;
+    }
+    const dtW = pdfFontWidth(docTitle, 8.5);
+    if (W - S.M - dtW - 8 > lx)
+        c += pdfLine(lx, hy + 1, W - S.M - dtW - 8, hy + 1, [0.8, 0.8, 0.8], .5);
+    c += pdfTextOp(docTitle, W - S.M, hy, 8.5, { align: "right", color: [0.1, 0.1, 0.1] });
+    let yTop = hy - 22;
+    if (withHero) {
+        const src = pdfProductImageSource(item, data), hero = src ? reg(src, imageMap.get(src)) : null;
+        if (hero) {
+            c += pdfDrawImage(`Im${hero.id}`, hero, S.M, yTop - S.heroH, W - 2 * S.M, S.heroH, true);
+            yTop -= S.heroH + 18;
+        }
+        const desc = pdfDescText(lang, item);
+        if (desc && !hero) {
+            c += pdfTextOp(desc, S.M, yTop - 8, 8, { maxWidth: W - 2 * S.M, maxLines: 3, leading: 10.5, color: [0.35, 0.35, 0.35] });
+            yTop -= 40;
+        }
+    }
+    const cw = (W - 2 * S.M - S.gap * (S.cols - 1)) / S.cols, ch = pdfSeriesCellH();
+    rows.forEach((r, i) => {
+        const col = i % S.cols, rowI = Math.floor(i / S.cols);
+        const inRow = Math.min(S.cols, rows.length - rowI * S.cols);
+        /* Son satır eksikse ortalanır (orijinal listedeki gibi) */
+        const offset = inRow < S.cols ? (S.cols - inRow) * (cw + S.gap) / 2 : 0;
+        const x = S.M + offset + col * (cw + S.gap), y = yTop - rowI * (ch + 8);
+        const a = r.image ? reg(pdfImageSource(r.image), imageMap.get(pdfImageSource(r.image))) : null;
+        c += pdfSeriesCell(data, r, lang, x, y, cw, a);
+    });
+    const logo = logoAsset ? reg("__seriesLogo__", logoAsset) : null;
+    c += pdfSeriesFooter(data, lang, pageNo, logo);
+    return { content: c, images, pageNo };
+}
+/* Bir ürünün kaç modülü ilk sayfaya (görselli) ve devam sayfalarına sığar */
+function pdfSeriesCapacity(withHero, hasHero) {
+    const S = PDF_SERIES, H = PDF_LAYOUT.H, ch = pdfSeriesCellH() + 8;
+    const top = H - S.headY - 22 - (withHero && hasHero ? S.heroH + 18 : 0), bottom = S.footY + 18;
+    return Math.max(1, Math.floor((top - bottom + 8) / ch)) * S.cols;
+}
+async function pdfSeriesPages(data, lang, imageMap, pages) {
+    const logoSrc = pdfImageSource(data.logo?.src);
+    const logoAsset = logoSrc ? await pdfImageAsset(logoSrc, { max: 600, quality: .92 }) : null;
+    for (const category of (data.categories || [])) {
+        const items = Array.isArray(category.items) ? category.items : [];
+        if (!items.length)
+            continue;
+        if (data.pdf?.useCategoryCovers)
+            pages.push(await renderPdfCategoryCoverPage(data, lang, category, pages.length + 1));
+        for (const item of items) {
+            let rows = pdfVariantRows(item, lang).map(r => ({ ...r, name: r.name || pdfText(lang, item.name, item.name_en, item.name) || "" }));
+            const hasHero = !!pdfProductImageSource(item, data);
+            let first = true;
+            do {
+                const cap = pdfSeriesCapacity(first, hasHero), chunk = rows.slice(0, cap);
+                rows = rows.slice(cap);
+                pages.push(pdfSeriesPage(data, lang, item, chunk, first, pages.length + 1, imageMap, logoAsset));
+                first = false;
+            } while (rows.length);
+        }
+    }
+}
+/* Kapak: siyah zemin, üstte logo, sağ altta logonun ilk harfinin silik dev izi, altta belge adı. */
+async function pdfSeriesMarkAsset(src) {
+    const key = pdfImageSource(src);
+    if (!key)
+        return null;
+    const asset = await pdfLoadImageSafe(key);
+    if (!asset)
+        return null;
+    try {
+        const iw = asset.width || 1, ih = asset.height || 1, cropW = Math.max(1, Math.round(iw * 0.31));
+        const scale = Math.min(1, 1400 / ih), c = document.createElement("canvas");
+        c.width = Math.max(1, Math.round(cropW * scale));
+        c.height = Math.max(1, Math.round(ih * scale));
+        const ctx = c.getContext("2d", { alpha: false });
+        ctx.fillStyle = "#050505";
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.globalAlpha = .26;
+        ctx.drawImage(asset.im, 0, 0, cropW, ih, 0, 0, c.width, c.height);
+        return { data: c.toDataURL("image/jpeg", .9), width: c.width, height: c.height, source: key + "#mark" };
+    }
+    catch (_) {
+        return null;
+    }
+    finally {
+        if (asset.objectUrl)
+            try { URL.revokeObjectURL(asset.objectUrl); } catch (_) { }
+    }
+}
+async function renderPdfSeriesCover(data, lang, title) {
+    const full = await renderPdfFullImagePage(data.pdf?.coverImage);
+    if (full)
+        return full;
+    const W = PDF_LAYOUT.W, H = PDF_LAYOUT.H, images = new Map();
+    let c = pdfRect(0, 0, W, H, PDF_COVER_INK);
+    const src = pdfImageSource(data.pdf?.coverLogo?.src);
+    const mark = await pdfSeriesMarkAsset(src);
+    if (mark) {
+        const m = { ...mark, id: 2 }, mh = H * 0.5, mw = mh * (m.width / m.height);
+        images.set("__seriesMark__", m);
+        c += pdfDrawImage("Im2", m, W - mw * 0.72, -mh * 0.2, mw, mh, false);
+    }
+    const logo = await pdfLogoImageAsset(src);
+    if (logo) {
+        const lg = { ...logo, id: 1 }, box = pdfFitRect(lg.width || 1, lg.height || 1, 0, 0, 150, 60);
+        images.set("__coverLogo__", lg);
+        c += pdfDrawImage("Im1", lg, W / 2 - box.w / 2, H - 165 - box.h / 2, box.w, box.h, false);
+    }
+    else {
+        const name = pdfCompanyName(data, lang);
+        if (name)
+            c += pdfTextOp(name, W / 2, H - 172, 26, { align: "center", bold: true, maxWidth: 440, maxLines: 1, color: [1, 1, 1] });
+    }
+    c += pdfTextOp(title, 44, 58, 11, { bold: true, maxWidth: 300, maxLines: 2, leading: 14, color: [1, 1, 1] });
+    const site = data.pdf?.website || "";
+    if (site)
+        c += pdfTextOp(site, 44, 40, 7.5, { maxWidth: 300, maxLines: 1, color: [0.6, 0.6, 0.6] });
+    return { content: c, images, pageNo: null };
+}
+function pdfSeriesPriceTitle(data, lang) {
+    const cur = data.currency?.selected === "USD" ? "USD" : data.currency?.selected === "EUR" ? "EUR" : "TL";
+    const autoTitle = lang === "EN" ? `${cur} PRICE LIST` : `${cur} FİYAT LİSTESİ`;
+    const defTitle = /^(\d{4}(-\d+)?\s*)?(TL|USD|EUR)?\s*F[İI]YAT L[İI]STES[İI]$/i.test(String(data.pdf?.title || "").trim());
+    return lang === "EN" ? (data.pdf?.title_en || autoTitle) : ((data.pdf?.title && !defTitle) ? data.pdf.title : autoTitle);
+}
 async function buildPriceListPDF(rawData, lang) {
     const norm = normalizeData(rawData), source = projectCurrency(norm, norm.currency?.selected || "TRY") || norm, currency = source.currency?.selected || "TRY";
     /* PDF dili artık para biriminden değil, sitenin seçili dilinden gelir. */
@@ -3028,6 +3289,12 @@ async function buildPriceListPDF(rawData, lang) {
     pdfVade = vr ? { rate: vr, label: vadeLabelOf(source, pdfLang) } : null;
     try {
         const prepared = await pdfPrepareImages(source), data = prepared.data;
+        if (pdfPriceTemplateId(data.pdf?.priceTemplate) === "modis") {
+            const pagesM = [await renderPdfSeriesCover(data, pdfLang, pdfSeriesPriceTitle(data, pdfLang))];
+            await pdfSeriesPages(data, pdfLang, prepared.images, pagesM);
+            pagesM.push(await renderPdfClosingPage(data, pdfLang));
+            return await pdfCreateVectorDocument(pagesM);
+        }
         const pages = [await renderPdfCoverPage(data, pdfLang)];
         await pdfFlowPages(data, pdfLang, prepared.images, pages);
         pages.push(await renderPdfClosingPage(data, pdfLang));
@@ -3316,7 +3583,8 @@ const PDF_CATALOG_TEMPLATES = [
     { id: "klasik", name: "Klasik Liste", desc: "Fiyat listesiyle aynı düzen; fiyat yerine ölçüler ve açıklama. Sayfa başına 7 ürün." },
     { id: "vitrin", name: "Vitrin", desc: "Her kategori için ayrı seçilir: her model tek sayfada, sayfa başına 2 model veya akıllı akış düzeni." },
     { id: "izgara", name: "Izgara", desc: "Sayfa başına 6 ürün kartı. Geniş ürün yelpazesine hızlı göz atma." },
-    { id: "dergi", name: "Dergi", desc: "Sayfa başına 2 ürün, görseller sırayla solda ve sağda. Sunum havası." }
+    { id: "dergi", name: "Dergi", desc: "Sayfa başına 2 ürün, görseller sırayla solda ve sağda. Sunum havası." },
+    { id: "modis", name: "Modis Orijinal", desc: "Her seri kendi sayfasında: takım görseli, modüller 4'lü ızgarada ikonlu ölçü tablosuyla." }
 ];
 function pdfCatalogTemplateId(v) { return PDF_CATALOG_TEMPLATES.some(t => t.id === v) ? v : "akilli"; }
 /* Vitrin şablonunda her kategorinin sayfa düzeni: full = her model tek sayfa, duo = sayfa başına 2 model, flow = akıllı akış */
@@ -3379,6 +3647,14 @@ async function pdfBuildCatalogInner(rawData, lang, templateId) {
     const tplRaw = pdfCatalogTemplateId(templateId || source.pdf?.catalogTemplate);
     /* Akıllı şablon = Vitrin + her kategori için otomatik sayfa düzeni (elle seçilen vitrin ayarları yok sayılır). */
     const tpl = tplRaw === "akilli" ? "vitrin" : tplRaw;
+    if (tplRaw === "modis") {
+        const prepared = await pdfPrepareImages(source), dataM = prepared.data;
+        const titleM = L === "EN" ? "PRODUCT CATALOG" : (String(source.pdf?.catalogTitle || "").trim() || "ÜRÜN KATALOĞU");
+        const pagesM = [await renderPdfSeriesCover(dataM, L, titleM)];
+        await pdfSeriesPages(dataM, L, prepared.images, pagesM);
+        pagesM.push(await renderPdfClosingPage(dataM, L));
+        return await pdfCreateVectorDocument(pagesM);
+    }
     const data = { ...source, categories: pdfRealCategories(source), pdf: tplRaw === "akilli" ? { ...(source.pdf || {}), vitrinModes: {} } : source.pdf };
     const assets = await pdfPrepareCatalogAssets(data, tpl);
     const title = L === "EN" ? "PRODUCT CATALOG" : (String(source.pdf?.catalogTitle || "").trim() || "ÜRÜN KATALOĞU");
@@ -3762,6 +4038,20 @@ function CatalogTemplateThumb({ id, accent }) {
             React.createElement("rect", { x: "6", y: "66", width: "48", height: "3", fill: "#111" }),
             React.createElement("rect", { x: "6", y: "70", width: "48", height: "1.4", fill: ln }),
             React.createElement("rect", { x: "6", y: "73", width: "48", height: "1.4", fill: ln })));
+    if (id === "modis")
+        return page(React.createElement(React.Fragment, null,
+            React.createElement("rect", { x: "6", y: "6", width: "16", height: "3.2", fill: "#111" }),
+            React.createElement("rect", { x: "24", y: "7.4", width: "22", height: ".6", fill: "#bbb" }),
+            React.createElement("rect", { x: "47", y: "6.6", width: "7", height: "1.8", fill: "#555" }),
+            React.createElement("rect", { x: "8", y: "13", width: "44", height: "18", fill: img }),
+            [0, 1, 2, 3, 4, 5, 6, 7].map(i => { const x = 6 + (i % 4) * 12.3, y = 35 + Math.floor(i / 4) * 17; return React.createElement("g", { key: i },
+                React.createElement("rect", { x: x + 1.5, y: y, width: "8", height: "5", fill: "#777" }),
+                React.createElement("rect", { x: x + 1, y: y + 6.5, width: "9", height: "1", fill: ln }),
+                React.createElement("rect", { x: x, y: y + 9, width: "11", height: "4", fill: "none", stroke: "#222", strokeWidth: ".4" }),
+                React.createElement("rect", { x: x + 3, y: y + 14.2, width: "5", height: "1", fill: "#111" })); }),
+            React.createElement("rect", { x: "6", y: "73", width: "6", height: "2", fill: "#111" }),
+            React.createElement("rect", { x: "14", y: "73.8", width: "30", height: ".5", fill: a }),
+            React.createElement("rect", { x: "46", y: "73.4", width: "8", height: "1.2", fill: "#999" })));
     if (id === "izgara")
         return page(React.createElement(React.Fragment, null,
             React.createElement("rect", { x: "6", y: "6", width: "26", height: "3", fill: "#222" }),
@@ -6896,6 +7186,15 @@ function App() {
                                     "Yeni sekmede a\u00E7"))),
                         React.createElement("div", { className: "rounded-2xl border border-neutral-800 bg-neutral-900 p-4" },
                             React.createElement("div", { className: "text-[10px] uppercase tracking-widest font-bold text-amber-500 mb-2" }, "PDF Fiyat Listesi"),
+                            React.createElement("div", { role: "radiogroup", "aria-label": "Fiyat listesi şablonu", className: "grid grid-cols-2 gap-2 mb-4" }, PDF_SERIES_TEMPLATES.map(tp => {
+                                const active = pdfPriceTemplateId(data.pdf?.priceTemplate) === tp.id;
+                                return React.createElement("button", { key: tp.id, type: "button", role: "radio", "aria-checked": active, onClick: () => setPath(["pdf", "priceTemplate"], tp.id), className: "text-left rounded-xl p-2.5 border transition-colors", style: { borderColor: active ? theme.accent : "#D2D2D7", background: active ? theme.accent + "18" : "#FFFFFF" } },
+                                    React.createElement(CatalogTemplateThumb, { id: tp.id === "modis" ? "modis" : "klasik", accent: theme.accent }),
+                                    React.createElement("div", { className: "mt-2 text-xs font-bold flex items-center gap-1.5" },
+                                        active && React.createElement(Icon, { type: "check", size: 13 }),
+                                        tp.name),
+                                    React.createElement("div", { className: "text-[11px] text-neutral-400 leading-snug mt-0.5" }, tp.desc));
+                            })),
                             React.createElement("div", { className: "rounded-xl bg-neutral-950 border border-neutral-800 p-3 mb-4" },
                                 React.createElement("div", { className: "text-xs font-bold mb-1" }, "Kategori D\u00FCzenleri"),
                                 React.createElement("div", { className: "text-[11px] text-neutral-400 mb-3" },
