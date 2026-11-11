@@ -165,6 +165,7 @@ const rpc=(name,args)=>sb("/rest/v1/rpc/"+name,{method:"POST",body:args||{}});
 let view="checking";       /* checking | login | newPassword | app */
 let restaurants=[];
 let loading=false;
+let tetraOkundu=false;   /* Tetra paket durumu sunucudan okunabildi mi */
 let filter="all";
 let query="";
 let modal=null;            /* {type:'create'|'result'|'edit'|'share', ...} */
@@ -384,6 +385,7 @@ function renderCard(r){
    <span><b>${r.categories}</b> kategori</span>
    <span><b>${r.visits_30d}</b> ${K().open30}</span>
    <span>${r.plan==="premium"?"Premium":"Temel"} paket</span>
+   ${kind==="menu"&&r.tetra?`<span><b>Menü + Tetra</b></span>`:""}
   </div>
   ${trial}
   ${members?`<div class="members">${members}</div>`:`<div class="hint">Henüz panel hesabı yok.</div>`}
@@ -516,6 +518,15 @@ function renderModal(){
       </select>
      </div>
     </div>
+    ${kind==="menu"&&tetraOkundu?`
+    <div class="field">
+     <label for="eTetra">Tetra (kasa, mutfak, TV ekranı)</label>
+     <select id="eTetra">
+      <option value="0" ${r.tetra?"":"selected"}>Kapalı · yalnız Menü</option>
+      <option value="1" ${r.tetra?"selected":""}>Açık · Menü + Tetra</option>
+     </select>
+     <div class="hint">Açınca işletme tetra.neardiji.com adresine kendi menü hesabıyla girer. Kapatınca cihazları durur, kayıtları silinmez.</div>
+    </div>`:""}
 
     <div class="row2">
      <div class="field">
@@ -686,6 +697,16 @@ async function loadRestaurants(){
  loading=true;
  const list=await rpc(K().list);
  restaurants=Array.isArray(list)?list:[];
+ /* Tetra paketi (kasa, mutfak, TV): yalnız menü işletmelerinde. Okunamazsa liste yine açılır, paket alanı gizlenir. */
+ tetraOkundu=false;
+ if(kind==="menu"){
+  try{
+   const t=await rpc("tetra_baslangic");
+   const acik=new Set((Array.isArray(t)?t:[]).filter(x=>x&&x.tetra===true).map(x=>x.id));
+   restaurants.forEach(r=>{r.tetra=acik.has(r.id)});
+   tetraOkundu=true;
+  }catch(e){}
+ }
  loading=false;
 }
 
@@ -890,6 +911,11 @@ function bindModal(){
   try{
    await sb("/rest/v1/"+K().table+"?id=eq."+r.id,{method:"PATCH",headers:{"Prefer":"return=minimal"},body});
    Object.assign(r,body);
+   const tetraSecim=$("eTetra")?$("eTetra").value==="1":null;
+   if(tetraSecim!==null&&tetraSecim!==!!r.tetra){
+    await rpc("tetra_admin_ayarla",{p_restaurant:r.id,p_aktif:tetraSecim});
+    r.tetra=tetraSecim;
+   }
    toast("✓ Kaydedildi");
    modal=null;
    render();
