@@ -613,6 +613,14 @@ function shareText(r,owner){
   lines.push("Şifre: "+owner.temp_password);
  }
 
+ /* Tetra paketi açık işletme: kurulum sayfası da paylaşılır */
+ if(kind==="menu"&&r.tetra){
+  lines.push("");
+  lines.push("Tetra hesabınız da hazır: kasanız, mutfağınız ve müşterinizin telefonu aynı siparişi aynı anda görür.");
+  lines.push("Beş adımlık kurulum: https://tetra.neardiji.com/kurulum");
+  lines.push("Girişte menü panelinizdeki e-posta ve şifreyi kullanın.");
+ }
+
  if(r.status==="trial"&&r.trial_ends){
   lines.push("");
   lines.push("Demo "+fmtDate(r.trial_ends)+" tarihine kadar açık.");
