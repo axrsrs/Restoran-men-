@@ -489,6 +489,7 @@ function sessionFromAuth(j){
 }
 
 async function authRequest(path,body,method){
+ if(window.NDDogrula)body=await NDDogrula.ekle(path,body);
  const r=await fetch(SB_URL+"/auth/v1/"+path,{
   method:method||"POST",
   headers:Object.assign(
@@ -1242,7 +1243,9 @@ function bindCloudLogin(){
    const baglanti=e instanceof TypeError&&/fetch|network|load failed/i.test(e.message||"");
    if(!baglanti&&!e.status)console.error("Giriş hatası:",e);
    showLoginError(
-    e.status===400||e.code==="invalid_credentials"
+    window.NDDogrula&&NDDogrula.hataMi(e)
+    ?NDDogrula.HATA
+    :e.status===400||e.code==="invalid_credentials"
     ?"E-posta veya şifre yanlış."
     :e.status===429
     ?"Çok fazla deneme yapıldı. Biraz bekleyip tekrar deneyin."

@@ -28,9 +28,10 @@ function toSession(j){return {access_token:j.access_token,refresh_token:j.refres
 async function authReq(path,body,method,withToken){
  var h={"apikey":SB_KEY,"Content-Type":"application/json"};
  if(withToken&&session)h.Authorization="Bearer "+session.access_token;
+ if(window.NDDogrula)body=await NDDogrula.ekle(path,body);
  var r=await fetch(SB_URL+"/auth/v1/"+path,{method:method||"POST",headers:h,body:JSON.stringify(body||{})});
  var j={};try{j=await r.json()}catch(e){}
- if(!r.ok){var er=new Error(j.error_description||j.msg||j.message||("HTTP "+r.status));er.status=r.status;throw er}
+ if(!r.ok){var er=new Error(j.error_description||j.msg||j.message||("HTTP "+r.status));er.status=r.status;er.code=j.error_code||"";throw er}
  return j;
 }
 async function ensureFresh(){
@@ -91,7 +92,7 @@ function bindLogin(){
    await afterLogin();
   }catch(er){
    b.disabled=false;b.textContent="Giriş Yap";
-   var el=$("err");if(el)el.textContent=er.status===400?"E-posta veya şifre yanlış.":er.status===429?"Çok fazla deneme. Biraz bekleyin.":(er.message||"Giriş yapılamadı.");
+   var el=$("err");if(el)el.textContent=window.NDDogrula&&NDDogrula.hataMi(er)?NDDogrula.HATA:er.status===400?"E-posta veya şifre yanlış.":er.status===429?"Çok fazla deneme. Biraz bekleyin.":(er.message||"Giriş yapılamadı.");
   }
  });
 }

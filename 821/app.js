@@ -117,6 +117,7 @@ function storeSession(s){
 }
 
 async function authReq(path,body,method,withToken){
+ if(window.NDDogrula)body=await NDDogrula.ekle(path,body);
  const r=await fetch(SB_URL+"/auth/v1/"+path,{
   method:method||"POST",
   headers:Object.assign({"apikey":SB_KEY,"Content-Type":"application/json"},
@@ -646,7 +647,7 @@ function bindLogin(){
    await afterLogin();
   }catch(e){
    btn.disabled=false;btn.textContent="Giriş yap";
-   showErr(e.status===400?"E-posta veya şifre yanlış.":e.status===429?"Çok fazla deneme. Biraz bekleyin.":"Giriş yapılamadı: "+e.message);
+   showErr(window.NDDogrula&&NDDogrula.hataMi(e)?NDDogrula.HATA:e.status===400?"E-posta veya şifre yanlış.":e.status===429?"Çok fazla deneme. Biraz bekleyin.":"Giriş yapılamadı: "+e.message);
   }
  };
 

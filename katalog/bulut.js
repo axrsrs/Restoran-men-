@@ -32,6 +32,7 @@
   async function authReq(path, body, method, withToken) {
     var h = { apikey: SB_KEY, "Content-Type": "application/json" };
     if (withToken && session) h.Authorization = "Bearer " + session.access_token;
+    if (window.NDDogrula) body = await window.NDDogrula.ekle(path, body);
     var r = await fetch(SB_URL + "/auth/v1/" + path, { method: method || "POST", headers: h, body: JSON.stringify(body || {}) });
     var j = await r.json().catch(function () { return {}; });
     if (!r.ok) { var e = new Error(j.msg || j.error_description || j.message || ("Hata " + r.status)); e.status = r.status; e.code = j.error_code || j.code; throw e; }
@@ -257,7 +258,7 @@
           ov.remove(); resolve(true);
         } catch (er) {
           btn.disabled = false;
-          err.textContent = er.status === 400 ? "E-posta veya şifre hatalı." : er.status === 429 ? "Çok fazla deneme yapıldı. Birkaç dakika sonra tekrar deneyin." : "Giriş yapılamadı: " + er.message;
+          err.textContent = window.NDDogrula && window.NDDogrula.hataMi(er) ? window.NDDogrula.HATA : er.status === 400 ? "E-posta veya şifre hatalı." : er.status === 429 ? "Çok fazla deneme yapıldı. Birkaç dakika sonra tekrar deneyin." : "Giriş yapılamadı: " + er.message;
         }
       };
     });
