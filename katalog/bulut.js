@@ -89,6 +89,10 @@
       throw new Error("katalog yok");
     }
     catalog = rec;
+    try {
+      var adi = (rec.data && (rec.data.siteName || "")) || rec.name || "";
+      if (adi && window.NDUygulama) window.NDUygulama.ayarla({ ad: adi + " Katalog", kisaAd: adi, baslangic: "/katalog/?f=" + slug, tema: "#F5F5F7", arka: "#F5F5F7" });
+    } catch (e) { }
     lastSavedJSON = JSON.stringify(rec.data || {});
     try {
       var k = "sh21v:" + slug + ":" + new Date().toISOString().slice(0, 10);

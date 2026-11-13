@@ -6027,6 +6027,7 @@ function render(options={}){
  document.documentElement.lang=language;
 
  document.title=(DATA.name||"Menü")+" • Dijital Menü";
+ if(window.NDUygulama&&DATA.name)NDUygulama.ayarla({ad:DATA.name,baslangic:"/menu/?r="+RESTAURANT_SLUG});
 
  applyTheme();
 
