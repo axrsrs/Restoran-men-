@@ -15,14 +15,14 @@
 
   var METIN = {
     tr: {
-      baslik: "Gizliliğinize önem veriyoruz",
-      metin: "NearDiji olarak kişisel verilerinizin güvenliğini ciddiye alıyoruz. Sitemizin sorunsuz çalışması için yalnızca gerekli tarayıcı kayıtlarını kullanıyor, ziyaret istatistiklerini ise sizin onayınızla tutuyoruz. Ayrıntılı bilgiye Çerez Politikası'ndan ulaşabilir, tercihlerinizi dilediğiniz zaman değiştirebilirsiniz.",
+      baslik: "Gizliliğin önemli.",
+      metin: "Bu site yalnızca çalışması için gereken tarayıcı kayıtlarını kullanır. Ziyaret istatistikleri ise sadece onay verirsen tutulur. Ayrıntılar Çerez Politikası'nda; tercihini istediğin zaman değiştirebilirsin.",
       kabul: "Tümünü kabul et", reddet: "Reddet", yonet: "Tercihleri yönet",
-      tBaslik: "Çerez tercihleriniz",
+      tBaslik: "Çerez tercihlerin",
       zorunlu: "Zorunlu", zorunluAcik: "Her zaman açık",
-      zorunluMetin: "Sitenin düzgün açılması, tema tercihinizin ve oturumunuzun hatırlanması için gereklidir; kapatılamaz.",
+      zorunluMetin: "Sitenin düzgün açılması, tema tercihinin ve oturumunun hatırlanması için gerekir. Kapatılamaz.",
       analitik: "Ziyaret istatistikleri",
-      analitikMetin: "Sayfalarımızın ne kadar ziyaret edildiğini anlamamıza ve sitemizi geliştirmemize yardımcı olur. Kimliğinizi belirlemez.",
+      analitikMetin: "Sayfaların ne kadar ziyaret edildiğini gösterir, sitenin gelişmesine yardımcı olur. Kimliğini belirlemez.",
       kaydet: "Seçimi kaydet", geri: "Geri", kvkk: "Çerez Politikası"
     },
     en: {

@@ -105,9 +105,20 @@ $("themeBtn").addEventListener("click",function(){
 });
 
 /* ── içerik ── */
-function headlineHTML(text,accent){
+function wordsHTML(t,k){
+ return String(t).split(/(\s+)/).map(function(w){
+  if(!w)return "";if(/^\s+$/.test(w))return " ";
+  return '<span class="w"><span style="--i:'+(k.n++)+'">'+esc(w)+'</span></span>';
+ }).join("");
+}
+function headlineHTML(text,accent,anim){
+ var k={n:0};
  return String(text||"").split("\n").map(function(line){
   var a=(accent||"").trim(), i=a?line.indexOf(a):-1, html;
+  if(anim){
+   html=i>=0?wordsHTML(line.slice(0,i),k)+'<span class="acc">'+wordsHTML(a,k)+'</span>'+wordsHTML(line.slice(i+a.length),k):wordsHTML(line,k);
+   return '<span class="sh-line">'+html+'</span>';
+  }
   if(i>=0)html=esc(line.slice(0,i))+'<span class="acc">'+esc(a)+'</span>'+esc(line.slice(i+a.length));
   else html=esc(line);
   return '<span class="sh-line">'+html+'</span>';
@@ -174,34 +185,34 @@ function render(){
  $("heroBody").textContent=h.body||"";
  $("heroCtas").innerHTML=cta(h.primary,"btn")+cta(h.secondary,"txt");
 
- $("projTitle").innerHTML=headlineHTML(C.projectsTitle,"");
+ $("projTitle").innerHTML=headlineHTML(C.projectsTitle,"",1);
  $("projIntro").textContent=C.projectsIntro||"";
  var list=(C.projects||[]).filter(function(p){return p&&!p.hidden&&p.name});
  renderProjects(list);
 
  var refs=(C.clients||[]).filter(function(c){return c&&c.logo});
  $("referanslar").hidden=!refs.length;$("navRef").hidden=!refs.length;
- $("refTitle").innerHTML=headlineHTML(C.clientsTitle||"Referanslar","");
+ $("refTitle").innerHTML=headlineHTML(C.clientsTitle||"Referanslar","",1);
  $("refIntro").textContent=C.clientsIntro||"";
  renderClients(refs);
 
- $("svcTitle").innerHTML=headlineHTML(C.servicesTitle,"");
+ $("svcTitle").innerHTML=headlineHTML(C.servicesTitle,"",1);
  $("services").innerHTML=(C.services||[]).filter(function(s){return s&&s.title}).map(function(s,i){
-  return '<div class="svc"><b>'+String(i+1).padStart(2,"0")+'</b><h3>'+esc(s.title)+'</h3><p>'+esc(s.desc)+'</p></div>';
+  return '<div class="svc" style="--i:'+i+'"><b>'+String(i+1).padStart(2,"0")+'</b><h3>'+esc(s.title)+'</h3><p>'+esc(s.desc)+'</p></div>';
  }).join("");
 
- $("stepsTitle").innerHTML=headlineHTML(C.stepsTitle,"");
- $("steps").innerHTML=(C.steps||[]).filter(function(s){return s&&s.title}).map(function(s){
-  return '<li class="step"><h3>'+esc(s.title)+'</h3><p>'+esc(s.desc)+'</p></li>';
+ $("stepsTitle").innerHTML=headlineHTML(C.stepsTitle,"",1);
+ $("steps").innerHTML=(C.steps||[]).filter(function(s){return s&&s.title}).map(function(s,i){
+  return '<li class="step" style="--i:'+i+'"><h3>'+esc(s.title)+'</h3><p>'+esc(s.desc)+'</p></li>';
  }).join("");
 
  $("aboutTitle").textContent=C.aboutTitle||"Hakkında";
- $("aboutText").textContent=C.about||"";
+ $("aboutText").innerHTML=String(C.about||"").split(/(\s+)/).map(function(w){return !w?"":/^\s+$/.test(w)?" ":'<span class="sw">'+esc(w)+'</span>'}).join("");aboutScrub();
  $("langs").textContent=C.languages||"";
  $("hakkinda").hidden=!C.about;$("navAbout").hidden=!C.about;
 
  var ct=C.contact||{}, wa=waLink(ct.whatsapp,ct.waText);
- $("contactTitle").innerHTML=headlineHTML(C.contactTitle,"");
+ $("contactTitle").innerHTML=headlineHTML(C.contactTitle,"",1);
  $("contactText").textContent=C.contactText||"";
  var main="";
  if(wa)main+='<a class="btn" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp\'tan yaz'+ARROW+'</a>';
@@ -490,6 +501,27 @@ var revealIO=("IntersectionObserver" in window)?new IntersectionObserver(functio
 },{rootMargin:"0px 0px -8% 0px"}):null;
 function observeReveal(){
  document.querySelectorAll(".rv:not(.in)").forEach(function(el){if(revealIO)revealIO.observe(el);else el.classList.add("in")});
+}
+
+/* ── Hakkında: kaydırdıkça kelime kelime aydınlanan metin ── */
+var AS={on:false,raf:0,bound:false};
+function aboutScrub(){
+ var box=$("aboutText");if(!box)return;
+ if(matchMedia("(prefers-reduced-motion: reduce)").matches){box.classList.add("sw-off");return}
+ function paint(){
+  AS.raf=0;var ws=box.querySelectorAll(".sw");if(!ws.length)return;
+  var r=box.getBoundingClientRect(),vh=window.innerHeight;
+  var p=Math.min(1,Math.max(0,(vh*.88-r.top)/(r.height+vh*.42)));
+  var lit=p*ws.length*1.08;
+  for(var i=0;i<ws.length;i++)ws[i].style.opacity=String(.18+.82*Math.min(1,Math.max(0,lit-i)));
+ }
+ function req(){if(AS.on&&!AS.raf)AS.raf=requestAnimationFrame(paint)}
+ if(!AS.bound){
+  AS.bound=true;
+  window.addEventListener("scroll",req,{passive:true});window.addEventListener("resize",req,{passive:true});
+  if("IntersectionObserver" in window)new IntersectionObserver(function(es){AS.on=es[0].isIntersecting;req()}).observe(box);else AS.on=true;
+ }
+ AS.on=AS.on||!("IntersectionObserver" in window);paint();
 }
 
 /* ── sunucudan güncel içerik ── */
