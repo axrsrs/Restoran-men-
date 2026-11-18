@@ -85,7 +85,8 @@
         fatal("Katalog geçici olarak hizmet dışı", (ts.name || "Bu firma") + " kataloğu şu an yayında değil. Lütfen firmayla iletişime geçin.");
         throw new Error("katalog askıda");
       }
-      fatal("Katalog bulunamadı", "Bu adreste yayında bir katalog yok ya da katalog şu an kapalı. Lütfen firmayla iletişime geçin.");
+      if (window.NDBulunamadi) window.NDBulunamadi.goster("katalog");
+      else fatal("Katalog bulunamadı", "Bu adreste yayında bir katalog yok ya da katalog şu an kapalı. Lütfen firmayla iletişime geçin.");
       throw new Error("katalog yok");
     }
     catalog = rec;

@@ -795,6 +795,7 @@ function trackVisitOnce(){
 function renderCloudState(){
 
  if(cloud.state==="notfound"){
+  if((cloud.suspended===null||cloud.suspended===undefined)&&window.NDBulunamadi)setTimeout(()=>window.NDBulunamadi.goster("menu"),0);
   return `
   <div class="cloudState">
    <div class="cloudStateIcon">🍽</div>
@@ -807,8 +808,8 @@ function renderCloudState(){
   return `
   <div class="cloudState">
    <div class="cloudStateIcon">📶</div>
-   <h2>Menü yüklenemedi</h2>
-   <p>İnternet bağlantınızı kontrol edip tekrar deneyin.</p>
+   <h2>Menü şu an açılamadı</h2>
+   <p>Bağlantıda ya da sunucuda geçici bir sorun var. Lütfen birazdan tekrar deneyin.</p>
    <button class="adminButton gold" id="cloudRetry">Tekrar Dene</button>
   </div>`;
  }
