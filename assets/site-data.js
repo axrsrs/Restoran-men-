@@ -41,7 +41,7 @@ window.ND_DEFAULT = {
       link: "/menu", linkLabel: "Demoyu aç", image: "", featured: true, hidden: false },
     { id: "p2", name: "Tetra", tag: "Sipariş sistemi", year: "2026", status: "live",
       desc: "Kasa. Mutfak ekranı. Hazır siparişler için TV ekranı. Sipariş hazır olduğunda müşterinin telefonuna bildirim gider. Self servis ve gel-al işletmeleri için, NearMenu ile aynı menüyle.",
-      link: "https://tetra.neardiji.com/kurulum", linkLabel: "Nasıl çalışır", image: "", featured: false, hidden: false },
+      link: "https://tetra.neardiji.com", linkLabel: "Nasıl çalışır", image: "", featured: false, hidden: false },
     { id: "p3", name: "OFISCHI", tag: "Katalog · Teklif", year: "2026", status: "live",
       desc: "Ofis mobilyası için premium katalog ve teklif platformu. Türkçe ve İngilizce. TL, USD ve EUR fiyat. Teklif sepeti, indirim, KDV seçenekleri ve tek dokunuşla PDF teklif.",
       link: "", linkLabel: "", image: "", featured: false, hidden: false },

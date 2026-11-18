@@ -617,7 +617,7 @@ function shareText(r,owner){
  if(kind==="menu"&&r.tetra){
   lines.push("");
   lines.push("Tetra hesabınız da hazır: kasanız, mutfağınız ve müşterinizin telefonu aynı siparişi aynı anda görür.");
-  lines.push("Beş adımlık kurulum: https://tetra.neardiji.com/kurulum");
+  lines.push("Beş adımlık kurulum: https://tetra.neardiji.com");
   lines.push("Girişte menü panelinizdeki e-posta ve şifreyi kullanın.");
  }
 
