@@ -198,7 +198,7 @@ function render(){
  $("aboutTitle").textContent=C.aboutTitle||"Hakkında";
  $("aboutText").textContent=C.about||"";
  $("langs").textContent=C.languages||"";
- $("hakkinda").hidden=!C.about;
+ $("hakkinda").hidden=!C.about;$("navAbout").hidden=!C.about;
 
  var ct=C.contact||{}, wa=waLink(ct.whatsapp,ct.waText);
  $("contactTitle").innerHTML=headlineHTML(C.contactTitle,"");
