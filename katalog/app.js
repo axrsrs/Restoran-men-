@@ -244,6 +244,7 @@ function sanitizeCatalogData(data) {
             clean.pdf[k] = safeText(clean.pdf[k], 200);
         clean.pdf.catalogTemplate = ["akilli", "klasik", "vitrin", "izgara", "dergi", "modis"].includes(clean.pdf.catalogTemplate) ? clean.pdf.catalogTemplate : "akilli";
         clean.pdf.priceTemplate = clean.pdf.priceTemplate === "modis" ? "modis" : "standart";
+        clean.pdf.priceGroup = clean.pdf.priceGroup === "series" ? "series" : "category";
         const lay = {}, srcLay = (clean.pdf.categoryLayouts && typeof clean.pdf.categoryLayouts === "object") ? clean.pdf.categoryLayouts : {};
         const vit = {}, srcVit = (clean.pdf.vitrinModes && typeof clean.pdf.vitrinModes === "object") ? clean.pdf.vitrinModes : {};
         for (const fc of (clean.categories || [])) {
@@ -276,6 +277,7 @@ function sanitizeCatalogData(data) {
                 item[k] = safeText(item[k]);
             item.dims = safeText(item.dims, 500);
             item.dims_en = safeText(item.dims_en, 500);
+            item.collection = safeText(item.collection, 80);
             item.m3 = logiNumber(item.m3, 3);
             item.pkg = logiNumber(item.pkg, 0);
             item.kg = logiNumber(item.kg, 2);
@@ -2977,10 +2979,12 @@ async function pdfFlowPages(data, lang, preparedImages, pages, opts = {}) {
         const items = Array.isArray(category.items) ? category.items : [];
         if (!items.length)
             continue;
-        if (data.pdf?.useCategoryCovers) {
-            /* Önceki kategorinin bekleyen ürünleri kapaktan ÖNCE basılır. */
+        const cover = pdfSectionCover(data, category);
+        if (cover || category.seriesStart) {
+            /* Önceki kategorinin bekleyen ürünleri kapaktan ÖNCE basılır; seriye göre düzende her seri yeni sayfada başlar. */
             await flush();
-            pages.push(await renderPdfCategoryCoverPage(data, lang, category, pages.length + 1));
+            if (cover)
+                pages.push(await renderPdfCategoryCoverPage(data, lang, cover, pages.length + 1));
         }
         const layout = opts.forceTable ? "table" : categoryLayoutOf(data, category.id);
         if (layout !== "table") {
@@ -3193,6 +3197,54 @@ function pdfSeriesCapacity(withHero, hasHero) {
     const top = H - S.headY - 22 - (withHero && hasHero ? S.heroH + 18 : 0), bottom = S.footY + 18;
     return Math.max(1, Math.floor((top - bottom + 8) / ch)) * S.cols;
 }
+/* FİYAT LİSTESİ SIRALAMASI — "Seriye göre" (pdf.priceGroup = "series"):
+   Aynı seri adı (item.collection) birden fazla kategoride geçiyorsa o serinin ürünleri art arda basılır
+   (ör. Magnus: makam takımı → koltuk takımı → toplantı masası → yan sehpa). Seri içindeki sıra kategori sırasıdır.
+   Tek kategoride kalan ürünler (seri adı yok ya da seri tek kategoride) serilerden sonra kendi kategorilerinde gelir.
+   Her seri / kategori yeni sayfada başlar; kategori kapakları açıksa kapak seri başına bir kez basılır. */
+function pdfGroupBySeries(data) {
+    const cats = Array.isArray(data?.categories) ? data.categories : [];
+    const keyOf = it => String(it?.collection || "").trim().toLocaleLowerCase("tr-TR");
+    const catsOf = new Map(), labelOf = new Map(), order = [];
+    for (const c of cats)
+        for (const it of (c.items || [])) {
+            const k = keyOf(it);
+            if (!k)
+                continue;
+            if (!catsOf.has(k)) {
+                catsOf.set(k, new Set());
+                labelOf.set(k, String(it.collection).trim());
+                order.push(k);
+            }
+            catsOf.get(k).add(c.id);
+        }
+    const series = order.filter(k => catsOf.get(k).size > 1), inSeries = new Set(series), out = [];
+    for (const k of series) {
+        const name = labelOf.get(k), groups = [];
+        for (const c of cats) {
+            const items = (c.items || []).filter(it => keyOf(it) === k);
+            if (items.length)
+                groups.push({ ...c, items, name: name + " · " + (c.name || ""), name_en: name + " · " + (c.name_en || c.name || "") });
+        }
+        const all = groups.flatMap(g => g.items);
+        const cover = { id: "seri-" + k, name, name_en: name, coverImage: (all.find(it => it.image) || {}).image || null, items: all };
+        groups.forEach((g, i) => out.push({ ...g, seriesStart: i === 0, seriesCover: cover }));
+    }
+    for (const c of cats) {
+        const items = (c.items || []).filter(it => !inSeries.has(keyOf(it)));
+        if (items.length)
+            out.push({ ...c, items, seriesStart: true, seriesCover: { ...c, items } });
+    }
+    return { ...data, categories: out };
+}
+/* Kategori kapağı / seri kapağı: gruplu düzende yalnızca grubun ilk bölümünde basılır. */
+function pdfSectionCover(data, category) {
+    if (!data.pdf?.useCategoryCovers)
+        return null;
+    if (category.seriesCover)
+        return category.seriesStart ? category.seriesCover : null;
+    return category;
+}
 async function pdfSeriesPages(data, lang, imageMap, pages) {
     const logoSrc = pdfImageSource(data.logo?.src);
     const logoAsset = logoSrc ? await pdfImageAsset(logoSrc, { max: 600, quality: .92 }) : null;
@@ -3200,8 +3252,9 @@ async function pdfSeriesPages(data, lang, imageMap, pages) {
         const items = Array.isArray(category.items) ? category.items : [];
         if (!items.length)
             continue;
-        if (data.pdf?.useCategoryCovers)
-            pages.push(await renderPdfCategoryCoverPage(data, lang, category, pages.length + 1));
+        const cover = pdfSectionCover(data, category);
+        if (cover)
+            pages.push(await renderPdfCategoryCoverPage(data, lang, cover, pages.length + 1));
         for (const item of items) {
             let rows = pdfVariantRows(item, lang).map(r => ({ ...r, name: r.name || pdfText(lang, item.name, item.name_en, item.name) || "" }));
             const hasHero = !!pdfProductImageSource(item, data);
@@ -3288,7 +3341,8 @@ async function buildPriceListPDF(rawData, lang) {
     const vr = vadeRateOf(source);
     pdfVade = vr ? { rate: vr, label: vadeLabelOf(source, pdfLang) } : null;
     try {
-        const prepared = await pdfPrepareImages(source), data = prepared.data;
+        const prepared = await pdfPrepareImages(source);
+        const data = prepared.data?.pdf?.priceGroup === "series" ? pdfGroupBySeries(prepared.data) : prepared.data;
         if (pdfPriceTemplateId(data.pdf?.priceTemplate) === "modis") {
             const pagesM = [await renderPdfSeriesCover(data, pdfLang, pdfSeriesPriceTitle(data, pdfLang))];
             await pdfSeriesPages(data, pdfLang, prepared.images, pagesM);
@@ -6482,6 +6536,10 @@ function App() {
                         React.createElement("label", { className: "adm-field" },
                             React.createElement("span", null, "A\u00E7\u0131klama"),
                             React.createElement("textarea", { className: "adm-input", rows: "4", value: it.desc, onChange: e => editTurkishField(c.id, it, "desc", e.target.value), placeholder: "K\u0131sa a\u00E7\u0131klama (\u00F6r. 3+1+1 tak\u0131m)" })),
+                        React.createElement("label", { className: "adm-field" },
+                            React.createElement("span", null, "Seri adı (isteğe bağlı)"),
+                            React.createElement("input", { className: "adm-input", maxLength: 80, value: it.collection || "", onChange: e => updateItem(c.id, it.id, "collection", e.target.value.slice(0, 80)), placeholder: "Ör. Magnus" }),
+                            React.createElement("div", { className: "adm-muted", style: { fontSize: 12 } }, "Aynı seri adını taşıyan ürünler, fiyat listesi “Seriye göre” sıralandığında bir arada basılır.")),
                         p.parts.length === 0 && React.createElement("label", { className: "adm-field" },
                             React.createElement("span", null, "\u00D6l\u00E7\u00FCler"),
                             React.createElement("input", { className: "adm-input", value: it.dims, onChange: e => { const v = e.target.value; updateItem(c.id, it.id, "dims", v); updateItem(c.id, it.id, "dims_en", v); }, placeholder: "\u00D6r. 200\u00D790\u00D775 cm" })),
@@ -7195,6 +7253,15 @@ function App() {
                                         tp.name),
                                     React.createElement("div", { className: "text-[11px] text-neutral-400 leading-snug mt-0.5" }, tp.desc));
                             })),
+                            React.createElement("div", { className: "rounded-xl bg-neutral-950 border border-neutral-800 p-3 mb-4" },
+                                React.createElement("div", { className: "text-xs font-bold mb-1" }, "Sıralama"),
+                                React.createElement("div", { className: "text-[11px] text-neutral-400 mb-3" }, "Seriye göre seçilirse aynı seri adını taşıyan ürünler (makam takımı, koltuk takımı, toplantı masası, yan sehpa…) fiyat listesinde art arda gelir; her seri yeni sayfada başlar. Seri adı ürün düzenleme ekranındaki Bilgiler sekmesinden girilir."),
+                                React.createElement("div", { role: "radiogroup", "aria-label": "Fiyat listesi sıralaması", className: "grid grid-cols-2 gap-2" }, [["category", "Kategoriye göre"], ["series", "Seriye göre"]].map(([id, label]) => {
+                                    const active = (data.pdf?.priceGroup === "series" ? "series" : "category") === id;
+                                    return React.createElement("button", { key: id, type: "button", role: "radio", "aria-checked": active, onClick: () => setPath(["pdf", "priceGroup"], id), className: "min-h-[44px] rounded-xl px-3 text-xs font-bold border flex items-center justify-center gap-1.5 transition-colors", style: { borderColor: active ? theme.accent : "#3a3a3c", background: active ? theme.accent + "26" : "transparent" } },
+                                        active && React.createElement(Icon, { type: "check", size: 13 }),
+                                        label);
+                                }))),
                             React.createElement("div", { className: "rounded-xl bg-neutral-950 border border-neutral-800 p-3 mb-4" },
                                 React.createElement("div", { className: "text-xs font-bold mb-1" }, "Kategori D\u00FCzenleri"),
                                 React.createElement("div", { className: "text-[11px] text-neutral-400 mb-3" },
