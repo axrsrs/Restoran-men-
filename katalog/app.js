@@ -3023,7 +3023,7 @@ async function pdfFlowPages(data, lang, preparedImages, pages, opts = {}) {
     }
     await flush();
 }
-/* ==================== "MODIS ORİJİNAL" ŞABLONU (fiyat listesi + fiyatsız katalog) ====================
+/* ==================== "SERİ SAYFALARI" ŞABLONU (iç kimlik: "modis" — kayıtlı ayarlar bozulmasın diye değiştirilmedi) (fiyat listesi + fiyatsız katalog) ====================
    Her ürün (seri / takım) kendi sayfasında başlar: büyük seri adı + ince alt başlık ve sağda belge adı,
    takım görseli, altında modüller 4'lü ızgarada (görsel · ad · ikonlu G/D/Y/m³/kg tablosu · fiyat).
    Altta logo + vurgu çizgisi + alt bilgi; sayfa numarası tek/çift sayfada dış kenarda.
@@ -3031,7 +3031,7 @@ async function pdfFlowPages(data, lang, preparedImages, pages, opts = {}) {
 const PDF_SERIES = { M: 36, cols: 4, gap: 10, imgH: 58, heroH: 200, headY: 52, footY: 40 };
 const PDF_SERIES_TEMPLATES = Object.freeze([
     { id: "standart", name: "Standart", desc: "Kategori düzenlerine göre akış: takım tablosu, ölçü kartları veya model sırası." },
-    { id: "modis", name: "Modis Orijinal", desc: "Her seri kendi sayfasında: takım görseli, modüller 4'lü ızgarada ikonlu ölçü tablosu ve fiyatla." }
+    { id: "modis", name: "Seri Sayfaları", desc: "Her seri kendi sayfasında: takım görseli, modüller 4'lü ızgarada ikonlu ölçü tablosu ve fiyatla." }
 ]);
 function pdfPriceTemplateId(v) { return v === "modis" ? "modis" : "standart"; }
 function pdfSeriesUpper(s, lang) { try { return String(s || "").toLocaleUpperCase(lang === "EN" ? "en-US" : "tr-TR"); } catch (_) { return String(s || "").toUpperCase(); } }
@@ -3638,7 +3638,7 @@ const PDF_CATALOG_TEMPLATES = [
     { id: "vitrin", name: "Vitrin", desc: "Her kategori için ayrı seçilir: her model tek sayfada, sayfa başına 2 model veya akıllı akış düzeni." },
     { id: "izgara", name: "Izgara", desc: "Sayfa başına 6 ürün kartı. Geniş ürün yelpazesine hızlı göz atma." },
     { id: "dergi", name: "Dergi", desc: "Sayfa başına 2 ürün, görseller sırayla solda ve sağda. Sunum havası." },
-    { id: "modis", name: "Modis Orijinal", desc: "Her seri kendi sayfasında: takım görseli, modüller 4'lü ızgarada ikonlu ölçü tablosuyla." }
+    { id: "modis", name: "Seri Sayfaları", desc: "Her seri kendi sayfasında: takım görseli, modüller 4'lü ızgarada ikonlu ölçü tablosuyla." }
 ];
 function pdfCatalogTemplateId(v) { return PDF_CATALOG_TEMPLATES.some(t => t.id === v) ? v : "akilli"; }
 /* Vitrin şablonunda her kategorinin sayfa düzeni: full = her model tek sayfa, duo = sayfa başına 2 model, flow = akıllı akış */
