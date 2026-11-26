@@ -2981,6 +2981,10 @@ async function getAllFull(store) {
   return rows.map((r) => fromRow(store, r));
 }
 
+/* v50: siparişler başka sekmedeyken değişirse liste "eski" işaretlenir; Siparişler'e geçince
+   hafızadan yeniden çizilir (sunucuya istek yok). */
+var v50SipKirli = false;
+function v50SipDegisti() { if (currentView !== "orders") v50SipKirli = true; }
 function upsertLocalStore(store, data) {
   const list = Array.isArray(data) ? data : [data];
   if (!list.length) return;
@@ -2991,7 +2995,7 @@ function upsertLocalStore(store, data) {
     const idx = target.findIndex((x) => x.id === item.id);
     if (idx >= 0) target[idx] = item; else target.push(item);
   }
-  if (store === "orders") sortedOrders = allOrders.slice().sort((a, b) => b.id - a.id);
+  if (store === "orders") { sortedOrders = allOrders.slice().sort((a, b) => b.id - a.id); v50SipDegisti(); }
   if (store === "stockMovements") stockLoaded = true;
   rebuildDerivedIndexes();
 }
@@ -3001,7 +3005,7 @@ function removeLocalStore(store, id) {
   if (!Array.isArray(target)) return;
   const idx = target.findIndex((x) => x.id === id);
   if (idx >= 0) target.splice(idx, 1);
-  if (store === "orders") sortedOrders = allOrders.slice().sort((a, b) => b.id - a.id);
+  if (store === "orders") { sortedOrders = allOrders.slice().sort((a, b) => b.id - a.id); v50SipDegisti(); }
   rebuildDerivedIndexes();
 }
 
@@ -3123,7 +3127,7 @@ function rebuildDerivedIndexes() {
 }
 
 function applyStoreData(store, data) {
-  if (store === "orders") { allOrders = data; sortedOrders = data.slice().sort((a, b) => b.id - a.id); }
+  if (store === "orders") { allOrders = data; sortedOrders = data.slice().sort((a, b) => b.id - a.id); v50SipDegisti(); }
   else if (store === "products") allProducts = data;
   else if (store === "customers") allCustomers = data;
   else if (store === "suppliers") allSuppliers = data;
@@ -3459,6 +3463,7 @@ function applyRemoteOrderChange(c) {
   const idx = allOrders.findIndex((o) => o.id === id);
   if (idx >= 0) allOrders[idx] = incoming;
   else allOrders.push(incoming);
+  v50SipDegisti();
   if (structural) {
     sortedOrders = allOrders.slice().sort((a, b) => b.id - a.id);
     rebuildDerivedIndexes();
@@ -4010,6 +4015,7 @@ function switchView(view) {
   document.getElementById("sidebar").classList.remove("open");
   document.getElementById("sidebarOverlay").classList.remove("open");
   v106BarAktif();
+  if (view === "orders" && v50SipKirli) renderOrdersView();   /* v50: başka sekmedeyken gelen / onaylanan siparişler */
   if (view === "products") renderProductsView();
   if (view === "purchase") { try { v26Ciz(false); } catch (e) { console.warn(e); } }
   if (view === "iadeler") { try { v44Ciz(false); } catch (e) { console.warn(e); } }
@@ -4280,6 +4286,7 @@ function scrollToTopOfView() {
    SİPARİŞLER — RENDER
    ======================================================= */
 function renderOrdersView() {
+  v50SipKirli = false;
   renderOrderTrashButton();
   renderFilterPills();
   renderSummary();
@@ -9346,7 +9353,6 @@ async function v25Ciz(force) {
     if (!v25Kat) box.innerHTML = `<div class="v25-bos">Yükleniyor…</div>`;
     try { await v25KatYukle(force); } catch (e) { box.innerHTML = `<div class="v25-bos">Katalog okunamadı: ${escapeHtml(v25Hata(e))}</div>`; return; }
   }
-  const yeniB = document.getElementById("v25Yeni"); if (yeniB) yeniB.disabled = v25Yok;
   if (v25Yok) { box.innerHTML = `<div class="v98-warn">Katalog bağlantısı henüz kurulmamış. Supabase'de <b>pronto-katalog.sql</b> dosyasını bir kez çalıştırın.</div>`; return; }
   const say = document.getElementById("v25Say"); if (say) say.textContent = `(${v25Kat.rows.size})`;
   const q = v106Ara(v25AraQ), gs = v25Gruplar(q);
@@ -9444,61 +9450,10 @@ async function v25Gorsel(file) {
   } finally { URL.revokeObjectURL(url); }
 }
 
-/* Kataloğa ürün ekle penceresi */
-async function v25YeniAc() {
-  if (!supa) { showToast("Katalog için internet bağlantısı gerekli."); return; }
-  try { await v25KatYukle(false); } catch (e) { showToast(v25Hata(e)); return; }
-  if (v25Yok) { showToast("Katalog kurulumu (pronto-katalog.sql) henüz yapılmamış."); return; }
-  const m = v98Ov(`<div class="modal-head"><h2>Kataloğa Ürün Ekle</h2><button class="icon-btn" data-x aria-label="Kapat">✕</button></div>
-    <div class="modal-body"><div id="v25SecHost"></div>
-      <div class="v25-foto"><span class="v25-th" id="v25FTh">Fotoğraf yok</span><div><div class="v98-s" id="v25FBilgi"></div>
-        <button type="button" class="btn btn-secondary" id="v25FSec" style="margin-top:6px">Model fotoğrafı seç</button>
-        <button type="button" class="btn btn-ghost" id="v25FSil" style="margin-top:6px;display:none">Kaldır</button>
-        <input type="file" id="v25FDosya" accept="image/jpeg,image/png,image/webp" hidden></div></div>
-      <div class="v25-hata" id="v25H" role="alert"></div></div>
-    <div class="modal-foot"><button class="btn btn-ghost" type="button" data-x>Vazgeç</button><button class="btn btn-primary" type="button" id="v25Kaydet">Kataloğa Ekle</button></div>`);
-  m.ov.querySelector(".modal").classList.add("v25-modal");
-  let foto = "", kirli = false;
-  // yazılmış form dışarı tıklayınca sorulmadan kapanmasın
-  m.ov.addEventListener("mousedown", (e) => { if (e.target === m.ov && kirli) { e.stopImmediatePropagation(); showConfirm("Kaydedilmemiş değişiklikler var. Çıkmak istersen bu değişiklikler kaybolacak. Devam edilsin mi?", () => m.close()); } }, true);
-  m.ov.addEventListener("click", (e) => { if (e.target.closest("[data-x]") && kirli) { e.stopImmediatePropagation(); showConfirm("Kaydedilmemiş değişiklikler var. Çıkmak istersen bu değişiklikler kaybolacak. Devam edilsin mi?", () => m.close()); } }, true);
-  const th = m.$("#v25FTh"), bilgi = m.$("#v25FBilgi"), sec = m.$("#v25FSec"), sil = m.$("#v25FSil"), hata = m.$("#v25H"), btn = m.$("#v25Kaydet");
-  const thGoster = (v) => { th.textContent = ""; if (v && v25ImgOk(v)) { const im = new Image(); im.alt = ""; im.src = v; th.appendChild(im); } else th.textContent = "Fotoğraf yok"; };
-  let son = null;
-  const S = v25Secici(m.$("#v25SecHost"), { onChange: (api) => {
-    kirli = true; hata.textContent = "";
-    const fk = api.fotoAnahtar(), t = api.tam();
-    const tm = !t && api.temel(), var2 = t || (tm && !api.yeniSec().length);
-    btn.disabled = !api.gecerli() || !!var2; btn.textContent = var2 ? "Zaten katalogda" : tm ? "Seçenek olarak ekle" : "Kataloğa Ekle";
-    if (fk) { sec.style.display = "none"; sil.style.display = "none"; bilgi.textContent = "Bu modelin fotoğrafı katalogda var."; if (son !== fk) { son = fk; thGoster(""); v25FotoIste(fk, (v) => { if (son === fk) thGoster(v); }); } }
-    else { son = null; sec.style.display = api.gecerli() ? "" : "none"; bilgi.textContent = api.gecerli() ? "Bu modelin fotoğrafı yok. İsterseniz ekleyin (Teklif'te de görünür)." : ""; thGoster(foto); sil.style.display = foto ? "" : "none"; sec.textContent = foto ? "Fotoğrafı değiştir" : "Model fotoğrafı seç"; }
-  } });
-  kirli = false; setTimeout(() => S.odak(), 50);
-  sec.addEventListener("click", () => m.$("#v25FDosya").click());
-  m.$("#v25FDosya").addEventListener("change", async (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return; try { foto = await v25Gorsel(f); kirli = true; thGoster(foto); sil.style.display = ""; sec.textContent = "Fotoğrafı değiştir"; } catch (er) { hata.textContent = er.message || String(er); } });
-  sil.addEventListener("click", () => { foto = ""; thGoster(""); sil.style.display = "none"; sec.textContent = "Model fotoğrafı seç"; });
-  btn.addEventListener("click", async () => {
-    if (!S.gecerli()) { hata.textContent = "Kategori ve model zorunlu."; return; }
-    btn.disabled = true; btn.textContent = "Ekleniyor…"; hata.textContent = "";
-    try {
-      const { data, error } = await supa.rpc("pronto_katalog_ekle", { p_urun: S.deger(), p_foto: !S.fotoAnahtar() && foto ? foto : null });
-      if (error) throw error;
-      const r = data || {}, u = r.urun || {};
-      v49KatYerel(r);
-      if (r.foto === "eklendi" && r.foto_anahtar) { const at = new Date().toISOString(); v25Kat.foto[r.foto_anahtar] = at; v25Foto[r.foto_anahtar] = { at, v: foto }; cachePut(V25_FOTO_C, { map: v25Foto }); }
-      v49KatSakla();
-      m.close();
-      showToast(r.yeni ? `${u.kod || "Ürün"} PRONTO Teklif kataloğuna eklendi.` : r.renk_yeni || r.olcu_yeni ? `${u.kod || "Ürün"} katalogda var; ${[r.olcu_yeni && u.olcu, r.renk_yeni && u.renk].filter(Boolean).join(" · ")} seçenek olarak eklendi.` : `Bu ürün zaten katalogda (${u.kod || ""}).`);
-      if (currentView === "products" && v25Tab === "kat") v25Ciz(false);
-    } catch (er) { btn.disabled = false; btn.textContent = "Kataloğa Ekle"; hata.textContent = "Eklenemedi: " + v25Hata(er); }
-  });
-}
-
 (function v25Kur() {
   const sec = document.getElementById("view-products"); if (!sec) return;
   sec.addEventListener("click", (e) => { const t = e.target.closest("[data-v25-tab]"); if (t) v25SekmeAc(t.dataset.v25Tab); });
   const a = document.getElementById("v25Ara"); if (a) a.addEventListener("input", debounce((e) => { v25AraQ = sanitizeSearchText(e.target.value, 100); v25Ciz(false); }, 200));
-  const y = document.getElementById("v25Yeni"); if (y) y.addEventListener("click", v25YeniAc);
 })();
 </script>
 <style id="v26-satin-alma">
